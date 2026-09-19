@@ -50,13 +50,64 @@
     </div>
   </section>
 
-  <section class="team-note">
-    <div class="icon-circle" style="margin:0 auto 24px;" aria-hidden="true">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15.5H6l-2 2V8.5C4 7.12 5.12 6 6.5 6h7C14.88 6 16 7.12 16 8.5v3c0 1.38-1.12 2.5-2.5 2.5H8Z"/><path d="M14 9h3.5c1.38 0 2.5 1.12 2.5 2.5V18l-2-2h-4"/></svg>
+  <section class="team-slider" id="team-slider" aria-labelledby="team-heading">
+    <div class="container team-slider-grid">
+
+      <div class="team-slider-left">
+        <div class="team-counter" id="team-counter" aria-hidden="true"></div>
+        <p class="team-bio" id="team-bio"></p>
+        <button type="button" class="team-view-more" id="team-view-more">View more</button>
+      </div>
+
+      <div class="team-slider-right">
+        <div class="team-slider-head">
+          <div>
+            <h2 class="team-heading" id="team-heading">
+              <span class="team-heading-light">The People</span>
+              <span class="team-heading-dark">Behind The Promise</span>
+            </h2>
+            <p class="team-subtitle">Built on years of hands-on experience guiding Kenyan students abroad &mdash; with a shared focus on getting it right.</p>
+          </div>
+          <div class="team-nav" role="group" aria-label="Team slider controls">
+            <button type="button" class="team-nav-btn" id="team-prev">Previous</button>
+            <span class="team-nav-divider" aria-hidden="true"></span>
+            <button type="button" class="team-nav-btn" id="team-next">Next</button>
+          </div>
+        </div>
+
+        <div class="team-progress-track"><div class="team-progress-fill" id="team-progress"></div></div>
+
+        <div class="team-strip-viewport" id="team-strip-viewport" tabindex="0" aria-roledescription="carousel" aria-label="Our team">
+          <ul class="team-strip" id="team-strip"></ul>
+        </div>
+
+        <div class="team-active-row">
+          <div class="team-active-name-wrap">
+            <div class="team-active-name" id="team-active-name"></div>
+            <div class="team-active-role" id="team-active-role"></div>
+          </div>
+          <a href="mailto:admissions@studiesandawardsltd.com?subject=Join%20Our%20Team" class="team-join-btn">Join Our Team</a>
+        </div>
+      </div>
+
     </div>
-    <p>Individual counsellor profiles for this page are still being put together. In the meantime, every enquiry reaches a real member of our Eldoret team directly &mdash; reach out and we'll introduce you to the counsellor best matched to your destination and course.</p>
-    <a href="mailto:admissions@studiesandawardsltd.com?subject=Talk%20to%20a%20Counsellor" class="btn btn-primary">Talk to a Counsellor</a>
+    <div class="sr-only" aria-live="polite" id="team-live"></div>
   </section>
+
+  <div class="team-modal-overlay" id="team-modal-overlay" hidden>
+    <div class="team-modal" role="dialog" aria-modal="true" aria-labelledby="team-modal-name" id="team-modal" tabindex="-1">
+      <button type="button" class="team-modal-close" id="team-modal-close" aria-label="Close">&times;</button>
+      <div class="team-modal-head">
+        <div>
+          <div class="team-modal-name" id="team-modal-name"></div>
+          <div class="team-modal-role" id="team-modal-role"></div>
+          <a href="#" class="team-modal-linkedin" id="team-modal-linkedin" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <img class="team-modal-photo" id="team-modal-photo" src="" alt="">
+      </div>
+      <div class="team-modal-bio" id="team-modal-bio"></div>
+    </div>
+  </div>
 
   <section class="cta-band on-bg" id="contact" aria-labelledby="cta-heading">
     <div class="container">
@@ -137,6 +188,7 @@
   </div>
 </footer>
 
+<script src="js/team-data.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
