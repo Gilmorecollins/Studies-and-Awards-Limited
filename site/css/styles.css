@@ -203,6 +203,32 @@ p { margin: 0; }
 }
 .nav-toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
+/* ---------- transparent header overlaying a full-bleed hero photo ---------- */
+.site-header.header-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: transparent;
+  border-bottom-color: transparent;
+  transition: background-color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+}
+.site-header.header-overlay .brand-name,
+.site-header.header-overlay .nav-toggle { color: #FFFFFF; transition: color 250ms ease; }
+@media (min-width: 769px) {
+  .site-header.header-overlay .nav-link:not(.muted) { color: #FFFFFF; }
+  .site-header.header-overlay .nav-link.muted { color: rgba(255,255,255,0.75); }
+}
+.site-header.header-overlay.is-scrolled {
+  background: var(--bg);
+  border-bottom-color: var(--border-soft);
+  box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+}
+.site-header.header-overlay.is-scrolled .brand-name,
+.site-header.header-overlay.is-scrolled .nav-toggle { color: var(--ink); }
+@media (min-width: 769px) {
+  .site-header.header-overlay.is-scrolled .nav-link:not(.muted) { color: var(--text); }
+  .site-header.header-overlay.is-scrolled .nav-link.muted { color: var(--muted); }
+}
+
 /* ---------- footer ---------- */
 
 .site-footer { background: var(--ink); padding: 64px 0 32px; }
@@ -347,10 +373,6 @@ p { margin: 0; }
 .section-head p { font-size: 16px; color: var(--muted); line-height: 1.6; }
 .section-dark { background: var(--ink); }
 .section-paper { background: var(--paper); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-
-.breadcrumb { padding: 4px 40px 0; font-size: 13.5px; }
-.breadcrumb a { color: var(--muted); transition: color 150ms ease; }
-.breadcrumb a:hover { color: var(--ink); }
 
 /* ---------- cards / grids ---------- */
 
@@ -589,7 +611,7 @@ p { margin: 0; }
 
 .city-scroller-top-label {
   position: absolute;
-  top: clamp(20px, 4vh, 40px);
+  top: calc(84px + clamp(20px, 4vh, 40px));
   left: clamp(24px, 4.5vw, 72px);
   z-index: 3;
   color: rgba(255,255,255,0.85);
@@ -601,7 +623,7 @@ p { margin: 0; }
 }
 .city-scroller-top-label strong { color: var(--brass); font-weight: 600; }
 @media (max-width: 768px) {
-  .city-scroller-top-label { font-size: 10px; letter-spacing: 0.1em; max-width: 70%; }
+  .city-scroller-top-label { top: calc(68px + clamp(16px, 4vh, 32px)); font-size: 10px; letter-spacing: 0.1em; max-width: 70%; }
 }
 
 .city-panel {
@@ -812,6 +834,4 @@ p { margin: 0; }
 
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom { flex-direction: column; gap: 10px; align-items: flex-start; }
-
-  .breadcrumb { padding: 4px 20px 0; }
 }

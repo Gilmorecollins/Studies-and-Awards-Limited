@@ -45,6 +45,26 @@
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 })();
 
+// Transparent header over a full-bleed hero photo — turns solid once the
+// page scrolls past the hero so nav text stays readable over lighter content.
+(function () {
+  'use strict';
+
+  var header = document.querySelector('.site-header.header-overlay');
+  if (!header) return;
+
+  var updateScrolled = function () {
+    if (window.scrollY > 40) {
+      header.classList.add('is-scrolled');
+    } else {
+      header.classList.remove('is-scrolled');
+    }
+  };
+
+  updateScrolled();
+  window.addEventListener('scroll', updateScrolled, { passive: true });
+})();
+
 // Destination page: full-screen autoplaying city slideshow — crossfades
 // to the next city on a timer, or on demand via the dots/pause button.
 (function () {
