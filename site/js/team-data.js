@@ -1,78 +1,141 @@
-// Placeholder team data — replace each member's photo, bio and linkedin
-// with the real thing. Shape (TeamMember):
+// Team data. Shape (TeamMember):
 //   { id, name, role, shortBio, fullBio: string[], photo, linkedin? }
 // photo should be a 4:5 portrait (e.g. 960x1200) for the best crop in the slider.
+//
+// Bios below are intentionally short and generic (role-based, nothing
+// invented) — replace shortBio/fullBio with real background/detail
+// whenever you have it, and add last names + real linkedin URLs when ready.
 window.TEAM_MEMBERS = [
   {
-    id: 'amina-hassan',
-    name: 'Amina Hassan',
-    role: 'Founder & Lead Counsellor',
-    shortBio: 'Amina founded Studies and Awards Limited to give Kenyan students the same calibre of guidance she wished she’d had applying abroad. She leads the counselling team and personally reviews every application before it goes out.',
+    id: 'evelyne-choge',
+    name: 'Evelyne Choge',
+    role: 'Director',
+    shortBio: 'Evelyne is the Director at Studies and Awards Limited, overseeing the organisation’s strategy and day-to-day operations.',
     fullBio: [
-      'Amina Hassan is the Founder and Lead Counsellor at Studies and Awards Limited, based in Eldoret. After navigating her own study-abroad application with little local support, she set out to build a consultancy that walks Kenyan students through every step — from choosing a course to landing at the airport.',
-      'She oversees the counselling team’s day-to-day work and stays closely involved with university partnerships, making sure every recommendation is grounded in what’s actually right for the student, not just what’s easiest to sell.'
+      'Evelyne Choge is the Director at Studies and Awards Limited, based in Eldoret.',
+      '[Add a couple of sentences on her background and what she focuses on day to day.]'
     ],
-    photo: 'assets/team/amina-hassan.jpg',
+    photo: 'assets/team/evelyne-choge.jpg',
     linkedin: '#'
   },
   {
-    id: 'brian-kiptoo',
-    name: 'Brian Kiptoo',
-    role: 'Australia & UK Counsellor',
-    shortBio: 'Brian specialises in Australian and UK admissions, having placed students across Sydney, Melbourne, London and Edinburgh. He’s known for turning around visa-ready applications fast without cutting corners.',
+    id: 'mourine',
+    name: 'Mourine',
+    role: 'General Manager',
+    shortBio: 'Mourine is the General Manager at Studies and Awards Limited, overseeing the team’s day-to-day work across every destination.',
     fullBio: [
-      'Brian Kiptoo leads Australia and UK placements at Studies and Awards Limited. He works closely with partner universities across both countries to keep pace with shifting entry requirements and visa rules.',
-      'Students working with Brian get a clear, realistic timeline from their first meeting — he’s built a reputation for catching paperwork issues early, well before they become visa delays.'
+      'Mourine serves as General Manager at Studies and Awards Limited.',
+      '[Add a couple of sentences on her background and what she focuses on day to day.]'
     ],
-    photo: 'assets/team/brian-kiptoo.jpg',
+    photo: 'assets/team/mourine.jpg',
     linkedin: '#'
   },
   {
-    id: 'faith-chebet',
-    name: 'Faith Chebet',
-    role: 'Germany & Europe Counsellor',
-    shortBio: 'Faith guides students through Germany’s public university system and the language training that comes before it, making tuition-friendly European degrees genuinely accessible.',
+    id: 'joyner',
+    name: 'Joyner',
+    role: 'Assistant General Manager',
+    shortBio: 'Joyner is the Assistant General Manager at Studies and Awards Limited, supporting operations across the team.',
     fullBio: [
-      'Faith Chebet manages Germany and wider European placements at Studies and Awards Limited. Her focus is demystifying Germany’s public university system — admissions, language requirements and the paperwork that trips most applicants up.',
-      'She coordinates the German Language Training students complete before applying, and stays in touch with them well after enrolment to help with the practical side of settling in.'
+      'Joyner serves as Assistant General Manager at Studies and Awards Limited.',
+      '[Add a couple of sentences on her background and what she focuses on day to day.]'
     ],
-    photo: 'assets/team/faith-chebet.jpg',
+    photo: 'assets/team/joyner.jpg',
     linkedin: '#'
   },
   {
-    id: 'daniel-mwangi',
-    name: 'Daniel Mwangi',
-    role: 'Canada & Ireland Counsellor',
-    shortBio: 'Daniel focuses on Canada and Ireland, two of the most popular post-study-work pathways for our students, and is well versed in both countries’ evolving visa requirements.',
+    id: 'beatrice',
+    name: 'Beatrice',
+    role: 'Assistant Manager',
+    shortBio: 'Beatrice is the Assistant Manager at Studies and Awards Limited, supporting the team’s day-to-day operations.',
     fullBio: [
-      'Daniel Mwangi handles Canada and Ireland placements at Studies and Awards Limited, with a particular focus on post-study work pathways — the reason most students choose these two destinations in the first place.',
-      'He keeps a close eye on both countries’ immigration policy updates so students aren’t caught off guard mid-application, and works directly with partner institutions to speed up offer turnaround.'
+      'Beatrice serves as Assistant Manager at Studies and Awards Limited.',
+      '[Add a couple of sentences on her background and what she focuses on day to day.]'
     ],
-    photo: 'assets/team/daniel-mwangi.jpg',
+    photo: 'assets/team/beatrice.jpg',
     linkedin: '#'
   },
   {
-    id: 'grace-atieno',
-    name: 'Grace Atieno',
-    role: 'Visa & Compliance Officer',
-    shortBio: 'Grace handles the visa and documentation side of every application, making sure submissions are accurate, complete and lodged on time across all five destinations.',
+    id: 'dennis',
+    name: 'Dennis',
+    role: 'Compliance and Verification',
+    shortBio: 'Dennis handles compliance and verification at Studies and Awards Limited, making sure every application meets the right standards.',
     fullBio: [
-      'Grace Atieno is the Visa and Compliance Officer at Studies and Awards Limited. She reviews every student’s documentation before submission and manages visa lodgement across Australia, the UK, Germany, Canada and Ireland.',
-      'Her background in immigration paperwork means students get an extra, careful set of eyes on the details that most often cause delays or refusals.'
+      'Dennis leads Compliance and Verification at Studies and Awards Limited.',
+      '[Add a couple of sentences on his background and what he focuses on day to day.]'
     ],
-    photo: 'assets/team/grace-atieno.jpg',
+    photo: 'assets/team/dennis.jpg',
     linkedin: '#'
   },
   {
-    id: 'kevin-langat',
-    name: 'Kevin Langat',
-    role: 'Client Relations Lead',
-    shortBio: 'Kevin is usually the first person students speak to, matching each enquiry with the right counsellor and staying on hand throughout the process to answer questions as they come up.',
+    id: 'tebby',
+    name: 'Tebby',
+    role: 'Administration and Accounts',
+    shortBio: 'Tebby manages administration and accounts at Studies and Awards Limited, keeping the office and finances running smoothly.',
     fullBio: [
-      'Kevin Langat leads client relations at Studies and Awards Limited. He’s typically the first point of contact for new enquiries, taking time to understand a student’s goals before matching them with the counsellor best suited to their destination.',
-      'Beyond the initial match, Kevin stays involved as a point of contact throughout the process, making sure students always know who to reach and what’s happening next.'
+      'Tebby handles Administration and Accounts at Studies and Awards Limited.',
+      '[Add a couple of sentences on her background and what she focuses on day to day.]'
     ],
-    photo: 'assets/team/kevin-langat.jpg',
+    photo: 'assets/team/tebby.jpg',
+    linkedin: '#'
+  },
+  {
+    id: 'witney',
+    name: 'Witney',
+    role: 'IELTS and PTE Tutor',
+    shortBio: 'Witney tutors IELTS and PTE at Studies and Awards Limited, preparing students for the language requirements of their destination.',
+    fullBio: [
+      'Witney is the IELTS and PTE Tutor at Studies and Awards Limited.',
+      '[Add a couple of sentences on her background and what she focuses on day to day.]'
+    ],
+    photo: 'assets/team/witney.jpg',
+    linkedin: '#'
+  },
+  {
+    id: 'joy',
+    name: 'Joy',
+    role: 'Applications',
+    shortBio: 'Joy handles applications at Studies and Awards Limited, guiding students through their submissions to partner institutions.',
+    fullBio: [
+      'Joy works on Applications at Studies and Awards Limited.',
+      '[Add a couple of sentences on her background and what she focuses on day to day.]'
+    ],
+    photo: 'assets/team/joy.jpg',
+    linkedin: '#'
+  },
+  {
+    id: 'rahab',
+    name: 'Rahab',
+    role: 'Customer Experience',
+    shortBio: 'Rahab looks after Customer Experience at Studies and Awards Limited, making sure every student’s journey with us feels supported.',
+    fullBio: [
+      'Rahab works on Customer Experience at Studies and Awards Limited.',
+      '[Add a couple of sentences on her background and what she focuses on day to day.]'
+    ],
+    photo: 'assets/team/rahab.jpg',
+    linkedin: '#'
+  },
+  {
+    id: 'tina',
+    name: 'Tina',
+    role: 'Client Relations',
+    shortBio: 'Tina works in Client Relations at Studies and Awards Limited, staying in touch with students throughout their application.',
+    fullBio: [
+      'Tina works on Client Relations at Studies and Awards Limited.',
+      '[Add a couple of sentences on her background and what she focuses on day to day.]'
+    ],
+    photo: 'assets/team/tina.jpg',
+    linkedin: '#'
+  },
+  {
+    id: 'collins',
+    name: 'Collins',
+    role: 'Masomo Welfare',
+    shortBio: 'Collins works on Masomo Welfare at Studies and Awards Limited, supporting students’ wellbeing throughout their studies.',
+    fullBio: [
+      'Collins works on Masomo Welfare at Studies and Awards Limited.',
+      '[Add a couple of sentences on his background and what he focuses on day to day.]'
+    ],
+    photo: 'assets/team/collins.jpg',
     linkedin: '#'
   }
 ];
