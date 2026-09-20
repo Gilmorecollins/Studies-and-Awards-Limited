@@ -56,6 +56,18 @@ window.TEAM_MEMBERS = [
     linkedin: '#'
   },
   {
+    id: 'canisius-yego',
+    name: 'Canisius Yego',
+    role: 'Compliance and Verification Manager',
+    shortBio: 'Canisius is the Compliance and Verification Manager at Studies and Awards Limited, making sure every application meets the required standards.',
+    fullBio: [
+      'Canisius Yego is the Compliance and Verification Manager at Studies and Awards Limited, leading the team that reviews student documentation before it’s submitted to partner institutions and visa authorities.',
+      'His focus is on accuracy and accountability: making sure every file is complete, verified and compliant, so students’ applications go out right the first time.'
+    ],
+    photo: 'assets/team/canisius-yego.jpg',
+    linkedin: '#'
+  },
+  {
     id: 'dennis',
     name: 'Dennis',
     role: 'Compliance and Verification',

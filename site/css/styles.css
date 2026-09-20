@@ -789,7 +789,7 @@ p { margin: 0; }
   color: var(--ink); border-bottom: 1px solid transparent;
 }
 .team-modal-linkedin:hover { border-bottom-color: var(--ink); }
-.team-modal-photo { width: 120px; height: 120px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; }
+.team-modal-photo { width: 120px; height: 120px; border-radius: var(--radius-sm); object-fit: cover; object-position: 50% 8%; flex-shrink: 0; }
 .team-modal-bio p { font-size: 14px; line-height: 1.75; color: var(--text-prose); margin-bottom: 14px; }
 .team-modal-bio p:last-child { margin-bottom: 0; }
 
