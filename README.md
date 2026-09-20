@@ -58,8 +58,10 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
 - **Destination photos**: add the new photo to `source-assets/destination-photos/<country>/`,
   resize/compress it into `site/assets/destinations/<country>/`, then add
   an entry to that country's `partners` array in `generate-countries.mjs`
-  and regenerate. (Canada and Ireland still have no city photos, so their
-  showcase shows placeholders.)
+  and regenerate. If a photo is close to square (e.g. 4:3) and the full-screen
+  slide crops off the subject, give that city a `position: 'center bottom'`
+  (any CSS background-position) in its entry. Ireland still has no city
+  photos, so its showcase shows placeholders.
 - **Publishing**: the live version is published as a Claude Artifact, not
   auto-deployed from this repo — republish from `site/index.html` after
   making changes.

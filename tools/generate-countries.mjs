@@ -110,7 +110,14 @@ const countries = [
     areas: ['Business & Management', 'Engineering & Technology', 'Health Sciences', 'Hospitality', 'Information Technology'],
     visa: 'A Canadian study permit generally requires a letter of acceptance from a designated learning institution, proof of financial support, and a medical exam where applicable.',
     visaNote: 'Current study permit fees and financial-proof thresholds — confirm exact requirements with a Studies &amp; Awards counsellor, as these are set by Immigration, Refugees and Citizenship Canada and change periodically.',
-    partners: [],
+    partners: [
+      { city: 'Toronto', photo: 'assets/destinations/canada/toronto.jpg', fact: 'Canada\'s largest city, home to the 553-metre CN Tower — the world\'s tallest free-standing structure for more than 30 years.' },
+      { city: 'Vancouver', photo: 'assets/destinations/canada/vancouver.jpg', fact: 'Regularly ranked among the world\'s most liveable cities, set between the Pacific Ocean and the Coast Mountains.' },
+      { city: 'Montreal', photo: 'assets/destinations/canada/montreal.jpg', fact: 'One of the world\'s largest French-speaking cities, built around Mount Royal — the hill it takes its name from.' },
+      { city: 'Ottawa', photo: 'assets/destinations/canada/ottawa.jpg', fact: 'Canada\'s capital, home to Parliament Hill and a Rideau Canal that becomes the world\'s largest naturally frozen skating rink each winter.' },
+      { city: 'Calgary', photo: 'assets/destinations/canada/calgary.jpg', fact: 'Host of the 1988 Winter Olympics and the annual Calgary Stampede, with the Canadian Rockies close by.' },
+      { city: 'Edmonton', photo: 'assets/destinations/canada/edmonton.jpg', position: 'center bottom', fact: 'Alberta\'s capital, known as the "Festival City" and home to West Edmonton Mall, the largest shopping mall in North America.' },
+    ],
   },
   {
     slug: 'ireland',
@@ -145,8 +152,16 @@ function page(c) {
 
   const slideCount = c.partners.length > 0 ? c.partners.length : PLACEHOLDER_SLOTS;
 
+  // A city may set `position` (a CSS background-position, e.g. 'center bottom')
+  // when its photo is close to square and the default centred crop cuts off the
+  // subject on the full-screen slide.
+  const citySlideStyle = (p, i) => {
+    const style = (i === 0 ? `background-image:url('${p.photo}');` : '') + (p.position ? `background-position:${p.position};` : '');
+    return style ? ` style="${style}"` : '';
+  };
+
   const cityImages = (c.partners.length > 0
-    ? c.partners.map((p, i) => `      <div class="city-img" data-src="${p.photo}"${i === 0 ? ` style="background-image:url('${p.photo}');"` : ''}></div>`)
+    ? c.partners.map((p, i) => `      <div class="city-img" data-src="${p.photo}"${citySlideStyle(p, i)}></div>`)
     : Array.from({ length: PLACEHOLDER_SLOTS }, () => `      <div class="city-img is-placeholder"></div>`)
   ).join('\n');
 
