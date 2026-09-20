@@ -745,3 +745,197 @@ function createCursorFollower(options) {
     compactLink.focus({ preventScroll: true });
   });
 })();
+
+// Destination pages: the "View partners & courses" dialog. A city panel's button
+// opens a searchable list of that city's partner institutions and the courses
+// each offers, read from js/partners-<country>.js (generated from
+// tools/data/partner-institutions.json). Behaves like the team bio modal —
+// Escape / overlay click / close button, focus trap, body scroll lock, focus
+// returned to the button — and pauses the city slideshow while it's open.
+(function () {
+  'use strict';
+
+  var overlay = document.getElementById('partners-overlay');
+  var scroller = document.getElementById('city-scroller');
+  var all = window.PARTNERS;
+  if (!overlay || !scroller || !all) return;
+
+  var cities = all[Object.keys(all)[0]]; // a destination page loads exactly one country's data
+  if (!cities) return;
+
+  var modal = document.getElementById('partners-modal');
+  var closeBtn = document.getElementById('partners-close');
+  var titleEl = document.getElementById('partners-title');
+  var searchInput = document.getElementById('partners-search-input');
+  var countEl = document.getElementById('partners-count');
+  var bodyEl = document.getElementById('partners-body');
+  var playToggle = scroller.querySelector('.city-play-toggle');
+
+  var MAIL = 'admissions@studiesandawardsltd.com';
+  var chevron = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+
+  var built = {};         // city -> { items, emptyEl }, built once on first open
+  var current = null;     // the city being shown
+  var lastFocused = null;
+  var pausedSlideshow = false;
+  var hideTimer = null;
+
+  function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+
+  // Writes `text` into `el`, wrapping the first occurrence of `term` in <mark>.
+  function highlight(el, text, term) {
+    el.textContent = '';
+    var i = term ? text.toLowerCase().indexOf(term) : -1;
+    if (i < 0) { el.textContent = text; return; }
+    var mark = document.createElement('mark');
+    mark.textContent = text.slice(i, i + term.length);
+    el.appendChild(document.createTextNode(text.slice(0, i)));
+    el.appendChild(mark);
+    el.appendChild(document.createTextNode(text.slice(i + term.length)));
+  }
+
+  function build(city) {
+    return cities[city].map(function (inst) {
+      var details = document.createElement('details');
+      details.className = 'partners-item';
+
+      var summary = document.createElement('summary');
+      var name = document.createElement('span');
+      name.className = 'partners-item-name';
+      name.textContent = inst.name;
+      var meta = document.createElement('span');
+      meta.className = 'partners-item-meta';
+      meta.innerHTML = '<span>' + (inst.courses.length ? plural(inst.courses.length, 'course', 'courses') : 'Courses on request') + '</span>' + chevron;
+      summary.appendChild(name);
+      summary.appendChild(meta);
+      details.appendChild(summary);
+
+      var chips = [];
+      if (inst.courses.length) {
+        var ul = document.createElement('ul');
+        ul.className = 'partners-courses';
+        inst.courses.forEach(function (course) {
+          var li = document.createElement('li');
+          li.className = 'partners-course';
+          li.textContent = course;
+          ul.appendChild(li);
+          chips.push({ el: li, text: course });
+        });
+        details.appendChild(ul);
+      } else {
+        var note = document.createElement('p');
+        note.className = 'partners-nocourses';
+        var subject = encodeURIComponent('Course enquiry - ' + inst.name + ' (' + city + ')');
+        note.innerHTML = 'The course list for this institution isn’t published here yet. <a href="mailto:' + MAIL + '?subject=' + subject + '">Ask a counsellor</a> which programs it offers.';
+        details.appendChild(note);
+      }
+      return { el: details, nameEl: name, name: inst.name, chips: chips };
+    });
+  }
+
+  function render(city) {
+    if (!built[city]) {
+      var empty = document.createElement('p');
+      empty.className = 'partners-empty';
+      empty.hidden = true;
+      built[city] = { items: build(city), emptyEl: empty };
+    }
+    bodyEl.textContent = '';
+    built[city].items.forEach(function (it) { bodyEl.appendChild(it.el); });
+    bodyEl.appendChild(built[city].emptyEl);
+  }
+
+  // Filters by institution name or course. Institutions whose *courses* match are
+  // opened and the matching courses highlighted, so a search for "nursing" shows
+  // where it can be studied.
+  function applyFilter() {
+    var term = searchInput.value.trim().toLowerCase();
+    var data = built[current];
+    var shown = 0;
+    data.items.forEach(function (it) {
+      var nameHit = !term || it.name.toLowerCase().indexOf(term) > -1;
+      var chipHits = 0;
+      it.chips.forEach(function (chip) {
+        var hit = !!term && chip.text.toLowerCase().indexOf(term) > -1;
+        if (hit) chipHits++;
+        chip.el.classList.toggle('is-match', hit);
+        highlight(chip.el, chip.text, hit ? term : '');
+      });
+      var visible = nameHit || chipHits > 0;
+      it.el.hidden = !visible;
+      it.el.open = !!term && chipHits > 0;
+      highlight(it.nameEl, it.name, term && nameHit ? term : '');
+      if (visible) shown++;
+    });
+    var total = data.items.length;
+    countEl.textContent = term
+      ? 'Showing ' + shown + ' of ' + plural(total, 'institution', 'institutions')
+      : plural(total, 'partner institution', 'partner institutions') + ' · select one to see its courses';
+    data.emptyEl.hidden = shown > 0;
+    if (!shown) data.emptyEl.textContent = 'No institution or course in ' + current + ' matches “' + searchInput.value.trim() + '”. Try a broader word, such as “nursing” or “business”.';
+  }
+
+  // Elements a keyboard user can actually reach: visible, and not tucked inside a
+  // collapsed institution (only its summary row is focusable while it's closed).
+  function focusables() {
+    return Array.prototype.filter.call(modal.querySelectorAll('button, input, summary, a[href]'), function (el) {
+      if (el.offsetParent === null) return false;
+      return el.tagName === 'SUMMARY' || !el.closest('details:not([open])');
+    });
+  }
+
+  function trapKeys(event) {
+    if (event.key === 'Escape') { close(); return; }
+    if (event.key !== 'Tab') return;
+    var focusable = focusables();
+    if (!focusable.length) return;
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || document.activeElement === modal)) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  function open(city, trigger) {
+    if (!cities[city]) return;
+    current = city;
+    titleEl.textContent = city;
+    searchInput.value = '';
+    render(city);
+    applyFilter();
+    bodyEl.scrollTop = 0;
+
+    // the slideshow would keep rotating behind the dialog — pause it, resume on close
+    if (playToggle && scroller.classList.contains('is-playing')) { playToggle.click(); pausedSlideshow = true; }
+
+    window.clearTimeout(hideTimer);
+    lastFocused = trigger || document.activeElement;
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    window.requestAnimationFrame(function () { overlay.classList.add('is-open'); });
+    modal.focus();
+    document.addEventListener('keydown', trapKeys);
+  }
+
+  function close() {
+    overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', trapKeys);
+    hideTimer = window.setTimeout(function () { overlay.hidden = true; }, 260);
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    if (pausedSlideshow && playToggle) { playToggle.click(); pausedSlideshow = false; }
+  }
+
+  Array.prototype.forEach.call(scroller.querySelectorAll('.partners-open'), function (btn) {
+    btn.addEventListener('click', function () { open(btn.getAttribute('data-partners-city'), btn); });
+  });
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', function (event) {
+    if (event.target === overlay) close();
+  });
+  searchInput.addEventListener('input', applyFilter);
+})();

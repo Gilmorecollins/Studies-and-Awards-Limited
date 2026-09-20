@@ -1,0 +1,3579 @@
+{
+ "_about": "Partner institutions by country and city, with the courses offered. Source: the Studies and Awards partner list (Partner_Institutions.pdf, Sept 2026), cleaned of typos and cut-off names. This file is the source of truth: tools/generate-countries.mjs reads it and writes the js/partners-*.js data the destination pages load. An empty \"courses\" list means the source said \"Not listed\".",
+ "countries": {
+  "Australia": {
+   "Adelaide": [
+    {
+     "name": "Abbey College Australia",
+     "courses": [
+      "Civil design",
+      "IT",
+      "Project Management",
+      "Graduate Diploma of Management (Learning)",
+      "Business",
+      "Diploma of community service",
+      "Certificate IV in Ageing Support",
+      "Certificate IV in Disability Support",
+      "Certificate III in Individual Support"
+     ]
+    },
+    {
+     "name": "Acknowledge Education",
+     "courses": [
+      "Community Services",
+      "Civil design",
+      "Social work",
+      "Hospitality Management",
+      "Nursing",
+      "Counselling",
+      "Kitchen Management",
+      "Early Childhood Education",
+      "Graduate Diploma of Early Childhood Education",
+      "Bachelor of Construction Project Management",
+      "Advanced diploma of civil construction Design",
+      "Diploma of civil construction design",
+      "Master of Social Work",
+      "Graduate Certificate of Health and Community",
+      "Master of Counselling",
+      "Bachelor of Social Work",
+      "Bachelor of Community Services",
+      "Diploma of Nursing",
+      "Diploma of Hospitality Management",
+      "Cert III Commercial Cookery",
+      "Bachelor of Tourism and Hospitality Management",
+      "Cert IV Kitchen Management",
+      "Advanced Diploma of Hospitality Management"
+     ]
+    },
+    {
+     "name": "Alphacrucis University College",
+     "courses": [
+      "Teaching",
+      "Theology",
+      "Arts",
+      "Divinity",
+      "Bachelor of Business Analytics"
+     ]
+    },
+    {
+     "name": "Care Education Australia",
+     "courses": []
+    },
+    {
+     "name": "Central Queensland University (CQU)",
+     "courses": [
+      "BSc Nursing",
+      "BSc Public Health",
+      "Bachelor of Exercise and Sport Science",
+      "Bachelor of Science",
+      "Bachelor of Oral Health",
+      "Bachelor of Podiatry",
+      "Bachelor of Physiotherapy",
+      "Bachelor of Occupational Therapy",
+      "Bachelor of IT",
+      "BA Accounting",
+      "BA Business",
+      "B Engineering",
+      "B Eng and Technology",
+      "Bachelor of Construction Management",
+      "B Eng (Civil Construction Design)",
+      "Bachelor of Psychological Science",
+      "Bachelor of Agriculture",
+      "Master Clinical Practice",
+      "Master of Laboratory Medicine",
+      "M Eng",
+      "Master Construction Management",
+      "Master of Project Management",
+      "MSc IT",
+      "MSc Info Systems",
+      "Graduate Dip IT",
+      "Graduate Dip Project Management",
+      "Master of Social Work (Qualifying)"
+     ]
+    },
+    {
+     "name": "ECA",
+     "courses": []
+    },
+    {
+     "name": "Group Colleges Australia (GCA)",
+     "courses": [
+      "Bachelor of Business (Hospitality Management)",
+      "Bachelor of Business (Project Management)",
+      "Bachelor Business Management",
+      "Bachelor of Accounting",
+      "MBA",
+      "MBA (IT Management) (Entrepreneurship) (Accounting) (Marketing)"
+     ]
+    },
+    {
+     "name": "Ikon Institute",
+     "courses": [
+      "Bachelor of Community Services",
+      "Bachelor of Counseling and Psychotherapy",
+      "Bachelor of Social Work",
+      "Bachelor of Early Childhood Education",
+      "Master of Teaching (Early Childhood)",
+      "Diploma of Early Childhood Education",
+      "Master of Social Work (Qualifying)",
+      "Master of Counselling and Psychotherapy"
+     ]
+    },
+    {
+     "name": "Kaplan Business School",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Business (Accounting)",
+      "Bachelor of Business (Hospitality & Tourism Management)",
+      "Bachelor of Business (Management)",
+      "Bachelor of Business (Marketing)",
+      "Bachelor of Information Technology",
+      "Diploma of Business",
+      "Diploma of Commerce",
+      "Diploma of Information Technology",
+      "English for Academic Purposes",
+      "General English",
+      "Graduate Certificate in Accounting",
+      "Graduate Certificate in Business Administration",
+      "Graduate Certificate in Business Analytics",
+      "Graduate Certificate in Information Technology",
+      "Graduate Diploma of Business Administration",
+      "Graduate Diploma of Business Analytics",
+      "Graduate Diploma of Information Technology",
+      "IELTS Preparation Course",
+      "Master of Accounting",
+      "Master of Business Administration",
+      "Master of Business Analytics",
+      "Master of Business Analytics (Extension)"
+     ]
+    },
+    {
+     "name": "MINT International College",
+     "courses": [
+      "Leadership & Management",
+      "Commercial Cookery",
+      "Kitchen Management",
+      "Hospitality Management",
+      "IT (Telecommunications Network Engineering)",
+      "Carpentry",
+      "ELICOS",
+      "Diploma of Hospitality Management",
+      "Certificate IV in Kitchen Management"
+     ]
+    },
+    {
+     "name": "National Diversity Institute",
+     "courses": [
+      "Diploma of community service",
+      "Certificate III in Individual Support",
+      "Certificate IV in Ageing Support",
+      "Certificate IV in Disability Support"
+     ]
+    },
+    {
+     "name": "Nova Higher Education’s",
+     "courses": []
+    },
+    {
+     "name": "Salford College",
+     "courses": [
+      "ELICOS General English",
+      "English Preparation for Academic Studies Program 1",
+      "English Preparation for Academic Studies Program 2",
+      "Certificate IV in Kitchen Management",
+      "Diploma of Hospitality Management",
+      "Advanced Diploma of Hospitality Management",
+      "Certificate III in Carpentry",
+      "Certificate III in Solid Plastering",
+      "Certificate III in Wall and Ceiling Lining",
+      "Certificate III in Wall and Floor Tiling",
+      "Certificate III in Painting and Decorating",
+      "Certificate III in Bricklaying and Blocklaying",
+      "Certificate IV in Building and Construction",
+      "Diploma of Building and Construction (Building)",
+      "Advanced diploma of civil construction Design",
+      "Diploma of Leadership and Management",
+      "Advanced Diploma of Leadership and Management",
+      "Diploma of Project Management",
+      "Advanced Diploma of Program Management",
+      "Graduate Diploma of Management (Learning)"
+     ]
+    },
+    {
+     "name": "Skills Institute Australia (SIA)",
+     "courses": [
+      "Hospitality Management",
+      "Building & Construction",
+      "Civil Construction Design",
+      "Business",
+      "IT (Telecommunications Network Engineering)",
+      "Automotive",
+      "General English",
+      "Project Management",
+      "Kitchen Management"
+     ]
+    },
+    {
+     "name": "Southern Academy of Business and Technology",
+     "courses": []
+    },
+    {
+     "name": "Sunbeam International College",
+     "courses": [
+      "IT",
+      "Civil Construction Design",
+      "Kitchen Management",
+      "Ageing Support",
+      "Hospitality Management",
+      "ELICOS",
+      "General English",
+      "Electrical and Information Engineering",
+      "Certificate IV in Kitchen Management"
+     ]
+    },
+    {
+     "name": "TAFE South Australia",
+     "courses": [
+      "Diploma in Marketing and Communication",
+      "Associate Degree in Electrical Engineering",
+      "Certificate IV in Building and Construction",
+      "Diploma in Automotive Technology",
+      "Associate Degree in Mechanical Engineering"
+     ]
+    },
+    {
+     "name": "The University of Adelaide College",
+     "courses": [
+      "Bachelor of Psychology",
+      "Bachelor of Journalism",
+      "Master of LAW",
+      "Bachelors of Science Majoring in Chemistry",
+      "Bachelors of Science Majoring in Genetics",
+      "Masters of Engineering",
+      "Bachelor of Accounting",
+      "Bachelors of Commerce Majoring in Business",
+      "Graduate Diploma in Midwifery",
+      "Graduate Diploma in Marketing"
+     ]
+    },
+    {
+     "name": "Torrens University Australia",
+     "courses": [
+      "Community Services",
+      "Public Health",
+      "Interior Design and Decoration",
+      "Design and Animation",
+      "Business (Accounting)",
+      "Associate Degree of Cybersecurity"
+     ]
+    },
+    {
+     "name": "University of the Sunshine Coast",
+     "courses": [
+      "Bachelor of Engineering - Electrical and Electronic",
+      "Bachelor of Nursing Science -",
+      "Bachelor of Education studies",
+      "Bachelor of Social Work",
+      "Bachelor of Nursing Science",
+      "Bachelor of Engineering - Civil",
+      "Bachelor of Engineering - Mechanical (Honours)",
+      "Bachelor of Engineering - Civil honours"
+     ]
+    },
+    {
+     "name": "Victoria Institute of Technology",
+     "courses": [
+      "Diploma of Information Technology",
+      "Diploma of Business",
+      "Bachelor of Business",
+      "Bachelor of Information Technology and Systems",
+      "Master of Information Technology and Systems",
+      "Master of Business Administration",
+      "Cookery",
+      "Telecommunication engineering",
+      "Carpentry"
+     ]
+    },
+    {
+     "name": "Victorian Institute of Technology (VIT)",
+     "courses": []
+    }
+   ],
+   "Brisbane": [
+    {
+     "name": "Acknowledge Education",
+     "courses": [
+      "Community Services",
+      "Civil design",
+      "Social work",
+      "Hospitality Management",
+      "Nursing",
+      "Counselling",
+      "Kitchen Management",
+      "Early Childhood Education",
+      "Graduate Diploma of Early Childhood Education",
+      "Bachelor of Construction Project Management",
+      "Advanced diploma of civil construction Design",
+      "Diploma of civil construction design",
+      "Master of Social Work",
+      "Graduate Certificate of Health and Community",
+      "Master of Counselling",
+      "Bachelor of Social Work",
+      "Bachelor of Community Services",
+      "Diploma of Nursing",
+      "Diploma of Hospitality Management",
+      "Cert III Commercial Cookery",
+      "Bachelor of Tourism and Hospitality Management",
+      "Cert IV Kitchen Management",
+      "Advanced Diploma of Hospitality Management"
+     ]
+    },
+    {
+     "name": "AIBI Higher Education",
+     "courses": [
+      "Bachelor of Cyber Security",
+      "Master of IT in Cyber Security",
+      "Bachelor of Business",
+      "Bachelor of Enterprise Management Systems",
+      "Bachelor of Business Specialisations",
+      "MBA -Digital Transformation)"
+     ]
+    },
+    {
+     "name": "Alphacrucis University College",
+     "courses": [
+      "Teaching",
+      "Theology",
+      "Arts",
+      "Divinity",
+      "Bachelor of Business Analytics"
+     ]
+    },
+    {
+     "name": "Australia Institute of Business and Technology - International",
+     "courses": [
+      "Electronics and Communications Engineering",
+      "Portfolio Management"
+     ]
+    },
+    {
+     "name": "Australia Institute of Business and Technology (AIBT)",
+     "courses": [
+      "ELICOS",
+      "Leadership & Management",
+      "Logistics",
+      "Project Management",
+      "IT (Telecommunications Network Engineering)",
+      "Supply Chain Management",
+      "Ageing Support",
+      "Community Services",
+      "Early Childhood Education",
+      "Air Conditioning and Refrigeration Engineering",
+      "Automotive"
+     ]
+    },
+    {
+     "name": "Australian Catholic University",
+     "courses": [
+      "Bachelor of Biomedical Sciences",
+      "Bachelor of Applied Public Health",
+      "Bachelor of Commerce",
+      "Bachelor of Criminology",
+      "Bachelor of Computer Science",
+      "Bachelor of Education - Early Childhood and Primary",
+      "Bachelor of Human Rights",
+      "Bachelor of IT",
+      "Bachelor Business Management",
+      "Bachelor of Nutrition Science",
+      "Bachelor of Nursing",
+      "Bachelor of Occupational Therapy",
+      "Bachelor of Psychology",
+      "Bachelor of Laws",
+      "Bachelor Social Work",
+      "Bachelor Accounting and Finance",
+      "MS Data Science",
+      "MSc IT",
+      "MBA",
+      "Master Social Work",
+      "MPA",
+      "MSc Public Health",
+      "MA Teaching",
+      "MA Education"
+     ]
+    },
+    {
+     "name": "Australian College of Applied Professions (ACAP)",
+     "courses": [
+      "Counselling",
+      "Social work",
+      "Psychological Science",
+      "MBA",
+      "Graduate diploma of legal practice (PLT)",
+      "Criminology",
+      "Graduate certificate of human service"
+     ]
+    },
+    {
+     "name": "Australian Institute of Business Intelligence (AIBI)",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Business (AI Management) (Hospitality Management) (Enterprise Management Systems)",
+      "Bachelor of Cyber Security",
+      "Bachelor of Enterprise Management Systems",
+      "Master of IT in Cyber Security",
+      "MBA -Digital Transformation)"
+     ]
+    },
+    {
+     "name": "Bond University",
+     "courses": [
+      "Actuarial Science & Data Analytics",
+      "Architecture",
+      "BSC Exercise and Sport Science",
+      "BA Arts",
+      "BA policy, Philosophy and Economics",
+      "Bachelor Exercise and Sport Science",
+      "BA Business",
+      "Bachelor Sport Science",
+      "BA Communication",
+      "Bachelor Project Management",
+      "Master of Legal Admin",
+      "Master Communication",
+      "MSc Finance",
+      "MBA"
+     ]
+    },
+    {
+     "name": "Brighton College",
+     "courses": [
+      "Advanced Diploma of Business",
+      "Advanced Diploma of Hospitality Management",
+      "Advanced Diploma of Information Technology",
+      "Certificate III in Individual Support",
+      "Certificate IV in Ageing Support",
+      "Certificate IV in Business",
+      "Certificate IV in Kitchen Management",
+      "Diploma of Business",
+      "Diploma of Community Services",
+      "Diploma of Hospitality Management",
+      "Diploma of Information Technology",
+      "English for Academic Purposes",
+      "General English (Starter to Advanced)",
+      "Graduate Diploma of Management (Learning)",
+      "Pearson Test of English Preparation"
+     ]
+    },
+    {
+     "name": "Central Queensland University (CQU)",
+     "courses": [
+      "BSc Nursing",
+      "BSc Public Health",
+      "Bachelor of Exercise and Sport Science",
+      "Bachelor of Science",
+      "Bachelor of Oral Health",
+      "Bachelor of Podiatry",
+      "Bachelor of Physiotherapy",
+      "Bachelor of Occupational Therapy",
+      "Bachelor of IT",
+      "BA Accounting",
+      "BA Business",
+      "B Engineering",
+      "B Eng and Technology",
+      "Bachelor of Construction Management",
+      "B Eng (Civil Construction Design)",
+      "Bachelor of Psychological Science",
+      "Bachelor of Agriculture",
+      "Master Clinical Practice",
+      "Master of Laboratory Medicine",
+      "M Eng",
+      "Master Construction Management",
+      "Master of Project Management",
+      "MSc IT",
+      "MSc Info Systems",
+      "Graduate Dip IT",
+      "Graduate Dip Project Management",
+      "Master of Social Work (Qualifying)"
+     ]
+    },
+    {
+     "name": "ECA",
+     "courses": []
+    },
+    {
+     "name": "Engineering Institute of Technology",
+     "courses": []
+    },
+    {
+     "name": "Greenwich Higher Education",
+     "courses": []
+    },
+    {
+     "name": "Griffith University",
+     "courses": [
+      "BA Business",
+      "BA Commerce",
+      "MA Business",
+      "MA Finance",
+      "MA Financial Planning",
+      "MPA",
+      "MA Financial Tech",
+      "B Arts",
+      "Bachelor of Laws",
+      "Bachelor of Science",
+      "BA Criminology and Criminal Justice",
+      "Bachelors of Cyber Sec/Criminology&Criminal Justice",
+      "Bachelor Forensic Science",
+      "Political Science & IR",
+      "Bachelor Early Childhood and Primary Education",
+      "MA Education",
+      "BA Primary and Sec Education",
+      "MA Primary & Sec Teaching",
+      "BA Animation",
+      "BA Cinematic Arts",
+      "BA Film & screen Media Production",
+      "MA Cinematic Arts",
+      "BSc Computer Science",
+      "BA Digital Marketing and Analytics",
+      "Bachelor of Information Technology (BIT)",
+      "BSc Software Eng",
+      "MSc Cyber Sec",
+      "MSc Data Science",
+      "Master of Information Technology (MIT)",
+      "BA Aviation",
+      "B Engineering",
+      "BSc Health Science",
+      "BSc Biomedical Science",
+      "BSc Paramedicine",
+      "Bach Pharmacology & Toxicology",
+      "MSC Pharmacy",
+      "MSc Biotechnology",
+      "Bach Exercise Science",
+      "Bach Physiotherapy",
+      "Bach Sport Dev",
+      "Bach Int Tourism & Hotel Management",
+      "BSc Public Health",
+      "Bach Nutrition and Dietetics",
+      "Bach Occupational Therapy",
+      "Master Dentistry",
+      "Clinical dentistry",
+      "Bach Eng",
+      "Industrial design",
+      "Environmental Science",
+      "MBA",
+      "Bach Counselling",
+      "Bach Human Services",
+      "Bach Social Work",
+      "MSc Clinical Psychology",
+      "MSc Global Public Health",
+      "Master of Mental Health Practice",
+      "MSc Social Work",
+      "MPH",
+      "Master of Rehabilitation Counselling"
+     ]
+    },
+    {
+     "name": "Holmes Institute",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Professional Accounting",
+      "Bachelor of Information Systems",
+      "MBA",
+      "MPA",
+      "Master of Information Systems",
+      "Master of Teaching (Early childhood and Diploma of Early Childhood)"
+     ]
+    },
+    {
+     "name": "Ikon Institute",
+     "courses": [
+      "Bachelor of Community Services",
+      "Bachelor of Counseling and Psychotherapy",
+      "Bachelor of Social Work",
+      "Bachelor of Early Childhood Education",
+      "Master of Teaching (Early Childhood)",
+      "Diploma of Early Childhood Education",
+      "Master of Social Work (Qualifying)",
+      "Master of Counselling and Psychotherapy"
+     ]
+    },
+    {
+     "name": "James Cook (Brisbane)",
+     "courses": [
+      "MBA",
+      "MSc Data Science",
+      "MA Education/MBA",
+      "Master of Information Technology (MIT)",
+      "MSc Eng Management",
+      "Master Int Tourism & Hospitality Management",
+      "MPA",
+      "BA Business",
+      "BA Commerce",
+      "Bachelor of Information Technology (BIT)",
+      "Bach Tourism Hospitality and Events"
+     ]
+    },
+    {
+     "name": "James Cook University",
+     "courses": [
+      "Postgraduate Qualifying Program in Business - Continue to Master of Professional Accounting",
+      "Master's Degree Master of Professional Accounting",
+      "Master of Business Administration",
+      "Bachelor of Information Technology",
+      "Master of Engineering Management",
+      "Master of Education + Master of Business Administration"
+     ]
+    },
+    {
+     "name": "Kaplan Business School",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Business (Accounting)",
+      "Bachelor of Business (Hospitality & Tourism Management)",
+      "Bachelor of Business (Management)",
+      "Bachelor of Business (Marketing)",
+      "Bachelor of Information Technology",
+      "Diploma of Business",
+      "Diploma of Commerce",
+      "Diploma of Information Technology",
+      "English for Academic Purposes",
+      "General English",
+      "Graduate Certificate in Accounting",
+      "Graduate Certificate in Business Administration",
+      "Graduate Certificate in Business Analytics",
+      "Graduate Certificate in Information Technology",
+      "Graduate Diploma of Business Administration",
+      "Graduate Diploma of Business Analytics",
+      "Graduate Diploma of Information Technology",
+      "IELTS Preparation Course",
+      "Master of Accounting",
+      "Master of Business Administration",
+      "Master of Business Analytics",
+      "Master of Business Analytics (Extension)"
+     ]
+    },
+    {
+     "name": "Leaders Institute",
+     "courses": [
+      "Agribusiness",
+      "Accounting",
+      "Business",
+      "Commerce",
+      "Agricultural Information Management",
+      "MBA"
+     ]
+    },
+    {
+     "name": "Skills Institute Australia (SIA)",
+     "courses": [
+      "Hospitality Management",
+      "Building & Construction",
+      "Civil Construction Design",
+      "Business",
+      "IT (Telecommunications Network Engineering)",
+      "Automotive",
+      "General English",
+      "Project Management",
+      "Kitchen Management"
+     ]
+    },
+    {
+     "name": "Southern Cross University",
+     "courses": [
+      "Bachelor of Laws",
+      "Bachelor of Business Administration",
+      "Bachelor of Counselling",
+      "Bachelor of Physiotherapy",
+      "Bachelor of Engineering (Honours)",
+      "Social work",
+      "Teaching",
+      "Biomedical Science",
+      "Clinical Sciences",
+      "Counselling",
+      "Education",
+      "IT",
+      "Law- Legal and Justice Studies",
+      "Nursing",
+      "Psychological Science",
+      "Veterinary Technology",
+      "MBA",
+      "Computing",
+      "Engineering Management",
+      "Accounting",
+      "Bachelor of Business",
+      "Graduate certificate in small Business Management",
+      "Master of Management"
+     ]
+    },
+    {
+     "name": "Sydney School of Business and Technology (SSBT)",
+     "courses": [
+      "Civil Construction Design",
+      "Kitchen Management",
+      "Hospitality Management",
+      "Project Management",
+      "General English",
+      "Early Childhood Education",
+      "IT"
+     ]
+    },
+    {
+     "name": "TAFE QLD",
+     "courses": [
+      "Bachelor of Nursing",
+      "Master of Cyber Security",
+      "Bachelor of Dental Prosthetics"
+     ]
+    },
+    {
+     "name": "The Hotel School (SCU)",
+     "courses": [
+      "Diploma in Hotel Management",
+      "Bachelor in Business in Hotel Management",
+      "Associate Degree of International Hotel and Tourism"
+     ]
+    },
+    {
+     "name": "University of the Sunshine Coast",
+     "courses": [
+      "Bachelor of Engineering - Electrical and Electronic",
+      "Bachelor of Nursing Science -",
+      "Bachelor of Education studies",
+      "Bachelor of Social Work",
+      "Bachelor of Nursing Science",
+      "Bachelor of Engineering - Civil",
+      "Bachelor of Engineering - Mechanical (Honours)",
+      "Bachelor of Engineering - Civil honours"
+     ]
+    },
+    {
+     "name": "Victoria University",
+     "courses": [
+      "Bachelor of Business - Accounting (BBNS)",
+      "Master of Applied Information Technology (NMIT)",
+      "Master of Professional Accounting (BMAQ)",
+      "Master of Business Analytics",
+      "Master of Business Administration",
+      "Bachelor of Information Technology",
+      "Bachelor of Early Childhood Education and Leadership",
+      "Graduate Diploma - Early Childhood Education",
+      "Diploma of Business - Enterprise (VDBE) (093391K) - Continue to Bachelor of Business - Accounting (BBNS)",
+      "Diploma of Information Technology",
+      "Master of Applied Information Technology",
+      "Bachelor of Cyber Security",
+      "Master of Enterprise Resource Planning",
+      "Master of Supply Chain Management",
+      "Bachelor of Business - Information Systems Management",
+      "Master of Education"
+     ]
+    }
+   ],
+   "Canberra": [
+    {
+     "name": "Australian Catholic University",
+     "courses": [
+      "Bachelor of Biomedical Sciences",
+      "Bachelor of Applied Public Health",
+      "Bachelor of Commerce",
+      "Bachelor of Criminology",
+      "Bachelor of Computer Science",
+      "Bachelor of Education - Early Childhood and Primary",
+      "Bachelor of Human Rights",
+      "Bachelor of IT",
+      "Bachelor Business Management",
+      "Bachelor of Nutrition Science",
+      "Bachelor of Nursing",
+      "Bachelor of Occupational Therapy",
+      "Bachelor of Psychology",
+      "Bachelor of Laws",
+      "Bachelor Social Work",
+      "Bachelor Accounting and Finance",
+      "MS Data Science",
+      "MSc IT",
+      "MBA",
+      "Master Social Work",
+      "MPA",
+      "MSc Public Health",
+      "MA Teaching",
+      "MA Education"
+     ]
+    },
+    {
+     "name": "Australian National University",
+     "courses": [
+      "BSc Computing",
+      "BSc Applied Data Analytics",
+      "B Engineering",
+      "Bachelor IR",
+      "Bachelor Music",
+      "Bachelor of Political Science",
+      "BA Political Science",
+      "BA Public Policy",
+      "BA Accounting",
+      "BA Actuarial Studies",
+      "BA Economics",
+      "BA Finance",
+      "Bachelor of Statistics",
+      "MA Accounting",
+      "MSc Public Health",
+      "MSc Professional psychology",
+      "Master Climate Change",
+      "MA Laws",
+      "MPA",
+      "MA Criminology",
+      "MA History"
+     ]
+    },
+    {
+     "name": "Canberra Institute of Technology",
+     "courses": [
+      "Certificate III/IV and Diploma IT",
+      "Cert III Hospitality",
+      "Certificate III + Diploma ECDE",
+      "Diploma+ Adv Diploma of Graphic Design"
+     ]
+    },
+    {
+     "name": "Charles Sturt University(CSU)",
+     "courses": []
+    },
+    {
+     "name": "University of Canberra",
+     "courses": [
+      "Bachelor of Information Technology",
+      "Bachelor of Primary Education",
+      "Bachelor of Business Informatics",
+      "Bachelor of Secondary Education (Science)",
+      "Bachelor of Software Engineering",
+      "Bachelor of Early Childhood Od Primary Education"
+     ]
+    }
+   ],
+   "Darwin": [
+    {
+     "name": "Canterbury Institute of Management",
+     "courses": [
+      "Bachelor of Business (Info Systems) (Accounting)",
+      "Master of ICT",
+      "MBA",
+      "MBA (Accounting) (Info Systems) (Project Management)",
+      "Graduate Diploma Business",
+      "Graduate Diploma ICT"
+     ]
+    },
+    {
+     "name": "Charles Darwin University (CDU)",
+     "courses": [
+      "Social work",
+      "IT",
+      "Civil design",
+      "Community service",
+      "Telecommunication engineering",
+      "Accounting",
+      "Arts",
+      "Business",
+      "Law- Legal and Justice Studies",
+      "Nursing",
+      "Medicine",
+      "Education",
+      "Hospitality Management",
+      "Psychological Science",
+      "Public Health",
+      "IT (Telecommunications Network Engineering)",
+      "Engineering Management",
+      "Environmental science management"
+     ]
+    }
+   ],
+   "Hobart": [
+    {
+     "name": "Australia Institute of Business and Technology (AIBT)",
+     "courses": [
+      "ELICOS",
+      "Leadership & Management",
+      "Logistics",
+      "Project Management",
+      "IT (Telecommunications Network Engineering)",
+      "Supply Chain Management",
+      "Ageing Support",
+      "Community Services",
+      "Early Childhood Education",
+      "Air Conditioning and Refrigeration Engineering",
+      "Automotive"
+     ]
+    },
+    {
+     "name": "Australian Vocational Training Academy (AVTA)",
+     "courses": [
+      "Horticulture",
+      "Agribusiness Management",
+      "Civil Construction Design",
+      "IT (Telecommunications Network Engineering)",
+      "Community Services",
+      "Early Childhood Education",
+      "Hospitality Management",
+      "Automotive"
+     ]
+    },
+    {
+     "name": "Reach Community College",
+     "courses": [
+      "Individual Support",
+      "Community Services",
+      "Accounting",
+      "Civil Construction Design",
+      "Hospitality Management",
+      "IT (Telecommunications Network Engineering)",
+      "Automotive",
+      "Commercial Cookery",
+      "Building & Construction",
+      "Logistics",
+      "ELICOS"
+     ]
+    },
+    {
+     "name": "Tas TAFE",
+     "courses": [
+      "Certificate III in Account Administration",
+      "Certificate IV in Accounting and Bookkeeping",
+      "Diploma in Community Service",
+      "Diploma of Nursing",
+      "Diploma of Hospitality Management"
+     ]
+    },
+    {
+     "name": "University of Tasmania",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Accounting",
+      "Bachelor of Business Analytics",
+      "Bachelor in Business Economics",
+      "BA Finance",
+      "Hospitality Management",
+      "Bachelor of Social Work",
+      "Bachelor of Marine and Antarctic Science",
+      "Bachelor of Science - Environmental Remediation",
+      "Bachelor of Information and Communication Technology",
+      "Bachelor of Economics",
+      "Master of Planning",
+      "Bachelor of Architecture and Built Environments",
+      "Master of Professional Accounting - Accounting for Sustainable Business",
+      "Bachelor of Nursing",
+      "Bachelor of Biomedicine",
+      "Bachelor of Science - Molecular Bioscience",
+      "Bachelor of Science - Marine Biology",
+      "Master of Information Technology and Systems",
+      "Bachelor of Pharmacy",
+      "Master of Speech Pathology",
+      "Bachelor of Arts",
+      "Bachelor of Arts (Honours) - History",
+      "Bachelor of Arts (Honours) - Geography and Environmental Sciences",
+      "Bachelor of Arts (Honours) - International Relations",
+      "Bachelor of Laws",
+      "Bachelor of Arts (Honours) - Politics and Policy",
+      "Master of Teaching - Secondary Specialisation",
+      "Master of Psychology - Clinical",
+      "Master of Protected Area Conservation",
+      "Bachelor of Arts (Honours) - Criminology",
+      "Bachelor of Design",
+      "Bachelor of Exercise and Sport Science",
+      "Bachelor of Nutrition Science",
+      "Master of Social Work - Qualifying",
+      "Bachelor of Fine Arts",
+      "Bachelor of Science - Psychological Science",
+      "Master of Agriculture and Food Sciences (Specialisation)",
+      "Bachelor of Science - Zoology",
+      "Bachelor of Global Logistics and Maritime Management - Maritime Business Management (, Bachelor of Music - Classical Music Performance, Master of Finance"
+     ]
+    }
+   ],
+   "Melbourne": [
+    {
+     "name": "Acknowledge Education",
+     "courses": [
+      "Community Services",
+      "Civil design",
+      "Social work",
+      "Hospitality Management",
+      "Nursing",
+      "Counselling",
+      "Kitchen Management",
+      "Early Childhood Education",
+      "Graduate Diploma of Early Childhood Education",
+      "Bachelor of Construction Project Management",
+      "Advanced diploma of civil construction Design",
+      "Diploma of civil construction design",
+      "Master of Social Work",
+      "Graduate Certificate of Health and Community",
+      "Master of Counselling",
+      "Bachelor of Social Work",
+      "Bachelor of Community Services",
+      "Diploma of Nursing",
+      "Diploma of Hospitality Management",
+      "Cert III Commercial Cookery",
+      "Bachelor of Tourism and Hospitality Management",
+      "Cert IV Kitchen Management",
+      "Advanced Diploma of Hospitality Management"
+     ]
+    },
+    {
+     "name": "AIBI Higher Education",
+     "courses": [
+      "Bachelor of Cyber Security",
+      "Master of IT in Cyber Security",
+      "Bachelor of Business",
+      "Bachelor of Enterprise Management Systems",
+      "Bachelor of Business Specialisations",
+      "MBA -Digital Transformation)"
+     ]
+    },
+    {
+     "name": "Alphacrucis University College",
+     "courses": [
+      "Teaching",
+      "Theology",
+      "Arts",
+      "Divinity",
+      "Bachelor of Business Analytics"
+     ]
+    },
+    {
+     "name": "ALTEC College",
+     "courses": []
+    },
+    {
+     "name": "Analytics Institute of Australia",
+     "courses": []
+    },
+    {
+     "name": "Auscanus Institute of Australia",
+     "courses": [
+      "ELICOS",
+      "Cookery",
+      "Kitchen Management",
+      "Hospitality Management",
+      "Leadership & Management",
+      "Business"
+     ]
+    },
+    {
+     "name": "Australian Catholic University",
+     "courses": [
+      "Bachelor of Biomedical Sciences",
+      "Bachelor of Applied Public Health",
+      "Bachelor of Commerce",
+      "Bachelor of Criminology",
+      "Bachelor of Computer Science",
+      "Bachelor of Education - Early Childhood and Primary",
+      "Bachelor of Human Rights",
+      "Bachelor of IT",
+      "Bachelor Business Management",
+      "Bachelor of Nutrition Science",
+      "Bachelor of Nursing",
+      "Bachelor of Occupational Therapy",
+      "Bachelor of Psychology",
+      "Bachelor of Laws",
+      "Bachelor Social Work",
+      "Bachelor Accounting and Finance",
+      "MS Data Science",
+      "MSc IT",
+      "MBA",
+      "Master Social Work",
+      "MPA",
+      "MSc Public Health",
+      "MA Teaching",
+      "MA Education"
+     ]
+    },
+    {
+     "name": "Australian College of Applied Professions (ACAP)",
+     "courses": [
+      "Counselling",
+      "Social work",
+      "Psychological Science",
+      "MBA",
+      "Graduate diploma of legal practice (PLT)",
+      "Criminology",
+      "Graduate certificate of human service"
+     ]
+    },
+    {
+     "name": "Australian Institute of Business Intelligence (AIBI)",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Business (AI Management) (Hospitality Management) (Enterprise Management Systems)",
+      "Bachelor of Cyber Security",
+      "Bachelor of Enterprise Management Systems",
+      "Master of IT in Cyber Security",
+      "MBA -Digital Transformation)"
+     ]
+    },
+    {
+     "name": "Australian Institute of Higher Education (AIH)",
+     "courses": [
+      "Bachelor of Accounting",
+      "Bachelor of Business (Hospitality and Tourism Management)",
+      "Bachelor of Business Information Systems",
+      "Bachelor of Business Project Management",
+      "MBA (Business Analytics)",
+      "Master of Business Information Systems",
+      "Master of Business Information Systems (Data Analytics) (Cyber Security)"
+     ]
+    },
+    {
+     "name": "Australian Vocational Training Academy (AVTA)",
+     "courses": [
+      "Horticulture",
+      "Agribusiness Management",
+      "Civil Construction Design",
+      "IT (Telecommunications Network Engineering)",
+      "Community Services",
+      "Early Childhood Education",
+      "Hospitality Management",
+      "Automotive"
+     ]
+    },
+    {
+     "name": "Barton Business School",
+     "courses": []
+    },
+    {
+     "name": "Box Hill Institute",
+     "courses": []
+    },
+    {
+     "name": "Brighton College",
+     "courses": [
+      "Advanced Diploma of Business",
+      "Advanced Diploma of Hospitality Management",
+      "Advanced Diploma of Information Technology",
+      "Certificate III in Individual Support",
+      "Certificate IV in Ageing Support",
+      "Certificate IV in Business",
+      "Certificate IV in Kitchen Management",
+      "Diploma of Business",
+      "Diploma of Community Services",
+      "Diploma of Hospitality Management",
+      "Diploma of Information Technology",
+      "English for Academic Purposes",
+      "General English (Starter to Advanced)",
+      "Graduate Diploma of Management (Learning)",
+      "Pearson Test of English Preparation"
+     ]
+    },
+    {
+     "name": "Brooklyn International College (BIC)",
+     "courses": [
+      "Advanced Diploma of community sector Management",
+      "Advanced Diploma of Leadership and management",
+      "Certificate III in Early Childhood Education and Care",
+      "Certificate III in Individual Support",
+      "Certificate IV in Ageing Support",
+      "Diploma of community service",
+      "Diploma of Early Childhood Education and Care",
+      "Diploma of Leadership and Management"
+     ]
+    },
+    {
+     "name": "Canterbury Institute of Management",
+     "courses": [
+      "Bachelor of Business (Info Systems) (Accounting)",
+      "Master of ICT",
+      "MBA",
+      "MBA (Accounting) (Info Systems) (Project Management)",
+      "Graduate Diploma Business",
+      "Graduate Diploma ICT"
+     ]
+    },
+    {
+     "name": "Central Queensland University (CQU)",
+     "courses": [
+      "BSc Nursing",
+      "BSc Public Health",
+      "Bachelor of Exercise and Sport Science",
+      "Bachelor of Science",
+      "Bachelor of Oral Health",
+      "Bachelor of Podiatry",
+      "Bachelor of Physiotherapy",
+      "Bachelor of Occupational Therapy",
+      "Bachelor of IT",
+      "BA Accounting",
+      "BA Business",
+      "B Engineering",
+      "B Eng and Technology",
+      "Bachelor of Construction Management",
+      "B Eng (Civil Construction Design)",
+      "Bachelor of Psychological Science",
+      "Bachelor of Agriculture",
+      "Master Clinical Practice",
+      "Master of Laboratory Medicine",
+      "M Eng",
+      "Master Construction Management",
+      "Master of Project Management",
+      "MSc IT",
+      "MSc Info Systems",
+      "Graduate Dip IT",
+      "Graduate Dip Project Management",
+      "Master of Social Work (Qualifying)"
+     ]
+    },
+    {
+     "name": "Charles Sturt",
+     "courses": [
+      "Master of Project Management and Leadership (Professional Practice)",
+      "Bachelor of Information Technology",
+      "Master of Professional Information Technology",
+      "Bachelor of Nursing",
+      "Bachelor of Business",
+      "Master of Business Data Analytics",
+      "Master of Professional Accounting - Professional Practice",
+      "Bachelor of Accounting",
+      "Bachelor of Pharmacy",
+      "Master of Agricultural Science",
+      "Bachelor of Physiotherapy",
+      "Bachelor of Criminal Justice",
+      "Master of Agriculture",
+      "Bachelor of Social Science - Psychology",
+      "Bachelor of Nursing Science -",
+      "Master of Professional Accounting (Professional Practice)",
+      "Double Degree - Bachelor of Veterinary Biology & Bachelor of Veterinary Science",
+      "Bachelor of Information Technology and Systems",
+      "Bachelor of Business (Accounting)",
+      "Bachelor of Occupational Therapy",
+      "Bachelor of Paramedicine",
+      "Bachelor of Education - Early Childhood and Primary",
+      "Bachelor of Oral Health - Therapy and Hygiene",
+      "Bachelor of Agricultural Business Management",
+      "Bachelor of Engineering (Honours)",
+      "Bachelor of Social Work"
+     ]
+    },
+    {
+     "name": "Charles Sturt University(CSU)",
+     "courses": []
+    },
+    {
+     "name": "Chisholm",
+     "courses": [
+      "Bachelor of Psychology",
+      "Bachelor of Nursing",
+      "Bachelor of Business (Accounting)",
+      "Bachelor of IT (Cybersecurity)",
+      "Diploma of IT"
+     ]
+    },
+    {
+     "name": "Chisholm Institute",
+     "courses": [
+      "Bachelor of Psychology",
+      "Bachelor of Community Mental Health",
+      "Bachelor of Nursing",
+      "Diploma of Building and Construction (Building)",
+      "Bachelor of Engineering Technology",
+      "Cert III/IV & Diploma IT",
+      "Bachelor of IT (Cyber Security)"
+     ]
+    },
+    {
+     "name": "Danford College",
+     "courses": [
+      "Certificate III painting and Decorating",
+      "Certificate III solid plastering",
+      "Certificate IV in building and construction (building)",
+      "Advanced Diploma of Engineering Technology",
+      "Advanced Diploma of Building and construction (management)",
+      "Advanced diploma of civil construction Design",
+      "Diploma of Information Technology",
+      "Advanced Diploma of Information Technology",
+      "Diploma of program Management",
+      "Advanced Diploma of Program Management",
+      "Graduate certificate in strategic procurement",
+      "Graduate Diploma of Management (Learning)"
+     ]
+    },
+    {
+     "name": "Danford Higher Education",
+     "courses": [
+      "Master of Information Technology",
+      "Bachelor of Business (Accounting)",
+      "Bachelor of Business (Digital Marketing)",
+      "Bachelor of Information Technology",
+      "Diploma of Business"
+     ]
+    },
+    {
+     "name": "ECA",
+     "courses": []
+    },
+    {
+     "name": "Edvantage Institute Australia (EIA)",
+     "courses": [
+      "Master of IT",
+      "MBA",
+      "Bachelor of IT",
+      "Bachelor of Accounting",
+      "Bachelor of Marketing"
+     ]
+    },
+    {
+     "name": "Engineering Institute of Technology",
+     "courses": [
+      "Master of Engineering (Mechanical)",
+      "Bachelor of Science (Electrical Engineering)",
+      "Master of Engineering (Civil: Structural)",
+      "Bachelor of Science (Industrial Automation Engineering, Bachelor of Science (Civil & Structural Engineering), Bachelor of Science (Mechanical Engineering), Master of Engineering (Electrical Systems), Master Of Engineering (Industrial Automation)"
+     ]
+    },
+    {
+     "name": "Engineering Institute of Technology (EIT)",
+     "courses": [
+      "Bachelor of Science (Civil and Structural Engineering)",
+      "Bachelor of Science (Electrical Engineering)",
+      "Bachelor of Science (Mechanical Engineering)",
+      "Doctor of Engineering",
+      "Master of Engineering (Civil: Structural)",
+      "Master of Engineering (Electrical Systems)",
+      "Master of Engineering (Industrial Automation)",
+      "Master of Engineering (Mechanical)"
+     ]
+    },
+    {
+     "name": "Greenwich Higher Education",
+     "courses": []
+    },
+    {
+     "name": "Group Colleges Australia (GCA)",
+     "courses": [
+      "Bachelor of Business (Hospitality Management)",
+      "Bachelor of Business (Project Management)",
+      "Bachelor Business Management",
+      "Bachelor of Accounting",
+      "MBA",
+      "MBA (IT Management) (Entrepreneurship) (Accounting) (Marketing)"
+     ]
+    },
+    {
+     "name": "Holmes Institute",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Professional Accounting",
+      "Bachelor of Information Systems",
+      "MBA",
+      "MPA",
+      "Master of Information Systems",
+      "Master of Teaching (Early childhood and Diploma of Early Childhood)"
+     ]
+    },
+    {
+     "name": "IHM Australia",
+     "courses": [
+      "Social work",
+      "Nursing"
+     ]
+    },
+    {
+     "name": "Ikon Institute",
+     "courses": [
+      "Bachelor of Community Services",
+      "Bachelor of Counseling and Psychotherapy",
+      "Bachelor of Social Work",
+      "Bachelor of Early Childhood Education",
+      "Master of Teaching (Early Childhood)",
+      "Diploma of Early Childhood Education",
+      "Master of Social Work (Qualifying)",
+      "Master of Counselling and Psychotherapy"
+     ]
+    },
+    {
+     "name": "Kaplan Business School",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Business (Accounting)",
+      "Bachelor of Business (Hospitality & Tourism Management)",
+      "Bachelor of Business (Management)",
+      "Bachelor of Business (Marketing)",
+      "Bachelor of Information Technology",
+      "Diploma of Business",
+      "Diploma of Commerce",
+      "Diploma of Information Technology",
+      "English for Academic Purposes",
+      "General English",
+      "Graduate Certificate in Accounting",
+      "Graduate Certificate in Business Administration",
+      "Graduate Certificate in Business Analytics",
+      "Graduate Certificate in Information Technology",
+      "Graduate Diploma of Business Administration",
+      "Graduate Diploma of Business Analytics",
+      "Graduate Diploma of Information Technology",
+      "IELTS Preparation Course",
+      "Master of Accounting",
+      "Master of Business Administration",
+      "Master of Business Analytics",
+      "Master of Business Analytics (Extension)"
+     ]
+    },
+    {
+     "name": "Melbourne Institute of Higher Education (MIHE)",
+     "courses": [
+      "IT (Cyber Security)",
+      "Business (Marketing)"
+     ]
+    },
+    {
+     "name": "Melbourne Polytech",
+     "courses": [
+      "Bachelor of Agriculture and Technology",
+      "Bachelor of Agriculture (Viticulture and Winemaking) (Agronomy) (, Cert IV Building and Construction, Diploma of Accounting, Cert IV Accounting and Bookkeeping, Diploma of Early Childhood Education, Bachelor of Early Childhood Education, Cert III Early Childhood Education, Cert IV Kitchen Management, Cert III Hospitality, Cert IV Hospitality, Diploma Hospitality Management"
+     ]
+    },
+    {
+     "name": "Melbourne Polytechnic",
+     "courses": [
+      "Dip Early Childhood",
+      "BA ECD",
+      "B Eng and Technology",
+      "Diploma Hospitality Management",
+      "BA Hospitality Management",
+      "Diploma Community Services",
+      "Adv Diploma Building Design",
+      "Bachelor of Applied Architecture",
+      "Bachelor Eng Technology",
+      "Diploma Building and Construction",
+      "Master of Information Technology (MIT)",
+      "Bachelor of Information Technology (BIT)"
+     ]
+    },
+    {
+     "name": "MINT International College",
+     "courses": [
+      "Leadership & Management",
+      "Commercial Cookery",
+      "Kitchen Management",
+      "Hospitality Management",
+      "IT (Telecommunications Network Engineering)",
+      "Carpentry",
+      "ELICOS",
+      "Diploma of Hospitality Management",
+      "Certificate IV in Kitchen Management"
+     ]
+    },
+    {
+     "name": "NAPS",
+     "courses": [
+      "Bachelor of Social Work",
+      "Bachelor of Early Childhood Education",
+      "Master I.T",
+      "MPA",
+      "MBA",
+      "Diploma of Early Childhood Education",
+      "Graduate Diploma IT",
+      "Graduate Diploma Business Admin",
+      "Graduate Diploma Management"
+     ]
+    },
+    {
+     "name": "National Academy of Professional Studies (NAPS)",
+     "courses": [
+      "Information Technology",
+      "Social work",
+      "Business",
+      "Professional Accounting",
+      "MBA",
+      "DEGREE",
+      "Masters"
+     ]
+    },
+    {
+     "name": "National Polytechnic of Australia (NPA)",
+     "courses": [
+      "ELICOS",
+      "Early Childhood Education",
+      "Automotive",
+      "Project Management",
+      "Accounting + Bookkeeping",
+      "IT (Telecommunications Network Engineering)",
+      "Kitchen Management",
+      "Hospitality Management"
+     ]
+    },
+    {
+     "name": "Nova Higher Education’s",
+     "courses": []
+    },
+    {
+     "name": "Oxford International Education Group",
+     "courses": []
+    },
+    {
+     "name": "Ozford Institute of Higher Education",
+     "courses": [
+      "Business Administration",
+      "Professional Accounting",
+      "Cyber security",
+      "Information System",
+      "Business",
+      "Business (Accounting)",
+      "General English"
+     ]
+    },
+    {
+     "name": "PIA",
+     "courses": []
+    },
+    {
+     "name": "Reach Community College",
+     "courses": [
+      "Individual Support",
+      "Community Services",
+      "Accounting",
+      "Civil Construction Design",
+      "Hospitality Management",
+      "IT (Telecommunications Network Engineering)",
+      "Automotive",
+      "Commercial Cookery",
+      "Building & Construction",
+      "Logistics",
+      "ELICOS"
+     ]
+    },
+    {
+     "name": "Rhodes International College",
+     "courses": [
+      "Early Childhood Education",
+      "Ageing Support",
+      "Community Services",
+      "Marketing & Communication",
+      "Information Technology",
+      "Business",
+      "Leadership & Management"
+     ]
+    },
+    {
+     "name": "RMIT Australia",
+     "courses": [
+      "Bach Architectural Design",
+      "Bach Interior Design",
+      "Bach Urban Planning",
+      "Bach Project Management",
+      "Bachelor of Design",
+      "B Eng (Software/Electrical)",
+      "BSc Computer Science",
+      "BSc Biomedical Science",
+      "Bachelor of Lab Science",
+      "Bach Science (Biotechnology)",
+      "Bachelor of Pharmaceutical Science",
+      "B Eng (Chemical Eng)",
+      "BSc Nursing",
+      "Bachelor of Criminology & psychology",
+      "Bachelor of Youth Work and Youth Studies"
+     ]
+    },
+    {
+     "name": "Southern Cross University",
+     "courses": [
+      "Social work",
+      "Teaching",
+      "Biomedical Science",
+      "Clinical Sciences",
+      "Counselling",
+      "Education",
+      "IT",
+      "Law- Legal and Justice Studies",
+      "Nursing",
+      "Psychological Science",
+      "Veterinary Technology",
+      "MBA",
+      "Computing",
+      "Engineering Management",
+      "Accounting",
+      "Bachelor of Business",
+      "Graduate certificate in small Business Management",
+      "Master of Management"
+     ]
+    },
+    {
+     "name": "Swinburne University of Technology",
+     "courses": [
+      "Advanced Diploma of Engineering Technology (Mechanical Engineering Design)"
+     ]
+    },
+    {
+     "name": "The Gordon",
+     "courses": [
+      "Diploma of Accounting",
+      "Advanced Diploma of Information Technology (Cyber Security)",
+      "Certificate III in Business",
+      "Certificate III in Business (Medical Administration)"
+     ]
+    },
+    {
+     "name": "The Hotel School (SCU)",
+     "courses": [
+      "Diploma in Hotel Management",
+      "Bachelor in Business in Hotel Management",
+      "Associate Degree of International Hotel and Tourism"
+     ]
+    },
+    {
+     "name": "The Institute of International Studies (TIIS)",
+     "courses": [
+      "Bachelor of IT",
+      "Bachelor of Business",
+      "MBA",
+      "MPA",
+      "Master of Cyber Security"
+     ]
+    },
+    {
+     "name": "Torrens University Australia",
+     "courses": [
+      "Community Services",
+      "Public Health",
+      "Interior Design and Decoration",
+      "Design and Animation",
+      "Business (Accounting)",
+      "Associate Degree of Cybersecurity"
+     ]
+    },
+    {
+     "name": "Universal Higher Education",
+     "courses": [
+      "Graduate Certificate in IT",
+      "Graduate Diploma of IT",
+      "Bachelor of IT",
+      "Bachelor of Multinational Film Production",
+      "Master of IT",
+      "Master of Engineering Management"
+     ]
+    },
+    {
+     "name": "University of Wollongong",
+     "courses": [
+      "Community Services",
+      "Biomedical Science",
+      "Early Childhood Education",
+      "Civil Engineering",
+      "Electrical and Information Engineering",
+      "Bachelor of Science (Mechanical Engineering)",
+      "Mining",
+      "IT- AI and Data Science",
+      "IT- Big Data and Analytics",
+      "IT- Business Information Systems",
+      "IT- Networking and Security"
+     ]
+    },
+    {
+     "name": "VIC Government School (Victoria)",
+     "courses": []
+    },
+    {
+     "name": "Victoria Institute of Technology",
+     "courses": [
+      "Diploma of Information Technology",
+      "Diploma of Business",
+      "Bachelor of Business",
+      "Bachelor of Information Technology and Systems",
+      "Master of Information Technology and Systems",
+      "Master of Business Administration",
+      "Cookery",
+      "Telecommunication engineering",
+      "Carpentry"
+     ]
+    },
+    {
+     "name": "Victorian Institute of Technology (VIT)",
+     "courses": []
+    }
+   ],
+   "Perth": [
+    {
+     "name": "Acknowledge Education",
+     "courses": [
+      "Community Services",
+      "Civil design",
+      "Social work",
+      "Hospitality Management",
+      "Nursing",
+      "Counselling",
+      "Kitchen Management",
+      "Early Childhood Education",
+      "Graduate Diploma of Early Childhood Education",
+      "Bachelor of Construction Project Management",
+      "Advanced diploma of civil construction Design",
+      "Diploma of civil construction design",
+      "Master of Social Work",
+      "Graduate Certificate of Health and Community",
+      "Master of Counselling",
+      "Bachelor of Social Work",
+      "Bachelor of Community Services",
+      "Diploma of Nursing",
+      "Diploma of Hospitality Management",
+      "Cert III Commercial Cookery",
+      "Bachelor of Tourism and Hospitality Management",
+      "Cert IV Kitchen Management",
+      "Advanced Diploma of Hospitality Management"
+     ]
+    },
+    {
+     "name": "AIBI Higher Education",
+     "courses": [
+      "Bachelor of Cyber Security",
+      "Master of IT in Cyber Security",
+      "Bachelor of Business",
+      "Bachelor of Enterprise Management Systems",
+      "Bachelor of Business Specialisations",
+      "MBA -Digital Transformation)"
+     ]
+    },
+    {
+     "name": "Alphacrucis University College",
+     "courses": [
+      "Teaching",
+      "Theology",
+      "Arts",
+      "Divinity",
+      "Bachelor of Business Analytics"
+     ]
+    },
+    {
+     "name": "APEIRO Institute",
+     "courses": [
+      "Automotive",
+      "Electronics and Communications",
+      "Civil Construction Design"
+     ]
+    },
+    {
+     "name": "Australian College of Management and Innovation",
+     "courses": [
+      "Advanced Diploma of Business",
+      "Advanced diploma of civil construction Design",
+      "Certificate III in Bricklaying and Blocklaying",
+      "Certificate III in Wall and Ceiling Lining",
+      "Diploma of Building and construction (management)",
+      "Diploma of Business",
+      "Diploma of civil construction design",
+      "Graduate Diploma of Management (Learning)"
+     ]
+    },
+    {
+     "name": "Australian Data & Cyber Institute (ADCI)",
+     "courses": [
+      "Data Science",
+      "Cyber security"
+     ]
+    },
+    {
+     "name": "Australian Institute of Business Intelligence (AIBI)",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Business (AI Management) (Hospitality Management) (Enterprise Management Systems)",
+      "Bachelor of Cyber Security",
+      "Bachelor of Enterprise Management Systems",
+      "Master of IT in Cyber Security",
+      "MBA -Digital Transformation)"
+     ]
+    },
+    {
+     "name": "Australian Technical College (ATC)",
+     "courses": [
+      "Kitchen Management",
+      "Hospitality Management",
+      "Business",
+      "Community Services",
+      "IT (Telecommunications Network Engineering)",
+      "Civil Construction Design"
+     ]
+    },
+    {
+     "name": "Australian Tertiary Institute (ATI)",
+     "courses": [
+      "Kitchen Management",
+      "Hospitality Management",
+      "IT (Telecommunications Network Engineering)"
+     ]
+    },
+    {
+     "name": "DNA Kingston Training",
+     "courses": [
+      "Work health and safety"
+     ]
+    },
+    {
+     "name": "Engineering Institute of Technology",
+     "courses": [
+      "Master of Engineering (Mechanical)",
+      "Bachelor of Science (Electrical Engineering)",
+      "Master of Engineering (Civil: Structural)",
+      "Bachelor of Science (Industrial Automation Engineering, Bachelor of Science (Civil & Structural Engineering), Bachelor of Science (Mechanical Engineering), Master of Engineering (Electrical Systems), Master Of Engineering (Industrial Automation)"
+     ]
+    },
+    {
+     "name": "Engineering Institute of Technology (EIT)",
+     "courses": [
+      "Bachelor of Science (Civil and Structural Engineering)",
+      "Bachelor of Science (Electrical Engineering)",
+      "Bachelor of Science (Mechanical Engineering)",
+      "Doctor of Engineering",
+      "Master of Engineering (Civil: Structural)",
+      "Master of Engineering (Electrical Systems)",
+      "Master of Engineering (Industrial Automation)",
+      "Master of Engineering (Mechanical)"
+     ]
+    },
+    {
+     "name": "IHM Australia",
+     "courses": [
+      "Social work",
+      "Nursing"
+     ]
+    },
+    {
+     "name": "Kaplan Business School",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Business (Accounting)",
+      "Bachelor of Business (Hospitality & Tourism Management)",
+      "Bachelor of Business (Management)",
+      "Bachelor of Business (Marketing)",
+      "Bachelor of Information Technology",
+      "Diploma of Business",
+      "Diploma of Commerce",
+      "Diploma of Information Technology",
+      "English for Academic Purposes",
+      "General English",
+      "Graduate Certificate in Accounting",
+      "Graduate Certificate in Business Administration",
+      "Graduate Certificate in Business Analytics",
+      "Graduate Certificate in Information Technology",
+      "Graduate Diploma of Business Administration",
+      "Graduate Diploma of Business Analytics",
+      "Graduate Diploma of Information Technology",
+      "IELTS Preparation Course",
+      "Master of Accounting",
+      "Master of Business Administration",
+      "Master of Business Analytics",
+      "Master of Business Analytics (Extension)"
+     ]
+    },
+    {
+     "name": "Keystone College of Business and Technology (KCBT)",
+     "courses": [
+      "Civil Construction Design",
+      "Cookery",
+      "Hospitality Management",
+      "Social Media Marketing",
+      "Business",
+      "PTE",
+      "Project Management"
+     ]
+    },
+    {
+     "name": "Kingston International College",
+     "courses": [
+      "Commercial Cookery",
+      "Certificate IV in Kitchen Management",
+      "Diploma of Hospitality Management",
+      "Hospitality Management",
+      "Certificate III in Early Childhood Education and Care",
+      "Diploma of Early Childhood Education and Care",
+      "Diploma of community service",
+      "Certificate III in Individual Support",
+      "ELICOS",
+      "Graduate Diploma of Management (Learning)"
+     ]
+    },
+    {
+     "name": "Lead College",
+     "courses": [
+      "Cookery",
+      "Kitchen Management",
+      "Early Childhood Education",
+      "Information Technology",
+      "Leadership & Management",
+      "Community Services",
+      "Automotive",
+      "Carpentry",
+      "Bricklaying & Blocklaying",
+      "Building & Construction"
+     ]
+    },
+    {
+     "name": "Milner International College of English",
+     "courses": [
+      "General English",
+      "Cambridge"
+     ]
+    },
+    {
+     "name": "Murdoch College",
+     "courses": [
+      "Foundation Studies",
+      "Diploma Business",
+      "Diploma IT",
+      "Murdoch Preparatory Course"
+     ]
+    },
+    {
+     "name": "Oxford International Education Group",
+     "courses": []
+    },
+    {
+     "name": "Skills Institute Australia (SIA)",
+     "courses": [
+      "Hospitality Management",
+      "Building & Construction",
+      "Civil Construction Design",
+      "Business",
+      "IT (Telecommunications Network Engineering)",
+      "Automotive",
+      "General English",
+      "Project Management",
+      "Kitchen Management"
+     ]
+    },
+    {
+     "name": "Southern Cross University",
+     "courses": [
+      "Social work",
+      "Teaching",
+      "Biomedical Science",
+      "Clinical Sciences",
+      "Counselling",
+      "Education",
+      "IT",
+      "Law- Legal and Justice Studies",
+      "Nursing",
+      "Psychological Science",
+      "Veterinary Technology",
+      "MBA",
+      "Computing",
+      "Engineering Management",
+      "Accounting",
+      "Bachelor of Business",
+      "Graduate certificate in small Business Management",
+      "Master of Management"
+     ]
+    },
+    {
+     "name": "Stanley College",
+     "courses": [
+      "Community Services",
+      "ICT",
+      "Accounting",
+      "Hospitality Management",
+      "Digital Marketing",
+      "Business",
+      "MBA",
+      "IT (Cyber Security)",
+      "Cookery",
+      "Kitchen Management",
+      "Early Childhood Education",
+      "Cert III Hospitality",
+      "Diploma of Hospitality Management",
+      "Advanced Diploma of Hospitality Management",
+      "Bachelor of Business (Hospitality & Events)",
+      "Cert III Commercial Cookery",
+      "Cert IV Kitchen Management",
+      "Diploma Hospitality Management",
+      "Advanced Diploma in Hospitality Management",
+      "Diploma of Business",
+      "Graduate Diploma of Management (Learning)",
+      "Bachelor of Business",
+      "Bachelor of Business (Digital Marketing Major)",
+      "Bachelor Business (Management Major)",
+      "Bachelor of Business (Accounting major)",
+      "Diploma of Community Services",
+      "Bachelor of Community Services",
+      "Diploma of nursing",
+      "Cert III Individual Support (Ageing)",
+      "Cert III in Individual Support (Disability)",
+      "Cert III Early Childhood Education",
+      "Diploma of Early Childhood Education and Care",
+      "Diploma of Information Technology",
+      "Bachelor of ICT",
+      "Master of Business",
+      "Graduate Diploma Business"
+     ]
+    },
+    {
+     "name": "TAFE West Australia",
+     "courses": [
+      "Diploma in Accounting",
+      "Diploma in Business",
+      "Certificate IV in Accounting and Bookkeeping",
+      "Advance Diploma in Engineering",
+      "Diploma of Automotive Engineering",
+      "Diploma in Surveying"
+     ]
+    },
+    {
+     "name": "The Hotel School (SCU)",
+     "courses": [
+      "Diploma in Hotel Management",
+      "Bachelor in Business in Hotel Management",
+      "Associate Degree of International Hotel and Tourism"
+     ]
+    },
+    {
+     "name": "West Australian Institute of Further Studies",
+     "courses": [
+      "Cookery",
+      "Community Services",
+      "Hospitality Management",
+      "Dental Technology",
+      "Early Childhood Education"
+     ]
+    }
+   ],
+   "Sydney": [
+    {
+     "name": "Abbey College Australia",
+     "courses": [
+      "Civil design",
+      "IT",
+      "Project Management",
+      "Graduate Diploma of Management (Learning)",
+      "Business",
+      "Diploma of community service",
+      "Certificate IV in Ageing Support",
+      "Certificate IV in Disability Support",
+      "Certificate III in Individual Support"
+     ]
+    },
+    {
+     "name": "Acknowledge Education",
+     "courses": [
+      "Community Services",
+      "Civil design",
+      "Social work",
+      "Hospitality Management",
+      "Nursing",
+      "Counselling",
+      "Kitchen Management",
+      "Early Childhood Education",
+      "Graduate Diploma of Early Childhood Education",
+      "Bachelor of Construction Project Management",
+      "Advanced diploma of civil construction Design",
+      "Diploma of civil construction design",
+      "Master of Social Work",
+      "Graduate Certificate of Health and Community",
+      "Master of Counselling",
+      "Bachelor of Social Work",
+      "Bachelor of Community Services",
+      "Diploma of Nursing",
+      "Diploma of Hospitality Management",
+      "Cert III Commercial Cookery",
+      "Bachelor of Tourism and Hospitality Management",
+      "Cert IV Kitchen Management",
+      "Advanced Diploma of Hospitality Management"
+     ]
+    },
+    {
+     "name": "AHHI",
+     "courses": [
+      "Diploma of Business",
+      "Advanced Diploma of Business",
+      "Graduate Diploma of Management (Learning)",
+      "Certificate III in Horticulture",
+      "Certificate IV in Horticulture",
+      "Certificate III in Individual Support",
+      "Diploma of Mental Health",
+      "Certificate IV in Ageing Support",
+      "Diploma of Community Services",
+      "Certificate III in Plumbing",
+      "Diploma of Building and Construction"
+     ]
+    },
+    {
+     "name": "AIBI Higher Education",
+     "courses": [
+      "Bachelor of Cyber Security",
+      "Master of IT in Cyber Security",
+      "Bachelor of Business",
+      "Bachelor of Enterprise Management Systems",
+      "Bachelor of Business Specialisations",
+      "MBA -Digital Transformation)"
+     ]
+    },
+    {
+     "name": "Alphacrucis University College",
+     "courses": [
+      "Teaching",
+      "Theology",
+      "Arts",
+      "Divinity",
+      "Bachelor of Business Analytics"
+     ]
+    },
+    {
+     "name": "APEIRO Institute",
+     "courses": [
+      "Automotive",
+      "Electronics and Communications",
+      "Civil Construction Design"
+     ]
+    },
+    {
+     "name": "Apsley College",
+     "courses": [
+      "General English",
+      "IT",
+      "Leadership & Management",
+      "Bricklaying & Blocklaying",
+      "Painting & Decorating",
+      "Wall & Floor Tiling",
+      "Project Management"
+     ]
+    },
+    {
+     "name": "Astral Skills Institute of Australia (ASIA)",
+     "courses": [
+      "Kitchen Management",
+      "Hospitality Management",
+      "Civil Construction Design"
+     ]
+    },
+    {
+     "name": "Astute Training",
+     "courses": [
+      "Community Services",
+      "Business"
+     ]
+    },
+    {
+     "name": "Australia Institute of Business and Technology - International",
+     "courses": [
+      "Electronics and Communications Engineering",
+      "Portfolio Management"
+     ]
+    },
+    {
+     "name": "Australia Institute of Business and Technology (AIBT)",
+     "courses": [
+      "ELICOS",
+      "Leadership & Management",
+      "Logistics",
+      "Project Management",
+      "IT (Telecommunications Network Engineering)",
+      "Supply Chain Management",
+      "Ageing Support",
+      "Community Services",
+      "Early Childhood Education",
+      "Air Conditioning and Refrigeration Engineering",
+      "Automotive"
+     ]
+    },
+    {
+     "name": "Australian Catholic University",
+     "courses": [
+      "Bachelor of Biomedical Sciences",
+      "Bachelor of Applied Public Health",
+      "Bachelor of Commerce",
+      "Bachelor of Criminology",
+      "Bachelor of Computer Science",
+      "Bachelor of Education - Early Childhood and Primary",
+      "Bachelor of Human Rights",
+      "Bachelor of IT",
+      "Bachelor Business Management",
+      "Bachelor of Nutrition Science",
+      "Bachelor of Nursing",
+      "Bachelor of Occupational Therapy",
+      "Bachelor of Psychology",
+      "Bachelor of Laws",
+      "Bachelor Social Work",
+      "Bachelor Accounting and Finance",
+      "MS Data Science",
+      "MSc IT",
+      "MBA",
+      "Master Social Work",
+      "MPA",
+      "MSc Public Health",
+      "MA Teaching",
+      "MA Education"
+     ]
+    },
+    {
+     "name": "Australian College of Applied Professions (ACAP)",
+     "courses": [
+      "Counselling",
+      "Social work",
+      "Psychological Science",
+      "MBA",
+      "Graduate diploma of legal practice (PLT)",
+      "Criminology",
+      "Graduate certificate of human service"
+     ]
+    },
+    {
+     "name": "Australian Harbour International College (AHIC)",
+     "courses": [
+      "Ageing Support",
+      "Community Services",
+      "Information Technology",
+      "Accounting",
+      "Project Management",
+      "Early Childhood Education",
+      "Kitchen Management",
+      "Hospitality Management",
+      "Civil Construction Design",
+      "ELICOS"
+     ]
+    },
+    {
+     "name": "Australian Health and Management Institute (AHMI)",
+     "courses": [
+      "IT (Cyber Security & Telecommunications Network)",
+      "Automotive",
+      "Painting & Decorating",
+      "Wall & Floor Tiling",
+      "Bricklaying & Blocklaying",
+      "Carpentry",
+      "Building & Construction",
+      "Civil Construction Design",
+      "Kitchen Management",
+      "Hospitality Management",
+      "Early Childhood Education",
+      "Mental Health",
+      "Community Services",
+      "ELICOS"
+     ]
+    },
+    {
+     "name": "Australian Institute of Business Intelligence (AIBI)",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Business (AI Management) (Hospitality Management) (Enterprise Management Systems)",
+      "Bachelor of Cyber Security",
+      "Bachelor of Enterprise Management Systems",
+      "Master of IT in Cyber Security",
+      "MBA -Digital Transformation)"
+     ]
+    },
+    {
+     "name": "Australian Institute of Higher Education (AIH)",
+     "courses": [
+      "Bachelor of Accounting",
+      "Bachelor of Business (Hospitality and Tourism Management)",
+      "Bachelor of Business Information Systems",
+      "Bachelor of Business Project Management",
+      "MBA (Business Analytics)",
+      "Master of Business Information Systems",
+      "Master of Business Information Systems (Data Analytics) (Cyber Security)"
+     ]
+    },
+    {
+     "name": "Australian Technical College (ATC)",
+     "courses": [
+      "Kitchen Management",
+      "Hospitality Management",
+      "Business",
+      "Community Services",
+      "IT (Telecommunications Network Engineering)",
+      "Civil Construction Design"
+     ]
+    },
+    {
+     "name": "Australian Vocational Training Academy (AVTA)",
+     "courses": [
+      "Horticulture",
+      "Agribusiness Management",
+      "Civil Construction Design",
+      "IT (Telecommunications Network Engineering)",
+      "Community Services",
+      "Early Childhood Education",
+      "Hospitality Management",
+      "Automotive"
+     ]
+    },
+    {
+     "name": "Brighton College",
+     "courses": [
+      "Advanced Diploma of Business",
+      "Advanced Diploma of Hospitality Management",
+      "Advanced Diploma of Information Technology",
+      "Certificate III in Individual Support",
+      "Certificate IV in Ageing Support",
+      "Certificate IV in Business",
+      "Certificate IV in Kitchen Management",
+      "Diploma of Business",
+      "Diploma of Community Services",
+      "Diploma of Hospitality Management",
+      "Diploma of Information Technology",
+      "English for Academic Purposes",
+      "General English (Starter to Advanced)",
+      "Graduate Diploma of Management (Learning)",
+      "Pearson Test of English Preparation"
+     ]
+    },
+    {
+     "name": "Brooklyn International College (BIC)",
+     "courses": [
+      "Advanced Diploma of community sector Management",
+      "Advanced Diploma of Leadership and management",
+      "Certificate III in Early Childhood Education and Care",
+      "Certificate III in Individual Support",
+      "Certificate IV in Ageing Support",
+      "Diploma of community service",
+      "Diploma of Early Childhood Education and Care",
+      "Diploma of Leadership and Management"
+     ]
+    },
+    {
+     "name": "Canterbury Institute of Management",
+     "courses": [
+      "Bachelor of Business (Info Systems) (Accounting)",
+      "Master of ICT",
+      "MBA",
+      "MBA (Accounting) (Info Systems) (Project Management)",
+      "Graduate Diploma Business",
+      "Graduate Diploma ICT"
+     ]
+    },
+    {
+     "name": "Central Queensland University (CQU)",
+     "courses": [
+      "BSc Nursing",
+      "BSc Public Health",
+      "Bachelor of Exercise and Sport Science",
+      "Bachelor of Science",
+      "Bachelor of Oral Health",
+      "Bachelor of Podiatry",
+      "Bachelor of Physiotherapy",
+      "Bachelor of Occupational Therapy",
+      "Bachelor of IT",
+      "BA Accounting",
+      "BA Business",
+      "B Engineering",
+      "B Eng and Technology",
+      "Bachelor of Construction Management",
+      "B Eng (Civil Construction Design)",
+      "Bachelor of Psychological Science",
+      "Bachelor of Agriculture",
+      "Master Clinical Practice",
+      "Master of Laboratory Medicine",
+      "M Eng",
+      "Master Construction Management",
+      "Master of Project Management",
+      "MSc IT",
+      "MSc Info Systems",
+      "Graduate Dip IT",
+      "Graduate Dip Project Management",
+      "Master of Social Work (Qualifying)"
+     ]
+    },
+    {
+     "name": "Charles Darwin University (CDU)",
+     "courses": [
+      "Social work",
+      "IT",
+      "Civil design",
+      "Community service",
+      "Telecommunication engineering",
+      "Accounting",
+      "Arts",
+      "Business",
+      "Law- Legal and Justice Studies",
+      "Nursing",
+      "Medicine",
+      "Education",
+      "Hospitality Management",
+      "Psychological Science",
+      "Public Health",
+      "IT (Telecommunications Network Engineering)",
+      "Engineering Management",
+      "Environmental science management"
+     ]
+    },
+    {
+     "name": "Charles Sturt",
+     "courses": [
+      "Master of Project Management and Leadership (Professional Practice)",
+      "Bachelor of Information Technology",
+      "Master of Professional Information Technology",
+      "Bachelor of Nursing",
+      "Bachelor of Business",
+      "Master of Business Data Analytics",
+      "Master of Professional Accounting - Professional Practice",
+      "Bachelor of Accounting",
+      "Bachelor of Pharmacy",
+      "Master of Agricultural Science",
+      "Bachelor of Physiotherapy",
+      "Bachelor of Criminal Justice",
+      "Master of Agriculture",
+      "Bachelor of Social Science - Psychology",
+      "Bachelor of Nursing Science -",
+      "Master of Professional Accounting (Professional Practice)",
+      "Double Degree - Bachelor of Veterinary Biology & Bachelor of Veterinary Science",
+      "Bachelor of Information Technology and Systems",
+      "Bachelor of Business (Accounting)",
+      "Bachelor of Occupational Therapy",
+      "Bachelor of Paramedicine",
+      "Bachelor of Education - Early Childhood and Primary",
+      "Bachelor of Oral Health - Therapy and Hygiene",
+      "Bachelor of Agricultural Business Management",
+      "Bachelor of Engineering (Honours)",
+      "Bachelor of Social Work"
+     ]
+    },
+    {
+     "name": "Charles Sturt University(CSU)",
+     "courses": []
+    },
+    {
+     "name": "ECA",
+     "courses": []
+    },
+    {
+     "name": "Fusion College of Technology",
+     "courses": [
+      "Civil Construction Design",
+      "Community service",
+      "IT"
+     ]
+    },
+    {
+     "name": "Greenwich Higher Education",
+     "courses": []
+    },
+    {
+     "name": "Group Colleges Australia (GCA)",
+     "courses": [
+      "Bachelor of Business (Hospitality Management)",
+      "Bachelor of Business (Project Management)",
+      "Bachelor Business Management",
+      "Bachelor of Accounting",
+      "MBA",
+      "MBA (IT Management) (Entrepreneurship) (Accounting) (Marketing)"
+     ]
+    },
+    {
+     "name": "Holmes Institute",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Professional Accounting",
+      "Bachelor of Information Systems",
+      "MBA",
+      "MPA",
+      "Master of Information Systems",
+      "Master of Teaching (Early childhood and Diploma of Early Childhood)"
+     ]
+    },
+    {
+     "name": "Ikon Institute",
+     "courses": [
+      "Bachelor of Community Services",
+      "Bachelor of Counseling and Psychotherapy",
+      "Bachelor of Social Work",
+      "Bachelor of Early Childhood Education",
+      "Master of Teaching (Early Childhood)",
+      "Diploma of Early Childhood Education",
+      "Master of Social Work (Qualifying)",
+      "Master of Counselling and Psychotherapy"
+     ]
+    },
+    {
+     "name": "Institute of Science Management & Technology (ISMT)",
+     "courses": [
+      "Automotive",
+      "Leadership & Management",
+      "Early Childhood Education",
+      "Community Services",
+      "Emergency Health Care",
+      "Information Technology",
+      "Hospitality Management",
+      "Air Conditioning and Refrigeration Engineering",
+      "Wall & Floor Tiling"
+     ]
+    },
+    {
+     "name": "International College of Australia (Western Sydney College)",
+     "courses": [
+      "Business",
+      "Accounting + Bookkeeping",
+      "Leadership & Management",
+      "Information Technology",
+      "Banking services Management",
+      "Kitchen Management",
+      "Hospitality Management",
+      "Civil Construction Design",
+      "Community Services"
+     ]
+    },
+    {
+     "name": "International Graduate Institute (IGI)",
+     "courses": [
+      "Entrepreneurship and Innovation",
+      "Digital Marketing",
+      "Business Management"
+     ]
+    },
+    {
+     "name": "Kaplan Business School",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Business (Accounting)",
+      "Bachelor of Business (Hospitality & Tourism Management)",
+      "Bachelor of Business (Management)",
+      "Bachelor of Business (Marketing)",
+      "Bachelor of Information Technology",
+      "Diploma of Business",
+      "Diploma of Commerce",
+      "Diploma of Information Technology",
+      "English for Academic Purposes",
+      "General English",
+      "Graduate Certificate in Accounting",
+      "Graduate Certificate in Business Administration",
+      "Graduate Certificate in Business Analytics",
+      "Graduate Certificate in Information Technology",
+      "Graduate Diploma of Business Administration",
+      "Graduate Diploma of Business Analytics",
+      "Graduate Diploma of Information Technology",
+      "IELTS Preparation Course",
+      "Master of Accounting",
+      "Master of Business Administration",
+      "Master of Business Analytics",
+      "Master of Business Analytics (Extension)"
+     ]
+    },
+    {
+     "name": "King's Own Institute (KOI)",
+     "courses": [
+      "Bachelor of Business Accounting",
+      "MPA",
+      "Bachelor of Business (Management and Finance)",
+      "MBA",
+      "Master of Information Systems (Business Analytics / Information Security)",
+      "Bachelor of IT",
+      "Master of IT",
+      "Master of IT (Cybersecurity / Data Analytics)"
+     ]
+    },
+    {
+     "name": "Le Pont International College",
+     "courses": [
+      "Hospitality Management",
+      "Cookery"
+     ]
+    },
+    {
+     "name": "Leaders Institute",
+     "courses": [
+      "Agribusiness",
+      "Accounting",
+      "Business",
+      "Commerce",
+      "Agricultural Information Management",
+      "MBA"
+     ]
+    },
+    {
+     "name": "NAPS",
+     "courses": [
+      "Bachelor of Social Work",
+      "Bachelor of Early Childhood Education",
+      "Master I.T",
+      "MPA",
+      "MBA",
+      "Diploma of Early Childhood Education",
+      "Graduate Diploma IT",
+      "Graduate Diploma Business Admin",
+      "Graduate Diploma Management"
+     ]
+    },
+    {
+     "name": "National Academy of Professional Studies (NAPS)",
+     "courses": [
+      "Information Technology",
+      "Social work",
+      "Business",
+      "Professional Accounting",
+      "MBA",
+      "DEGREE",
+      "Masters"
+     ]
+    },
+    {
+     "name": "National Polytechnic of Australia (NPA)",
+     "courses": [
+      "ELICOS",
+      "Early Childhood Education",
+      "Automotive",
+      "Project Management",
+      "Accounting + Bookkeeping",
+      "IT (Telecommunications Network Engineering)",
+      "Kitchen Management",
+      "Hospitality Management"
+     ]
+    },
+    {
+     "name": "New Era Institute",
+     "courses": [
+      "Certificate IV in Kitchen Management",
+      "Diploma of Hospitality Management",
+      "Advanced Diploma of Information Technology (Cyber Security)",
+      "Advanced Diploma of Information Technology (Telecommunications Network Engineering)",
+      "Certificate III & Diploma of Early Childhood Education and Care",
+      "Certificate IV in Ageing Support – Diploma of Community Services",
+      "Civil Construction Design"
+     ]
+    },
+    {
+     "name": "Opera City English College",
+     "courses": [
+      "General English",
+      "English for Academic Purposes",
+      "IELTS Preparation Course"
+     ]
+    },
+    {
+     "name": "Oxford International Education Group",
+     "courses": []
+    },
+    {
+     "name": "PIA",
+     "courses": []
+    },
+    {
+     "name": "Pivot Education",
+     "courses": [
+      "ELICOS",
+      "PTE"
+     ]
+    },
+    {
+     "name": "Reach Community College",
+     "courses": [
+      "Individual Support",
+      "Community Services",
+      "Accounting",
+      "Civil Construction Design",
+      "Hospitality Management",
+      "IT (Telecommunications Network Engineering)",
+      "Automotive",
+      "Commercial Cookery",
+      "Building & Construction",
+      "Logistics",
+      "ELICOS"
+     ]
+    },
+    {
+     "name": "Rhodes International College",
+     "courses": [
+      "Early Childhood Education",
+      "Ageing Support",
+      "Community Services",
+      "Marketing & Communication",
+      "Information Technology",
+      "Business",
+      "Leadership & Management"
+     ]
+    },
+    {
+     "name": "Rosehill College",
+     "courses": [
+      "Advanced Diploma of Engineering Technology - Electrical",
+      "Advanced Diploma of Information Technology",
+      "Advanced Diploma of Leadership and management",
+      "Advanced Diploma of Marketing and Communication",
+      "Advanced Diploma of Program Management",
+      "Certificate III in Early Childhood Education and Care",
+      "Certificate III in Electrotechnology Electrician",
+      "Certificate III in Individual Support",
+      "Certificate IV in Business",
+      "Certificate IV in Disability Support",
+      "Certificate IV in Marketing and Communication",
+      "Diploma of Business",
+      "Diploma of Community Services",
+      "Diploma of Early Childhood Education and Care",
+      "Diploma of Information Technology",
+      "Diploma of Marketing and Communication",
+      "General English",
+      "Graduate Diploma of Management (Learning)"
+     ]
+    },
+    {
+     "name": "Salford College",
+     "courses": [
+      "ELICOS General English",
+      "English Preparation for Academic Studies Program 1",
+      "English Preparation for Academic Studies Program 2",
+      "Certificate IV in Kitchen Management",
+      "Diploma of Hospitality Management",
+      "Advanced Diploma of Hospitality Management",
+      "Certificate III in Carpentry",
+      "Certificate III in Solid Plastering",
+      "Certificate III in Wall and Ceiling Lining",
+      "Certificate III in Wall and Floor Tiling",
+      "Certificate III in Painting and Decorating",
+      "Certificate III in Bricklaying and Blocklaying",
+      "Certificate IV in Building and Construction",
+      "Diploma of Building and Construction (Building)",
+      "Advanced diploma of civil construction Design",
+      "Diploma of Leadership and Management",
+      "Advanced Diploma of Leadership and Management",
+      "Diploma of Project Management",
+      "Advanced Diploma of Program Management",
+      "Graduate Diploma of Management (Learning)"
+     ]
+    },
+    {
+     "name": "Southern Academy of Business and Technology",
+     "courses": []
+    },
+    {
+     "name": "Southern Academy of Higher Education (SAHE)",
+     "courses": [
+      "Bachelor of Business (Accounting major)",
+      "Bachelor of Business (Hospitality Major)",
+      "Bachelor of Business (Information Systems Major)",
+      "Bachelor of Business (Project Management major)",
+      "Bachelor of Information Technology (Accounting Information Systems Specialisation)",
+      "Bachelor of Information Technology (Artificial Intelligence Specialisation)",
+      "Bachelor of Information Technology (Computer Science Specialisation)",
+      "Bachelor of Information Technology (Cyber Security Specialisation)",
+      "Bachelor of Information Technology (Data Analytics Specialisation)",
+      "Bachelor of Information Technology (Project and Operations Management Specialisation)",
+      "Bachelor of Information Technology (Information Systems Specialisation)"
+     ]
+    },
+    {
+     "name": "Southern Cross Institute",
+     "courses": [
+      "Bachelor of Business",
+      "Master of ICT",
+      "Graduate Diploma of IT"
+     ]
+    },
+    {
+     "name": "Southern Cross University",
+     "courses": [
+      "Social work",
+      "Teaching",
+      "Biomedical Science",
+      "Clinical Sciences",
+      "Counselling",
+      "Education",
+      "IT",
+      "Law- Legal and Justice Studies",
+      "Nursing",
+      "Psychological Science",
+      "Veterinary Technology",
+      "MBA",
+      "Computing",
+      "Engineering Management",
+      "Accounting",
+      "Bachelor of Business",
+      "Graduate certificate in small Business Management",
+      "Master of Management"
+     ]
+    },
+    {
+     "name": "Sunbeam International College",
+     "courses": [
+      "IT",
+      "Civil Construction Design",
+      "Kitchen Management",
+      "Ageing Support",
+      "Hospitality Management",
+      "ELICOS",
+      "General English",
+      "Electrical and Information Engineering",
+      "Certificate IV in Kitchen Management"
+     ]
+    },
+    {
+     "name": "Superior Training College",
+     "courses": []
+    },
+    {
+     "name": "Sydney Institute of Higher Education",
+     "courses": [
+      "Bachelor of Business (Accounting)",
+      "Master of Information Technology and Systems",
+      "Graduate Certificate of Information Technology",
+      "Graduate Diploma of Information Technology",
+      "Master of Information Technology",
+      "Bachelor of IT",
+      "Bachelor of Business",
+      "Master of IT"
+     ]
+    },
+    {
+     "name": "Sydney Metropolitan Institute of Technology",
+     "courses": [
+      "Bachelor of Business - Entrepreneurship",
+      "Bachelor of Social Work (BSW)",
+      "Bachelor of Information Technology (BIT)",
+      "Master of Social Work",
+      "Master of Information Technology (MIT)",
+      "IT (Telecommunications Network Engineering)",
+      "Social work",
+      "Master of Business Administration",
+      "Business Administration",
+      "Diploma of community service",
+      "Bachelor of Business"
+     ]
+    },
+    {
+     "name": "Sydney School of Business and Technology (SSBT)",
+     "courses": [
+      "Civil Construction Design",
+      "Kitchen Management",
+      "Hospitality Management",
+      "Project Management",
+      "General English",
+      "Early Childhood Education",
+      "IT"
+     ]
+    },
+    {
+     "name": "SydneyMet",
+     "courses": [
+      "Master of Social Work",
+      "Master of IT",
+      "MBA",
+      "Bachelor of Social Work",
+      "Bachelor of IT",
+      "Bachelor of Business (Entrepreneurship)",
+      "Graduate Diploma in Human Community Services",
+      "Graduate Diploma in IT",
+      "Graduate Diploma in Business Administration"
+     ]
+    },
+    {
+     "name": "TAFE NSW",
+     "courses": [
+      "Bachelor in Business",
+      "Bachelors of Creative Practice Specializing in Music Production Performance",
+      "Bachelor of Applied Commerce",
+      "Bachelor of Fashion and Design"
+     ]
+    },
+    {
+     "name": "Taylors College Sydney",
+     "courses": []
+    },
+    {
+     "name": "The Hotel School (SCU)",
+     "courses": [
+      "Diploma in Hotel Management",
+      "Bachelor in Business in Hotel Management",
+      "Associate Degree of International Hotel and Tourism"
+     ]
+    },
+    {
+     "name": "The Institute of International Studies (TIIS)",
+     "courses": [
+      "Bachelor of IT",
+      "Bachelor of Business",
+      "MBA",
+      "MPA",
+      "Master of Cyber Security"
+     ]
+    },
+    {
+     "name": "The One International College",
+     "courses": [
+      "Ageing Support",
+      "Community Services",
+      "IT",
+      "Marketing & Communication"
+     ]
+    },
+    {
+     "name": "The University of Sydney",
+     "courses": [
+      "Bachelors of Science",
+      "Bachelors of Arts",
+      "Bachelors of Commerce",
+      "Masters of Commerce",
+      "Bachelor of Psychology",
+      "Doctor of Clinical Dentistry (Orthodontics)",
+      "Graduate Certificate in Sustainability",
+      "Master of Sustainability",
+      "Bachelor of Economics",
+      "Bachelor of Commerce",
+      "Bachelor of Advance Computing",
+      "Master of Environmental Science",
+      "Master of LAW",
+      "Master of Data Science"
+     ]
+    },
+    {
+     "name": "Torrens University Australia",
+     "courses": [
+      "Community Services",
+      "Public Health",
+      "Interior Design and Decoration",
+      "Design and Animation",
+      "Business (Accounting)",
+      "Associate Degree of Cybersecurity"
+     ]
+    },
+    {
+     "name": "Training for Knowledge and Livelihood",
+     "courses": [
+      "Business",
+      "Accounting + Bookkeeping",
+      "Leadership & Management",
+      "Information Technology",
+      "Kitchen Management",
+      "Hospitality Management",
+      "Early Childhood Education",
+      "ELICOS"
+     ]
+    },
+    {
+     "name": "University of Newcastle International College",
+     "courses": [
+      "Bachelor of Construction Management",
+      "Bachelor of Design (Architecture)",
+      "Bachelor of Applied Data Science",
+      "Bachelor of Computer Science",
+      "Bachelor of Computing",
+      "Bachelors of Information Technology",
+      "Bachelors of Mathematics",
+      "Bachelors of Mathematics (Advance)",
+      "Bachelors of Chemical Engineering",
+      "Bachelors of Civil Engineering"
+     ]
+    },
+    {
+     "name": "University of Notre Dam",
+     "courses": [
+      "Law, Humanities & Social Sciences",
+      "Business & Management",
+      "Art, Design & Media",
+      "Natural Science & Mathematics",
+      "Pharmacy, Health & Life Sciences",
+      "Architecture"
+     ]
+    },
+    {
+     "name": "University of Tasmania",
+     "courses": [
+      "Bachelor of Business",
+      "Bachelor of Accounting",
+      "Bachelor of Business Analytics",
+      "Bachelor in Business Economics",
+      "BA Finance",
+      "Hospitality Management",
+      "Bachelor of Social Work",
+      "Bachelor of Marine and Antarctic Science",
+      "Bachelor of Science - Environmental Remediation",
+      "Bachelor of Information and Communication Technology",
+      "Bachelor of Economics",
+      "Master of Planning",
+      "Bachelor of Architecture and Built Environments",
+      "Master of Professional Accounting - Accounting for Sustainable Business",
+      "Bachelor of Nursing",
+      "Bachelor of Biomedicine",
+      "Bachelor of Science - Molecular Bioscience",
+      "Bachelor of Science - Marine Biology",
+      "Master of Information Technology and Systems",
+      "Bachelor of Pharmacy",
+      "Master of Speech Pathology",
+      "Bachelor of Arts",
+      "Bachelor of Arts (Honours) - History",
+      "Bachelor of Arts (Honours) - Geography and Environmental Sciences",
+      "Bachelor of Arts (Honours) - International Relations",
+      "Bachelor of Laws",
+      "Bachelor of Arts (Honours) - Politics and Policy",
+      "Master of Teaching - Secondary Specialisation",
+      "Master of Psychology - Clinical",
+      "Master of Protected Area Conservation",
+      "Bachelor of Arts (Honours) - Criminology",
+      "Bachelor of Design",
+      "Bachelor of Exercise and Sport Science",
+      "Bachelor of Nutrition Science",
+      "Master of Social Work - Qualifying",
+      "Bachelor of Fine Arts",
+      "Bachelor of Science - Psychological Science",
+      "Master of Agriculture and Food Sciences (Specialisation)",
+      "Bachelor of Science - Zoology",
+      "Bachelor of Global Logistics and Maritime Management - Maritime Business Management (, Bachelor of Music - Classical Music Performance, Master of Finance"
+     ]
+    },
+    {
+     "name": "University of Technology Sydney",
+     "courses": [
+      "BA in Analytics and Data Science",
+      "BA in business",
+      "BA in communication",
+      "BA in education",
+      "BA in design architecture and building",
+      "BA in engineering",
+      "BA in LAW",
+      "BA in science and mathematics"
+     ]
+    },
+    {
+     "name": "University of Technology Sydney College",
+     "courses": []
+    },
+    {
+     "name": "University of Wollongong",
+     "courses": []
+    },
+    {
+     "name": "University of Wollongong, Australia (UWA)",
+     "courses": [
+      "Social work",
+      "Professional Accounting Advanced",
+      "Nursing",
+      "Cyber security",
+      "Data Science",
+      "Business Management",
+      "MBA",
+      "Counselling",
+      "Biomedical Science",
+      "Education",
+      "Business",
+      "Psychological Science",
+      "Marketing & Communication",
+      "Professional Accounting",
+      "Business (Accounting)",
+      "Bachelor of Business",
+      "Medicine",
+      "Doctor of Engineering",
+      "Banking services Management",
+      "Associate Degree of Cybersecurity"
+     ]
+    },
+    {
+     "name": "Victoria Institute of Technology",
+     "courses": [
+      "Diploma of Information Technology",
+      "Diploma of Business",
+      "Bachelor of Business",
+      "Bachelor of Information Technology and Systems",
+      "Master of Information Technology and Systems",
+      "Master of Business Administration",
+      "Cookery",
+      "Telecommunication engineering",
+      "Carpentry"
+     ]
+    },
+    {
+     "name": "Victoria University",
+     "courses": [
+      "Bachelor of Business - Accounting (BBNS)",
+      "Master of Applied Information Technology (NMIT)",
+      "Master of Professional Accounting (BMAQ)",
+      "Master of Business Analytics",
+      "Master of Business Administration",
+      "Bachelor of Information Technology",
+      "Bachelor of Early Childhood Education and Leadership",
+      "Graduate Diploma - Early Childhood Education",
+      "Diploma of Business - Enterprise (VDBE) (093391K) - Continue to Bachelor of Business - Accounting (BBNS)",
+      "Diploma of Information Technology",
+      "Master of Applied Information Technology",
+      "Bachelor of Cyber Security",
+      "Master of Enterprise Resource Planning",
+      "Master of Supply Chain Management",
+      "Bachelor of Business - Information Systems Management",
+      "Master of Education"
+     ]
+    },
+    {
+     "name": "Victorian Institute of Technology (VIT)",
+     "courses": []
+    }
+   ]
+  },
+  "Canada": {
+   "Halifax": [
+    {
+     "name": "Oxford International Education Group",
+     "courses": []
+    }
+   ],
+   "Regina": [
+    {
+     "name": "Saskatchewan Polytechnic",
+     "courses": []
+    }
+   ],
+   "Saskatoon": [
+    {
+     "name": "Saskatchewan Polytechnic",
+     "courses": []
+    }
+   ],
+   "Vancouver": [
+    {
+     "name": "Oxford International Education Group",
+     "courses": []
+    }
+   ],
+   "Winnipeg": [
+    {
+     "name": "University of Manitoba",
+     "courses": []
+    }
+   ]
+  },
+  "Germany": {
+   "Berlin": [
+    {
+     "name": "Arden University",
+     "courses": [
+      "Business & Management",
+      "Health Management",
+      "Computing",
+      "Business and Management - Human Resources Management"
+     ]
+    },
+    {
+     "name": "Berlin School of Business and Innovation",
+     "courses": [
+      "BSc Psychology",
+      "BSc Computer Science",
+      "BA Tourism & Hospitality Management",
+      "BSc International Business Management",
+      "MSc Digital Marketing",
+      "Global MBA",
+      "MSc Global Logistics & Supply Chain Management",
+      "MA Energy Management",
+      "MSc Engineering Management",
+      "MSc Artificial Intelligence",
+      "MSc Information Technology Management"
+     ]
+    },
+    {
+     "name": "Macromedia University of Applied Sciences",
+     "courses": [
+      "BSc Criminal Psychology",
+      "BSc Clinical Psychology",
+      "BSc Health Psychology",
+      "BSc Psychology",
+      "BSc Artificial Intelligence",
+      "BSc Web Development",
+      "BSc Software Development",
+      "Bsc Healthcare Management",
+      "BA Business Management",
+      "MA Strategic Management"
+     ]
+    },
+    {
+     "name": "Oxford International Education Group",
+     "courses": []
+    },
+    {
+     "name": "SRH University",
+     "courses": [
+      "Social work",
+      "Applied A.I",
+      "Applied Mechatronic Systems",
+      "Computer Science",
+      "Game Design",
+      "Web Development",
+      "Communication Design",
+      "Construction Management",
+      "Supply Chain Management",
+      "Business Psychology",
+      "Electrical Engineering BSc",
+      "BSc Mechanical Engineering",
+      "BSc Global Hospitality Management",
+      "BA International Business Administration",
+      "Bsc Healthcare Management",
+      "BA Law, Economics and Government",
+      "Master User Experience (UX) and Design",
+      "Master Health Informatics",
+      "Master AI",
+      "Master I.T"
+     ]
+    },
+    {
+     "name": "University of Europe for Applied Sciences (UE)",
+     "courses": [
+      "MBA",
+      "Bachelor of Social Science - Psychology",
+      "Health Management",
+      "Data Science",
+      "Software Engineering",
+      "Digital Media and Marketing",
+      "UX/UI Design BA"
+     ]
+    }
+   ],
+   "Bremen": [
+    {
+     "name": "Constructor University",
+     "courses": [
+      "BSc Biochemistry and Cell Biology",
+      "Computer Science",
+      "Electrical and Computer Engineering",
+      "BA International Relations",
+      "BA Global Economics",
+      "BSc Robotics and Intelligence Systems"
+     ]
+    }
+   ],
+   "Cologne": [
+    {
+     "name": "SRH University",
+     "courses": [
+      "Social work",
+      "Applied A.I",
+      "Applied Mechatronic Systems",
+      "Computer Science",
+      "Game Design",
+      "Web Development",
+      "Communication Design",
+      "Construction Management",
+      "Supply Chain Management",
+      "Business Psychology",
+      "Electrical Engineering BSc",
+      "BSc Mechanical Engineering",
+      "BSc Global Hospitality Management",
+      "BA International Business Administration",
+      "Bsc Healthcare Management",
+      "BA Law, Economics and Government",
+      "Master User Experience (UX) and Design",
+      "Master Health Informatics",
+      "Master AI",
+      "Master I.T"
+     ]
+    }
+   ],
+   "Dortmund": [
+    {
+     "name": "University of Europe for Applied Sciences (UE)",
+     "courses": [
+      "MBA",
+      "Bachelor of Social Science - Psychology",
+      "Health Management",
+      "Data Science",
+      "Software Engineering",
+      "Digital Media and Marketing",
+      "UX/UI Design BA"
+     ]
+    }
+   ],
+   "Hamburg": [
+    {
+     "name": "SRH University",
+     "courses": [
+      "Social work",
+      "Applied A.I",
+      "Applied Mechatronic Systems",
+      "Computer Science",
+      "Game Design",
+      "Web Development",
+      "Communication Design",
+      "Construction Management",
+      "Supply Chain Management",
+      "Business Psychology",
+      "Electrical Engineering BSc",
+      "BSc Mechanical Engineering",
+      "BSc Global Hospitality Management",
+      "BA International Business Administration",
+      "Bsc Healthcare Management",
+      "BA Law, Economics and Government",
+      "Master User Experience (UX) and Design",
+      "Master Health Informatics",
+      "Master AI",
+      "Master I.T"
+     ]
+    },
+    {
+     "name": "University of Europe for Applied Sciences (UE)",
+     "courses": [
+      "MBA",
+      "Bachelor of Social Science - Psychology",
+      "Health Management",
+      "Data Science",
+      "Software Engineering",
+      "Digital Media and Marketing",
+      "UX/UI Design BA"
+     ]
+    }
+   ],
+   "Heidelberg": [
+    {
+     "name": "Schiller International University",
+     "courses": [
+      "MBA",
+      "Business",
+      "Computer Science",
+      "Bachelor of International Relations & Diplomacy",
+      "Bachelor of International Hospitality and Tourism Management",
+      "BS in International Marketing",
+      "BS Applied Mathematics & Artificial Intelligence",
+      "BS in Business Analytics",
+      "Master of Finance",
+      "Data Science",
+      "MS in Sustainability Management"
+     ]
+    },
+    {
+     "name": "SRH University",
+     "courses": [
+      "Social work",
+      "Applied A.I",
+      "Applied Mechatronic Systems",
+      "Computer Science",
+      "Game Design",
+      "Web Development",
+      "Communication Design",
+      "Construction Management",
+      "Supply Chain Management",
+      "Business Psychology",
+      "Electrical Engineering BSc",
+      "BSc Mechanical Engineering",
+      "BSc Global Hospitality Management",
+      "BA International Business Administration",
+      "Bsc Healthcare Management",
+      "BA Law, Economics and Government",
+      "Master User Experience (UX) and Design",
+      "Master Health Informatics",
+      "Master AI",
+      "Master I.T"
+     ]
+    }
+   ],
+   "Leipzig": [
+    {
+     "name": "SRH University",
+     "courses": [
+      "Social work",
+      "Applied A.I",
+      "Applied Mechatronic Systems",
+      "Computer Science",
+      "Game Design",
+      "Web Development",
+      "Communication Design",
+      "Construction Management",
+      "Supply Chain Management",
+      "Business Psychology",
+      "Electrical Engineering BSc",
+      "BSc Mechanical Engineering",
+      "BSc Global Hospitality Management",
+      "BA International Business Administration",
+      "Bsc Healthcare Management",
+      "BA Law, Economics and Government",
+      "Master User Experience (UX) and Design",
+      "Master Health Informatics",
+      "Master AI",
+      "Master I.T"
+     ]
+    }
+   ],
+   "Munich": [
+    {
+     "name": "Macromedia University of Applied Sciences",
+     "courses": [
+      "BSc Criminal Psychology",
+      "BSc Clinical Psychology",
+      "BSc Health Psychology",
+      "BSc Psychology",
+      "BSc Artificial Intelligence",
+      "BSc Web Development",
+      "BSc Software Development",
+      "Bsc Healthcare Management",
+      "BA Business Management",
+      "MA Strategic Management"
+     ]
+    },
+    {
+     "name": "Munich University of Digital Technologies & Applied Sciences",
+     "courses": [
+      "M Eng Data Science & A.I"
+     ]
+    },
+    {
+     "name": "SRH University",
+     "courses": [
+      "Social work",
+      "Applied A.I",
+      "Applied Mechatronic Systems",
+      "Computer Science",
+      "Game Design",
+      "Web Development",
+      "Communication Design",
+      "Construction Management",
+      "Supply Chain Management",
+      "Business Psychology",
+      "Electrical Engineering BSc",
+      "BSc Mechanical Engineering",
+      "BSc Global Hospitality Management",
+      "BA International Business Administration",
+      "Bsc Healthcare Management",
+      "BA Law, Economics and Government",
+      "Master User Experience (UX) and Design",
+      "Master Health Informatics",
+      "Master AI",
+      "Master I.T"
+     ]
+    }
+   ]
+  },
+  "United Kingdom": {
+   "Belfast": [
+    {
+     "name": "Ulster University",
+     "courses": [
+      "BSc Accounting with Finance",
+      "BSc Accounting with Law",
+      "BSc Accounting with Education",
+      "BSc Accounting with Management",
+      "BSc Applied Health Sciences",
+      "BA Animation",
+      "Applied Medical Sciences BSc",
+      "Pharmaceutical Sciences BSc",
+      "Architectural Engineering B Eng",
+      "Architecture",
+      "Artificial Intelligence BEng",
+      "Accounting MSc"
+     ]
+    }
+   ],
+   "Cambridge": [
+    {
+     "name": "Anglia Ruskin University (ARU)",
+     "courses": [
+      "Accounting & Finance",
+      "Acting",
+      "Animal Science",
+      "Business & Law",
+      "Building Surveying",
+      "Architecture",
+      "Agriculture with Business",
+      "Animation & illustration",
+      "Biomedical Engineering",
+      "Business Economics",
+      "Civil Engineering",
+      "Computer Science",
+      "Construction Management",
+      "Criminology",
+      "Cyber security",
+      "Electronical and Electronic Engineering",
+      "Fashion design",
+      "Film",
+      "Optometry",
+      "Midwifery",
+      "Bachelor of Nursing"
+     ]
+    }
+   ],
+   "Coventry": [
+    {
+     "name": "Coventry University",
+     "courses": [
+      "Bachelor of Accounting",
+      "Adult Nursing",
+      "Advanced Aerospace Engineering MSC",
+      "Advanced Clinical Practice MSC",
+      "Software Engineering",
+      "Animation BA",
+      "Antimicrobial Resistance MSC",
+      "Applied Psychology",
+      "Architecture",
+      "Artificial Intelligence",
+      "Automotive Engineering",
+      "Aviation Management",
+      "Bachelor of Engineering - Civil honours",
+      "Business Analytics MSc",
+      "Business & Management",
+      "Childhood Youth and Education Studies",
+      "Business Economics BSC Hons",
+      "Biotechnology MSC",
+      "Biomedical Science"
+     ]
+    }
+   ],
+   "London": [
+    {
+     "name": "ECA",
+     "courses": []
+    }
+   ],
+   "Londonderry": [
+    {
+     "name": "Ulster University",
+     "courses": [
+      "BSc Accounting with Finance",
+      "BSc Accounting with Law",
+      "BSc Accounting with Education",
+      "BSc Accounting with Management",
+      "BSc Applied Health Sciences",
+      "BA Animation",
+      "Applied Medical Sciences BSc",
+      "Pharmaceutical Sciences BSc",
+      "Architectural Engineering B Eng",
+      "Architecture",
+      "Artificial Intelligence BEng",
+      "Accounting MSc"
+     ]
+    }
+   ],
+   "Norwich": [
+    {
+     "name": "University of East Anglia",
+     "courses": [
+      "MSC Animal Behaviour",
+      "MSc Computing",
+      "MSc Microbiology",
+      "MSc Accounting",
+      "Digital Marketing",
+      "Fintech, AI & Data Science",
+      "Global Public Health MSC",
+      "International Business & Innovation",
+      "Purchasing & Supply Chain Management",
+      "MMBS Medicine",
+      "LLB Hons Law with Criminology",
+      "MChem Chemistry"
+     ]
+    }
+   ],
+   "Peterborough": [
+    {
+     "name": "Anglia Ruskin University (ARU)",
+     "courses": [
+      "Accounting & Finance",
+      "Acting",
+      "Animal Science",
+      "Business & Law",
+      "Building Surveying",
+      "Architecture",
+      "Agriculture with Business",
+      "Animation & illustration",
+      "Biomedical Engineering",
+      "Business Economics",
+      "Civil Engineering",
+      "Computer Science",
+      "Construction Management",
+      "Criminology",
+      "Cyber security",
+      "Electronical and Electronic Engineering",
+      "Fashion design",
+      "Film",
+      "Optometry",
+      "Midwifery",
+      "Bachelor of Nursing"
+     ]
+    }
+   ],
+   "Southampton": [
+    {
+     "name": "Solent University",
+     "courses": [
+      "Accounting & Finance",
+      "Adult Nursing",
+      "Animation BA",
+      "Applied AI & Data Science MSc",
+      "Applied Mechanical Engineering",
+      "BA Architectural Design and Technology",
+      "BSc Biomedical Science",
+      "Business & Management",
+      "BSc Computer Science",
+      "Construction Management",
+      "Criminal Investigation with Psychology",
+      "Criminology"
+     ]
+    }
+   ]
+  }
+ }
+}

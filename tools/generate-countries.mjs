@@ -7,6 +7,13 @@ import { dirname, join, resolve } from 'path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const siteDir = join(__dirname, '..', 'site');
 
+// Partner institutions by country -> city -> [{ name, courses[] }]. The source
+// of truth is data/partner-institutions.json; a city panel below shows a summary
+// and a "View partners & courses" button for every city that has entries.
+const partnerData = JSON.parse(readFileSync(join(__dirname, 'data', 'partner-institutions.json'), 'utf8')).countries;
+
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
 const checkIcon = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8A6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;margin-top:2px;"><path d="M5 12.5l4.5 4.5L19 7"/></svg>`;
 
 const PLACEHOLDER_SLOTS = 3;
@@ -44,6 +51,7 @@ const countries = [
       { city: 'Canberra', photo: 'assets/destinations/australia/canberra.jpg', fact: 'Chosen in 1908 as a purpose-built capital — a compromise between rival cities Sydney and Melbourne.' },
       { city: 'Darwin', photo: 'assets/destinations/australia/darwin.jpg', fact: 'Australia\'s tropical capital of the north, closer to Jakarta than to Canberra.' },
       { city: 'Hobart', photo: 'assets/destinations/australia/hobart.jpg', fact: 'Australia\'s second-oldest capital city, founded in 1804 on the Derwent River.' },
+      { city: 'Townsville', photo: 'assets/destinations/australia/townsville.jpg', position: 'center bottom', fact: 'A tropical city in North Queensland, home to James Cook University and the gateway to the Great Barrier Reef and Magnetic Island.' },
     ],
   },
   {
@@ -67,6 +75,12 @@ const countries = [
       { city: 'Glasgow', photo: 'assets/destinations/united-kingdom/glasgow.jpg', fact: 'Scotland\'s largest city, celebrated for its Victorian and Art Nouveau architecture.' },
       { city: 'Birmingham', photo: 'assets/destinations/united-kingdom/birmingham.jpg', fact: 'The UK\'s second-largest city — with more miles of canal than Venice.' },
       { city: 'Leeds', photo: 'assets/destinations/united-kingdom/leeds.jpg', fact: 'One of the UK\'s largest financial centres outside London, built on a Victorian textile legacy.' },
+      { city: 'Cambridge', photo: 'assets/destinations/united-kingdom/cambridge.jpg', fact: 'Home to the University of Cambridge, founded in 1209 and one of the oldest universities in the world.' },
+      { city: 'Southampton', photo: 'assets/destinations/united-kingdom/southampton.jpg', fact: 'A major port city on the south coast, from where the RMS Titanic set sail in 1912, and home to the University of Southampton.' },
+      { city: 'Norwich', photo: 'assets/destinations/united-kingdom/norwich.jpg', fact: 'A historic East Anglian city with a Norman cathedral and castle, and England\'s first UNESCO City of Literature.' },
+      { city: 'Peterborough', photo: 'assets/destinations/united-kingdom/peterborough.jpg', fact: 'A cathedral city on the River Nene in the East of England, with fast rail links to London.' },
+      { city: 'Belfast', photo: 'assets/destinations/united-kingdom/belfast.jpg', fact: 'The capital of Northern Ireland, where the RMS Titanic was built, now home to the Titanic Belfast visitor experience.' },
+      { city: 'Londonderry', photo: 'assets/destinations/united-kingdom/londonderry.jpg', fact: 'Also known as Derry, a Northern Ireland city whose 17th-century walls are the most complete city walls in Ireland.' },
     ],
   },
   {
@@ -93,6 +107,9 @@ const countries = [
       { city: 'D&uuml;sseldorf', photo: 'assets/destinations/germany/dusseldorf.jpg', fact: 'A fashion and trade-fair hub on the Rhine, home to one of Europe\'s largest Japanese communities.' },
       { city: 'Leipzig', photo: 'assets/destinations/germany/leipzig.jpg', fact: 'A historic centre of music and publishing, once home to Johann Sebastian Bach and now a fast-growing student city.' },
       { city: 'Bremen', photo: 'assets/destinations/germany/bremen.jpg', fact: 'One of Germany\'s oldest port cities, famously the setting of the Brothers Grimm tale "The Town Musicians of Bremen".' },
+      { city: 'Cologne', photo: 'assets/destinations/germany/cologne.jpg', fact: 'Home to Cologne Cathedral, a UNESCO World Heritage Site that took more than 600 years to complete, on the banks of the Rhine.' },
+      { city: 'Dortmund', photo: 'assets/destinations/germany/dortmund.jpg', fact: 'A former coal and steel city reinvented as a technology hub, home to TU Dortmund University and the football club Borussia Dortmund.' },
+      { city: 'Heidelberg', photo: 'assets/destinations/germany/heidelberg.jpg', fact: 'Home to Germany\'s oldest university, founded in 1386, in a river valley beneath a ruined hilltop castle.' },
     ],
   },
   {
@@ -117,6 +134,9 @@ const countries = [
       { city: 'Ottawa', photo: 'assets/destinations/canada/ottawa.jpg', fact: 'Canada\'s capital, home to Parliament Hill and a Rideau Canal that becomes the world\'s largest naturally frozen skating rink each winter.' },
       { city: 'Calgary', photo: 'assets/destinations/canada/calgary.jpg', fact: 'Host of the 1988 Winter Olympics and the annual Calgary Stampede, with the Canadian Rockies close by.' },
       { city: 'Edmonton', photo: 'assets/destinations/canada/edmonton.jpg', position: 'center bottom', fact: 'Alberta\'s capital, known as the "Festival City" and home to West Edmonton Mall, the largest shopping mall in North America.' },
+      { city: 'Winnipeg', photo: 'assets/destinations/canada/winnipeg.jpg', fact: 'The capital of Manitoba, built where the Red and Assiniboine rivers meet at The Forks — a gathering place for thousands of years and now home to the Canadian Museum for Human Rights.' },
+      { city: 'Halifax', photo: 'assets/destinations/canada/halifax.jpg', fact: 'Nova Scotia\'s capital and the largest city in Atlantic Canada, a harbour city overlooked by the star-shaped Citadel fortress and home to Dalhousie University.' },
+      { city: 'Saskatoon', photo: 'assets/destinations/canada/saskatoon.jpg', fact: 'Known as the "City of Bridges" for the spans across the South Saskatchewan River, and home to the University of Saskatchewan.' },
     ],
   },
   {
@@ -174,7 +194,58 @@ function footerDestLinks() {
   return countries.map(c => `          <a href="${c.slug}.html">${c.name}</a>`).join('\n');
 }
 
+// "3 partner institutions in Halifax: A, B and C." / "22 ... in Adelaide, including A, B and C."
+function partnerSummary(city, list) {
+  const names = list.slice(0, 3).map(i => esc(i.name));
+  const joined = names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names[0];
+  const n = list.length;
+  if (n === 1) return `1 partner institution in ${city}: ${joined}.`;
+  if (n <= 3) return `${n} partner institutions in ${city}: ${joined}.`;
+  return `${n} partner institutions in ${city}, including ${joined}.`;
+}
+
+// js/partners-<slug>.js — the full lists (with courses) the dialog reads, only for
+// the cities that have a slide on the page. null when a country has no partner data.
+function partnersData(c) {
+  const cities = partnerData[c.name] ?? {};
+  const shown = {};
+  for (const p of c.partners) if (cities[p.city]?.length) shown[p.city] = cities[p.city];
+  if (!Object.keys(shown).length) return null;
+  return `// GENERATED by tools/generate-countries.mjs from tools/data/partner-institutions.json —
+// edit the data file and re-run the script; changes made here will be overwritten.
+window.PARTNERS = window.PARTNERS || {};
+window.PARTNERS[${JSON.stringify(c.slug)}] = ${JSON.stringify(shown)};
+`;
+}
+
+const searchIcon = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>`;
+const arrowIcon = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></svg>`;
+
 function page(c) {
+  const partnerCities = partnerData[c.name] ?? {};
+  const hasPartnerData = partnersData(c) !== null;
+
+  // The "View partners & courses" dialog: markup only — main.js fills it from
+  // js/partners-<slug>.js when a city's button is pressed.
+  const partnersModal = hasPartnerData ? `
+<div class="partners-overlay" id="partners-overlay" hidden>
+  <div class="partners-modal" role="dialog" aria-modal="true" aria-labelledby="partners-title" id="partners-modal" tabindex="-1">
+    <button type="button" class="partners-close" id="partners-close" aria-label="Close">&times;</button>
+    <div class="partners-head">
+      <span class="eyebrow">PARTNER INSTITUTIONS &middot; ${c.name.toUpperCase()}</span>
+      <h2 class="partners-title" id="partners-title"></h2>
+      <div class="partners-search">
+        ${searchIcon}
+        <label class="sr-only" for="partners-search-input">Search institutions or courses</label>
+        <input type="search" id="partners-search-input" placeholder="Search by institution or course" autocomplete="off">
+      </div>
+      <p class="partners-count" id="partners-count" role="status" aria-live="polite"></p>
+    </div>
+    <div class="partners-body" id="partners-body"></div>
+  </div>
+</div>
+` : '';
+  const partnersScript = hasPartnerData ? `<script src="js/partners-${c.slug}.js"></script>\n` : '';
   const whyCards = c.why.map((w, i) => `      <div class="card bullet-row" style="padding:26px;">
         <div class="icon-circle" aria-hidden="true">${whyIcons[i % whyIcons.length]}</div>
         <div><h3>${w[0]}</h3><p>${w[1]}</p></div>
@@ -198,25 +269,35 @@ function page(c) {
   ).join('\n');
 
   const cityPanels = (c.partners.length > 0
-    ? c.partners.map((p, i) => `      <div class="city-panel" aria-hidden="true">
+    ? c.partners.map((p, i) => {
+      const list = partnerCities[p.city] ?? [];
+      const info = list.length
+        ? `          <div class="city-panel-info has-partners">
+            <div class="city-panel-info-label">PARTNER INSTITUTIONS</div>
+            <p>${partnerSummary(p.city, list)}</p>
+            <button type="button" class="partners-open" data-partners-city="${esc(p.city)}">View partners &amp; courses ${arrowIcon}</button>
+          </div>`
+        : `          <div class="city-panel-info">
+            <div class="city-panel-info-label">PARTNER INSTITUTIONS</div>
+            <p>[Partner institutions in ${p.city} &mdash; list coming soon.]</p>
+          </div>`;
+      return `      <div class="city-panel" aria-hidden="true">
         <div class="city-panel-inner">
           <div class="city-panel-index">${String(i + 1).padStart(2, '0')} / ${String(slideCount).padStart(2, '0')}</div>
           <h3 class="city-panel-name">${p.city}</h3>
           <p class="city-panel-fact">${p.fact}</p>
-          <div class="city-panel-info">
-            <div class="city-panel-info-label">PARTNER UNIVERSITIES</div>
-            <p>[Partner universities in ${p.city} &mdash; list coming soon.]</p>
-          </div>
+${info}
         </div>
-      </div>`)
+      </div>`;
+    })
     : Array.from({ length: PLACEHOLDER_SLOTS }, (_, i) => `      <div class="city-panel" aria-hidden="true">
         <div class="city-panel-inner">
           <div class="city-panel-index">${String(i + 1).padStart(2, '0')} / ${String(slideCount).padStart(2, '0')}</div>
           <h3 class="city-panel-name">[City]</h3>
           <p class="city-panel-fact">[A short, real fun fact about this city will go here.]</p>
           <div class="city-panel-info">
-            <div class="city-panel-info-label">PARTNER UNIVERSITIES</div>
-            <p>[Add a city photo, then list partner universities here.]</p>
+            <div class="city-panel-info-label">PARTNER INSTITUTIONS</div>
+            <p>[Add a city photo, then list partner institutions here.]</p>
           </div>
         </div>
       </div>`)
@@ -436,9 +517,9 @@ ${footerDestLinks()}
     </div>
   </div>
 </footer>
-
+${partnersModal}
 <script src="js/destinations-data.js"></script>
-<script src="js/main.js"></script>
+${partnersScript}<script src="js/main.js"></script>
 </body>
 </html>
 `;
@@ -477,8 +558,19 @@ ${rows}
 // Everything this script owns, as [path relative to site/, content].
 const outputs = [
   ...countries.map(c => [`${c.slug}.html`, page(c)]),
+  ...countries.flatMap(c => {
+    const data = partnersData(c);
+    return data ? [[`js/partners-${c.slug}.js`, data]] : [];
+  }),
   ['js/destinations-data.js', destinationsData()],
 ];
+
+// Heads-up: partner data for a city that has no slide (no photo yet) isn't shown anywhere.
+const unshown = countries.flatMap(c => Object.keys(partnerData[c.name] ?? {})
+  .filter(city => !c.partners.some(p => p.city === city))
+  .map(city => `${city} (${c.name})`));
+// Heads-up: partner data whose country isn't one of ours.
+const unknownCountries = Object.keys(partnerData).filter(name => !countries.some(c => c.name === name));
 
 // CLI:
 //   node tools/generate-countries.mjs               write the generated files into site/
@@ -508,6 +600,8 @@ if (args.includes('--check')) {
     writeFileSync(out, content, 'utf8');
     console.log('wrote', out);
   }
+  if (unshown.length) console.log(`\nnote: partner data exists for cities with no slide yet, so it isn't shown: ${unshown.join(', ')}.\n      Add the city (with a photo) to that country's \`partners\` list to show it.`);
+  if (unknownCountries.length) console.log(`\nnote: partner data for countries with no page: ${unknownCountries.join(', ')}`);
 }
 
 export { countries, footerDestLinks };

@@ -5,7 +5,8 @@
   "description": "Build scripts for the Studies and Awards Limited website — generates the destination pages in ../site from the data in generate-countries.mjs.",
   "scripts": {
     "generate": "node generate-countries.mjs",
-    "check": "node generate-countries.mjs --check"
+    "check": "node generate-countries.mjs --check",
+    "photos": "node process-photos.mjs"
   },
   "dependencies": {
     "jimp": "^1.6.1"
