@@ -1103,3 +1103,275 @@ p { margin: 0; }
   .team-modal-head { flex-direction: column-reverse; }
   .team-modal-photo { width: 96px; height: 96px; }
 }
+
+/* ---------- next destination (boarding-pass suggestion) ----------
+   Built by the "Destination pages" block in js/main.js from js/destinations-data.js.
+   A navy boarding pass with a perforated stub; declining folds it down to a
+   one-line pill. Motion is all transform/opacity, and switched off by the
+   prefers-reduced-motion rule at the top of this file. */
+
+.next-dest-section { padding-bottom: 0; }
+.next-dest { --nd-notch: 14px; --nd-ease: cubic-bezier(0.65, 0, 0.35, 1); }
+
+/* fold: grid-rows 1fr <-> 0fr animates height without measuring it in JS */
+.next-dest-fold {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 480ms cubic-bezier(0.77, 0, 0.175, 1), opacity 320ms ease, visibility 0s;
+}
+.next-dest-clip { min-height: 0; overflow: hidden; }
+.next-dest[data-state="expanded"] .next-dest-fold-compact,
+.next-dest[data-state="compact"] .next-dest-fold-pass {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition: grid-template-rows 480ms cubic-bezier(0.77, 0, 0.175, 1), opacity 240ms ease, visibility 0s 480ms;
+}
+
+/* the pass */
+.next-dest-pass {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  overflow: hidden;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #001238 0%, var(--ink) 55%, #04226e 100%);
+  border-radius: clamp(20px, 3vw, 28px);
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 700ms ease, transform 800ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.next-dest.is-visible .next-dest-pass { opacity: 1; transform: none; }
+.next-dest-pass::before,
+.next-dest-pass::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.next-dest-pass::before { width: 360px; height: 360px; right: -60px; top: -190px; background: var(--brass); opacity: 0.15; }
+.next-dest-pass::after { width: 320px; height: 320px; left: 10%; bottom: -200px; background: #3355C7; opacity: 0.3; }
+
+/* outlined airport-code watermark */
+.next-dest-mark {
+  position: absolute;
+  z-index: -1;
+  right: 340px;
+  bottom: -0.12em;
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif;
+  font-size: clamp(170px, 19vw, 260px);
+  line-height: 0.8;
+  letter-spacing: 0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,0.1);
+  pointer-events: none;
+  user-select: none;
+}
+
+.next-dest-main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  padding: clamp(28px, 4vw, 52px);
+}
+.next-dest-eyebrow { color: var(--brass); }
+.next-dest-title { color: #FFFFFF; font-size: clamp(25px, 3vw, 36px); line-height: 1.15; }
+.next-dest-lead { color: #FFFFFF; font-size: 16px; line-height: 1.6; }
+.next-dest-lead strong { color: var(--brass); }
+.next-dest-lead em { color: var(--on-dark-muted); }
+.next-dest-tagline { color: var(--on-dark-muted); font-size: 14.5px; line-height: 1.7; max-width: 54ch; }
+
+/* route: FRA - - - - - plane - - - - - YYZ */
+.next-dest-route {
+  width: 100%;
+  max-width: 520px;
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(14px, 2.4vw, 28px);
+}
+.next-dest-stop { display: flex; flex-direction: column; gap: 4px; }
+.next-dest-stop-code {
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif;
+  font-size: clamp(40px, 5vw, 56px);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: #FFFFFF;
+}
+.next-dest-stop.is-to .next-dest-stop-code { color: var(--brass); }
+.next-dest-stop-name {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--on-dark-muted);
+}
+.next-dest-track { position: relative; height: 28px; }
+.next-dest-track::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  margin-top: -1px;
+  border-top: 2px dashed rgba(255,255,255,0.3);
+}
+.next-dest-trail {
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--brass);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 900ms var(--nd-ease);
+}
+.next-dest-plane {
+  position: absolute;
+  left: 0; top: 50%;
+  display: flex;
+  width: 28px; height: 28px;
+  margin-top: -14px;
+  align-items: center;
+  justify-content: center;
+  color: var(--brass);
+  transition: left 900ms var(--nd-ease), transform 900ms var(--nd-ease);
+}
+.next-dest-plane-icon { transform: rotate(90deg); }
+.next-dest.is-visible:not(.is-departing) .next-dest-plane-icon { animation: next-dest-bob 3.2s ease-in-out infinite; }
+@keyframes next-dest-bob {
+  0%, 100% { transform: translateY(0) rotate(90deg); }
+  50% { transform: translateY(-3px) rotate(90deg); }
+}
+.next-dest.is-departing .next-dest-plane { left: 100%; transform: translateX(-100%); }
+.next-dest.is-departing .next-dest-trail { transform: scaleX(1); }
+.next-dest.is-departing .next-dest-stop.is-to .next-dest-stop-code { animation: next-dest-land 650ms ease-out 650ms both; }
+@keyframes next-dest-land {
+  0% { transform: scale(1); text-shadow: none; }
+  50% { transform: scale(1.12); text-shadow: 0 0 26px rgba(255,184,0,0.7); }
+  100% { transform: scale(1); text-shadow: 0 0 14px rgba(255,184,0,0.4); }
+}
+
+/* the tear-off stub */
+.next-dest-stub {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: clamp(24px, 3vw, 40px);
+  background:
+    repeating-linear-gradient(to bottom, rgba(255,255,255,0.32) 0 7px, transparent 7px 15px) left top / 2px 100% no-repeat,
+    rgba(255,255,255,0.035);
+}
+.next-dest-stub::before,
+.next-dest-stub::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--nd-notch) * -1 + 1px);
+  width: calc(var(--nd-notch) * 2);
+  height: calc(var(--nd-notch) * 2);
+  border-radius: 50%;
+  background: var(--bg);
+}
+.next-dest-stub::before { top: calc(var(--nd-notch) * -1); }
+.next-dest-stub::after { bottom: calc(var(--nd-notch) * -1); }
+.next-dest-stub-label {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--on-dark-faint);
+}
+.next-dest-go { width: 100%; padding: 16px 22px; text-align: center; line-height: 1.3; }
+.next-dest-go svg { flex-shrink: 0; transition: transform 150ms ease; }
+.next-dest-go:hover svg { transform: translateX(3px); }
+.next-dest.is-departing .next-dest-go { cursor: progress; }
+.next-dest-later {
+  align-self: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  background: none;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--on-dark-muted);
+  text-decoration: underline;
+  text-decoration-color: rgba(185,195,224,0.4);
+  text-underline-offset: 4px;
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+.next-dest-later:hover { color: #FFFFFF; }
+.next-dest-pass .btn:focus-visible,
+.next-dest-later:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
+.next-dest-barcode {
+  height: 30px;
+  margin-top: 4px;
+  opacity: 0.45;
+  background: repeating-linear-gradient(90deg, #FFFFFF 0 2px, transparent 2px 4px, #FFFFFF 4px 5px, transparent 5px 9px, #FFFFFF 9px 12px, transparent 12px 14px, #FFFFFF 14px 15px, transparent 15px 19px);
+}
+
+/* folded-down one-line shortcut */
+.next-dest-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px;
+  padding: 8px 18px 8px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+.next-dest-compact:hover { border-color: var(--brass); background: var(--bg); }
+.next-dest-compact:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.next-dest-compact svg { flex-shrink: 0; transition: transform 150ms ease; }
+.next-dest-compact:hover svg { transform: translateX(3px); }
+.next-dest-compact-code {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--brass);
+  color: var(--ink);
+}
+
+/* fade the page out just before navigating away */
+html.is-leaving body { opacity: 0; transition: opacity 220ms ease; }
+
+/* below ~1360px the bottom-right watermark would run into the route's own
+   airport code, so it moves up to the top-right corner instead */
+@media (max-width: 1360px) {
+  .next-dest-mark { bottom: auto; top: 6px; font-size: 130px; }
+}
+
+@media (max-width: 900px) {
+  .next-dest-pass { grid-template-columns: minmax(0, 1fr); }
+  .next-dest-mark { right: 12px; }
+  .next-dest-stub {
+    padding-left: clamp(28px, 4vw, 52px);
+    padding-right: clamp(28px, 4vw, 52px);
+    background:
+      repeating-linear-gradient(to right, rgba(255,255,255,0.32) 0 7px, transparent 7px 15px) left top / 100% 2px no-repeat,
+      rgba(255,255,255,0.035);
+  }
+  .next-dest-stub::before,
+  .next-dest-stub::after { top: calc(var(--nd-notch) * -1 + 1px); bottom: auto; }
+  .next-dest-stub::before { left: calc(var(--nd-notch) * -1); }
+  .next-dest-stub::after { left: auto; right: calc(var(--nd-notch) * -1); }
+}

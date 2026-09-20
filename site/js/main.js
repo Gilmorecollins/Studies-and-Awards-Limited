@@ -559,3 +559,189 @@ function createCursorFollower(options) {
     } : null
   });
 })();
+
+// Destination pages: "Want to see another destination?" boarding-pass card.
+// Suggests the next destination in the journey order defined in
+// destinations-data.js (wrapping round at the end). Accepting flies a small
+// plane along the route and then takes the visitor there; declining folds the
+// card down to a one-line shortcut for the rest of the session.
+//
+// Progressive enhancement: the accept button is a real link, so opening it in
+// a new tab, middle-click, or running with JS blocked all still work. The
+// "Other destinations" pills below stay as the no-JS fallback.
+(function () {
+  'use strict';
+
+  var mount = document.getElementById('next-destination');
+  var list = window.DESTINATIONS;
+  if (!mount || !list || list.length < 2) return;
+
+  var fromIndex = -1;
+  list.forEach(function (d, i) {
+    if (d.slug === mount.getAttribute('data-current')) fromIndex = i;
+  });
+  if (fromIndex < 0) return;
+
+  var toIndex = (fromIndex + 1) % list.length;
+  var from = list[fromIndex];
+  var to = list[toIndex];
+  var href = to.slug + '.html';
+  var wrapped = toIndex < fromIndex;
+
+  var DISMISS_KEY = 'sa-next-destination-dismissed';
+  var FLIGHT_MS = 900;
+  var LEAVE_MS = 220;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function esc(text) {
+    return String(text).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  // Session storage can throw (private mode, blocked site data) — the card
+  // must render and work either way, so every access is guarded.
+  function readDismissed() {
+    try { return window.sessionStorage.getItem(DISMISS_KEY) === '1'; } catch (e) { return false; }
+  }
+  function writeDismissed() {
+    try { window.sessionStorage.setItem(DISMISS_KEY, '1'); } catch (e) { /* ignore */ }
+  }
+
+  var arrowIcon = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></svg>';
+  var planeIcon = '<svg class="next-dest-plane-icon" viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>';
+
+  mount.innerHTML = [
+    '<div class="next-dest" data-state="' + (readDismissed() ? 'compact' : 'expanded') + '">',
+    '  <div class="next-dest-fold next-dest-fold-pass">',
+    '    <div class="next-dest-clip">',
+    '      <div class="next-dest-pass">',
+    '        <span class="next-dest-mark" aria-hidden="true">' + esc(to.code) + '</span>',
+    '        <div class="next-dest-main">',
+    '          <span class="eyebrow next-dest-eyebrow">' + (wrapped ? 'Full circle' : 'Next stop') + ' &middot; ' + pad(toIndex + 1) + ' / ' + pad(list.length) + '</span>',
+    '          <h2 class="next-dest-title">Want to see another destination?</h2>',
+    '          <p class="next-dest-lead">Next on the route is <strong>' + esc(to.name) + '</strong> &mdash; <em>' + esc(to.welcome) + '</em>.</p>',
+    '          <p class="next-dest-tagline">' + esc(to.tagline) + '</p>',
+    '          <div class="next-dest-route" aria-hidden="true">',
+    '            <div class="next-dest-stop"><span class="next-dest-stop-code">' + esc(from.code) + '</span><span class="next-dest-stop-name">' + esc(from.name) + '</span></div>',
+    '            <div class="next-dest-track"><span class="next-dest-trail"></span><span class="next-dest-plane">' + planeIcon + '</span></div>',
+    '            <div class="next-dest-stop is-to"><span class="next-dest-stop-code">' + esc(to.code) + '</span><span class="next-dest-stop-name">' + esc(to.name) + '</span></div>',
+    '          </div>',
+    '        </div>',
+    '        <div class="next-dest-stub">',
+    '          <span class="next-dest-stub-label" aria-hidden="true">Boarding pass</span>',
+    '          <a class="btn btn-primary next-dest-go" href="' + esc(href) + '"><span class="next-dest-go-label">Yes, take me to ' + esc(to.name) + '</span>' + arrowIcon + '</a>',
+    '          <button type="button" class="next-dest-later">Not now</button>',
+    '          <span class="next-dest-barcode" aria-hidden="true"></span>',
+    '        </div>',
+    '      </div>',
+    '    </div>',
+    '  </div>',
+    '  <div class="next-dest-fold next-dest-fold-compact">',
+    '    <div class="next-dest-clip">',
+    '      <a class="next-dest-compact" href="' + esc(href) + '">',
+    '        <span class="next-dest-compact-code" aria-hidden="true">' + esc(to.code) + '</span>',
+    '        <span class="next-dest-compact-text">Next stop: <strong>' + esc(to.name) + '</strong></span>',
+    '        ' + arrowIcon,
+    '      </a>',
+    '    </div>',
+    '  </div>',
+    '  <p class="sr-only" role="status" aria-live="polite"></p>',
+    '</div>'
+  ].join('\n');
+
+  var root = mount.querySelector('.next-dest');
+  var goLink = root.querySelector('.next-dest-go');
+  var goLabel = root.querySelector('.next-dest-go-label');
+  var laterBtn = root.querySelector('.next-dest-later');
+  var compactLink = root.querySelector('.next-dest-compact');
+  var status = root.querySelector('[role="status"]');
+  var goLabelText = goLabel.textContent;
+
+  // --- Reveal on scroll + prefetch -----------------------------------------
+  // The next page is a few KB of HTML; fetching it while the visitor reads the
+  // card (or the moment they show intent) makes accepting feel instant.
+  var prefetched = false;
+  function prefetch() {
+    if (prefetched) return;
+    var conn = window.navigator.connection;
+    if (conn && conn.saveData) return;
+    prefetched = true;
+    var link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.as = 'document';
+    link.href = href;
+    document.head.appendChild(link);
+  }
+
+  function reveal() {
+    root.classList.add('is-visible');
+    prefetch();
+  }
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      if (entries.some(function (e) { return e.isIntersecting; })) {
+        reveal();
+        observer.disconnect();
+      }
+    }, { threshold: 0.25 });
+    observer.observe(root);
+  } else {
+    reveal();
+  }
+
+  ['pointerenter', 'focusin', 'touchstart'].forEach(function (type) {
+    root.addEventListener(type, prefetch, { passive: true });
+  });
+
+  // --- Accept: fly, then go --------------------------------------------------
+  var departing = false;
+  var timers = [];
+
+  function clearTimers() {
+    timers.forEach(function (id) { window.clearTimeout(id); });
+    timers = [];
+  }
+
+  goLink.addEventListener('click', function (event) {
+    // A second click while airborne skips the wait: let the link navigate.
+    if (departing) { clearTimers(); return; }
+    // Leave new-tab / new-window clicks and reduced-motion visitors alone.
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (reduceMotion) return;
+
+    event.preventDefault();
+    departing = true;
+    root.classList.add('is-departing');
+    goLabel.textContent = 'Boarding…';
+    status.textContent = 'Boarding. Taking you to ' + to.name + '.';
+
+    timers.push(window.setTimeout(function () {
+      document.documentElement.classList.add('is-leaving');
+      timers.push(window.setTimeout(function () { window.location.assign(href); }, LEAVE_MS));
+    }, FLIGHT_MS));
+  });
+
+  // Coming back via the browser's back button can restore this page from the
+  // back/forward cache exactly as we left it — mid-flight. Put it back on the
+  // runway.
+  window.addEventListener('pageshow', function (event) {
+    if (!event.persisted) return;
+    clearTimers();
+    departing = false;
+    root.classList.remove('is-departing');
+    document.documentElement.classList.remove('is-leaving');
+    goLabel.textContent = goLabelText;
+    status.textContent = '';
+  });
+
+  // --- Decline: fold down to a one-line shortcut -----------------------------
+  laterBtn.addEventListener('click', function () {
+    root.setAttribute('data-state', 'compact');
+    writeDismissed();
+    status.textContent = 'Suggestion dismissed. A shortcut to ' + to.name + ' is still here if you change your mind.';
+    compactLink.focus({ preventScroll: true });
+  });
+})();

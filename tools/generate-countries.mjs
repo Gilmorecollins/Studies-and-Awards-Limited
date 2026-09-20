@@ -1,6 +1,6 @@
-import { writeFileSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { dirname, join, resolve } from 'path';
 
 // Resolve paths relative to this script's location, not the caller's cwd,
 // so `node tools/generate-countries.mjs` works the same from anywhere.
@@ -84,7 +84,16 @@ const countries = [
     areas: ['Engineering', 'Computer Science', 'Natural Sciences', 'Business Administration', 'Architecture'],
     visa: 'A German national (long-stay) student visa generally requires university admission, proof of financial resources (often via a blocked account), health insurance, and, for many programs, a German language certificate — which is what our German Language Training prepares you for.',
     visaNote: 'Current visa fees and blocked-account thresholds — confirm exact requirements with a Studies &amp; Awards counsellor, as these are set by German authorities and change periodically.',
-    partners: [],
+    partners: [
+      { city: 'Berlin', photo: 'assets/destinations/germany/berlin.jpg', fact: 'Germany\'s capital and largest city, reunified in 1990 and now one of Europe\'s leading centres for startups and the arts.' },
+      { city: 'Munich', photo: 'assets/destinations/germany/munich.jpg', fact: 'Bavaria\'s capital, home to the world-famous Oktoberfest and some of Germany\'s top-ranked technical universities.' },
+      { city: 'Hamburg', photo: 'assets/destinations/germany/hamburg.jpg', fact: 'Germany\'s second-largest city and a major port, built around more canals and bridges than Amsterdam and Venice combined.' },
+      { city: 'Frankfurt', photo: 'assets/destinations/germany/frankfurt.jpg', fact: 'Continental Europe\'s financial capital, home to the European Central Bank and one of the world\'s busiest airports.' },
+      { city: 'Stuttgart', photo: 'assets/destinations/germany/stuttgart.jpg', fact: 'Home to Mercedes-Benz and Porsche, at the heart of Germany\'s automotive and engineering industry.' },
+      { city: 'D&uuml;sseldorf', photo: 'assets/destinations/germany/dusseldorf.jpg', fact: 'A fashion and trade-fair hub on the Rhine, home to one of Europe\'s largest Japanese communities.' },
+      { city: 'Leipzig', photo: 'assets/destinations/germany/leipzig.jpg', fact: 'A historic centre of music and publishing, once home to Johann Sebastian Bach and now a fast-growing student city.' },
+      { city: 'Bremen', photo: 'assets/destinations/germany/bremen.jpg', fact: 'One of Germany\'s oldest port cities, famously the setting of the Brothers Grimm tale "The Town Musicians of Bremen".' },
+    ],
   },
   {
     slug: 'canada',
@@ -123,7 +132,7 @@ const countries = [
 ];
 
 function footerDestLinks() {
-  return countries.map(c => `        <a href="${c.slug}.html">${c.name}</a>`).join('\n');
+  return countries.map(c => `          <a href="${c.slug}.html">${c.name}</a>`).join('\n');
 }
 
 function page(c) {
@@ -206,7 +215,7 @@ ${cityDots}
 
 <a href="#main" class="skip-link">Skip to content</a>
 
-<header class="site-header">
+<header class="site-header header-overlay">
   <div class="container">
     <a href="index.html" class="brand" aria-label="Studies and Awards home">
       <span class="brand-mark" aria-hidden="true">
@@ -219,7 +228,7 @@ ${cityDots}
       <a href="services.html" class="nav-link">Services</a>
       <a href="destinations.html" class="nav-link" aria-current="page">Destinations</a>
       <a href="team.html" class="nav-link">Team</a>
-      <a href="mailto:admissions@studiesandawardsltd.com?subject=Student%20Portal%20Access" class="nav-link muted">Student Portal</a>
+      <a href="https://student.studiesandawardsltd.com/login" class="nav-link muted">Student Portal</a>
       <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary nav-cta-mobile">Book Free Consultation</a>
     </nav>
     <div class="header-cta">
@@ -230,10 +239,6 @@ ${cityDots}
     </div>
   </div>
 </header>
-
-<nav class="breadcrumb container" aria-label="Breadcrumb">
-  <a href="destinations.html">Destinations</a> <span style="color:#5B5F66;">/</span> <span style="color:#001B5E; font-weight:600;" aria-current="page">${c.name}</span>
-</nav>
 
 <main id="main">
 
@@ -294,6 +299,8 @@ ${areaChips}
     </div>
   </section>
 
+  <section class="container section-tight next-dest-section" id="next-destination" data-current="${c.slug}" aria-label="Next destination"></section>
+
   <section class="container section-tight" aria-label="Other destinations">
     <h2 style="font-size:20px; margin-bottom:20px;">Other destinations</h2>
     <div style="display:flex; flex-wrap:wrap; gap:12px;">
@@ -314,72 +321,146 @@ ${otherPills}
 </main>
 
 <footer class="site-footer">
-  <div class="container footer-grid">
-    <div>
-      <div class="footer-brand-row">
-        <span class="brand-mark" aria-hidden="true">
-        <img src="assets/logo-mark.png" alt="" width="120" height="80">
-      </span>
-        <span class="brand-name">Studies &amp; Awards</span>
+  <div class="footer-card">
+    <div class="footer-card-glow footer-card-glow-1" aria-hidden="true"></div>
+    <div class="footer-card-glow footer-card-glow-2" aria-hidden="true"></div>
+    <div class="container footer-grid">
+      <div>
+        <div class="footer-brand-row">
+          <span class="brand-mark" aria-hidden="true">
+          <img src="assets/logo-mark.png" alt="" width="120" height="80">
+        </span>
+          <span class="brand-name">Studies &amp; Awards</span>
+        </div>
+        <p class="footer-blurb">Personalised guidance from your first visit until you arrive and start life abroad.</p>
       </div>
-      <p class="footer-blurb">Personalised guidance from your first visit until you arrive and start life abroad.</p>
-      <div class="social-row">
+      <nav aria-label="Quick links">
+        <div class="footer-heading">QUICK LINKS</div>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About Us</a>
+          <a href="services.html">Services</a>
+          <a href="team.html">Our Team</a>
+          <a href="https://student.studiesandawardsltd.com/login">Student Portal</a>
+        </div>
+      </nav>
+      <nav aria-label="Destinations">
+        <div class="footer-heading">DESTINATIONS</div>
+        <div class="footer-links">
+${footerDestLinks()}
+        </div>
+      </nav>
+      <div>
+        <div class="footer-heading">CONTACT</div>
+        <div class="footer-contact">
+          <div class="footer-contact-row">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+            <span>Daima Towers, Mezzanine 1, Eldoret, Kenya</span>
+          </div>
+          <a class="footer-contact-row" href="tel:+254721796500">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3c0 1-.9 1.8-1.9 1.6C10.9 18.3 5.7 13.1 4.9 6.9 4.7 5.9 5 3.5 6 3.5Z"/></svg>
+            <span>+254 721 796500</span>
+          </a>
+          <a class="footer-contact-row" href="mailto:admissions@studiesandawardsltd.com">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4 6.5 12 12.5 20 6.5"/></svg>
+            <span>admissions@studiesandawardsltd.com</span>
+          </a>
+        </div>
+      </div>
+      <div class="footer-newsletter">
+        <div class="footer-heading">GET THE LATEST</div>
+        <p class="footer-newsletter-blurb">Destination updates and intake deadlines, straight to your inbox.</p>
+        <form class="footer-subscribe" id="footer-subscribe-form">
+          <label class="sr-only" for="footer-subscribe-email">Your email address</label>
+          <input type="email" id="footer-subscribe-email" placeholder="Your email address" required>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <a class="footer-bottom-legal" href="https://student.studiesandawardsltd.com/login">Student Portal Login</a>
+      <span class="footer-bottom-copyright">&copy; <span id="current-year">2026</span> Studies and Awards Limited. All rights reserved.</span>
+      <div class="footer-bottom-social">
         <a href="#" class="social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9h-2.5c-.83 0-1.5.67-1.5 1.5V12h4l-.5 3.5H10V21h-3v-5.5H5V12h2v-2C7 7.5 8.5 5.5 11.5 5.5H14V9Z"/></svg></a>
         <a href="#" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.2" cy="7.8" r="0.6" fill="#FFFFFF"/></svg></a>
         <a href="#" class="social-link" aria-label="YouTube"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="6" width="17" height="12" rx="2.5"/><path d="M10.5 10l4 2-4 2Z" fill="#FFFFFF" stroke="none"/></svg></a>
         <a href="#" class="social-link" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5"/><circle cx="8.2" cy="8.2" r="0.9" fill="#FFFFFF" stroke="none"/><path d="M7 11.5v6M12.5 17.5v-3.5c0-1.4 1-2.3 2.2-2.3 1.2 0 1.8.8 1.8 2.3v3.5M12.5 11.5v6"/></svg></a>
       </div>
     </div>
-    <nav aria-label="Quick links">
-      <div class="footer-heading">QUICK LINKS</div>
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About Us</a>
-        <a href="services.html">Services</a>
-        <a href="team.html">Our Team</a>
-        <a href="mailto:admissions@studiesandawardsltd.com?subject=Student%20Portal%20Access">Student Portal</a>
-      </div>
-    </nav>
-    <nav aria-label="Destinations">
-      <div class="footer-heading">DESTINATIONS</div>
-      <div class="footer-links">
-${footerDestLinks()}
-      </div>
-    </nav>
-    <div>
-      <div class="footer-heading">CONTACT</div>
-      <div class="footer-contact">
-        <div class="footer-contact-row">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
-          <span>Daima Towers, Mezzanine 1, Eldoret, Kenya</span>
-        </div>
-        <a class="footer-contact-row" href="tel:+254721796500">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3c0 1-.9 1.8-1.9 1.6C10.9 18.3 5.7 13.1 4.9 6.9 4.7 5.9 5 3.5 6 3.5Z"/></svg>
-          <span>+254 721 796500</span>
-        </a>
-        <a class="footer-contact-row" href="mailto:admissions@studiesandawardsltd.com">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4 6.5 12 12.5 20 6.5"/></svg>
-          <span>admissions@studiesandawardsltd.com</span>
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="container footer-bottom">
-    <span>&copy; <span id="current-year">2026</span> Studies and Awards Limited. All rights reserved.</span>
-    <a href="mailto:admissions@studiesandawardsltd.com?subject=Student%20Portal%20Access">Student Portal Login</a>
   </div>
 </footer>
 
+<script src="js/destinations-data.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
 `;
 }
 
-for (const c of countries) {
-  const out = join(siteDir, `${c.slug}.html`);
-  writeFileSync(out, page(c), 'utf8');
-  console.log('wrote', out);
+// js/destinations-data.js — the registry the "next destination" boarding-pass
+// card reads in the browser. Emitted from the same `countries` list so the two
+// can't drift apart. Order here IS the journey order (each page suggests the
+// entry after it; the last wraps to the first). name / welcome / tagline are
+// used as plain text there, so keep them free of HTML entities.
+function destinationsData() {
+  const q = s => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+  const rows = countries.map(c => `  {
+    slug: ${q(c.slug)},
+    name: ${q(c.name)},
+    code: ${q(c.code)},
+    welcome: ${q(c.welcome)},
+    tagline: ${q(c.tagline)}
+  }`).join(',\n');
+
+  return `// Destination registry — GENERATED by tools/generate-countries.mjs from its
+// \`countries\` list. Edit the list there and re-run the script; anything changed
+// here by hand will be overwritten (and \`--check\` will flag it).
+//
+// Shape (Destination): { slug, name, code, welcome, tagline }
+//
+// The ORDER is the journey order used by the "next destination" boarding-pass
+// card on every destination page: each page suggests the entry after it, and
+// the last wraps back round to the first.
+window.DESTINATIONS = [
+${rows}
+];
+`;
+}
+
+// Everything this script owns, as [path relative to site/, content].
+const outputs = [
+  ...countries.map(c => [`${c.slug}.html`, page(c)]),
+  ['js/destinations-data.js', destinationsData()],
+];
+
+// CLI:
+//   node tools/generate-countries.mjs               write the generated files into site/
+//   node tools/generate-countries.mjs --out <dir>   write them somewhere else instead
+//   node tools/generate-countries.mjs --check       change nothing; exit 1 if any generated
+//                                                   file in site/ differs from what this
+//                                                   script would produce (i.e. someone
+//                                                   hand-edited it, or this script is behind)
+const args = process.argv.slice(2);
+const outFlag = args.indexOf('--out');
+const outDir = outFlag > -1 ? resolve(args[outFlag + 1]) : siteDir;
+
+if (args.includes('--check')) {
+  const drifted = outputs.filter(([rel, content]) => {
+    const file = join(siteDir, rel);
+    return !existsSync(file) || readFileSync(file, 'utf8') !== content;
+  });
+  if (drifted.length) {
+    console.error('Out of date (hand-edited, or the generator is behind):\n  ' + drifted.map(([rel]) => rel).join('\n  '));
+    process.exit(1);
+  }
+  console.log(`All ${outputs.length} generated files match the generator.`);
+} else {
+  for (const [rel, content] of outputs) {
+    const out = join(outDir, rel);
+    mkdirSync(dirname(out), { recursive: true });
+    writeFileSync(out, content, 'utf8');
+    console.log('wrote', out);
+  }
 }
 
 export { countries, footerDestLinks };
