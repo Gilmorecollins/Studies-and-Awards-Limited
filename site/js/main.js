@@ -45,6 +45,31 @@
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 })();
 
+// Footer newsletter box — no backend on this site, so "subscribing" opens
+// the visitor's own mail client with the address pre-filled, same as every
+// other call-to-action on the site.
+(function () {
+  'use strict';
+
+  var form = document.getElementById('footer-subscribe-form');
+  if (!form) return;
+
+  var input = document.getElementById('footer-subscribe-email');
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var email = input.value.trim();
+    if (!email) return;
+
+    var subject = encodeURIComponent('Newsletter Signup');
+    var body = encodeURIComponent('Please add this email address to the newsletter list: ' + email);
+    window.location.href = 'mailto:admissions@studiesandawardsltd.com?subject=' + subject + '&body=' + body;
+
+    form.classList.add('is-sent');
+    input.value = 'Check your mail app to send it';
+  });
+})();
+
 // Transparent header over a full-bleed hero photo — turns solid once the
 // page scrolls past the hero so nav text stays readable over lighter content.
 (function () {
