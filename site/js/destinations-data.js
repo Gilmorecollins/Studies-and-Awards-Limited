@@ -42,5 +42,12 @@ window.DESTINATIONS = [
     code: 'DUB',
     welcome: 'The Emerald Isle',
     tagline: 'EU-recognised degrees with strong post-study work opportunities in a welcoming, English-speaking country.'
+  },
+  {
+    slug: 'new-zealand',
+    name: 'New Zealand',
+    code: 'AKL',
+    welcome: 'Land of the Long White Cloud',
+    tagline: 'High-quality education in a safe, welcoming country, with a route to work after you graduate.'
   }
 ];
