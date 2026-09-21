@@ -1,7 +1,10 @@
 // Team data, used by the Team page AND by the site-wide "Book Free Consultation"
 // chooser. Shape (TeamMember):
-//   { id, name, role, department, helpsWith, whatsapp, shortBio, fullBio: string[], photo, linkedin? }
+//   { id, name, role, department, helpsWith, whatsapp, shortBio, fullBio: string[], photo, thumb, linkedin? }
 // photo should be a 4:5 portrait (e.g. 960x1200) for the best crop in the slider.
+// thumb is the small square head-and-shoulders portrait used on the consultation
+// cards (assets/team/thumbs/<id>.jpg) — made from the photo by
+// `node tools/make-team-thumbs.mjs`; re-run it if a photo changes.
 //
 // Consultation chooser: when a visitor clicks any "Book Free Consultation" button
 // they pick who to talk to and go straight to that person's WhatsApp.
@@ -47,6 +50,7 @@ window.TEAM_MEMBERS = [
       'Evelyne works closely with each department to make sure students get consistent, personal guidance regardless of which destination or counsellor they’re paired with, and stays involved in the partnerships that keep the company’s advice current.'
     ],
     photo: 'assets/team/evelyne-choge.jpg',
+    thumb: 'assets/team/thumbs/evelyne-choge.jpg',
     linkedin: '#'
   },
   {
@@ -62,6 +66,7 @@ window.TEAM_MEMBERS = [
       'She works across departments to keep applications, compliance and client communication running smoothly, so students have one consistent experience from enquiry to enrolment.'
     ],
     photo: 'assets/team/mourine.jpg',
+    thumb: 'assets/team/thumbs/mourine.jpg',
     linkedin: '#'
   },
   {
@@ -77,6 +82,7 @@ window.TEAM_MEMBERS = [
       'She helps keep the different departments — applications, compliance, client relations — working together smoothly, so nothing falls through the cracks on a student’s file.'
     ],
     photo: 'assets/team/joyner.jpg',
+    thumb: 'assets/team/thumbs/joyner.jpg',
     linkedin: '#'
   },
   {
@@ -92,6 +98,7 @@ window.TEAM_MEMBERS = [
       'She helps coordinate between departments and keeps things moving for students at every stage of their application.'
     ],
     photo: 'assets/team/beatrice.jpg',
+    thumb: 'assets/team/thumbs/beatrice.jpg',
     linkedin: '#'
   },
   {
@@ -107,6 +114,7 @@ window.TEAM_MEMBERS = [
       'His focus is on accuracy and accountability: making sure every file is complete, verified and compliant, so students’ applications go out right the first time.'
     ],
     photo: 'assets/team/canisius-yego.jpg',
+    thumb: 'assets/team/thumbs/canisius-yego.jpg',
     linkedin: '#'
   },
   {
@@ -122,6 +130,7 @@ window.TEAM_MEMBERS = [
       'His work is about catching errors and missing paperwork early, so applications go out complete and accurate the first time.'
     ],
     photo: 'assets/team/dennis.jpg',
+    thumb: 'assets/team/thumbs/dennis.jpg',
     linkedin: '#'
   },
   {
@@ -137,6 +146,7 @@ window.TEAM_MEMBERS = [
       'She’s often the first point of contact for anything administrative, from scheduling to payments, keeping things organised behind the scenes so the counselling team can focus on students.'
     ],
     photo: 'assets/team/tebby.jpg',
+    thumb: 'assets/team/thumbs/tebby.jpg',
     linkedin: '#'
   },
   {
@@ -152,6 +162,7 @@ window.TEAM_MEMBERS = [
       'She works with students individually and in groups, building test-taking skills and confidence so they can meet the score their chosen university or visa needs.'
     ],
     photo: 'assets/team/witney.jpg',
+    thumb: 'assets/team/thumbs/witney.jpg',
     linkedin: '#'
   },
   {
@@ -167,6 +178,7 @@ window.TEAM_MEMBERS = [
       'She checks each application for completeness and accuracy before it goes out, helping students avoid the delays that come from a missing document or a rushed form.'
     ],
     photo: 'assets/team/joy.jpg',
+    thumb: 'assets/team/thumbs/joy.jpg',
     linkedin: '#'
   },
   {
@@ -182,6 +194,7 @@ window.TEAM_MEMBERS = [
       'She helps students find their footing at the start of the process and stays a familiar point of contact as their application moves forward.'
     ],
     photo: 'assets/team/rahab.jpg',
+    thumb: 'assets/team/thumbs/rahab.jpg',
     linkedin: '#'
   },
   {
@@ -197,6 +210,7 @@ window.TEAM_MEMBERS = [
       'She helps bridge the gap between students and the rest of the team, following up on outstanding steps and answering questions as they come up.'
     ],
     photo: 'assets/team/tina.jpg',
+    thumb: 'assets/team/thumbs/tina.jpg',
     linkedin: '#'
   },
   {
@@ -212,6 +226,7 @@ window.TEAM_MEMBERS = [
       'He checks in with students beyond the paperwork, making sure they feel supported as they prepare for a major move abroad.'
     ],
     photo: 'assets/team/collins.jpg',
+    thumb: 'assets/team/thumbs/collins.jpg',
     linkedin: '#'
   }
 ];

@@ -14,6 +14,67 @@ const partnerData = JSON.parse(readFileSync(join(__dirname, 'data', 'partner-ins
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+// ---- link previews (WhatsApp, Facebook, LinkedIn…) -------------------------------
+// The site's public address once it has one, with no trailing slash, e.g.
+// 'https://studiesandawardsltd.com'. Left blank for now: the canonical link,
+// og:url and the share image all need a full web address, so they are only
+// written when this is set. Everything else (title, description, card type,
+// theme colour) is written either way. After setting it, run this script again.
+const SITE_URL = '';
+const SITE_NAME = 'Studies and Awards Limited';
+const THEME_COLOUR = '#001B5E';
+const SEO_START = '<!-- seo:start — written by tools/generate-countries.mjs; edit the script, not this block -->';
+const SEO_END = '<!-- seo:end -->';
+
+// `title` and `description` must already be safe inside an HTML attribute.
+function seoBlock({ title, description, path, image, imageAlt }) {
+  const absolute = rel => `${SITE_URL}${rel.startsWith('/') ? '' : '/'}${rel}`;
+  const lines = [
+    SEO_START,
+    `<meta name="theme-color" content="${THEME_COLOUR}">`,
+    '<meta property="og:type" content="website">',
+    `<meta property="og:site_name" content="${SITE_NAME}">`,
+    `<meta property="og:title" content="${title}">`,
+    `<meta property="og:description" content="${description}">`,
+    `<meta name="twitter:card" content="${SITE_URL ? 'summary_large_image' : 'summary'}">`,
+    `<meta name="twitter:title" content="${title}">`,
+    `<meta name="twitter:description" content="${description}">`,
+  ];
+  if (SITE_URL) {
+    lines.push(
+      `<link rel="canonical" href="${absolute(path)}">`,
+      `<meta property="og:url" content="${absolute(path)}">`,
+      `<meta property="og:image" content="${absolute(image)}">`,
+      '<meta property="og:image:width" content="1200">',
+      '<meta property="og:image:height" content="630">',
+      `<meta property="og:image:alt" content="${imageAlt}">`,
+      `<meta name="twitter:image" content="${absolute(image)}">`,
+    );
+  }
+  lines.push(SEO_END);
+  return lines.join('\n');
+}
+
+// The hand-maintained pages: the generator only ever rewrites the marked block
+// inside their <head>; everything else on those pages stays exactly as written.
+const HAND_PAGES = ['index.html', 'about.html', 'services.html', 'team.html', 'destinations.html'];
+
+function withSeoBlock(html, file) {
+  const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1];
+  const description = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1];
+  if (!title || !description) throw new Error(`${file}: needs a <title> and a meta description to build link-preview tags`);
+  const block = seoBlock({
+    title, description,
+    path: file === 'index.html' ? '/' : `/${file}`,
+    image: 'assets/share/default.jpg',
+    imageAlt: SITE_NAME,
+  });
+  const existing = /<!-- seo:start[\s\S]*?<!-- seo:end -->/;
+  if (existing.test(html)) return html.replace(existing, () => block);
+  if (!html.includes('</head>')) throw new Error(`${file}: no </head>`);
+  return html.replace('</head>', () => `${block}\n</head>`);
+}
+
 const checkIcon = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8A6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;margin-top:2px;"><path d="M5 12.5l4.5 4.5L19 7"/></svg>`;
 
 const PLACEHOLDER_SLOTS = 3;
@@ -40,7 +101,8 @@ const countries = [
     ],
     areas: ['Business & Management', 'Engineering', 'Health Sciences', 'Information Technology', 'Hospitality & Tourism'],
     visa: 'Studying in Australia generally requires a student visa, proof of enrolment, evidence of financial capacity, overseas student health cover, and an accepted English test score such as IELTS or PTE.',
-    visaNote: 'Current visa subclass, fees, and financial thresholds — confirm exact requirements with a Studies &amp; Awards counsellor, as these are set by the Australian government and change periodically.',
+    visaChanges: 'visa subclass, fees and financial thresholds',
+    visaAuthority: 'the Australian government',
     partners: [
       { city: 'Sydney', photo: 'assets/destinations/australia/sydney.jpg', fact: 'Home to the iconic Sydney Opera House, a UNESCO World Heritage Site with over one million roof tiles.' },
       { city: 'Melbourne', photo: 'assets/destinations/australia/melbourne.jpg', fact: 'Long ranked among the world\'s most liveable cities, known for its laneway cafés and arts scene.' },
@@ -68,7 +130,8 @@ const countries = [
     ],
     areas: ['Business & Management', 'Law', 'Engineering', 'Health Sciences', 'Computer Science'],
     visa: 'Studying in the UK generally requires a Student visa, an offer from a licensed student sponsor, proof of financial means to cover tuition and living costs, and an accepted English test score.',
-    visaNote: 'Current visa fees, financial-evidence thresholds, and the Immigration Health Surcharge — confirm exact requirements with a Studies &amp; Awards counsellor, as these are set by UK Visas and Immigration and change periodically.',
+    visaChanges: 'visa fees, financial-evidence thresholds and the Immigration Health Surcharge',
+    visaAuthority: 'UK Visas and Immigration',
     partners: [
       { city: 'London', photo: 'assets/destinations/united-kingdom/london.jpg', fact: 'Home to more than 170 museums, many of which — including the British Museum — offer free admission.' },
       { city: 'Edinburgh', photo: 'assets/destinations/united-kingdom/edinburgh.jpg', fact: 'Hosts the Edinburgh Festival Fringe, the largest annual arts festival in the world.' },
@@ -97,7 +160,8 @@ const countries = [
     ],
     areas: ['Engineering', 'Computer Science', 'Natural Sciences', 'Business Administration', 'Architecture'],
     visa: 'A German national (long-stay) student visa generally requires university admission, proof of financial resources (often via a blocked account), health insurance, and, for many programs, a German language certificate — which is what our German Language Training prepares you for.',
-    visaNote: 'Current visa fees and blocked-account thresholds — confirm exact requirements with a Studies &amp; Awards counsellor, as these are set by German authorities and change periodically.',
+    visaChanges: 'visa fees and blocked-account thresholds',
+    visaAuthority: 'German authorities',
     partners: [
       { city: 'Berlin', photo: 'assets/destinations/germany/berlin.jpg', fact: 'Germany\'s capital and largest city, reunified in 1990 and now one of Europe\'s leading centres for startups and the arts.' },
       { city: 'Munich', photo: 'assets/destinations/germany/munich.jpg', fact: 'Bavaria\'s capital, home to the world-famous Oktoberfest and some of Germany\'s top-ranked technical universities.' },
@@ -126,7 +190,8 @@ const countries = [
     ],
     areas: ['Business & Management', 'Engineering & Technology', 'Health Sciences', 'Hospitality', 'Information Technology'],
     visa: 'A Canadian study permit generally requires a letter of acceptance from a designated learning institution, proof of financial support, and a medical exam where applicable.',
-    visaNote: 'Current study permit fees and financial-proof thresholds — confirm exact requirements with a Studies &amp; Awards counsellor, as these are set by Immigration, Refugees and Citizenship Canada and change periodically.',
+    visaChanges: 'study permit fees and financial-proof thresholds',
+    visaAuthority: 'Immigration, Refugees and Citizenship Canada',
     partners: [
       { city: 'Toronto', photo: 'assets/destinations/canada/toronto.jpg', fact: 'Canada\'s largest city, home to the 553-metre CN Tower — the world\'s tallest free-standing structure for more than 30 years.' },
       { city: 'Vancouver', photo: 'assets/destinations/canada/vancouver.jpg', fact: 'Regularly ranked among the world\'s most liveable cities, set between the Pacific Ocean and the Coast Mountains.' },
@@ -153,7 +218,8 @@ const countries = [
     ],
     areas: ['Information Technology', 'Pharmaceutical Sciences', 'Business', 'Engineering', 'Data Science'],
     visa: 'Non-EEA students on courses longer than three months generally need an Irish study visa (Type D), a letter of acceptance, evidence of tuition payment, proof of financial resources, and private medical insurance.',
-    visaNote: 'Current visa fees and financial-evidence thresholds — confirm exact requirements with a Studies &amp; Awards counsellor, as these are set by Irish immigration authorities and change periodically.',
+    visaChanges: 'visa fees and financial-evidence thresholds',
+    visaAuthority: 'Irish immigration authorities',
     partners: [
       { city: 'Dublin', photo: 'assets/destinations/ireland/dublin.jpg', fact: 'Ireland\'s capital and largest city, home to Trinity College Dublin — founded in 1592 — and the European headquarters of many global technology companies.' },
       { city: 'Cork', photo: 'assets/destinations/ireland/cork.jpg', fact: 'The Republic\'s second-largest city, with a historic centre on an island in the River Lee and one of the world\'s largest natural harbours nearby.' },
@@ -178,7 +244,8 @@ const countries = [
     ],
     areas: ['Agriculture & Horticulture', 'Tourism & Hospitality', 'Engineering', 'Health Sciences', 'Information Technology'],
     visa: 'Studying in New Zealand for more than three months generally requires a student visa, an offer of place from an approved education provider, evidence of funds for tuition and living costs, health and character checks, and an accepted English test score where the provider asks for one.',
-    visaNote: 'Current visa fees and financial-evidence thresholds — confirm exact requirements with a Studies &amp; Awards counsellor, as these are set by Immigration New Zealand and change periodically.',
+    visaChanges: 'visa fees and financial-evidence thresholds',
+    visaAuthority: 'Immigration New Zealand',
     partners: [
       { city: 'Auckland', photo: 'assets/destinations/new-zealand/auckland.jpg', fact: 'New Zealand\'s largest city, known as the "City of Sails" and built on a narrow isthmus between two harbours.' },
       { city: 'Wellington', photo: 'assets/destinations/new-zealand/wellington.jpg', fact: 'New Zealand\'s capital — the world\'s southernmost national capital — known for its compact harbour setting and historic cable car.' },
@@ -279,12 +346,13 @@ function page(c) {
           </div>`
         : `          <div class="city-panel-info">
             <div class="city-panel-info-label">PARTNER INSTITUTIONS</div>
-            <p>[Partner institutions in ${p.city} &mdash; list coming soon.]</p>
+            <p>Our counsellors can advise on study options in ${p.city}.</p>
+            <a class="partners-open partners-ask" href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(p.city.replace(/&(\w+);/g, (m, e) => ({ uuml: 'ü' }[e] || m)) + ', ' + c.name)}">Ask a counsellor ${arrowIcon}</a>
           </div>`;
       return `      <div class="city-panel" aria-hidden="true">
         <div class="city-panel-inner">
           <div class="city-panel-index">${String(i + 1).padStart(2, '0')} / ${String(slideCount).padStart(2, '0')}</div>
-          <h3 class="city-panel-name">${p.city}</h3>
+          <p class="city-panel-name">${p.city}</p>
           <p class="city-panel-fact">${p.fact}</p>
 ${info}
         </div>
@@ -293,7 +361,7 @@ ${info}
     : Array.from({ length: PLACEHOLDER_SLOTS }, (_, i) => `      <div class="city-panel" aria-hidden="true">
         <div class="city-panel-inner">
           <div class="city-panel-index">${String(i + 1).padStart(2, '0')} / ${String(slideCount).padStart(2, '0')}</div>
-          <h3 class="city-panel-name">[City]</h3>
+          <p class="city-panel-name">[City]</p>
           <p class="city-panel-fact">[A short, real fun fact about this city will go here.]</p>
           <div class="city-panel-info">
             <div class="city-panel-info-label">PARTNER INSTITUTIONS</div>
@@ -333,6 +401,7 @@ ${cityDots}
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Study in ${c.name} — Studies and Awards Limited</title>
 <meta name="description" content="${c.tagline.replace(/"/g, '&quot;')}">
+${seoBlock({ title: `Study in ${esc(c.name)} — ${SITE_NAME}`, description: c.tagline.replace(/"/g, '&quot;'), path: `/${c.slug}.html`, image: `assets/share/${c.slug}.jpg`, imageAlt: `Study in ${esc(c.name)}${c.partners[0] ? ' — ' + c.partners[0].city : ''}` })}
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -411,7 +480,7 @@ ${areaChips}
         <div class="icon-circle" style="background:#FFFFFF; margin-bottom:20px;" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="1.5"/><circle cx="12" cy="9.5" r="2.2"/><path d="M8.5 16c.5-2 2-3 3.5-3s3 1 3.5 3"/></svg></div>
         <h2 id="visa-heading" style="font-size:22px; margin-bottom:14px;">Visa &amp; requirements</h2>
         <p style="font-size:15px; color:#333333; line-height:1.7; margin-bottom:16px;">${c.visa}</p>
-        <p class="placeholder-note">[${c.visaNote}]</p>
+        <p class="visa-note">Current ${c.visaChanges} are set by ${c.visaAuthority} and change periodically &mdash; confirm the exact requirements with a Studies &amp; Awards counsellor. <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}">Talk to a counsellor</a></p>
       </div>
       <div>
         <div class="icon-circle" style="background:#FFFFFF; margin-bottom:20px;" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15.5H6l-2 2V8.5C4 7.12 5.12 6 6.5 6h7C14.88 6 16 7.12 16 8.5v3c0 1.38-1.12 2.5-2.5 2.5H8Z"/><path d="M14 9h3.5c1.38 0 2.5 1.12 2.5 2.5V18l-2-2h-4"/></svg></div>
@@ -564,6 +633,7 @@ const outputs = [
     return data ? [[`js/partners-${c.slug}.js`, data]] : [];
   }),
   ['js/destinations-data.js', destinationsData()],
+  ...HAND_PAGES.map(f => [f, withSeoBlock(readFileSync(join(siteDir, f), 'utf8'), f)]),
 ];
 
 // Heads-up: partner data for a city that has no slide (no photo yet) isn't shown anywhere.
@@ -580,11 +650,14 @@ const unknownCountries = Object.keys(partnerData).filter(name => !countries.some
 //                                                   file in site/ differs from what this
 //                                                   script would produce (i.e. someone
 //                                                   hand-edited it, or this script is behind)
-const args = process.argv.slice(2);
+const isMain = fileURLToPath(import.meta.url).toLowerCase() === resolve(process.argv[1] || '').toLowerCase();
+const args = isMain ? process.argv.slice(2) : [];
 const outFlag = args.indexOf('--out');
 const outDir = outFlag > -1 ? resolve(args[outFlag + 1]) : siteDir;
 
-if (args.includes('--check')) {
+if (!isMain) {
+  // imported by another tool: expose the data, do nothing else
+} else if (args.includes('--check')) {
   const drifted = outputs.filter(([rel, content]) => {
     const file = join(siteDir, rel);
     return !existsSync(file) || readFileSync(file, 'utf8') !== content;

@@ -1108,11 +1108,12 @@ function createCursorFollower(options) {
       card.setAttribute('data-dept', m.department || '');
 
       var photo = el('img', 'consult-photo');
-      photo.src = m.photo;
+      photo.src = m.thumb || m.photo; // the small pre-framed portrait; the big photo only if a thumb is missing
       photo.alt = '';
-      photo.width = 72;
-      photo.height = 72;
+      photo.width = 96;
+      photo.height = 96;
       photo.loading = 'lazy';
+      photo.decoding = 'async';
       card.appendChild(photo);
 
       var info = el('div', 'consult-info');
@@ -1212,4 +1213,39 @@ function createCursorFollower(options) {
     event.preventDefault();
     open(trigger);
   });
+})();
+
+// Home page: the "What people say" section. It stays hidden until
+// js/testimonials-data.js contains real quotes, so no placeholder or invented
+// feedback is ever shown; an incomplete entry (no quote or no name) is skipped.
+(function () {
+  'use strict';
+
+  var section = document.getElementById('testimonials');
+  var grid = document.getElementById('testimonial-grid');
+  var list = window.TESTIMONIALS;
+  if (!section || !grid || !list || !list.length) return;
+
+  var quoteIcon = '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#FFB800" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-bottom:16px;"><path d="M9.5 7C7 8 5.5 10 5.5 13v4h5v-5h-2.2c0-1.6.9-2.7 2.2-3.4L9.5 7Zm8 0c-2.5 1-4 3-4 6v4h5v-5h-2.2c0-1.6.9-2.7 2.2-3.4L17.5 7Z"/></svg>';
+
+  function add(tag, className, text) {
+    var node = document.createElement(tag);
+    node.className = className;
+    node.textContent = text;
+    return node;
+  }
+
+  var shown = 0;
+  list.forEach(function (t) {
+    if (!t || !t.quote || !t.name) return;
+    var card = document.createElement('article');
+    card.className = 'testimonial-card';
+    card.insertAdjacentHTML('beforeend', quoteIcon);
+    card.appendChild(add('p', 'testimonial-quote', '“' + t.quote + '”'));
+    card.appendChild(add('div', 'testimonial-meta', t.name));
+    if (t.detail) card.appendChild(add('div', 'testimonial-role', t.detail));
+    grid.appendChild(card);
+    shown++;
+  });
+  if (shown) section.hidden = false;
 })();

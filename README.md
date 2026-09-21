@@ -12,6 +12,10 @@ site/              The actual website — open site/index.html in a browser,
   js/team-data.js   The staff: bios for the Team page, plus each person's
                     department, what they help with and WhatsApp number for
                     the consultation chooser. Loaded on every page.
+  js/testimonials-data.js
+                    Real quotes for the home page's "What people say"
+                    section. Empty for now, and the section stays hidden
+                    until it has at least one real quote.
   js/destinations-data.js
                     GENERATED. Destination registry (name, airport code,
                     tagline) in journey order — each destination page
@@ -42,9 +46,20 @@ tools/              Build scripts — not part of the deployed site.
                     The partner institutions by country and city, with the
                     courses each offers — the source of truth for the
                     partner lists on the destination pages.
+  make-team-thumbs.mjs     Makes the small square head-and-shoulders portraits
+                            (site/assets/team/thumbs/) used on the
+                            consultation cards, from the full team photos.
+                            Run: node tools/make-team-thumbs.mjs
+  make-share-images.mjs    Makes the 1200x630 pictures that appear when a page
+                            is shared on WhatsApp/Facebook
+                            (site/assets/share/): one per destination, from its
+                            lead city photo, plus a branded default.
+                            Run: node tools/make-share-images.mjs
   package.json      Declares the one dependency (jimp, used by
-                    process-photos.mjs) and the `generate` / `check` /
-                    `photos` npm scripts. Run `npm install` in tools/ once.
+                    process-photos.mjs, make-team-thumbs.mjs and
+                    make-share-images.mjs) and the `generate` / `check` /
+                    `photos` / `thumbs` npm scripts.
+                    Run `npm install` in tools/ once.
 
 source-assets/      Raw, uncompressed originals (destination photos, logo).
                     Not tracked by git (see .gitignore) — the compressed,
@@ -59,9 +74,12 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   the header/footer/layout, the template) in `tools/generate-countries.mjs`
   instead, then run `node tools/generate-countries.mjs` to regenerate them.
   Never hand-edit a destination page, `js/destinations-data.js` or
-  `js/partners-*.js`: the next run overwrites them. (The header and footer also appear on the non-generated
-  pages — index, about, services, team, destinations — so a change to them
-  must be made in those files as well as in the template.)
+  `js/partners-*.js`: the next run overwrites them. (The header and footer
+  also appear on the non-generated pages — index, about, services, team,
+  destinations — so a change to them must be made in those files as well as
+  in the template. Those five pages also carry a generated block of
+  link-preview tags between `<!-- seo:start -->` and `<!-- seo:end -->` in
+  their `<head>`; the generator rewrites only that block, so leave it alone.)
 - **Did someone edit a generated page by hand?** Run
   `node tools/generate-countries.mjs --check` (or `npm run check` in
   `tools/`). It changes nothing and exits with an error listing any generated
@@ -104,8 +122,9 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   `courses`; an empty `courses` list shows "Courses on request" with a link
   to email a counsellor) and regenerate. City names must match the slide's city
   name exactly. Data for a city that has no slide yet (no photo) isn't shown —
-  the generator prints a note listing them. Cities with no entries keep the
-  "[list coming soon]" placeholder. The JSON was built from the partner-list
+  the generator prints a note listing them. Cities with no entries show "Our
+  counsellors can advise on study options in <city>" with an "Ask a counsellor"
+  link that opens the consultation chooser for that city. The JSON was built from the partner-list
   PDF (Sept 2026) with spelling mistakes and cut-off names corrected; when you
   get an updated list, replace or extend it there.
 - **"Book Free Consultation" chooser**: every consultation button on the site
@@ -119,10 +138,30 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   left out, and **until at least one person has a number the buttons keep
   opening an email exactly as before**. Their `department` and `helpsWith`
   lines control how they're grouped and described; `CONSULT_DEPARTMENTS` sets
-  the order departments appear in. Add `?consultPreview` to any page's
+  the order departments appear in. The photo on each card is the small framed
+  portrait in `assets/team/thumbs/` (the `thumb` field), made from the full
+  team photo by `node tools/make-team-thumbs.mjs` — if you add a person or
+  replace a team photo, add/adjust their row in that script (eye height and top
+  of the hair) and re-run it. Add `?consultPreview` to any page's
   address (e.g. `index.html?consultPreview`) to preview the whole chooser,
   including people without a number yet. Numbers end up in public web pages,
   so use numbers people are happy to have published.
+- **Link previews (WhatsApp, Facebook, LinkedIn)**: every page has a generated
+  block of tags (title, description, card type, theme colour) so a shared link
+  shows a proper preview. The canonical link, `og:url` and the share picture
+  need the site's full web address, so they are switched on by setting
+  `SITE_URL` (e.g. `'https://studiesandawardsltd.com'`, no trailing slash) near
+  the top of `tools/generate-countries.mjs` and running it again — it's blank
+  until the site has a public address. The pictures are already made
+  (`site/assets/share/`; rebuild with `node tools/make-share-images.mjs`), so
+  they will show as "not referenced" in a file audit until `SITE_URL` is set.
+  After going live, paste a page's address into Facebook's Sharing Debugger to
+  refresh the cached preview. `--check` covers these blocks too.
+- **Testimonials**: the home page's "What people say" section is empty and
+  hidden until real quotes exist. Add each one to `js/testimonials-data.js` as
+  `{ quote, name, detail }` — only quotes the person has agreed to have
+  published, in their own words, under a name they're happy to use. An entry
+  with no quote or no name is skipped rather than shown half-empty.
 - **Publishing**: the live version is published as a Claude Artifact, not
   auto-deployed from this repo — republish from `site/index.html` after
   making changes.

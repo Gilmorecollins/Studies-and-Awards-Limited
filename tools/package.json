@@ -6,7 +6,8 @@
   "scripts": {
     "generate": "node generate-countries.mjs",
     "check": "node generate-countries.mjs --check",
-    "photos": "node process-photos.mjs"
+    "photos": "node process-photos.mjs",
+    "thumbs": "node make-team-thumbs.mjs"
   },
   "dependencies": {
     "jimp": "^1.6.1"

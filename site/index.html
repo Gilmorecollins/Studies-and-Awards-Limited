@@ -10,6 +10,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Oswald:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="css/styles.css">
+<!-- seo:start — written by tools/generate-countries.mjs; edit the script, not this block -->
+<meta name="theme-color" content="#001B5E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Studies and Awards Limited">
+<meta property="og:title" content="Studies and Awards Limited — Study Abroad Consultancy, Eldoret Kenya">
+<meta property="og:description" content="Personalised guidance for Kenyan students studying abroad in Australia, the United Kingdom, Germany, Canada, Ireland and New Zealand — test prep, applications, visas and travel, all in one place.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Studies and Awards Limited — Study Abroad Consultancy, Eldoret Kenya">
+<meta name="twitter:description" content="Personalised guidance for Kenyan students studying abroad in Australia, the United Kingdom, Germany, Canada, Ireland and New Zealand — test prep, applications, visas and travel, all in one place.">
+<!-- seo:end -->
 </head>
 <body>
 
@@ -241,37 +251,14 @@
     </div>
   </section>
 
-  <section class="section" aria-labelledby="testimonials-heading">
+  <section class="section" id="testimonials" aria-labelledby="testimonials-heading" hidden>
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">WHAT PEOPLE SAY</span>
         <h2 id="testimonials-heading">Hear from our students and families</h2>
-        <p>Real feedback from students, parents, and clients who have worked with us &mdash; added as it comes in.</p>
+        <p>Real feedback from students, parents, and clients who have worked with us.</p>
       </div>
-      <div class="grid-3">
-
-        <article class="testimonial-card">
-          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#FFB800" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-bottom:16px;"><path d="M7 8c-2 0-3.5 1.5-3.5 3.5S5 15 7 15c.5 0 1-.1 1.4-.3-.3 1.5-1.4 2.6-2.9 2.9v1.9c2.8-.4 5-2.8 5-5.7V11c0-1.7-1.3-3-3-3H7Z"/><path d="M16.5 8c-2 0-3.5 1.5-3.5 3.5s1.5 3.5 3.5 3.5c.5 0 1-.1 1.4-.3-.3 1.5-1.4 2.6-2.9 2.9v1.9c2.8-.4 5-2.8 5-5.7V11c0-1.7-1.3-3-3-3h-.5Z"/></svg>
-          <p class="testimonial-quote">[Add a real quote here &mdash; 2&ndash;3 sentences from a student, parent, or client about their experience with Studies &amp; Awards.]</p>
-          <div class="testimonial-meta">[Name]</div>
-          <div class="testimonial-role">[Student / Parent / Client &mdash; destination &amp; year]</div>
-        </article>
-
-        <article class="testimonial-card">
-          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#FFB800" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-bottom:16px;"><path d="M7 8c-2 0-3.5 1.5-3.5 3.5S5 15 7 15c.5 0 1-.1 1.4-.3-.3 1.5-1.4 2.6-2.9 2.9v1.9c2.8-.4 5-2.8 5-5.7V11c0-1.7-1.3-3-3-3H7Z"/><path d="M16.5 8c-2 0-3.5 1.5-3.5 3.5s1.5 3.5 3.5 3.5c.5 0 1-.1 1.4-.3-.3 1.5-1.4 2.6-2.9 2.9v1.9c2.8-.4 5-2.8 5-5.7V11c0-1.7-1.3-3-3-3h-.5Z"/></svg>
-          <p class="testimonial-quote">[Add a real quote here &mdash; 2&ndash;3 sentences from a student, parent, or client about their experience with Studies &amp; Awards.]</p>
-          <div class="testimonial-meta">[Name]</div>
-          <div class="testimonial-role">[Student / Parent / Client &mdash; destination &amp; year]</div>
-        </article>
-
-        <article class="testimonial-card">
-          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#FFB800" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-bottom:16px;"><path d="M7 8c-2 0-3.5 1.5-3.5 3.5S5 15 7 15c.5 0 1-.1 1.4-.3-.3 1.5-1.4 2.6-2.9 2.9v1.9c2.8-.4 5-2.8 5-5.7V11c0-1.7-1.3-3-3-3H7Z"/><path d="M16.5 8c-2 0-3.5 1.5-3.5 3.5s1.5 3.5 3.5 3.5c.5 0 1-.1 1.4-.3-.3 1.5-1.4 2.6-2.9 2.9v1.9c2.8-.4 5-2.8 5-5.7V11c0-1.7-1.3-3-3-3h-.5Z"/></svg>
-          <p class="testimonial-quote">[Add a real quote here &mdash; 2&ndash;3 sentences from a student, parent, or client about their experience with Studies &amp; Awards.]</p>
-          <div class="testimonial-meta">[Name]</div>
-          <div class="testimonial-role">[Student / Parent / Client &mdash; destination &amp; year]</div>
-        </article>
-
-      </div>
+      <div class="testimonial-grid" id="testimonial-grid"></div>
     </div>
   </section>
 
@@ -369,6 +356,7 @@
 </footer>
 
 <script src="js/team-data.js"></script>
+<script src="js/testimonials-data.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
