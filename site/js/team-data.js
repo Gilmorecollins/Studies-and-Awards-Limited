@@ -1,6 +1,6 @@
 // Team data, used by the Team page AND by the site-wide "Book Free Consultation"
 // chooser. Shape (TeamMember):
-//   { id, name, role, department, helpsWith, whatsapp, shortBio, fullBio: string[], photo, thumb, linkedin? }
+//   { id, name, role, department, helpsWith, whatsapp, startHere?, shortBio, fullBio: string[], photo, thumb, linkedin? }
 // photo should be a 4:5 portrait (e.g. 960x1200) for the best crop in the slider.
 // thumb is the small square head-and-shoulders portrait used on the consultation
 // cards (assets/team/thumbs/<id>.jpg) — made from the photo by
@@ -12,8 +12,12 @@
 //     (a leading 0 is read as Kenya, +254). Leave it '' and the person is left out
 //     of the chooser. Until at least one person has a number, the buttons keep
 //     opening an email exactly as before.
-//   - department: shown on the person's card and used for the filter chips.
+//   - department: used for the filter buttons above the list.
 //   - helpsWith: one line telling a visitor what to come to this person for.
+//   - startHere: true on ONE person to offer them first, in a "Not sure who to
+//     pick? Start here" box, for visitors who don't know who to ask. Remove it
+//     and the box goes away.
+//   People are listed in the same order as they appear below (the Team page order).
 //   Preview the full chooser (including people with no number yet) by adding
 //   ?consultPreview to any page's address.
 //
@@ -24,7 +28,8 @@
 // (no made-up years of experience, schools, etc.). Swap in real detail
 // whenever you have it. Last names and real linkedin URLs are still
 // missing for most people — fill those in when ready.
-// The order departments appear in the consultation chooser (front-line first).
+// The order the department filter buttons appear in the consultation chooser
+// (front-line first). It sets only the filter buttons, not the order of people.
 window.CONSULT_DEPARTMENTS = [
   'Customer Experience',
   'Client Relations',
@@ -238,6 +243,7 @@ window.TEAM_MEMBERS = [
     department: 'Customer Experience',
     helpsWith: 'Your first questions about studying abroad, and what to do next.',
     whatsapp: '+254792376637',
+    startHere: true,
     shortBio: 'Rahab looks after Customer Experience at Studies and Awards Limited, making sure every student’s journey with us feels supported.',
     fullBio: [
       'Rahab Cherono looks after Customer Experience at Studies and Awards Limited, making sure every student who reaches out gets a clear, timely response.',

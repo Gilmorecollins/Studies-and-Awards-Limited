@@ -132,16 +132,20 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   get an updated list, replace or extend it there.
 - **"Book Free Consultation" chooser**: every consultation button on the site
   (any link to the consultation email, or anything marked `data-consult`)
-  opens a "Who would you like to talk to?" dialog listing our staff by
-  department; choosing someone opens their WhatsApp with a ready-to-send
+  opens a "Who would you like to talk to?" dialog listing our staff in the
+  same order as the Team page, with department filter buttons (and a "Not sure
+  who to pick? Start here" shortcut); choosing someone opens their WhatsApp with a ready-to-send
   message that already names the country if the visitor is on a destination
   page. To switch a person on, put their number in `whatsapp` in
   `js/team-data.js` (e.g. `'0712 345 678'` or `'+254 712 345 678'` — a
   leading 0 is read as Kenya). People with an empty or invalid `whatsapp` are
   left out, and **until at least one person has a number the buttons keep
-  opening an email exactly as before**. Their `department` and `helpsWith`
-  lines control how they're grouped and described; `CONSULT_DEPARTMENTS` sets
-  the order departments appear in. The photo on each card is the small framed
+  opening an email exactly as before**. People appear in the order they are
+  listed in `js/team-data.js`. Their `department` decides which filter button
+  they sit under (`CONSULT_DEPARTMENTS` sets the order of those buttons) and
+  `helpsWith` is the line under their name. Put `startHere: true` on one person
+  to offer them first in the "Start here" box; remove it and the box goes away.
+  The photo on each card is the small framed
   portrait in `assets/team/thumbs/` (the `thumb` field), made from the full
   team photo by `node tools/make-team-thumbs.mjs` — if you add a person or
   replace a team photo, add/adjust their row in that script (eye height and top

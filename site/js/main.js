@@ -941,8 +941,10 @@ function createCursorFollower(options) {
 })();
 
 // Site-wide "Book Free Consultation": instead of opening an email, the button
-// opens a chooser of our staff (from js/team-data.js) — pick who to talk to, by
-// department, and go straight to their WhatsApp with a message ready to send.
+// opens a chooser of our staff (from js/team-data.js) — pick who to talk to and
+// go straight to their WhatsApp with a message ready to send. People are listed
+// in the same order as the Team page, can be narrowed by department, and a
+// person flagged `startHere` is offered first for visitors who aren't sure.
 //
 // It takes over any link whose address is the consultation email (so all the
 // existing buttons work without being edited), plus anything marked
@@ -965,8 +967,14 @@ function createCursorFollower(options) {
 
   var overlay = null;
   var modal = null;
+  var body = null;
   var grid = null;
   var filters = null;
+  var filtersWrap = null;
+  var countEl = null;
+  var topicEl = null;
+  var startEl = null;
+  var labelEl = null;
   var lastFocused = null;
   var hideTimer = null;
   var activeDept = '';
@@ -991,23 +999,26 @@ function createCursorFollower(options) {
 
   function firstName(member) { return String(member.name).split(' ')[0]; }
 
-  function sameLabel(a, b) {
-    function norm(s) { return String(s || '').toLowerCase().replace(/&/g, 'and').replace(/\s+/g, ' ').trim(); }
-    return norm(a) === norm(b);
-  }
-
   function hasContacts() {
     return members.some(function (m) { return normalize(m.whatsapp); });
   }
 
   // Who's shown: everyone with a working number (plus, in ?consultPreview mode,
-  // everyone else too, greyed out). Front-line departments first.
+  // everyone else too, greyed out), in the same order as the Team page.
   function people() {
-    var list = members.map(function (m, i) { return { m: m, number: normalize(m.whatsapp), i: i }; })
+    return members.map(function (m) { return { m: m, number: normalize(m.whatsapp) }; })
       .filter(function (p) { return p.number || preview; });
-    function rank(p) { var r = order.indexOf(p.m.department); return r < 0 ? order.length : r; }
-    list.sort(function (a, b) { return rank(a) - rank(b) || a.i - b.i; });
-    return list;
+  }
+
+  // The department filters: the order set by CONSULT_DEPARTMENTS (front-line
+  // first), then any other department in the order it first appears.
+  function departmentsOf(list) {
+    var names = [];
+    list.forEach(function (p) { if (p.m.department && names.indexOf(p.m.department) < 0) names.push(p.m.department); });
+    function rank(name) { var r = order.indexOf(name); return r < 0 ? order.length : r; }
+    return names.map(function (name, i) { return { name: name, i: i }; })
+      .sort(function (a, b) { return rank(a.name) - rank(b.name) || a.i - b.i; })
+      .map(function (x) { return x.name; });
   }
 
   // What the visitor is asking about: from the button (data-consult, or the
@@ -1043,33 +1054,56 @@ function createCursorFollower(options) {
     return node;
   }
 
-  var whatsappIcon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.2L3.2 20.8l4.5-1.2A8.8 8.8 0 1 0 12 3.2Z"/><path d="M9.2 8.6c.2 2.6 2.7 5.1 5.3 5.4l1.1-1.3-1.9-.9-.8.6a3.9 3.9 0 0 1-1.4-1.4l.6-.8-.9-1.9-2 .3Z"/></svg>';
+  function icon(paths, size, width) {
+    return '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="none" stroke="currentColor" stroke-width="' + width + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths + '</svg>';
+  }
+  var whatsappIcon = icon('<path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.2L3.2 20.8l4.5-1.2A8.8 8.8 0 1 0 12 3.2Z"/><path d="M9.2 8.6c.2 2.6 2.7 5.1 5.3 5.4l1.1-1.3-1.9-.9-.8.6a3.9 3.9 0 0 1-1.4-1.4l.6-.8-.9-1.9-2 .3Z"/>', 18, 1.8);
+  var phoneIcon = icon('<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/>', 18, 1.8);
+  var mailIcon = icon('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>', 18, 1.8);
+  var checkIcon = icon('<path d="M5 12.5l4.5 4.5L19 7"/>', 16, 2);
+  var closeIcon = icon('<path d="M6 6l12 12M18 6L6 18"/>', 20, 2);
+  var chevronLeft = icon('<path d="m15 6-6 6 6 6"/>', 18, 2);
+  var chevronRight = icon('<path d="m9 6 6 6-6 6"/>', 18, 2);
 
   function buildShell() {
     overlay = el('div', 'consult-overlay');
     overlay.id = 'consult-overlay';
     overlay.hidden = true;
     overlay.innerHTML = [
-      '<div class="consult-modal" role="dialog" aria-modal="true" aria-labelledby="consult-title" id="consult-modal" tabindex="-1">',
-      '  <button type="button" class="consult-close" aria-label="Close">&times;</button>',
+      '<div class="consult-modal" role="dialog" aria-modal="true" aria-labelledby="consult-title" aria-describedby="consult-sub" id="consult-modal" tabindex="-1">',
+      '  <button type="button" class="consult-close" aria-label="Close">' + closeIcon + '</button>',
       '  <div class="consult-head">',
       '    <span class="eyebrow">FREE CONSULTATION</span>',
       '    <h2 class="consult-title" id="consult-title">Who would you like to talk to?</h2>',
-      '    <p class="consult-sub">Choose the person who fits what you need. You’ll go straight to their WhatsApp with your message ready to send.</p>',
-      '    <div class="consult-filters" role="group" aria-label="Filter by department"></div>',
+      '    <p class="consult-sub" id="consult-sub">Pick the person who fits what you need. WhatsApp opens with your message already written, and you can edit it before you send.</p>',
+      '    <p class="consult-topic" hidden><span>Asking about</span><strong></strong></p>',
+      '    <p class="consult-assure">' + checkIcon + 'Free initial consultation &middot; no obligation</p>',
       '  </div>',
-      '  <div class="consult-body"><div class="consult-grid"></div></div>',
+      '  <div class="consult-main">',
+      '    <div class="consult-toolbar">',
+      '      <p class="consult-count" role="status" aria-live="polite"></p>',
+      '      <div class="consult-filters-wrap">',
+      '        <button type="button" class="consult-scroll consult-scroll-prev" tabindex="-1" aria-hidden="true">' + chevronLeft + '</button>',
+      '        <div class="consult-filters" role="group" aria-label="Filter by department"></div>',
+      '        <button type="button" class="consult-scroll consult-scroll-next" tabindex="-1" aria-hidden="true">' + chevronRight + '</button>',
+      '      </div>',
+      '    </div>',
+      '    <div class="consult-body"></div>',
+      '  </div>',
       '  <div class="consult-foot">',
-      '    <span>Prefer another way?</span>',
-      '    <a href="tel:' + OFFICE_TEL + '">Call the office ' + OFFICE_TEL_LABEL + '</a>',
-      '    <a href="mailto:' + OFFICE_MAIL + '?subject=Free%20Consultation%20Request" data-consult-fallback>Email ' + OFFICE_MAIL + '</a>',
+      '    <p class="consult-foot-title">Prefer another way?</p>',
+      '    <a class="consult-foot-link" href="tel:' + OFFICE_TEL + '">' + phoneIcon + '<span>Call the office <b class="consult-foot-detail">' + OFFICE_TEL_LABEL + '</b></span></a>',
+      '    <a class="consult-foot-link" href="mailto:' + OFFICE_MAIL + '?subject=Free%20Consultation%20Request" data-consult-fallback>' + mailIcon + '<span>Email <b class="consult-foot-detail">' + OFFICE_MAIL + '</b></span></a>',
       '  </div>',
       '</div>'
     ].join('\n');
     document.body.appendChild(overlay);
     modal = overlay.querySelector('.consult-modal');
-    grid = overlay.querySelector('.consult-grid');
+    body = overlay.querySelector('.consult-body');
     filters = overlay.querySelector('.consult-filters');
+    filtersWrap = overlay.querySelector('.consult-filters-wrap');
+    countEl = overlay.querySelector('.consult-count');
+    topicEl = overlay.querySelector('.consult-topic');
 
     overlay.querySelector('.consult-close').addEventListener('click', close);
     overlay.addEventListener('click', function (event) { if (event.target === overlay) close(); });
@@ -1078,7 +1112,106 @@ function createCursorFollower(options) {
       if (!chip) return;
       activeDept = chip.getAttribute('data-dept');
       applyDepartment();
+      chip.scrollIntoView({ inline: 'center', block: 'nearest', behavior: scrollBehavior() });
     });
+    // the filter row is one line; arrows (mouse users) and the edge fade show there's more
+    filters.addEventListener('scroll', updateScroll, { passive: true });
+    window.addEventListener('resize', updateScroll);
+    overlay.querySelector('.consult-scroll-prev').addEventListener('click', function () { nudge(-1); });
+    overlay.querySelector('.consult-scroll-next').addEventListener('click', function () { nudge(1); });
+  }
+
+  function scrollBehavior() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+  }
+
+  function nudge(direction) {
+    filters.scrollBy({ left: direction * Math.round(filters.clientWidth * 0.7), behavior: scrollBehavior() });
+  }
+
+  function updateScroll() {
+    if (!filters || !filtersWrap || filtersWrap.hidden) return;
+    var max = filters.scrollWidth - filters.clientWidth;
+    filtersWrap.classList.toggle('can-left', filters.scrollLeft > 4);
+    filtersWrap.classList.toggle('can-right', filters.scrollLeft < max - 4);
+  }
+
+  function photoFor(member, size) {
+    var photo = el('img', 'consult-photo');
+    photo.src = member.thumb || member.photo; // the small pre-framed portrait; the big photo only if a thumb is missing
+    photo.alt = '';
+    photo.width = size;
+    photo.height = size;
+    photo.loading = 'lazy';
+    photo.decoding = 'async';
+    return photo;
+  }
+
+  // The green button. Its ::after stretches over the whole row, so the entire
+  // row is one big tap target (the call button sits above it).
+  function whatsappLink(p, className, label) {
+    var link = el('a', className);
+    link.href = 'https://wa.me/' + p.number + '?text=' + encodeURIComponent(messageFor(p.m));
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.innerHTML = whatsappIcon + '<span></span>';
+    link.querySelector('span').textContent = label;
+    link.setAttribute('aria-label', 'Chat with ' + firstName(p.m) + ' on WhatsApp (opens in a new tab)');
+    return link;
+  }
+
+  function callLink(p) {
+    var link = el('a', 'consult-call');
+    link.href = 'tel:+' + p.number;
+    link.title = 'Call ' + pretty(p.number);
+    link.setAttribute('aria-label', 'Call ' + firstName(p.m) + ' on ' + pretty(p.number));
+    link.innerHTML = phoneIcon;
+    return link;
+  }
+
+  function identity(m) {
+    var info = el('div', 'consult-info');
+    info.appendChild(el('h3', 'consult-name', m.name));
+    info.appendChild(el('p', 'consult-role', m.role || m.department));
+    return info;
+  }
+
+  function row(p, index) {
+    var m = p.m;
+    var card = el('li', 'consult-card' + (p.number ? '' : ' is-pending'));
+    card.setAttribute('data-dept', m.department || '');
+    card.style.setProperty('--i', String(Math.min(index, 10)));
+    card.appendChild(photoFor(m, 56));
+    card.appendChild(identity(m));
+    if (m.helpsWith) card.appendChild(el('p', 'consult-help', m.helpsWith));
+
+    var actions = el('div', 'consult-actions');
+    if (p.number) {
+      actions.appendChild(whatsappLink(p, 'consult-wa', 'WhatsApp'));
+      actions.appendChild(callLink(p));
+    } else {
+      actions.appendChild(el('span', 'consult-pending', 'Number coming soon'));
+    }
+    card.appendChild(actions);
+    return card;
+  }
+
+  // For visitors who don't know who to ask: the person flagged `startHere`.
+  function startCard(p) {
+    var m = p.m;
+    var box = el('section', 'consult-start');
+    box.setAttribute('aria-labelledby', 'consult-start-tag');
+    var tag = el('span', 'consult-start-tag', 'Not sure who to pick? Start here');
+    tag.id = 'consult-start-tag';
+    box.appendChild(tag);
+
+    var inner = el('div', 'consult-start-body');
+    inner.appendChild(photoFor(m, 64));
+    inner.appendChild(identity(m));
+    if (m.helpsWith) inner.appendChild(el('p', 'consult-help', m.helpsWith));
+    inner.appendChild(whatsappLink(p, 'consult-start-wa', 'Chat with ' + firstName(m) + ' on WhatsApp'));
+    box.appendChild(inner);
+    return box;
   }
 
   function applyDepartment() {
@@ -1087,71 +1220,61 @@ function createCursorFollower(options) {
       chip.classList.toggle('is-active', on);
       chip.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
-    Array.prototype.forEach.call(grid.querySelectorAll('.consult-card'), function (card) {
-      card.hidden = !!activeDept && card.getAttribute('data-dept') !== activeDept;
+    var cards = grid.querySelectorAll('.consult-card');
+    var shown = 0;
+    Array.prototype.forEach.call(cards, function (card) {
+      var hide = !!activeDept && card.getAttribute('data-dept') !== activeDept;
+      card.hidden = hide;
+      if (!hide) shown++;
     });
+    // the "start here" shortcut belongs to the unfiltered view
+    if (startEl) startEl.hidden = !!activeDept;
+    if (labelEl) labelEl.hidden = !!activeDept;
+
+    countEl.textContent = activeDept
+      ? shown + (shown === 1 ? ' person' : ' people') + ' in ' + activeDept
+      : cards.length + ' people to talk to';
+    body.scrollTop = 0;
   }
 
   function render() {
     var list = people();
-    grid.textContent = '';
+    body.textContent = '';
     filters.textContent = '';
 
-    if (preview) {
-      var note = el('p', 'consult-preview', 'Preview mode: people who don’t have a WhatsApp number yet are shown greyed out. Visitors won’t see them until a number is added in js/team-data.js.');
-      grid.appendChild(note);
+    if (topic) {
+      topicEl.hidden = false;
+      topicEl.querySelector('strong').textContent = 'Studying in ' + topic;
+    } else {
+      topicEl.hidden = true;
     }
 
-    list.forEach(function (p) {
-      var m = p.m;
-      var card = el('article', 'consult-card' + (p.number ? '' : ' is-pending'));
-      card.setAttribute('data-dept', m.department || '');
+    if (preview) {
+      body.appendChild(el('p', 'consult-preview', 'Preview mode: people who don’t have a WhatsApp number yet are shown greyed out. Visitors won’t see them until a number is added in js/team-data.js.'));
+    }
 
-      var photo = el('img', 'consult-photo');
-      photo.src = m.thumb || m.photo; // the small pre-framed portrait; the big photo only if a thumb is missing
-      photo.alt = '';
-      photo.width = 96;
-      photo.height = 96;
-      photo.loading = 'lazy';
-      photo.decoding = 'async';
-      card.appendChild(photo);
+    var start = null;
+    list.forEach(function (p) { if (!start && p.m.startHere && p.number) start = p; });
+    startEl = start ? startCard(start) : null;
+    labelEl = start ? el('p', 'consult-label', 'Or choose someone specific') : null;
+    if (startEl) { body.appendChild(startEl); body.appendChild(labelEl); }
 
-      var info = el('div', 'consult-info');
-      info.appendChild(el('span', 'consult-dept', m.department || m.role));
-      info.appendChild(el('h3', 'consult-name', m.name));
-      // don't repeat the department as the job title ("Applications" / "Applications")
-      if (sameLabel(m.role, m.department)) card.classList.add('no-role');
-      else info.appendChild(el('p', 'consult-role', m.role));
-      card.appendChild(info);
+    grid = el('ul', 'consult-grid');
+    list.forEach(function (p, i) { grid.appendChild(row(p, i)); });
+    body.appendChild(grid);
 
-      if (m.helpsWith) card.appendChild(el('p', 'consult-help', m.helpsWith));
-
-      var actions = el('div', 'consult-actions');
-      if (p.number) {
-        var wa = el('a', 'btn consult-wa');
-        wa.href = 'https://wa.me/' + p.number + '?text=' + encodeURIComponent(messageFor(m));
-        wa.target = '_blank';
-        wa.rel = 'noopener noreferrer';
-        wa.innerHTML = whatsappIcon + '<span>Chat with ' + firstName(m) + ' on WhatsApp</span>';
-        actions.appendChild(wa);
-        var call = el('a', 'consult-call', 'or call ' + pretty(p.number));
-        call.href = 'tel:+' + p.number;
-        actions.appendChild(call);
-      } else {
-        actions.appendChild(el('span', 'consult-pending', 'Number coming soon'));
-      }
-      card.appendChild(actions);
-      grid.appendChild(card);
-    });
-
-    // department chips — only worth showing when there's a real choice to narrow
-    var departments = [];
-    list.forEach(function (p) { if (p.m.department && departments.indexOf(p.m.department) < 0) departments.push(p.m.department); });
-    filters.hidden = !(list.length > 4 && departments.length > 1);
+    // department filters — only worth showing when there's a real choice to narrow
+    var departments = departmentsOf(list);
+    var counts = {};
+    list.forEach(function (p) { counts[p.m.department] = (counts[p.m.department] || 0) + 1; });
+    filtersWrap.hidden = !(list.length > 4 && departments.length > 1);
+    filters.scrollLeft = 0;
     ['All'].concat(departments).forEach(function (name, i) {
-      var chip = el('button', 'consult-chip', name);
+      var chip = el('button', 'consult-chip');
       chip.type = 'button';
       chip.setAttribute('data-dept', i === 0 ? '' : name);
+      chip.appendChild(document.createTextNode(name));
+      chip.appendChild(el('span', 'consult-chip-count', String(i === 0 ? list.length : counts[name])));
       filters.appendChild(chip);
     });
     activeDept = '';
@@ -1160,7 +1283,7 @@ function createCursorFollower(options) {
 
   function focusables() {
     return Array.prototype.filter.call(modal.querySelectorAll('button, a[href]'), function (node) {
-      return node.offsetParent !== null && !node.closest('[hidden]');
+      return node.offsetParent !== null && !node.closest('[hidden]') && node.getAttribute('tabindex') !== '-1';
     });
   }
 
@@ -1184,12 +1307,12 @@ function createCursorFollower(options) {
     if (!overlay) buildShell();
     topic = topicFor(trigger);
     render();
-    modal.querySelector('.consult-body').scrollTop = 0;
 
     window.clearTimeout(hideTimer);
     lastFocused = trigger;
     overlay.hidden = false;
     document.body.style.overflow = 'hidden';
+    updateScroll();
     window.requestAnimationFrame(function () { overlay.classList.add('is-open'); });
     modal.focus();
     document.addEventListener('keydown', trapKeys);
@@ -1206,6 +1329,8 @@ function createCursorFollower(options) {
   document.addEventListener('click', function (event) {
     var trigger = event.target.closest ? event.target.closest(TRIGGER) : null;
     if (!trigger || event.defaultPrevented) return;
+    // the chooser's own "Email" link must really open the email app
+    if (trigger.hasAttribute('data-consult-fallback')) return;
     // leave new-tab / new-window clicks to the browser
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     // nobody to choose from yet: let the email link do its job
