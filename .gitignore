@@ -4,7 +4,7 @@ node_modules/
 # Raw, uncompressed source photos and logo files (many MB each).
 # The web-ready, compressed versions actually used by the site live in
 # site/assets/ and are tracked normally. Keep your own backup of the
-# originals in source-assets/ elsewhere (cloud drive, etc.) — they are
+# originals in source-assets/ elsewhere (cloud drive, etc.). They are
 # not preserved by git here.
 source-assets/
 

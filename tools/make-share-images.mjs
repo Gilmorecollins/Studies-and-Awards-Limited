@@ -13,8 +13,8 @@ import { countries } from './generate-countries.mjs';
 //
 // 1200x630 is the shape those sites expect, and each file is kept well under
 // 300 KB (WhatsApp skips large previews). A destination's image is its first
-// city photo — reorder that country's `partners` list in generate-countries.mjs
-// to change it — cropped to fit (a city's `position: 'center bottom'` is
+// city photo (reorder that country's `partners` list in generate-countries.mjs
+// to change it), cropped to fit (a city's `position: 'center bottom'` is
 // honoured), with the bottom darkened a little and the logo added.
 
 const W = 1200;
@@ -56,7 +56,7 @@ function fadeToColour(img, fromY, colour, max) {
 }
 
 // The mark's dark-blue half vanishes on dark photos, so it sits on a white rounded
-// tile — the same treatment as the logo in the site header.
+// tile, the same treatment as the logo in the site header.
 function tile(w, h, radius) {
   const t = new Jimp({ width: w, height: h, color: 0xffffffff });
   const { data } = t.bitmap;
@@ -89,7 +89,7 @@ async function save(img, name) {
 
 for (const c of countries) {
   const lead = c.partners[0];
-  if (!lead) { console.warn(`${c.slug}: no city photo yet — skipped`); continue; }
+  if (!lead) { console.warn(`${c.slug}: no city photo yet, skipped`); continue; }
   const img = await cover(join(siteDir, lead.photo), lead.position);
   fadeToColour(img, Math.round(H * 0.5), NAVY, 0.7);
   const tileH = Math.round(150 * logo.bitmap.height / logo.bitmap.width) + 2 * Math.round(150 * 0.14);

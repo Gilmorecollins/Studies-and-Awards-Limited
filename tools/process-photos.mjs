@@ -17,7 +17,7 @@ import { dirname, join, resolve } from 'path';
 //
 // Each photo is resized to 1920px wide (the height follows, so nothing is
 // cropped) and saved as a JPEG. Quality starts at 80 and steps down until the
-// file is about 500 KB or less, but never below 60 — very detailed photos
+// file is about 500 KB or less, but never below 60. Very detailed photos
 // (aerials, for instance) can still come out a little heavier than that.
 //
 // Afterwards, add the cities to that country's `partners` list in
@@ -84,7 +84,7 @@ for (const file of files) {
 
   const image = await Jimp.read(join(sourceDir, file));
   const { width, height } = image.bitmap;
-  if (width < WIDTH) console.warn(`  note: ${file} is only ${width}px wide — it will be enlarged to ${WIDTH}px and may look soft`);
+  if (width < WIDTH) console.warn(`  note: ${file} is only ${width}px wide, so it will be enlarged to ${WIDTH}px and may look soft`);
 
   image.resize({ w: WIDTH });
   let quality = START_QUALITY;

@@ -1,9 +1,9 @@
-# Studies and Awards Limited — Website
+# Studies and Awards Limited Website
 
 ## Structure
 
 ```
-site/              The actual website — open site/index.html in a browser,
+site/              The actual website. Open site/index.html in a browser,
                     or deploy this folder as-is to any static host.
   css/styles.css    Shared stylesheet (design tokens, layout, components)
   js/main.js        Shared JS (nav toggle, destination-page slideshow,
@@ -18,7 +18,7 @@ site/              The actual website — open site/index.html in a browser,
                     until it has at least one real quote.
   js/destinations-data.js
                     GENERATED. Destination registry (name, airport code,
-                    tagline) in journey order — each destination page
+                    tagline) in journey order. Each destination page
                     suggests the entry after it. Don't edit by hand.
   js/partners-<country>.js
                     GENERATED. The partner institutions (and their courses)
@@ -28,7 +28,7 @@ site/              The actual website — open site/index.html in a browser,
                     compressed destination photos)
   *.html            One file per page (the 6 destination pages are GENERATED)
 
-tools/              Build scripts — not part of the deployed site.
+tools/              Build scripts, not part of the deployed site.
   generate-countries.mjs   Generates the 6 destination pages (australia.html,
                             united-kingdom.html, germany.html, canada.html,
                             ireland.html, new-zealand.html) and
@@ -44,7 +44,7 @@ tools/              Build scripts — not part of the deployed site.
                             Run: node tools/process-photos.mjs <source folder> <site folder>
   data/partner-institutions.json
                     The partner institutions by country and city, with the
-                    courses each offers — the source of truth for the
+                    courses each offers. The source of truth for the
                     partner lists on the destination pages.
   make-team-thumbs.mjs     Makes the small square head-and-shoulders portraits
                             (site/assets/team/thumbs/) used on the
@@ -62,7 +62,7 @@ tools/              Build scripts — not part of the deployed site.
                     Run `npm install` in tools/ once.
 
 source-assets/      Raw, uncompressed originals (destination photos, logo).
-                    Not tracked by git (see .gitignore) — the compressed,
+                    Not tracked by git (see .gitignore). The compressed,
                     web-ready versions actually used by the site live in
                     site/assets/. Keep your own backup of these originals.
 ```
@@ -70,20 +70,20 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
 ## Making changes
 
 - **Page content/copy**: edit the HTML files in `site/` directly, *except*
-  the 6 destination pages — those are generated. Edit the data (or, for
+  the 6 destination pages, which are generated. Edit the data (or, for
   the header/footer/layout, the template) in `tools/generate-countries.mjs`
   instead, then run `node tools/generate-countries.mjs` to regenerate them.
   Never hand-edit a destination page, `js/destinations-data.js` or
   `js/partners-*.js`: the next run overwrites them. (The header and footer
-  also appear on the non-generated pages — index, about, services, team,
-  destinations — so a change to them must be made in those files as well as
+  also appear on the non-generated pages (index, about, services, team,
+  destinations), so a change to them must be made in those files as well as
   in the template. Those five pages also carry a generated block of
   link-preview tags between `<!-- seo:start -->` and `<!-- seo:end -->` in
   their `<head>`; the generator rewrites only that block, so leave it alone.)
 - **Did someone edit a generated page by hand?** Run
   `node tools/generate-countries.mjs --check` (or `npm run check` in
   `tools/`). It changes nothing and exits with an error listing any generated
-  file that no longer matches the generator. Run it before regenerating — if it
+  file that no longer matches the generator. Run it before regenerating. If it
   reports a page, port that hand edit into the generator first, or the
   regenerate will silently discard it. It also confirms every script in
   `site/js/` still parses (a stray keystroke in a hand-edited file such as
@@ -106,11 +106,11 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
 - **Destination photos**: put the raw photos in
   `source-assets/destination-photos/<Country>/` (one .jpg per city, named
   after the city), then run
-  `node tools/process-photos.mjs "<Country>" <country-slug>` — e.g.
+  `node tools/process-photos.mjs "<Country>" <country-slug>`, e.g.
   `node tools/process-photos.mjs "New zealand" new-zealand`. It writes
   1920px-wide, compressed copies (about 500 KB each) to
   `site/assets/destinations/<country-slug>/`; add `--changed` to process only
-  new or replaced photos (leaving the ones already live untouched — use this
+  new or replaced photos (leaving the ones already live untouched; use this
   whenever you add cities to a folder that already has photos), or
   `--out <dir>` to preview them somewhere else first. Then add an entry per city to that country's
   `partners` array in `generate-countries.mjs` and regenerate. If a photo is
@@ -124,8 +124,8 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   their courses. To change a list, edit the JSON (country → city → `name` and
   `courses`; an empty `courses` list shows "Courses on request" with a link
   to email a counsellor) and regenerate. City names must match the slide's city
-  name exactly. Data for a city that has no slide yet (no photo) isn't shown —
-  the generator prints a note listing them. Cities with no entries show "Our
+  name exactly. Data for a city that has no slide yet (no photo) isn't shown.
+  The generator prints a note listing them. Cities with no entries show "Our
   counsellors can advise on study options in <city>" with an "Ask a counsellor"
   link that opens the consultation chooser for that city. The JSON was built from the partner-list
   PDF (Sept 2026) with spelling mistakes and cut-off names corrected; when you
@@ -137,7 +137,7 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   who to pick? Start here" shortcut); choosing someone opens their WhatsApp with a ready-to-send
   message that already names the country if the visitor is on a destination
   page. To switch a person on, put their number in `whatsapp` in
-  `js/team-data.js` (e.g. `'0712 345 678'` or `'+254 712 345 678'` — a
+  `js/team-data.js` (e.g. `'0712 345 678'` or `'+254 712 345 678'`; a
   leading 0 is read as Kenya). People with an empty or invalid `whatsapp` are
   left out, and **until at least one person has a number the buttons keep
   opening an email exactly as before**. People appear in the order they are
@@ -147,7 +147,7 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   to offer them first in the "Start here" box; remove it and the box goes away.
   The photo on each card is the small framed
   portrait in `assets/team/thumbs/` (the `thumb` field), made from the full
-  team photo by `node tools/make-team-thumbs.mjs` — if you add a person or
+  team photo by `node tools/make-team-thumbs.mjs`. If you add a person or
   replace a team photo, add/adjust their row in that script (eye height and top
   of the hair) and re-run it. Team photos are 4:5 portraits, 960×1200, saved
   with a lowercase name matching the person's `id` (a raw camera photo or a
@@ -161,7 +161,7 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   shows a proper preview. The canonical link, `og:url` and the share picture
   need the site's full web address, so they are switched on by setting
   `SITE_URL` (e.g. `'https://studiesandawardsltd.com'`, no trailing slash) near
-  the top of `tools/generate-countries.mjs` and running it again — it's blank
+  the top of `tools/generate-countries.mjs` and running it again. It's blank
   until the site has a public address. The pictures are already made
   (`site/assets/share/`; rebuild with `node tools/make-share-images.mjs`), so
   they will show as "not referenced" in a file audit until `SITE_URL` is set.
@@ -171,14 +171,14 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   `js/testimonials-data.js`. It currently holds three **sample** quotes
   (marked `sample: true`) so the layout can be reviewed. Samples show only on
   your own copy of the site (opened as a file, or on localhost), each tagged
-  "Sample — replace before launch", and are hidden automatically on any real
+  "Sample: replace before launch", and are hidden automatically on any real
   website address (add `?testimonialsPreview` to an address to see them
-  anywhere). **Before you deploy, replace them with real quotes** — each as
+  anywhere). **Before you deploy, replace them with real quotes**, each as
   `{ quote, name, detail }`, in the person's own words, published with their
   agreement, under a name they're happy to use (leave `sample` out). An entry
   with no quote or no name is skipped. With nothing to show the section stays
   hidden. `--check` reminds you while samples remain, and fails once
   `SITE_URL` is set.
 - **Publishing**: the live version is published as a Claude Artifact, not
-  auto-deployed from this repo — republish from `site/index.html` after
+  auto-deployed from this repo. Republish from `site/index.html` after
   making changes.

@@ -24,7 +24,7 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 const SITE_URL = '';
 const SITE_NAME = 'Studies and Awards Limited';
 const THEME_COLOUR = '#001B5E';
-const SEO_START = '<!-- seo:start — written by tools/generate-countries.mjs; edit the script, not this block -->';
+const SEO_START = '<!-- seo:start (written by tools/generate-countries.mjs; edit the script, not this block) -->';
 const SEO_END = '<!-- seo:end -->';
 
 // `title` and `description` must already be safe inside an HTML attribute.
@@ -93,7 +93,7 @@ const countries = [
     name: 'Australia',
     code: 'SYD',
     welcome: 'The Land Down Under',
-    tagline: 'World-class universities and a relaxed, multicultural lifestyle — we guide you from application to arrival.',
+    tagline: 'World-class universities and a relaxed, multicultural lifestyle. We guide you from application to arrival.',
     why: [
       ['World-ranked universities', 'A wide range of internationally recognised degree programs across every discipline.'],
       ['Post-study work pathways', 'Many graduates are eligible to stay on and gain local work experience after their studies.'],
@@ -111,7 +111,7 @@ const countries = [
       { city: 'Perth', photo: 'assets/destinations/australia/perth.jpg', fact: 'One of the most geographically isolated major cities in the world, with vast desert to its east.' },
       { city: 'Adelaide', photo: 'assets/destinations/australia/adelaide.jpg', fact: 'Known as the "City of Churches," with more places of worship per capita than any other Australian city.' },
       { city: 'Gold Coast', photo: 'assets/destinations/australia/gold-coast.jpg', fact: 'Famous for its golden beaches and Australia\'s largest cluster of theme parks.' },
-      { city: 'Canberra', photo: 'assets/destinations/australia/canberra.jpg', fact: 'Chosen in 1908 as a purpose-built capital — a compromise between rival cities Sydney and Melbourne.' },
+      { city: 'Canberra', photo: 'assets/destinations/australia/canberra.jpg', fact: 'Chosen in 1908 as a purpose-built capital, a compromise between rival cities Sydney and Melbourne.' },
       { city: 'Darwin', photo: 'assets/destinations/australia/darwin.jpg', fact: 'Australia\'s tropical capital of the north, closer to Jakarta than to Canberra.' },
       { city: 'Hobart', photo: 'assets/destinations/australia/hobart.jpg', fact: 'Australia\'s second-oldest capital city, founded in 1804 on the Derwent River.' },
       { city: 'Townsville', photo: 'assets/destinations/australia/townsville.jpg', position: 'center bottom', fact: 'A tropical city in North Queensland, home to James Cook University and the gateway to the Great Barrier Reef and Magnetic Island.' },
@@ -134,10 +134,10 @@ const countries = [
     visaChanges: 'visa fees, financial-evidence thresholds and the Immigration Health Surcharge',
     visaAuthority: 'UK Visas and Immigration',
     partners: [
-      { city: 'London', photo: 'assets/destinations/united-kingdom/london.jpg', fact: 'Home to more than 170 museums, many of which — including the British Museum — offer free admission.' },
+      { city: 'London', photo: 'assets/destinations/united-kingdom/london.jpg', fact: 'Home to more than 170 museums, many of which (including the British Museum) offer free admission.' },
       { city: 'Edinburgh', photo: 'assets/destinations/united-kingdom/edinburgh.jpg', fact: 'Hosts the Edinburgh Festival Fringe, the largest annual arts festival in the world.' },
       { city: 'Glasgow', photo: 'assets/destinations/united-kingdom/glasgow.jpg', fact: 'Scotland\'s largest city, celebrated for its Victorian and Art Nouveau architecture.' },
-      { city: 'Birmingham', photo: 'assets/destinations/united-kingdom/birmingham.jpg', fact: 'The UK\'s second-largest city — with more miles of canal than Venice.' },
+      { city: 'Birmingham', photo: 'assets/destinations/united-kingdom/birmingham.jpg', fact: 'The UK\'s second-largest city, with more miles of canal than Venice.' },
       { city: 'Leeds', photo: 'assets/destinations/united-kingdom/leeds.jpg', fact: 'One of the UK\'s largest financial centres outside London, built on a Victorian textile legacy.' },
       { city: 'Cambridge', photo: 'assets/destinations/united-kingdom/cambridge.jpg', fact: 'Home to the University of Cambridge, founded in 1209 and one of the oldest universities in the world.' },
       { city: 'Southampton', photo: 'assets/destinations/united-kingdom/southampton.jpg', fact: 'A major port city on the south coast, from where the RMS Titanic set sail in 1912, and home to the University of Southampton.' },
@@ -152,7 +152,7 @@ const countries = [
     name: 'Germany',
     code: 'FRA',
     welcome: 'The Heart of Europe',
-    tagline: 'Tuition-friendly public universities — our German Language Training gets you ready to apply.',
+    tagline: 'Tuition-friendly public universities. Our German Language Training gets you ready to apply.',
     why: [
       ['Low or no tuition fees', 'Most public universities charge little to no tuition for degree programs.'],
       ['Strength in engineering & research', 'A long-standing international reputation in technical and scientific fields.'],
@@ -160,7 +160,7 @@ const countries = [
       ['Central European location', 'Easy access to travel, internships, and industry across the continent.'],
     ],
     areas: ['Engineering', 'Computer Science', 'Natural Sciences', 'Business Administration', 'Architecture'],
-    visa: 'A German national (long-stay) student visa generally requires university admission, proof of financial resources (often via a blocked account), health insurance, and, for many programs, a German language certificate — which is what our German Language Training prepares you for.',
+    visa: 'A German national (long-stay) student visa generally requires university admission, proof of financial resources (often via a blocked account), health insurance, and, for many programs, a German language certificate, which is what our German Language Training prepares you for.',
     visaChanges: 'visa fees and blocked-account thresholds',
     visaAuthority: 'German authorities',
     partners: [
@@ -194,13 +194,13 @@ const countries = [
     visaChanges: 'study permit fees and financial-proof thresholds',
     visaAuthority: 'Immigration, Refugees and Citizenship Canada',
     partners: [
-      { city: 'Toronto', photo: 'assets/destinations/canada/toronto.jpg', fact: 'Canada\'s largest city, home to the 553-metre CN Tower — the world\'s tallest free-standing structure for more than 30 years.' },
+      { city: 'Toronto', photo: 'assets/destinations/canada/toronto.jpg', fact: 'Canada\'s largest city, home to the 553-metre CN Tower, the world\'s tallest free-standing structure for more than 30 years.' },
       { city: 'Vancouver', photo: 'assets/destinations/canada/vancouver.jpg', fact: 'Regularly ranked among the world\'s most liveable cities, set between the Pacific Ocean and the Coast Mountains.' },
-      { city: 'Montreal', photo: 'assets/destinations/canada/montreal.jpg', fact: 'One of the world\'s largest French-speaking cities, built around Mount Royal — the hill it takes its name from.' },
+      { city: 'Montreal', photo: 'assets/destinations/canada/montreal.jpg', fact: 'One of the world\'s largest French-speaking cities, built around Mount Royal, the hill it takes its name from.' },
       { city: 'Ottawa', photo: 'assets/destinations/canada/ottawa.jpg', fact: 'Canada\'s capital, home to Parliament Hill and a Rideau Canal that becomes the world\'s largest naturally frozen skating rink each winter.' },
       { city: 'Calgary', photo: 'assets/destinations/canada/calgary.jpg', fact: 'Host of the 1988 Winter Olympics and the annual Calgary Stampede, with the Canadian Rockies close by.' },
       { city: 'Edmonton', photo: 'assets/destinations/canada/edmonton.jpg', position: 'center bottom', fact: 'Alberta\'s capital, known as the "Festival City" and home to West Edmonton Mall, the largest shopping mall in North America.' },
-      { city: 'Winnipeg', photo: 'assets/destinations/canada/winnipeg.jpg', fact: 'The capital of Manitoba, built where the Red and Assiniboine rivers meet at The Forks — a gathering place for thousands of years and now home to the Canadian Museum for Human Rights.' },
+      { city: 'Winnipeg', photo: 'assets/destinations/canada/winnipeg.jpg', fact: 'The capital of Manitoba, built where the Red and Assiniboine rivers meet at The Forks, a gathering place for thousands of years and now home to the Canadian Museum for Human Rights.' },
       { city: 'Halifax', photo: 'assets/destinations/canada/halifax.jpg', fact: 'Nova Scotia\'s capital and the largest city in Atlantic Canada, a harbour city overlooked by the star-shaped Citadel fortress and home to Dalhousie University.' },
       { city: 'Saskatoon', photo: 'assets/destinations/canada/saskatoon.jpg', fact: 'Known as the "City of Bridges" for the spans across the South Saskatchewan River, and home to the University of Saskatchewan.' },
     ],
@@ -222,13 +222,13 @@ const countries = [
     visaChanges: 'visa fees and financial-evidence thresholds',
     visaAuthority: 'Irish immigration authorities',
     partners: [
-      { city: 'Dublin', photo: 'assets/destinations/ireland/dublin.jpg', fact: 'Ireland\'s capital and largest city, home to Trinity College Dublin — founded in 1592 — and the European headquarters of many global technology companies.' },
+      { city: 'Dublin', photo: 'assets/destinations/ireland/dublin.jpg', fact: 'Ireland\'s capital and largest city, home to Trinity College Dublin (founded in 1592) and the European headquarters of many global technology companies.' },
       { city: 'Cork', photo: 'assets/destinations/ireland/cork.jpg', fact: 'The Republic\'s second-largest city, with a historic centre on an island in the River Lee and one of the world\'s largest natural harbours nearby.' },
       { city: 'Galway', photo: 'assets/destinations/ireland/galway.jpg', fact: 'The "City of the Tribes" on Ireland\'s Atlantic coast, home to the University of Galway and a European Capital of Culture for 2020.' },
       { city: 'Limerick', photo: 'assets/destinations/ireland/limerick.jpg', fact: 'Set on the River Shannon and home to the 13th-century King John\'s Castle, which has stood over the river for more than 800 years.' },
       { city: 'Waterford', photo: 'assets/destinations/ireland/waterford.jpg', fact: 'Ireland\'s oldest city, founded by Vikings in 914 and famous around the world for Waterford Crystal.' },
-      { city: 'Belfast', photo: 'assets/destinations/ireland/belfast.jpg', fact: 'The capital of Northern Ireland — part of the UK — where the RMS Titanic was built, now home to the Titanic Belfast visitor experience.' },
-      { city: 'Derry', photo: 'assets/destinations/ireland/derry.jpg', fact: 'Northern Ireland\'s second-largest city — part of the UK — with 17th-century walls that are the most complete city walls in Ireland.' },
+      { city: 'Belfast', photo: 'assets/destinations/ireland/belfast.jpg', fact: 'The capital of Northern Ireland (part of the UK), where the RMS Titanic was built, now home to the Titanic Belfast visitor experience.' },
+      { city: 'Derry', photo: 'assets/destinations/ireland/derry.jpg', fact: 'Northern Ireland\'s second-largest city (part of the UK) with 17th-century walls that are the most complete city walls in Ireland.' },
     ],
   },
   {
@@ -249,11 +249,11 @@ const countries = [
     visaAuthority: 'Immigration New Zealand',
     partners: [
       { city: 'Auckland', photo: 'assets/destinations/new-zealand/auckland.jpg', fact: 'New Zealand\'s largest city, known as the "City of Sails" and built on a narrow isthmus between two harbours.' },
-      { city: 'Wellington', photo: 'assets/destinations/new-zealand/wellington.jpg', fact: 'New Zealand\'s capital — the world\'s southernmost national capital — known for its compact harbour setting and historic cable car.' },
+      { city: 'Wellington', photo: 'assets/destinations/new-zealand/wellington.jpg', fact: 'New Zealand\'s capital and the world\'s southernmost national capital, known for its compact harbour setting and historic cable car.' },
       { city: 'Christchurch', photo: 'assets/destinations/new-zealand/christchurch.jpg', fact: 'The largest city in the South Island, known as the "Garden City" and home to the University of Canterbury.' },
-      { city: 'Hamilton', photo: 'assets/destinations/new-zealand/hamilton.jpg', fact: 'Set on the Waikato River — New Zealand\'s longest — in a farming region, and home to the University of Waikato.' },
+      { city: 'Hamilton', photo: 'assets/destinations/new-zealand/hamilton.jpg', fact: 'Set on the Waikato River (New Zealand\'s longest) in a farming region, and home to the University of Waikato.' },
       { city: 'Tauranga', photo: 'assets/destinations/new-zealand/tauranga.jpg', fact: 'A coastal Bay of Plenty city beneath Mauao (Mount Maunganui), home to the country\'s largest port by cargo volume.' },
-      { city: 'Dunedin', photo: 'assets/destinations/new-zealand/dunedin.jpg', fact: 'A student city with Scottish roots, home to the University of Otago — New Zealand\'s oldest university, founded in 1869.' },
+      { city: 'Dunedin', photo: 'assets/destinations/new-zealand/dunedin.jpg', fact: 'A student city with Scottish roots, home to the University of Otago, New Zealand\'s oldest university, founded in 1869.' },
     ],
   },
 ];
@@ -272,15 +272,15 @@ function partnerSummary(city, list) {
   return `${n} partner institutions in ${city}, including ${joined}.`;
 }
 
-// js/partners-<slug>.js — the full lists (with courses) the dialog reads, only for
+// js/partners-<slug>.js: the full lists (with courses) the dialog reads, only for
 // the cities that have a slide on the page. null when a country has no partner data.
 function partnersData(c) {
   const cities = partnerData[c.name] ?? {};
   const shown = {};
   for (const p of c.partners) if (cities[p.city]?.length) shown[p.city] = cities[p.city];
   if (!Object.keys(shown).length) return null;
-  return `// GENERATED by tools/generate-countries.mjs from tools/data/partner-institutions.json —
-// edit the data file and re-run the script; changes made here will be overwritten.
+  return `// GENERATED by tools/generate-countries.mjs from tools/data/partner-institutions.json.
+// Edit the data file and re-run the script; changes made here will be overwritten.
 window.PARTNERS = window.PARTNERS || {};
 window.PARTNERS[${JSON.stringify(c.slug)}] = ${JSON.stringify(shown)};
 `;
@@ -293,7 +293,7 @@ function page(c) {
   const partnerCities = partnerData[c.name] ?? {};
   const hasPartnerData = partnersData(c) !== null;
 
-  // The "View partners & courses" dialog: markup only — main.js fills it from
+  // The "View partners & courses" dialog: markup only; main.js fills it from
   // js/partners-<slug>.js when a city's button is pressed.
   const partnersModal = hasPartnerData ? `
 <div class="partners-overlay" id="partners-overlay" hidden>
@@ -379,7 +379,7 @@ ${info}
   const cityScroller = `  <section class="city-scroller" id="city-scroller" data-interval="10000" aria-label="${c.name} destination showcase" aria-roledescription="carousel">
 ${cityImages}
     <div class="city-scroller-vignette"></div>
-    <div class="city-scroller-top-label">Welcome to ${c.name} <strong>&mdash; ${c.welcome}</strong></div>
+    <div class="city-scroller-top-label">Welcome to ${c.name}: <strong>${c.welcome}</strong></div>
 ${cityPanels}
     <div class="city-scroller-bar" role="group" aria-label="Choose a city">
 ${cityDots}
@@ -400,9 +400,9 @@ ${cityDots}
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Study in ${c.name} — Studies and Awards Limited</title>
+<title>Study in ${c.name} | Studies and Awards Limited</title>
 <meta name="description" content="${c.tagline.replace(/"/g, '&quot;')}">
-${seoBlock({ title: `Study in ${esc(c.name)} — ${SITE_NAME}`, description: c.tagline.replace(/"/g, '&quot;'), path: `/${c.slug}.html`, image: `assets/share/${c.slug}.jpg`, imageAlt: `Study in ${esc(c.name)}${c.partners[0] ? ' — ' + c.partners[0].city : ''}` })}
+${seoBlock({ title: `Study in ${esc(c.name)} | ${SITE_NAME}`, description: c.tagline.replace(/"/g, '&quot;'), path: `/${c.slug}.html`, image: `assets/share/${c.slug}.jpg`, imageAlt: `Study in ${esc(c.name)}${c.partners[0] ? ': ' + c.partners[0].city : ''}` })}
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -481,7 +481,7 @@ ${areaChips}
         <div class="icon-circle" style="background:#FFFFFF; margin-bottom:20px;" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="1.5"/><circle cx="12" cy="9.5" r="2.2"/><path d="M8.5 16c.5-2 2-3 3.5-3s3 1 3.5 3"/></svg></div>
         <h2 id="visa-heading" style="font-size:22px; margin-bottom:14px;">Visa &amp; requirements</h2>
         <p style="font-size:15px; color:#333333; line-height:1.7; margin-bottom:16px;">${c.visa}</p>
-        <p class="visa-note">Current ${c.visaChanges} are set by ${c.visaAuthority} and change periodically &mdash; confirm the exact requirements with a Studies &amp; Awards counsellor. <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}">Talk to a counsellor</a></p>
+        <p class="visa-note">Current ${c.visaChanges} are set by ${c.visaAuthority} and change periodically, so confirm the exact requirements with a Studies &amp; Awards counsellor. <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}">Talk to a counsellor</a></p>
       </div>
       <div>
         <div class="icon-circle" style="background:#FFFFFF; margin-bottom:20px;" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15.5H6l-2 2V8.5C4 7.12 5.12 6 6.5 6h7C14.88 6 16 7.12 16 8.5v3c0 1.38-1.12 2.5-2.5 2.5H8Z"/><path d="M14 9h3.5c1.38 0 2.5 1.12 2.5 2.5V18l-2-2h-4"/></svg></div>
@@ -596,7 +596,7 @@ ${partnersScript}<script src="js/main.js"></script>
 `;
 }
 
-// js/destinations-data.js — the registry the "next destination" boarding-pass
+// js/destinations-data.js: the registry the "next destination" boarding-pass
 // card reads in the browser. Emitted from the same `countries` list so the two
 // can't drift apart. Order here IS the journey order (each page suggests the
 // entry after it; the last wraps to the first). name / welcome / tagline are
@@ -611,7 +611,7 @@ function destinationsData() {
     tagline: ${q(c.tagline)}
   }`).join(',\n');
 
-  return `// Destination registry — GENERATED by tools/generate-countries.mjs from its
+  return `// Destination registry, GENERATED by tools/generate-countries.mjs from its
 // \`countries\` list. Edit the list there and re-run the script; anything changed
 // here by hand will be overwritten (and \`--check\` will flag it).
 //
@@ -664,13 +664,13 @@ if (!isMain) {
     return !existsSync(file) || readFileSync(file, 'utf8') !== content;
   });
   // A stray keystroke in a hand-edited script (e.g. team-data.js) makes the whole file fail to load
-  // and silently switches its feature off — so --check also confirms every site script still parses.
+  // and silently switches its feature off, so --check also confirms every site script still parses.
   const broken = readdirSync(join(siteDir, 'js')).filter(f => f.endsWith('.js')).flatMap(f => {
     try { new vm.Script(readFileSync(join(siteDir, 'js', f), 'utf8'), { filename: f }); return []; }
     catch (e) { return [`js/${f}: ${e.message}`]; }
   });
   // Sample testimonials (`sample: true`) are stand-ins for design review. They never show on a real
-  // website address, but setting SITE_URL means deployment is near — so refuse to pass while any remain.
+  // website address, but setting SITE_URL means deployment is near, so refuse to pass while any remain.
   let samples = 0;
   try {
     const sandbox = { window: {} };
@@ -681,7 +681,7 @@ if (!isMain) {
   if (drifted.length || broken.length || samplesBlock) {
     if (drifted.length) console.error('Out of date (hand-edited, or the generator is behind):\n  ' + drifted.map(([rel]) => rel).join('\n  '));
     if (broken.length) console.error('Script syntax errors (the page feature they power will not work):\n  ' + broken.join('\n  '));
-    if (samplesBlock) console.error(`${samples} sample testimonial${samples === 1 ? '' : 's'} still in js/testimonials-data.js — replace with real quotes before deploying.`);
+    if (samplesBlock) console.error(`${samples} sample testimonial${samples === 1 ? '' : 's'} still in js/testimonials-data.js. Replace with real quotes before deploying.`);
     process.exit(1);
   }
   console.log(`All ${outputs.length} generated files match the generator, and every site script parses.`);

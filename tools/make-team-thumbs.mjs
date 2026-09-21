@@ -11,16 +11,16 @@ import { Jimp, ResizeStrategy } from 'jimp';
 //
 // Why not just shrink the big photo in the browser? The full portraits are
 // 960x1200 and 4:5, so squeezing one into a small square crops the top of the
-// head off and leaves the face tiny. These are framed on purpose — the eyes sit
-// at the same height on every card, with room above the hair — and made at 240px
-// so they stay sharp on high-density phone screens (shown at ~96px).
+// head off and leaves the face tiny. These are framed on purpose: the eyes sit
+// at the same height on every card, with room above the hair. They are made at 240px
+// so they stay sharp on high-density phone screens (shown at 56 to 64px).
 //
 // The framing numbers are pixel positions in each 960x1200 team photo:
 //   eye  = height of the eyes, headTop = top of the hair (or hairstyle).
 // If a new team photo is added (or one is re-cropped), add or adjust its row,
 // run this, and look at the result.
 
-const SIZE = 240;          // output edge, px (shown at ~96 CSS px, so 2.5x)
+const SIZE = 240;          // output edge, px (shown at 56 to 64 CSS px)
 const SIDE = 600;          // edge of the square cut from the 960x1200 photo
 const EYE_AT = 0.40;       // eyes sit this far down the square...
 const HEADROOM = 34;       // ...but never leave less than this above the hair
@@ -53,7 +53,7 @@ mkdirSync(outDir, { recursive: true });
 
 for (const [id, f] of Object.entries(framing)) {
   const src = join(teamDir, `${id}.jpg`);
-  if (!existsSync(src)) { console.error(`missing ${id}.jpg — skipped`); continue; }
+  if (!existsSync(src)) { console.error(`missing ${id}.jpg, skipped`); continue; }
   const img = await Jimp.read(src);
   const { width, height } = img.bitmap;
 

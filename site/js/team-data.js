@@ -3,7 +3,7 @@
 //   { id, name, role, department, helpsWith, whatsapp, startHere?, shortBio, fullBio: string[], photo, thumb, linkedin? }
 // photo should be a 4:5 portrait (e.g. 960x1200) for the best crop in the slider.
 // thumb is the small square head-and-shoulders portrait used on the consultation
-// cards (assets/team/thumbs/<id>.jpg) — made from the photo by
+// cards (assets/team/thumbs/<id>.jpg), made from the photo by
 // `node tools/make-team-thumbs.mjs`; re-run it if a photo changes.
 //
 // Consultation chooser: when a visitor clicks any "Book Free Consultation" button
@@ -24,10 +24,10 @@
 // These are public web pages: use numbers people are happy to have published
 // (a work WhatsApp / business line is safer than a personal one).
 //
-// Bios are drafted from each person's role only — no invented specifics
+// Bios are drafted from each person's role only, with no invented specifics
 // (no made-up years of experience, schools, etc.). Swap in real detail
 // whenever you have it. Last names and real linkedin URLs are still
-// missing for most people — fill those in when ready.
+// missing for most people, so fill those in when ready.
 // The order the department filter buttons appear in the consultation chooser
 // (front-line first). It sets only the filter buttons, not the order of people.
 window.CONSULT_DEPARTMENTS = [
@@ -102,7 +102,7 @@ window.TEAM_MEMBERS = [
     shortBio: 'Joyner is the Assistant General Manager at Studies and Awards Limited, supporting operations across the team.',
     fullBio: [
       'Joyner is the Assistant General Manager at Studies and Awards Limited, supporting the General Manager in coordinating the team’s daily operations.',
-      'She helps keep the different departments — applications, compliance, client relations — working together smoothly, so nothing falls through the cracks on a student’s file.'
+      'She helps keep the different departments (applications, compliance, client relations) working together smoothly, so nothing falls through the cracks on a student’s file.'
     ],
     photo: 'assets/team/joyner.jpg',
     thumb: 'assets/team/thumbs/joyner.jpg',

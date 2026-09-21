@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Studies and Awards Limited — site stylesheet
+   Studies and Awards Limited site stylesheet
    Per official Brand Identity Guide: Deep Royal Blue + Signature Gold +
    White, target ratio 60% white / 30% blue / 10% gold. Bebas Neue for
    major display headlines, Montserrat for headings/body/UI, Oswald for
@@ -7,15 +7,15 @@
    ========================================================================== */
 
 :root {
-  --ink: #001B5E;              /* Deep Royal Blue — brand primary */
+  --ink: #001B5E;              /* Deep Royal Blue, brand primary */
   --ink-soft: rgba(0, 27, 94, 0.06);
-  --paper: #F5F6F8;            /* Light Grey — brand secondary background */
-  --bg: #FFFFFF;               /* White — brand background */
+  --paper: #F5F6F8;            /* Light Grey, brand secondary background */
+  --bg: #FFFFFF;               /* White, brand background */
   --surface: #FFFFFF;
-  --brass: #FFB800;            /* Signature Gold — brand accent */
+  --brass: #FFB800;            /* Signature Gold, brand accent */
   --brass-hover: #E6A600;
   --brass-ink: #8A6600;        /* AA-safe gold for text on light backgrounds */
-  --text: #222222;             /* Charcoal — brand body text */
+  --text: #222222;             /* Charcoal, brand body text */
   --text-prose: #333333;
   --muted: #5B5F66;
   --on-dark-muted: #B9C3E0;
