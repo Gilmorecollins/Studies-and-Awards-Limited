@@ -1215,16 +1215,25 @@ function createCursorFollower(options) {
   });
 })();
 
-// Home page: the "What people say" section. It stays hidden until
-// js/testimonials-data.js contains real quotes, so no placeholder or invented
-// feedback is ever shown; an incomplete entry (no quote or no name) is skipped.
+// Home page: the "What people say" section, fed by js/testimonials-data.js.
+//
+// Real quotes are always shown. Entries marked `sample: true` are stand-ins for
+// reviewing the design: they show only on a developer's own copy (a file, or
+// localhost) or when ?testimonialsPreview is added to the address, and never on
+// a real website address — so a forgotten sample can't reach visitors. With
+// nothing to show, the section stays hidden. An incomplete entry (no quote or
+// no name) is skipped rather than shown half-empty.
 (function () {
   'use strict';
 
   var section = document.getElementById('testimonials');
   var grid = document.getElementById('testimonial-grid');
-  var list = window.TESTIMONIALS;
-  if (!section || !grid || !list || !list.length) return;
+  var all = window.TESTIMONIALS;
+  if (!section || !grid || !all || !all.length) return;
+
+  var here = window.location;
+  var ownCopy = here.protocol === 'file:' || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(here.hostname);
+  var allowSamples = ownCopy || /[?&]testimonialsPreview(=|&|$)/.test(here.search);
 
   var quoteIcon = '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#FFB800" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-bottom:16px;"><path d="M9.5 7C7 8 5.5 10 5.5 13v4h5v-5h-2.2c0-1.6.9-2.7 2.2-3.4L9.5 7Zm8 0c-2.5 1-4 3-4 6v4h5v-5h-2.2c0-1.6.9-2.7 2.2-3.4L17.5 7Z"/></svg>';
 
@@ -1236,10 +1245,16 @@ function createCursorFollower(options) {
   }
 
   var shown = 0;
-  list.forEach(function (t) {
+  var samples = 0;
+  all.forEach(function (t) {
     if (!t || !t.quote || !t.name) return;
+    if (t.sample && !allowSamples) return;
     var card = document.createElement('article');
-    card.className = 'testimonial-card';
+    card.className = 'testimonial-card' + (t.sample ? ' is-sample' : '');
+    if (t.sample) {
+      card.appendChild(add('span', 'testimonial-sample', 'Sample — replace before launch'));
+      samples++;
+    }
     card.insertAdjacentHTML('beforeend', quoteIcon);
     card.appendChild(add('p', 'testimonial-quote', '“' + t.quote + '”'));
     card.appendChild(add('div', 'testimonial-meta', t.name));
@@ -1247,5 +1262,13 @@ function createCursorFollower(options) {
     grid.appendChild(card);
     shown++;
   });
-  if (shown) section.hidden = false;
+  if (!shown) return;
+
+  if (samples) {
+    var note = add('p', 'consult-preview', 'Sample quotes are showing so you can review the layout. Visitors on the live site will not see them: replace them with real quotes in js/testimonials-data.js before you deploy.');
+    note.style.margin = '0 auto 24px';
+    note.style.maxWidth = '640px';
+    grid.parentNode.insertBefore(note, grid);
+  }
+  section.hidden = false;
 })();

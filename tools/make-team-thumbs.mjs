@@ -27,16 +27,20 @@ const HEADROOM = 34;       // ...but never leave less than this above the hair
 
 const framing = {
   'beatrice':       { eye: 384, headTop: 222 },
+  'bethwel':        { eye: 388, headTop: 210 },
   'canisius-yego':  { eye: 384, headTop: 180 },
   'collins':        { eye: 384, headTop: 168 },
   'dennis':         { eye: 360, headTop: 160 },
   'evelyne-choge':  { eye: 396, headTop: 224 },
+  'ian':            { eye: 325, headTop: 98 },
   'joy':            { eye: 384, headTop: 175 },
   'joyner':         { eye: 384, headTop: 204 },
   'mourine':        { eye: 384, headTop: 262 },
   'rahab':          { eye: 372, headTop: 150 },
+  'talaam':         { eye: 282, headTop: 75 },
   'tebby':          { eye: 372, headTop: 100 },
   'tina':           { eye: 408, headTop: 60 },
+  'winnie':         { eye: 380, headTop: 158 },
   'witney':         { eye: 384, headTop: 203 },
 };
 

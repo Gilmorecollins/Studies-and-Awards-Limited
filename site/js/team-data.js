@@ -32,6 +32,8 @@ window.CONSULT_DEPARTMENTS = [
   'IELTS & PTE',
   'Compliance & Verification',
   'Administration & Accounts',
+  'Operations',
+  'Magister Sacco',
   'Masomo Welfare',
   'Management'
 ];
@@ -150,6 +152,22 @@ window.TEAM_MEMBERS = [
     linkedin: '#'
   },
   {
+    id: 'bethwel',
+    name: 'Bethwel',
+    role: 'Operations',
+    department: 'Operations',
+    helpsWith: 'Keeping the day-to-day running of the office and student processes on track.',
+    whatsapp: '+254725505825',
+    shortBio: 'Bethwel works in Operations at Studies and Awards Limited, helping keep the team’s day-to-day work running smoothly.',
+    fullBio: [
+      'Bethwel works in Operations at Studies and Awards Limited, helping keep the company’s day-to-day work running smoothly.',
+      'Behind the scenes, Bethwel supports the departments students deal with directly, so the process from first enquiry to enrolment stays organised.'
+    ],
+    photo: 'assets/team/bethwel.jpg',
+    thumb: 'assets/team/thumbs/bethwel.jpg',
+    linkedin: '#'
+  },
+  {
     id: 'witney',
     name: 'Witney',
     role: 'IELTS and PTE Tutor',
@@ -166,12 +184,28 @@ window.TEAM_MEMBERS = [
     linkedin: '#'
   },
   {
+    id: 'winnie',
+    name: 'Winnie',
+    role: 'Application Manager',
+    department: 'Applications',
+    helpsWith: 'Overseeing how your applications to universities and colleges abroad are prepared and submitted.',
+    whatsapp: '+254727842613',
+    shortBio: 'Winnie is the Application Manager at Studies and Awards Limited, overseeing how student applications are prepared and submitted.',
+    fullBio: [
+      'Winnie is the Application Manager at Studies and Awards Limited, overseeing the Applications department and how students’ applications to partner universities and colleges abroad are prepared and submitted.',
+      'Working alongside the rest of the team, Winnie helps make sure each application is complete and accurate before it goes out, so students avoid the delays that come from a missing document or a rushed form.'
+    ],
+    photo: 'assets/team/winnie.jpg',
+    thumb: 'assets/team/thumbs/winnie.jpg',
+    linkedin: '#'
+  },
+  {
     id: 'joy',
     name: 'Joy',
     role: 'Applications',
     department: 'Applications',
     helpsWith: 'Guiding your applications to partner universities and colleges abroad.',
-    whatsapp: '+254727842613',
+    whatsapp: '+254758496566',
     shortBio: 'Joy handles applications at Studies and Awards Limited, guiding students through their submissions to partner institutions.',
     fullBio: [
       'Joy works on Applications at Studies and Awards Limited, guiding students through their submissions to partner universities and colleges abroad.',
@@ -179,6 +213,22 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/joy.jpg',
     thumb: 'assets/team/thumbs/joy.jpg',
+    linkedin: '#'
+  },
+  {
+    id: 'ian',
+    name: 'Ian',
+    role: 'Applications',
+    department: 'Applications',
+    helpsWith: 'Preparing and submitting your applications to universities and colleges abroad.',
+    whatsapp: '+254719648200',
+    shortBio: 'Ian works in the Applications department at Studies and Awards Limited, helping students prepare and submit their applications.',
+    fullBio: [
+      'Ian works in the Applications department at Studies and Awards Limited, helping students prepare and submit their applications to partner universities and colleges abroad.',
+      'Ian checks that each application is complete before it goes out, helping students avoid the delays that come from a missing document or a rushed form.'
+    ],
+    photo: 'assets/team/ian.jpg',
+    thumb: 'assets/team/thumbs/ian.jpg',
     linkedin: '#'
   },
   {
@@ -227,6 +277,22 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/collins.jpg',
     thumb: 'assets/team/thumbs/collins.jpg',
+    linkedin: '#'
+  },
+  {
+    id: 'talaam',
+    name: 'Talaam',
+    role: 'Magister Sacco',
+    department: 'Magister Sacco',
+    helpsWith: 'Questions about Magister Sacco.',
+    whatsapp: '+254707248824',
+    shortBio: 'Talaam works in the Magister Sacco department at Studies and Awards Limited.',
+    fullBio: [
+      'Talaam works in the Magister Sacco department at Studies and Awards Limited.',
+      'If you have a question about Magister Sacco, Talaam is the person to ask.'
+    ],
+    photo: 'assets/team/talaam.jpg',
+    thumb: 'assets/team/thumbs/talaam.jpg',
     linkedin: '#'
   }
 ];

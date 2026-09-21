@@ -810,18 +810,26 @@ p { margin: 0; }
 
 /* ---------- testimonials (home page; hidden until js/testimonials-data.js has real quotes) ---------- */
 
+/* one row: cards share the width when they fit, and the row scrolls sideways when they don't */
 .testimonial-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 380px));
-  justify-content: center;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(min(85%, 300px), 400px);
+  justify-content: safe center;
   gap: 24px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  padding-bottom: 12px; /* keeps the scrollbar clear of the cards */
 }
+.testimonial-grid:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .testimonial-card {
   border: 1px solid var(--border);
   border-top: 3px solid var(--brass);
   border-radius: var(--radius);
   padding: 30px;
   background: var(--surface);
+  scroll-snap-align: start;
 }
 .testimonial-quote { font-style: italic; color: var(--text-prose); font-size: 14.5px; line-height: 1.7; margin-bottom: 18px; }
 .testimonial-meta { font-size: 13.5px; font-weight: 700; color: var(--ink); }
@@ -1611,4 +1619,13 @@ html.is-leaving body { opacity: 0; transition: opacity 220ms ease; }
   .consult-chip { padding: 9px 14px; }
   .consult-card { grid-template-columns: 84px minmax(0, 1fr); }
   .consult-photo { width: 84px; height: 84px; }
+}
+
+/* a sample testimonial (design review only; hidden on real website addresses) */
+.testimonial-card.is-sample { position: relative; border-style: dashed; border-top-style: solid; }
+.testimonial-sample {
+  display: table; /* its own line, shrunk to fit */
+  margin-bottom: 14px; padding: 4px 10px;
+  border-radius: 999px; background: #FFF6DB; border: 1px solid var(--brass);
+  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink);
 }

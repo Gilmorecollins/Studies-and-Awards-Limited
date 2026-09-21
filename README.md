@@ -85,7 +85,10 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   `tools/`). It changes nothing and exits with an error listing any generated
   file that no longer matches the generator. Run it before regenerating — if it
   reports a page, port that hand edit into the generator first, or the
-  regenerate will silently discard it. `--out <dir>` writes the generated
+  regenerate will silently discard it. It also confirms every script in
+  `site/js/` still parses (a stray keystroke in a hand-edited file such as
+  `team-data.js` would otherwise silently switch its feature off), and reminds
+  you about leftover sample testimonials. `--out <dir>` writes the generated
   files somewhere else so you can diff them safely.
 - **Adding a country**: add an entry to `countries` in `generate-countries.mjs`
   (its position in the list is the journey order for the "next destination"
@@ -142,7 +145,10 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   portrait in `assets/team/thumbs/` (the `thumb` field), made from the full
   team photo by `node tools/make-team-thumbs.mjs` — if you add a person or
   replace a team photo, add/adjust their row in that script (eye height and top
-  of the hair) and re-run it. Add `?consultPreview` to any page's
+  of the hair) and re-run it. Team photos are 4:5 portraits, 960×1200, saved
+  with a lowercase name matching the person's `id` (a raw camera photo or a
+  square one should be cropped to that shape first, and the huge original kept
+  out of `site/`). Add `?consultPreview` to any page's
   address (e.g. `index.html?consultPreview`) to preview the whole chooser,
   including people without a number yet. Numbers end up in public web pages,
   so use numbers people are happy to have published.
@@ -157,11 +163,18 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   they will show as "not referenced" in a file audit until `SITE_URL` is set.
   After going live, paste a page's address into Facebook's Sharing Debugger to
   refresh the cached preview. `--check` covers these blocks too.
-- **Testimonials**: the home page's "What people say" section is empty and
-  hidden until real quotes exist. Add each one to `js/testimonials-data.js` as
-  `{ quote, name, detail }` — only quotes the person has agreed to have
-  published, in their own words, under a name they're happy to use. An entry
-  with no quote or no name is skipped rather than shown half-empty.
+- **Testimonials**: the home page's "What people say" section is fed by
+  `js/testimonials-data.js`. It currently holds three **sample** quotes
+  (marked `sample: true`) so the layout can be reviewed. Samples show only on
+  your own copy of the site (opened as a file, or on localhost), each tagged
+  "Sample — replace before launch", and are hidden automatically on any real
+  website address (add `?testimonialsPreview` to an address to see them
+  anywhere). **Before you deploy, replace them with real quotes** — each as
+  `{ quote, name, detail }`, in the person's own words, published with their
+  agreement, under a name they're happy to use (leave `sample` out). An entry
+  with no quote or no name is skipped. With nothing to show the section stays
+  hidden. `--check` reminds you while samples remain, and fails once
+  `SITE_URL` is set.
 - **Publishing**: the live version is published as a Claude Artifact, not
   auto-deployed from this repo — republish from `site/index.html` after
   making changes.

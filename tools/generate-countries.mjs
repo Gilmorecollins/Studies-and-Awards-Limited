@@ -1,4 +1,5 @@
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
+import vm from 'vm';
 import { fileURLToPath } from 'url';
 import { dirname, join, resolve } from 'path';
 
@@ -662,11 +663,29 @@ if (!isMain) {
     const file = join(siteDir, rel);
     return !existsSync(file) || readFileSync(file, 'utf8') !== content;
   });
-  if (drifted.length) {
-    console.error('Out of date (hand-edited, or the generator is behind):\n  ' + drifted.map(([rel]) => rel).join('\n  '));
+  // A stray keystroke in a hand-edited script (e.g. team-data.js) makes the whole file fail to load
+  // and silently switches its feature off — so --check also confirms every site script still parses.
+  const broken = readdirSync(join(siteDir, 'js')).filter(f => f.endsWith('.js')).flatMap(f => {
+    try { new vm.Script(readFileSync(join(siteDir, 'js', f), 'utf8'), { filename: f }); return []; }
+    catch (e) { return [`js/${f}: ${e.message}`]; }
+  });
+  // Sample testimonials (`sample: true`) are stand-ins for design review. They never show on a real
+  // website address, but setting SITE_URL means deployment is near — so refuse to pass while any remain.
+  let samples = 0;
+  try {
+    const sandbox = { window: {} };
+    vm.runInNewContext(readFileSync(join(siteDir, 'js', 'testimonials-data.js'), 'utf8'), sandbox);
+    samples = (sandbox.window.TESTIMONIALS || []).filter(t => t && t.sample).length;
+  } catch { /* a broken data file is reported above */ }
+  const samplesBlock = samples > 0 && SITE_URL !== '';
+  if (drifted.length || broken.length || samplesBlock) {
+    if (drifted.length) console.error('Out of date (hand-edited, or the generator is behind):\n  ' + drifted.map(([rel]) => rel).join('\n  '));
+    if (broken.length) console.error('Script syntax errors (the page feature they power will not work):\n  ' + broken.join('\n  '));
+    if (samplesBlock) console.error(`${samples} sample testimonial${samples === 1 ? '' : 's'} still in js/testimonials-data.js — replace with real quotes before deploying.`);
     process.exit(1);
   }
-  console.log(`All ${outputs.length} generated files match the generator.`);
+  console.log(`All ${outputs.length} generated files match the generator, and every site script parses.`);
+  if (samples) console.log(`note: ${samples} sample testimonial${samples === 1 ? '' : 's'} in js/testimonials-data.js (shown only on your own copy). Replace with real quotes before you deploy.`);
 } else {
   for (const [rel, content] of outputs) {
     const out = join(outDir, rel);
