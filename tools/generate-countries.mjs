@@ -518,6 +518,7 @@ ${footerDestLinks()}
   </div>
 </footer>
 ${partnersModal}
+<script src="js/team-data.js"></script>
 <script src="js/destinations-data.js"></script>
 ${partnersScript}<script src="js/main.js"></script>
 </body>

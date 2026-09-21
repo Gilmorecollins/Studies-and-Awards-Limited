@@ -939,3 +939,277 @@ function createCursorFollower(options) {
   });
   searchInput.addEventListener('input', applyFilter);
 })();
+
+// Site-wide "Book Free Consultation": instead of opening an email, the button
+// opens a chooser of our staff (from js/team-data.js) — pick who to talk to, by
+// department, and go straight to their WhatsApp with a message ready to send.
+//
+// It takes over any link whose address is the consultation email (so all the
+// existing buttons work without being edited), plus anything marked
+// data-consult. Progressive enhancement: until at least one person has a
+// `whatsapp` number in team-data.js, it steps aside and the buttons keep opening
+// an email, exactly as before — and the email link stays the fallback for
+// new-tab clicks and for visitors without JavaScript.
+(function () {
+  'use strict';
+
+  var members = window.TEAM_MEMBERS;
+  if (!members || !members.length) return;
+
+  var OFFICE_TEL = '+254721796500';
+  var OFFICE_TEL_LABEL = '+254 721 796500';
+  var OFFICE_MAIL = 'admissions@studiesandawardsltd.com';
+  var TRIGGER = 'a[href*="subject=Free%20Consultation"], a[data-consult], button[data-consult]';
+  var preview = /[?&]consultPreview(=|&|$)/.test(window.location.search);
+  var order = window.CONSULT_DEPARTMENTS || [];
+
+  var overlay = null;
+  var modal = null;
+  var grid = null;
+  var filters = null;
+  var lastFocused = null;
+  var hideTimer = null;
+  var activeDept = '';
+  var topic = '';
+
+  // "0712 345 678", "+254 712 345 678", "254712345678" -> "254712345678".
+  // A leading 0 is read as Kenya. Anything that isn't a plausible number -> ''.
+  function normalize(raw) {
+    var text = String(raw || '').trim();
+    var digits = text.replace(/\D/g, '');
+    if (!digits) return '';
+    if (digits.indexOf('00') === 0) digits = digits.slice(2);
+    else if (digits.charAt(0) === '0') digits = '254' + digits.slice(1);
+    else if (text.charAt(0) !== '+' && digits.length === 9) digits = '254' + digits;
+    return digits.length >= 11 && digits.length <= 15 ? digits : '';
+  }
+
+  function pretty(digits) {
+    if (digits.indexOf('254') === 0 && digits.length === 12) return '+254 ' + digits.slice(3, 6) + ' ' + digits.slice(6, 9) + ' ' + digits.slice(9);
+    return '+' + digits;
+  }
+
+  function firstName(member) { return String(member.name).split(' ')[0]; }
+
+  function sameLabel(a, b) {
+    function norm(s) { return String(s || '').toLowerCase().replace(/&/g, 'and').replace(/\s+/g, ' ').trim(); }
+    return norm(a) === norm(b);
+  }
+
+  function hasContacts() {
+    return members.some(function (m) { return normalize(m.whatsapp); });
+  }
+
+  // Who's shown: everyone with a working number (plus, in ?consultPreview mode,
+  // everyone else too, greyed out). Front-line departments first.
+  function people() {
+    var list = members.map(function (m, i) { return { m: m, number: normalize(m.whatsapp), i: i }; })
+      .filter(function (p) { return p.number || preview; });
+    function rank(p) { var r = order.indexOf(p.m.department); return r < 0 ? order.length : r; }
+    list.sort(function (a, b) { return rank(a) - rank(b) || a.i - b.i; });
+    return list;
+  }
+
+  // What the visitor is asking about: from the button (data-consult, or the
+  // country in its email subject), else the destination page they're on.
+  function topicFor(trigger) {
+    var explicit = trigger.getAttribute('data-consult');
+    if (explicit) return explicit;
+    var match = /subject=([^&]*)/.exec(trigger.getAttribute('href') || '');
+    if (match) {
+      try {
+        var country = /Free Consultation Request - (.+)$/.exec(decodeURIComponent(match[1]));
+        if (country) return country[1];
+      } catch (e) { /* malformed subject: fall through */ }
+    }
+    var mount = document.getElementById('next-destination');
+    if (mount && window.DESTINATIONS) {
+      for (var i = 0; i < window.DESTINATIONS.length; i++) {
+        if (window.DESTINATIONS[i].slug === mount.getAttribute('data-current')) return window.DESTINATIONS[i].name;
+      }
+    }
+    return '';
+  }
+
+  function messageFor(member) {
+    return 'Hello ' + firstName(member) + ', I’d like to book a free consultation' +
+      (topic ? ' about studying in ' + topic : '') + '. (Sent from the Studies and Awards website)';
+  }
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text) node.textContent = text;
+    return node;
+  }
+
+  var whatsappIcon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.2L3.2 20.8l4.5-1.2A8.8 8.8 0 1 0 12 3.2Z"/><path d="M9.2 8.6c.2 2.6 2.7 5.1 5.3 5.4l1.1-1.3-1.9-.9-.8.6a3.9 3.9 0 0 1-1.4-1.4l.6-.8-.9-1.9-2 .3Z"/></svg>';
+
+  function buildShell() {
+    overlay = el('div', 'consult-overlay');
+    overlay.id = 'consult-overlay';
+    overlay.hidden = true;
+    overlay.innerHTML = [
+      '<div class="consult-modal" role="dialog" aria-modal="true" aria-labelledby="consult-title" id="consult-modal" tabindex="-1">',
+      '  <button type="button" class="consult-close" aria-label="Close">&times;</button>',
+      '  <div class="consult-head">',
+      '    <span class="eyebrow">FREE CONSULTATION</span>',
+      '    <h2 class="consult-title" id="consult-title">Who would you like to talk to?</h2>',
+      '    <p class="consult-sub">Choose the person who fits what you need. You’ll go straight to their WhatsApp with your message ready to send.</p>',
+      '    <div class="consult-filters" role="group" aria-label="Filter by department"></div>',
+      '  </div>',
+      '  <div class="consult-body"><div class="consult-grid"></div></div>',
+      '  <div class="consult-foot">',
+      '    <span>Prefer another way?</span>',
+      '    <a href="tel:' + OFFICE_TEL + '">Call the office ' + OFFICE_TEL_LABEL + '</a>',
+      '    <a href="mailto:' + OFFICE_MAIL + '?subject=Free%20Consultation%20Request" data-consult-fallback>Email ' + OFFICE_MAIL + '</a>',
+      '  </div>',
+      '</div>'
+    ].join('\n');
+    document.body.appendChild(overlay);
+    modal = overlay.querySelector('.consult-modal');
+    grid = overlay.querySelector('.consult-grid');
+    filters = overlay.querySelector('.consult-filters');
+
+    overlay.querySelector('.consult-close').addEventListener('click', close);
+    overlay.addEventListener('click', function (event) { if (event.target === overlay) close(); });
+    filters.addEventListener('click', function (event) {
+      var chip = event.target.closest('.consult-chip');
+      if (!chip) return;
+      activeDept = chip.getAttribute('data-dept');
+      applyDepartment();
+    });
+  }
+
+  function applyDepartment() {
+    Array.prototype.forEach.call(filters.querySelectorAll('.consult-chip'), function (chip) {
+      var on = chip.getAttribute('data-dept') === activeDept;
+      chip.classList.toggle('is-active', on);
+      chip.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    Array.prototype.forEach.call(grid.querySelectorAll('.consult-card'), function (card) {
+      card.hidden = !!activeDept && card.getAttribute('data-dept') !== activeDept;
+    });
+  }
+
+  function render() {
+    var list = people();
+    grid.textContent = '';
+    filters.textContent = '';
+
+    if (preview) {
+      var note = el('p', 'consult-preview', 'Preview mode: people who don’t have a WhatsApp number yet are shown greyed out. Visitors won’t see them until a number is added in js/team-data.js.');
+      grid.appendChild(note);
+    }
+
+    list.forEach(function (p) {
+      var m = p.m;
+      var card = el('article', 'consult-card' + (p.number ? '' : ' is-pending'));
+      card.setAttribute('data-dept', m.department || '');
+
+      var photo = el('img', 'consult-photo');
+      photo.src = m.photo;
+      photo.alt = '';
+      photo.width = 72;
+      photo.height = 72;
+      photo.loading = 'lazy';
+      card.appendChild(photo);
+
+      var info = el('div', 'consult-info');
+      info.appendChild(el('span', 'consult-dept', m.department || m.role));
+      info.appendChild(el('h3', 'consult-name', m.name));
+      // don't repeat the department as the job title ("Applications" / "Applications")
+      if (sameLabel(m.role, m.department)) card.classList.add('no-role');
+      else info.appendChild(el('p', 'consult-role', m.role));
+      card.appendChild(info);
+
+      if (m.helpsWith) card.appendChild(el('p', 'consult-help', m.helpsWith));
+
+      var actions = el('div', 'consult-actions');
+      if (p.number) {
+        var wa = el('a', 'btn consult-wa');
+        wa.href = 'https://wa.me/' + p.number + '?text=' + encodeURIComponent(messageFor(m));
+        wa.target = '_blank';
+        wa.rel = 'noopener noreferrer';
+        wa.innerHTML = whatsappIcon + '<span>Chat with ' + firstName(m) + ' on WhatsApp</span>';
+        actions.appendChild(wa);
+        var call = el('a', 'consult-call', 'or call ' + pretty(p.number));
+        call.href = 'tel:+' + p.number;
+        actions.appendChild(call);
+      } else {
+        actions.appendChild(el('span', 'consult-pending', 'Number coming soon'));
+      }
+      card.appendChild(actions);
+      grid.appendChild(card);
+    });
+
+    // department chips — only worth showing when there's a real choice to narrow
+    var departments = [];
+    list.forEach(function (p) { if (p.m.department && departments.indexOf(p.m.department) < 0) departments.push(p.m.department); });
+    filters.hidden = !(list.length > 4 && departments.length > 1);
+    ['All'].concat(departments).forEach(function (name, i) {
+      var chip = el('button', 'consult-chip', name);
+      chip.type = 'button';
+      chip.setAttribute('data-dept', i === 0 ? '' : name);
+      filters.appendChild(chip);
+    });
+    activeDept = '';
+    applyDepartment();
+  }
+
+  function focusables() {
+    return Array.prototype.filter.call(modal.querySelectorAll('button, a[href]'), function (node) {
+      return node.offsetParent !== null && !node.closest('[hidden]');
+    });
+  }
+
+  function trapKeys(event) {
+    if (event.key === 'Escape') { close(); return; }
+    if (event.key !== 'Tab') return;
+    var items = focusables();
+    if (!items.length) return;
+    var first = items[0];
+    var last = items[items.length - 1];
+    if (event.shiftKey && (document.activeElement === first || document.activeElement === modal)) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  function open(trigger) {
+    if (!overlay) buildShell();
+    topic = topicFor(trigger);
+    render();
+    modal.querySelector('.consult-body').scrollTop = 0;
+
+    window.clearTimeout(hideTimer);
+    lastFocused = trigger;
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    window.requestAnimationFrame(function () { overlay.classList.add('is-open'); });
+    modal.focus();
+    document.addEventListener('keydown', trapKeys);
+  }
+
+  function close() {
+    overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', trapKeys);
+    hideTimer = window.setTimeout(function () { overlay.hidden = true; }, 260);
+    if (lastFocused && typeof lastFocused.focus === 'function' && document.contains(lastFocused)) lastFocused.focus();
+  }
+
+  document.addEventListener('click', function (event) {
+    var trigger = event.target.closest ? event.target.closest(TRIGGER) : null;
+    if (!trigger || event.defaultPrevented) return;
+    // leave new-tab / new-window clicks to the browser
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    // nobody to choose from yet: let the email link do its job
+    if (!hasContacts() && !preview) return;
+    event.preventDefault();
+    open(trigger);
+  });
+})();

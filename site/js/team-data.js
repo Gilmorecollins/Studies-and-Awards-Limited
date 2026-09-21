@@ -1,16 +1,46 @@
-// Team data. Shape (TeamMember):
-//   { id, name, role, shortBio, fullBio: string[], photo, linkedin? }
+// Team data, used by the Team page AND by the site-wide "Book Free Consultation"
+// chooser. Shape (TeamMember):
+//   { id, name, role, department, helpsWith, whatsapp, shortBio, fullBio: string[], photo, linkedin? }
 // photo should be a 4:5 portrait (e.g. 960x1200) for the best crop in the slider.
+//
+// Consultation chooser: when a visitor clicks any "Book Free Consultation" button
+// they pick who to talk to and go straight to that person's WhatsApp.
+//   - whatsapp: the person's number, e.g. '0712 345 678' or '+254 712 345 678'
+//     (a leading 0 is read as Kenya, +254). Leave it '' and the person is left out
+//     of the chooser. Until at least one person has a number, the buttons keep
+//     opening an email exactly as before.
+//   - department: shown on the person's card and used for the filter chips.
+//   - helpsWith: one line telling a visitor what to come to this person for.
+//   Preview the full chooser (including people with no number yet) by adding
+//   ?consultPreview to any page's address.
+//
+// These are public web pages: use numbers people are happy to have published
+// (a work WhatsApp / business line is safer than a personal one).
 //
 // Bios are drafted from each person's role only — no invented specifics
 // (no made-up years of experience, schools, etc.). Swap in real detail
 // whenever you have it. Last names and real linkedin URLs are still
 // missing for most people — fill those in when ready.
+// The order departments appear in the consultation chooser (front-line first).
+window.CONSULT_DEPARTMENTS = [
+  'Customer Experience',
+  'Client Relations',
+  'Applications',
+  'IELTS & PTE',
+  'Compliance & Verification',
+  'Administration & Accounts',
+  'Masomo Welfare',
+  'Management'
+];
+
 window.TEAM_MEMBERS = [
   {
     id: 'evelyne-choge',
     name: 'Evelyne Choge',
     role: 'Director',
+    department: 'Management',
+    helpsWith: 'Partnerships, strategy and anything that needs senior attention.',
+    whatsapp: '+254721796500',
     shortBio: 'Evelyne is the Director at Studies and Awards Limited, overseeing the organisation’s strategy and day-to-day operations.',
     fullBio: [
       'Evelyne Choge is the Director at Studies and Awards Limited, based in Eldoret. She sets the direction for how the team supports students across every stage of their study-abroad journey, from the first consultation through to departure.',
@@ -23,6 +53,9 @@ window.TEAM_MEMBERS = [
     id: 'mourine',
     name: 'Mourine',
     role: 'General Manager',
+    department: 'Management',
+    helpsWith: 'Day-to-day operations across every destination we support.',
+    whatsapp: '+254743449328',
     shortBio: 'Mourine is the General Manager at Studies and Awards Limited, overseeing the team’s day-to-day work across every destination.',
     fullBio: [
       'Mourine is the General Manager at Studies and Awards Limited, overseeing day-to-day operations across every destination the company supports.',
@@ -35,6 +68,9 @@ window.TEAM_MEMBERS = [
     id: 'joyner',
     name: 'Joyner',
     role: 'Assistant General Manager',
+    department: 'Management',
+    helpsWith: 'Coordinating the team so nothing is missed on your file.',
+    whatsapp: '+254796570026',
     shortBio: 'Joyner is the Assistant General Manager at Studies and Awards Limited, supporting operations across the team.',
     fullBio: [
       'Joyner is the Assistant General Manager at Studies and Awards Limited, supporting the General Manager in coordinating the team’s daily operations.',
@@ -47,6 +83,9 @@ window.TEAM_MEMBERS = [
     id: 'beatrice',
     name: 'Beatrice',
     role: 'Assistant Manager',
+    department: 'Management',
+    helpsWith: 'Keeping the office and the departments running smoothly for you.',
+    whatsapp: '+254729057921',
     shortBio: 'Beatrice is the Assistant Manager at Studies and Awards Limited, supporting the team’s day-to-day operations.',
     fullBio: [
       'Beatrice is the Assistant Manager at Studies and Awards Limited, supporting the day-to-day running of the office and the wider team.',
@@ -59,6 +98,9 @@ window.TEAM_MEMBERS = [
     id: 'canisius-yego',
     name: 'Canisius Yego',
     role: 'Compliance and Verification Manager',
+    department: 'Compliance & Verification',
+    helpsWith: 'Leading the review of your documents so applications go out complete and accurate.',
+    whatsapp: '+254746492493',
     shortBio: 'Canisius is the Compliance and Verification Manager at Studies and Awards Limited, making sure every application meets the required standards.',
     fullBio: [
       'Canisius Yego is the Compliance and Verification Manager at Studies and Awards Limited, leading the team that reviews student documentation before it’s submitted to partner institutions and visa authorities.',
@@ -71,6 +113,9 @@ window.TEAM_MEMBERS = [
     id: 'dennis',
     name: 'Dennis',
     role: 'Compliance and Verification',
+    department: 'Compliance & Verification',
+    helpsWith: 'Checking your documents before they go to institutions and visa authorities.',
+    whatsapp: '+254110652545',
     shortBio: 'Dennis handles compliance and verification at Studies and Awards Limited, making sure every application meets the right standards.',
     fullBio: [
       'Dennis leads Compliance and Verification at Studies and Awards Limited, reviewing student documentation before it’s submitted to partner institutions and visa authorities.',
@@ -83,6 +128,9 @@ window.TEAM_MEMBERS = [
     id: 'tebby',
     name: 'Tebby',
     role: 'Administration and Accounts',
+    department: 'Administration & Accounts',
+    helpsWith: 'Payments, scheduling and other office administration.',
+    whatsapp: '+254795907104',
     shortBio: 'Tebby manages administration and accounts at Studies and Awards Limited, keeping the office and finances running smoothly.',
     fullBio: [
       'Tebby handles Administration and Accounts at Studies and Awards Limited, keeping the office running and managing the company’s day-to-day finances.',
@@ -95,6 +143,9 @@ window.TEAM_MEMBERS = [
     id: 'witney',
     name: 'Witney',
     role: 'IELTS and PTE Tutor',
+    department: 'IELTS & PTE',
+    helpsWith: 'Preparing for the IELTS and PTE English tests.',
+    whatsapp: '+254719400272',
     shortBio: 'Witney tutors IELTS and PTE at Studies and Awards Limited, preparing students for the language requirements of their destination.',
     fullBio: [
       'Witney is the IELTS and PTE Tutor at Studies and Awards Limited, preparing students for the English-language tests most destinations require before they can enrol.',
@@ -107,6 +158,9 @@ window.TEAM_MEMBERS = [
     id: 'joy',
     name: 'Joy',
     role: 'Applications',
+    department: 'Applications',
+    helpsWith: 'Guiding your applications to partner universities and colleges abroad.',
+    whatsapp: '+254727842613',
     shortBio: 'Joy handles applications at Studies and Awards Limited, guiding students through their submissions to partner institutions.',
     fullBio: [
       'Joy works on Applications at Studies and Awards Limited, guiding students through their submissions to partner universities and colleges abroad.',
@@ -119,6 +173,9 @@ window.TEAM_MEMBERS = [
     id: 'rahab',
     name: 'Rahab Cherono',
     role: 'Customer Experience',
+    department: 'Customer Experience',
+    helpsWith: 'Your first questions about studying abroad, and what to do next.',
+    whatsapp: '+254792376637',
     shortBio: 'Rahab looks after Customer Experience at Studies and Awards Limited, making sure every student’s journey with us feels supported.',
     fullBio: [
       'Rahab Cherono looks after Customer Experience at Studies and Awards Limited, making sure every student who reaches out gets a clear, timely response.',
@@ -131,6 +188,9 @@ window.TEAM_MEMBERS = [
     id: 'tina',
     name: 'Tina',
     role: 'Client Relations',
+    department: 'Client Relations',
+    helpsWith: 'Following up on your application and answering questions as it moves forward.',
+    whatsapp: '+254792153303',
     shortBio: 'Tina works in Client Relations at Studies and Awards Limited, staying in touch with students throughout their application.',
     fullBio: [
       'Tina works in Client Relations at Studies and Awards Limited, staying in touch with students throughout their application so they always know what’s happening and what’s next.',
@@ -143,6 +203,9 @@ window.TEAM_MEMBERS = [
     id: 'collins',
     name: 'Collins',
     role: 'Masomo Welfare',
+    department: 'Masomo Welfare',
+    helpsWith: 'Support for your wellbeing as you prepare for a move abroad.',
+    whatsapp: '+254702138691',
     shortBio: 'Collins works on Masomo Welfare at Studies and Awards Limited, supporting students’ wellbeing throughout their studies.',
     fullBio: [
       'Collins works on Masomo Welfare at Studies and Awards Limited, supporting students’ wellbeing throughout their time working with the company.',

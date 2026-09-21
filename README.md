@@ -8,7 +8,10 @@ site/              The actual website — open site/index.html in a browser,
   css/styles.css    Shared stylesheet (design tokens, layout, components)
   js/main.js        Shared JS (nav toggle, destination-page slideshow,
                     "next destination" boarding-pass card, partner
-                    institutions dialog)
+                    institutions dialog, "Book Free Consultation" chooser)
+  js/team-data.js   The staff: bios for the Team page, plus each person's
+                    department, what they help with and WhatsApp number for
+                    the consultation chooser. Loaded on every page.
   js/destinations-data.js
                     GENERATED. Destination registry (name, airport code,
                     tagline) in journey order — each destination page
@@ -105,6 +108,21 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   "[list coming soon]" placeholder. The JSON was built from the partner-list
   PDF (Sept 2026) with spelling mistakes and cut-off names corrected; when you
   get an updated list, replace or extend it there.
+- **"Book Free Consultation" chooser**: every consultation button on the site
+  (any link to the consultation email, or anything marked `data-consult`)
+  opens a "Who would you like to talk to?" dialog listing our staff by
+  department; choosing someone opens their WhatsApp with a ready-to-send
+  message that already names the country if the visitor is on a destination
+  page. To switch a person on, put their number in `whatsapp` in
+  `js/team-data.js` (e.g. `'0712 345 678'` or `'+254 712 345 678'` — a
+  leading 0 is read as Kenya). People with an empty or invalid `whatsapp` are
+  left out, and **until at least one person has a number the buttons keep
+  opening an email exactly as before**. Their `department` and `helpsWith`
+  lines control how they're grouped and described; `CONSULT_DEPARTMENTS` sets
+  the order departments appear in. Add `?consultPreview` to any page's
+  address (e.g. `index.html?consultPreview`) to preview the whole chooser,
+  including people without a number yet. Numbers end up in public web pages,
+  so use numbers people are happy to have published.
 - **Publishing**: the live version is published as a Claude Artifact, not
   auto-deployed from this repo — republish from `site/index.html` after
   making changes.
