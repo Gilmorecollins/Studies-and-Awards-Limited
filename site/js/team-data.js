@@ -72,6 +72,22 @@ window.TEAM_MEMBERS = [
     linkedin: '#'
   },
   {
+    id: 'beatrice',
+    name: 'Beatrice',
+    role: 'Assistant Manager',
+    department: 'Management',
+    helpsWith: 'Keeping the office and the departments running smoothly for you.',
+    whatsapp: '+254729057921',
+    shortBio: 'Beatrice is the Assistant Manager at Studies and Awards Limited, supporting the team’s day-to-day operations.',
+    fullBio: [
+      'Beatrice is the Assistant Manager at Studies and Awards Limited, supporting the day-to-day running of the office and the wider team.',
+      'She helps coordinate between departments and keeps things moving for students at every stage of their application.'
+    ],
+    photo: 'assets/team/beatrice.jpg',
+    thumb: 'assets/team/thumbs/beatrice.jpg',
+    linkedin: '#'
+  },
+  {
     id: 'joyner',
     name: 'Joyner',
     role: 'Assistant General Manager',
@@ -88,19 +104,35 @@ window.TEAM_MEMBERS = [
     linkedin: '#'
   },
   {
-    id: 'beatrice',
-    name: 'Beatrice',
-    role: 'Assistant Manager',
-    department: 'Management',
-    helpsWith: 'Keeping the office and the departments running smoothly for you.',
-    whatsapp: '+254729057921',
-    shortBio: 'Beatrice is the Assistant Manager at Studies and Awards Limited, supporting the team’s day-to-day operations.',
+    id: 'tebby',
+    name: 'Tebby',
+    role: 'Administration and Accounts',
+    department: 'Administration & Accounts',
+    helpsWith: 'Payments, scheduling and other office administration.',
+    whatsapp: '+254795907104',
+    shortBio: 'Tebby manages administration and accounts at Studies and Awards Limited, keeping the office and finances running smoothly.',
     fullBio: [
-      'Beatrice is the Assistant Manager at Studies and Awards Limited, supporting the day-to-day running of the office and the wider team.',
-      'She helps coordinate between departments and keeps things moving for students at every stage of their application.'
+      'Tebby handles Administration and Accounts at Studies and Awards Limited, keeping the office running and managing the company’s day-to-day finances.',
+      'She’s often the first point of contact for anything administrative, from scheduling to payments, keeping things organised behind the scenes so the counselling team can focus on students.'
     ],
-    photo: 'assets/team/beatrice.jpg',
-    thumb: 'assets/team/thumbs/beatrice.jpg',
+    photo: 'assets/team/tebby.jpg',
+    thumb: 'assets/team/thumbs/tebby.jpg',
+    linkedin: '#'
+  },
+  {
+    id: 'witney',
+    name: 'Witney',
+    role: 'IELTS and PTE Tutor',
+    department: 'IELTS & PTE',
+    helpsWith: 'Preparing for the IELTS and PTE English tests.',
+    whatsapp: '+254719400272',
+    shortBio: 'Witney tutors IELTS and PTE at Studies and Awards Limited, preparing students for the language requirements of their destination.',
+    fullBio: [
+      'Witney is the IELTS and PTE Tutor at Studies and Awards Limited, preparing students for the English-language tests most destinations require before they can enrol.',
+      'She works with students individually and in groups, building test-taking skills and confidence so they can meet the score their chosen university or visa needs.'
+    ],
+    photo: 'assets/team/witney.jpg',
+    thumb: 'assets/team/thumbs/witney.jpg',
     linkedin: '#'
   },
   {
@@ -133,54 +165,6 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/dennis.jpg',
     thumb: 'assets/team/thumbs/dennis.jpg',
-    linkedin: '#'
-  },
-  {
-    id: 'tebby',
-    name: 'Tebby',
-    role: 'Administration and Accounts',
-    department: 'Administration & Accounts',
-    helpsWith: 'Payments, scheduling and other office administration.',
-    whatsapp: '+254795907104',
-    shortBio: 'Tebby manages administration and accounts at Studies and Awards Limited, keeping the office and finances running smoothly.',
-    fullBio: [
-      'Tebby handles Administration and Accounts at Studies and Awards Limited, keeping the office running and managing the company’s day-to-day finances.',
-      'She’s often the first point of contact for anything administrative, from scheduling to payments, keeping things organised behind the scenes so the counselling team can focus on students.'
-    ],
-    photo: 'assets/team/tebby.jpg',
-    thumb: 'assets/team/thumbs/tebby.jpg',
-    linkedin: '#'
-  },
-  {
-    id: 'bethwel',
-    name: 'Bethwel',
-    role: 'Operations',
-    department: 'Operations',
-    helpsWith: 'Keeping the day-to-day running of the office and student processes on track.',
-    whatsapp: '+254725505825',
-    shortBio: 'Bethwel works in Operations at Studies and Awards Limited, helping keep the team’s day-to-day work running smoothly.',
-    fullBio: [
-      'Bethwel works in Operations at Studies and Awards Limited, helping keep the company’s day-to-day work running smoothly.',
-      'Behind the scenes, Bethwel supports the departments students deal with directly, so the process from first enquiry to enrolment stays organised.'
-    ],
-    photo: 'assets/team/bethwel.jpg',
-    thumb: 'assets/team/thumbs/bethwel.jpg',
-    linkedin: '#'
-  },
-  {
-    id: 'witney',
-    name: 'Witney',
-    role: 'IELTS and PTE Tutor',
-    department: 'IELTS & PTE',
-    helpsWith: 'Preparing for the IELTS and PTE English tests.',
-    whatsapp: '+254719400272',
-    shortBio: 'Witney tutors IELTS and PTE at Studies and Awards Limited, preparing students for the language requirements of their destination.',
-    fullBio: [
-      'Witney is the IELTS and PTE Tutor at Studies and Awards Limited, preparing students for the English-language tests most destinations require before they can enrol.',
-      'She works with students individually and in groups, building test-taking skills and confidence so they can meet the score their chosen university or visa needs.'
-    ],
-    photo: 'assets/team/witney.jpg',
-    thumb: 'assets/team/thumbs/witney.jpg',
     linkedin: '#'
   },
   {
@@ -232,6 +216,22 @@ window.TEAM_MEMBERS = [
     linkedin: '#'
   },
   {
+    id: 'tina',
+    name: 'Tina',
+    role: 'Client Relations',
+    department: 'Client Relations',
+    helpsWith: 'Following up on your application and answering questions as it moves forward.',
+    whatsapp: '+254792153303',
+    shortBio: 'Tina works in Client Relations at Studies and Awards Limited, staying in touch with students throughout their application.',
+    fullBio: [
+      'Tina works in Client Relations at Studies and Awards Limited, staying in touch with students throughout their application so they always know what’s happening and what’s next.',
+      'She helps bridge the gap between students and the rest of the team, following up on outstanding steps and answering questions as they come up.'
+    ],
+    photo: 'assets/team/tina.jpg',
+    thumb: 'assets/team/thumbs/tina.jpg',
+    linkedin: '#'
+  },
+  {
     id: 'rahab',
     name: 'Rahab Cherono',
     role: 'Customer Experience',
@@ -248,19 +248,19 @@ window.TEAM_MEMBERS = [
     linkedin: '#'
   },
   {
-    id: 'tina',
-    name: 'Tina',
-    role: 'Client Relations',
-    department: 'Client Relations',
-    helpsWith: 'Following up on your application and answering questions as it moves forward.',
-    whatsapp: '+254792153303',
-    shortBio: 'Tina works in Client Relations at Studies and Awards Limited, staying in touch with students throughout their application.',
+    id: 'talaam',
+    name: 'Talaam',
+    role: 'Magister Sacco',
+    department: 'Magister Sacco',
+    helpsWith: 'Questions about Magister Sacco.',
+    whatsapp: '+254707248824',
+    shortBio: 'Talaam works in the Magister Sacco department at Studies and Awards Limited.',
     fullBio: [
-      'Tina works in Client Relations at Studies and Awards Limited, staying in touch with students throughout their application so they always know what’s happening and what’s next.',
-      'She helps bridge the gap between students and the rest of the team, following up on outstanding steps and answering questions as they come up.'
+      'Talaam works in the Magister Sacco department at Studies and Awards Limited.',
+      'If you have a question about Magister Sacco, Talaam is the person to ask.'
     ],
-    photo: 'assets/team/tina.jpg',
-    thumb: 'assets/team/thumbs/tina.jpg',
+    photo: 'assets/team/talaam.jpg',
+    thumb: 'assets/team/thumbs/talaam.jpg',
     linkedin: '#'
   },
   {
@@ -280,19 +280,19 @@ window.TEAM_MEMBERS = [
     linkedin: '#'
   },
   {
-    id: 'talaam',
-    name: 'Talaam',
-    role: 'Magister Sacco',
-    department: 'Magister Sacco',
-    helpsWith: 'Questions about Magister Sacco.',
-    whatsapp: '+254707248824',
-    shortBio: 'Talaam works in the Magister Sacco department at Studies and Awards Limited.',
+    id: 'bethwel',
+    name: 'Bethwel',
+    role: 'Operations',
+    department: 'Operations',
+    helpsWith: 'Keeping the day-to-day running of the office and student processes on track.',
+    whatsapp: '+254725505825',
+    shortBio: 'Bethwel works in Operations at Studies and Awards Limited, helping keep the team’s day-to-day work running smoothly.',
     fullBio: [
-      'Talaam works in the Magister Sacco department at Studies and Awards Limited.',
-      'If you have a question about Magister Sacco, Talaam is the person to ask.'
+      'Bethwel works in Operations at Studies and Awards Limited, helping keep the company’s day-to-day work running smoothly.',
+      'Behind the scenes, Bethwel supports the departments students deal with directly, so the process from first enquiry to enrolment stays organised.'
     ],
-    photo: 'assets/team/talaam.jpg',
-    thumb: 'assets/team/thumbs/talaam.jpg',
+    photo: 'assets/team/bethwel.jpg',
+    thumb: 'assets/team/thumbs/bethwel.jpg',
     linkedin: '#'
   }
 ];
