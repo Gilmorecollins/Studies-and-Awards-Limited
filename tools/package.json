@@ -2,7 +2,7 @@
   "name": "studies-and-awards-tools",
   "private": true,
   "type": "module",
-  "description": "Build scripts for the Studies and Awards Limited website. It generates the destination pages in ../site from the data in generate-countries.mjs.",
+  "description": "Build scripts for the Studies and Awards Limited website — generates the destination pages in ../site from the data in generate-countries.mjs.",
   "scripts": {
     "generate": "node generate-countries.mjs",
     "check": "node generate-countries.mjs --check",
