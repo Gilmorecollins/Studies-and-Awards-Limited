@@ -6,9 +6,9 @@
 <title>Study Destinations — Studies and Awards Limited</title>
 <meta name="description" content="Study abroad in Australia, the United Kingdom, Germany, Canada, Ireland or New Zealand with Studies and Awards Limited.">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Oswald:wght@400;500;600&display=swap">
+<link rel="preload" href="assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/bebas-neue.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/oswald.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
 <!-- seo:start — written by tools/generate-countries.mjs; edit the script, not this block -->
 <meta name="theme-color" content="#001B5E">
@@ -52,77 +52,106 @@
 
 <main id="main">
 
-  <section class="page-hero" aria-labelledby="page-heading">
-    <svg class="page-hero-deco" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <circle cx="1220" cy="40" r="240" fill="#DCE6F7" opacity="0.6"/>
-      <circle cx="140" cy="290" r="160" fill="#DCE6F7" opacity="0.5"/>
-    </svg>
-    <div class="container">
-      <span class="hero-kicker"><span class="hero-kicker-rule" aria-hidden="true"></span>DEPARTURES</span>
-      <h1 id="page-heading">Six destinations, one guided path.</h1>
-      <p>Every route below comes with the same personalised support &mdash; counselling, test prep, applications, visas and travel &mdash; tailored to that country's requirements.</p>
+  <section class="route-hero" aria-labelledby="page-heading">
+    <div class="route-hero-inner">
+      <div class="route-hero-copy">
+        <span class="hero-kicker"><span class="hero-kicker-rule" aria-hidden="true"></span>DEPARTURES</span>
+        <h1 id="page-heading">Six destinations, one guided path.</h1>
+        <p>Every route below comes with the same personalised support &mdash; counselling, test prep, applications, visas and travel &mdash; tailored to that country's requirements.</p>
+        <p class="route-hero-origin"><span class="route-hero-dot" aria-hidden="true"></span>Every journey starts with us in Eldoret.</p>
+      </div>
+      <div class="route-map">
+        <img src="assets/destinations/route-map.svg" width="720" height="432" alt="World map showing routes from Eldoret, Kenya to Canada, Ireland, the United Kingdom, Germany, Australia and New Zealand">
+        <div class="route-map-labels" aria-hidden="true">
+          <span class="route-pin route-pin-right" style="right: 73.889%; top: 29.167%;"><span class="route-pin-code">YYZ</span><span class="route-pin-name">Canada</span></span>
+          <span class="route-pin route-pin-right" style="right: 54.861%; top: 24.074%;"><span class="route-pin-code">DUB</span><span class="route-pin-name">Ireland</span></span>
+          <span class="route-pin route-pin-left" style="left: 47.222%; top: 16.667%;"><span class="route-pin-code">LHR</span><span class="route-pin-name">United Kingdom</span></span>
+          <span class="route-pin route-pin-left" style="left: 52.083%; top: 25.926%;"><span class="route-pin-code">FRA</span><span class="route-pin-name">Germany</span></span>
+          <span class="route-pin route-pin-right" style="right: 12.778%; top: 71.296%;"><span class="route-pin-code">SYD</span><span class="route-pin-name">Australia</span></span>
+          <span class="route-pin route-pin-right" style="right: 3.889%; top: 79.167%;"><span class="route-pin-code">AKL</span><span class="route-pin-name">New Zealand</span></span>
+          <span class="route-origin" style="left: 58.333%; top: 61.574%;">EDL &middot; ELDORET</span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="container" style="padding-bottom: 88px;">
-    <h2 class="sr-only">Choose a destination</h2>
-    <div class="dest-flag-grid dest-flag-grid-lg">
+  <section class="route-cards-wrap" aria-labelledby="route-cards-heading">
+    <h2 class="sr-only" id="route-cards-heading">Choose a destination</h2>
+    <ul class="route-cards" role="list">
+      <li>
+        <a href="australia.html" class="route-card">
+          <span class="route-card-tile"><svg class="route-card-flag" width="46" height="31" viewBox="0 0 120 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="120" height="60" fill="#012169"/><svg x="0" y="0" width="60" height="30" viewBox="0 0 60 30"><clipPath id="dAUs"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="dAUt"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#dAUs)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#dAUt)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg><polygon fill="#fff" points="30.00,36.00 31.76,41.35 37.04,39.39 33.95,44.10 38.77,47.00 33.17,47.53 33.90,53.11 30.00,49.05 26.10,53.11 26.83,47.53 21.23,47.00 26.05,44.10 22.96,39.39 28.24,41.35"/><polygon fill="#fff" points="90.00,46.50 90.88,49.18 93.52,48.19 91.97,50.55 94.39,52.00 91.58,52.26 91.95,55.05 90.00,53.02 88.05,55.05 88.42,52.26 85.61,52.00 88.03,50.55 86.48,48.19 89.12,49.18"/><polygon fill="#fff" points="76.00,21.50 76.88,24.18 79.52,23.19 77.97,25.55 80.39,27.00 77.58,27.26 77.95,30.05 76.00,28.02 74.05,30.05 74.42,27.26 71.61,27.00 74.03,25.55 72.48,23.19 75.12,24.18"/><polygon fill="#fff" points="90.00,6.50 90.88,9.18 93.52,8.19 91.97,10.55 94.39,12.00 91.58,12.26 91.95,15.05 90.00,13.03 88.05,15.05 88.42,12.26 85.61,12.00 88.03,10.55 86.48,8.19 89.12,9.18"/><polygon fill="#fff" points="102.00,18.50 102.88,21.18 105.52,20.19 103.97,22.55 106.39,24.00 103.58,24.26 103.95,27.05 102.00,25.02 100.05,27.05 100.42,24.26 97.61,24.00 100.03,22.55 98.48,20.19 101.12,21.18"/><polygon fill="#fff" points="96.00,28.60 96.56,30.22 98.28,30.26 96.91,31.30 97.41,32.94 96.00,31.96 94.59,32.94 95.09,31.30 93.72,30.26 95.44,30.22"/></svg><span class="route-card-num">01</span></span>
+          <span class="route-card-body">
+            <span class="route-card-name">Australia</span>
+            <span class="route-card-route" aria-hidden="true"><span class="route-card-from">EDL</span><span class="route-card-dash"></span><svg class="route-card-plane" viewBox="-0.5 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span class="route-card-dash"></span><span class="route-card-to">SYD</span></span>
+            <span class="route-card-tag">World-class universities and a relaxed, multicultural lifestyle.</span>
+          </span>
+          <span class="route-card-go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </li>
+      <li>
+        <a href="united-kingdom.html" class="route-card">
+          <span class="route-card-tile"><svg class="route-card-flag" width="46" height="31" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><clipPath id="dUKs"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="dUKt"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#dUKs)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#dUKt)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg><span class="route-card-num">02</span></span>
+          <span class="route-card-body">
+            <span class="route-card-name">United Kingdom</span>
+            <span class="route-card-route" aria-hidden="true"><span class="route-card-from">EDL</span><span class="route-card-dash"></span><svg class="route-card-plane" viewBox="-0.5 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span class="route-card-dash"></span><span class="route-card-to">LHR</span></span>
+            <span class="route-card-tag">World-renowned universities and a rich academic tradition.</span>
+          </span>
+          <span class="route-card-go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </li>
+      <li>
+        <a href="germany.html" class="route-card">
+          <span class="route-card-tile"><svg class="route-card-flag" width="46" height="31" viewBox="0 0 5 3" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="5" height="1" fill="#000"/><rect y="1" width="5" height="1" fill="#DD0000"/><rect y="2" width="5" height="1" fill="#FFCE00"/></svg><span class="route-card-num">03</span></span>
+          <span class="route-card-body">
+            <span class="route-card-name">Germany</span>
+            <span class="route-card-route" aria-hidden="true"><span class="route-card-from">EDL</span><span class="route-card-dash"></span><svg class="route-card-plane" viewBox="-0.5 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span class="route-card-dash"></span><span class="route-card-to">FRA</span></span>
+            <span class="route-card-tag">Tuition-friendly public universities &mdash; our language training gets you ready.</span>
+          </span>
+          <span class="route-card-go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </li>
+      <li>
+        <a href="canada.html" class="route-card">
+          <span class="route-card-tile"><svg class="route-card-flag" width="46" height="31" viewBox="0 0 9600 4800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="9600" height="4800" fill="#fff"/><rect width="2400" height="4800" fill="#D52B1E"/><rect x="7200" width="2400" height="4800" fill="#D52B1E"/><path fill="#D52B1E" d="m4890 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg><span class="route-card-num">04</span></span>
+          <span class="route-card-body">
+            <span class="route-card-name">Canada</span>
+            <span class="route-card-route" aria-hidden="true"><span class="route-card-from">EDL</span><span class="route-card-dash"></span><svg class="route-card-plane" viewBox="-0.5 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span class="route-card-dash"></span><span class="route-card-to">YYZ</span></span>
+            <span class="route-card-tag">Welcoming pathways to study and, for many graduates, to stay on and work.</span>
+          </span>
+          <span class="route-card-go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </li>
+      <li>
+        <a href="ireland.html" class="route-card">
+          <span class="route-card-tile"><svg class="route-card-flag" width="46" height="31" viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1" height="2" fill="#169B62"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#FF883E"/></svg><span class="route-card-num">05</span></span>
+          <span class="route-card-body">
+            <span class="route-card-name">Ireland</span>
+            <span class="route-card-route" aria-hidden="true"><span class="route-card-from">EDL</span><span class="route-card-dash"></span><svg class="route-card-plane" viewBox="-0.5 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span class="route-card-dash"></span><span class="route-card-to">DUB</span></span>
+            <span class="route-card-tag">EU-recognised degrees with strong post-study work opportunities.</span>
+          </span>
+          <span class="route-card-go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </li>
+      <li>
+        <a href="new-zealand.html" class="route-card">
+          <span class="route-card-tile"><svg class="route-card-flag" width="46" height="31" viewBox="0 0 120 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="120" height="60" fill="#012169"/><svg x="0" y="0" width="60" height="30" viewBox="0 0 60 30"><clipPath id="dNZs"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="dNZt"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#dNZs)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#dNZt)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg><polygon fill="#fff" points="90.00,42.70 91.56,46.86 95.99,47.05 92.52,49.82 93.70,54.10 90.00,51.65 86.30,54.10 87.48,49.82 84.01,47.05 88.44,46.86"/><polygon fill="#C8102E" points="90.00,44.00 91.23,47.30 94.76,47.45 92.00,49.65 92.94,53.05 90.00,51.10 87.06,53.05 88.00,49.65 85.24,47.45 88.77,47.30"/><polygon fill="#fff" points="78.00,19.40 79.38,23.10 83.33,23.27 80.24,25.73 81.29,29.53 78.00,27.35 74.71,29.53 75.76,25.73 72.67,23.27 76.62,23.10"/><polygon fill="#C8102E" points="78.00,20.70 79.06,23.54 82.09,23.67 79.72,25.56 80.53,28.48 78.00,26.81 75.47,28.48 76.28,25.56 73.91,23.67 76.94,23.54"/><polygon fill="#fff" points="90.00,6.70 91.31,10.20 95.04,10.36 92.12,12.69 93.12,16.29 90.00,14.23 86.88,16.29 87.88,12.69 84.96,10.36 88.69,10.20"/><polygon fill="#C8102E" points="90.00,8.00 90.99,10.64 93.80,10.76 91.60,12.52 92.35,15.24 90.00,13.68 87.65,15.24 88.40,12.52 86.20,10.76 89.01,10.64"/><polygon fill="#fff" points="101.00,17.10 102.21,20.34 105.66,20.49 102.96,22.64 103.88,25.96 101.00,24.06 98.12,25.96 99.04,22.64 96.34,20.49 99.79,20.34"/><polygon fill="#C8102E" points="101.00,18.40 101.89,20.78 104.42,20.89 102.44,22.47 103.12,24.91 101.00,23.51 98.88,24.91 99.56,22.47 97.58,20.89 100.11,20.78"/></svg><span class="route-card-num">06</span></span>
+          <span class="route-card-body">
+            <span class="route-card-name">New Zealand</span>
+            <span class="route-card-route" aria-hidden="true"><span class="route-card-from">EDL</span><span class="route-card-dash"></span><svg class="route-card-plane" viewBox="-0.5 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span class="route-card-dash"></span><span class="route-card-to">AKL</span></span>
+            <span class="route-card-tag">High-quality education in a safe, welcoming country, with a route to work after you graduate.</span>
+          </span>
+          <span class="route-card-go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </li>
+    </ul>
 
-      <a href="australia.html" class="dest-flag-card">
-        <span class="dest-flag-code">SYD</span>
-        <svg width="52" height="35" viewBox="0 0 120 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="120" height="60" fill="#012169"/><svg x="0" y="0" width="60" height="30" viewBox="0 0 60 30"><clipPath id="dAUs"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="dAUt"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#dAUs)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#dAUt)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg><polygon fill="#fff" points="30.00,36.00 31.76,41.35 37.04,39.39 33.95,44.10 38.77,47.00 33.17,47.53 33.90,53.11 30.00,49.05 26.10,53.11 26.83,47.53 21.23,47.00 26.05,44.10 22.96,39.39 28.24,41.35"/><polygon fill="#fff" points="90.00,46.50 90.88,49.18 93.52,48.19 91.97,50.55 94.39,52.00 91.58,52.26 91.95,55.05 90.00,53.02 88.05,55.05 88.42,52.26 85.61,52.00 88.03,50.55 86.48,48.19 89.12,49.18"/><polygon fill="#fff" points="76.00,21.50 76.88,24.18 79.52,23.19 77.97,25.55 80.39,27.00 77.58,27.26 77.95,30.05 76.00,28.02 74.05,30.05 74.42,27.26 71.61,27.00 74.03,25.55 72.48,23.19 75.12,24.18"/><polygon fill="#fff" points="90.00,6.50 90.88,9.18 93.52,8.19 91.97,10.55 94.39,12.00 91.58,12.26 91.95,15.05 90.00,13.03 88.05,15.05 88.42,12.26 85.61,12.00 88.03,10.55 86.48,8.19 89.12,9.18"/><polygon fill="#fff" points="102.00,18.50 102.88,21.18 105.52,20.19 103.97,22.55 106.39,24.00 103.58,24.26 103.95,27.05 102.00,25.02 100.05,27.05 100.42,24.26 97.61,24.00 100.03,22.55 98.48,20.19 101.12,21.18"/><polygon fill="#fff" points="96.00,28.60 96.56,30.22 98.28,30.26 96.91,31.30 97.41,32.94 96.00,31.96 94.59,32.94 95.09,31.30 93.72,30.26 95.44,30.22"/></svg>
-        <span class="dest-flag-name">Australia</span>
-        <span class="dest-flag-tag">World-class universities and a relaxed, multicultural lifestyle.</span>
-      </a>
-
-      <a href="united-kingdom.html" class="dest-flag-card">
-        <span class="dest-flag-code">LHR</span>
-        <svg width="52" height="35" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><clipPath id="dUKs"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="dUKt"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#dUKs)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#dUKt)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
-        <span class="dest-flag-name">United Kingdom</span>
-        <span class="dest-flag-tag">World-renowned universities and a rich academic tradition.</span>
-      </a>
-
-      <a href="germany.html" class="dest-flag-card">
-        <span class="dest-flag-code">FRA</span>
-        <svg width="52" height="35" viewBox="0 0 5 3" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="5" height="1" fill="#000"/><rect y="1" width="5" height="1" fill="#DD0000"/><rect y="2" width="5" height="1" fill="#FFCE00"/></svg>
-        <span class="dest-flag-name">Germany</span>
-        <span class="dest-flag-tag">Tuition-friendly public universities &mdash; our language training gets you ready.</span>
-      </a>
-
-      <a href="canada.html" class="dest-flag-card">
-        <span class="dest-flag-code">YYZ</span>
-        <svg width="52" height="35" viewBox="0 0 9600 4800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="9600" height="4800" fill="#fff"/><rect width="2400" height="4800" fill="#D52B1E"/><rect x="7200" width="2400" height="4800" fill="#D52B1E"/><path fill="#D52B1E" d="m4890 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>
-        <span class="dest-flag-name">Canada</span>
-        <span class="dest-flag-tag">Welcoming pathways to study and, for many graduates, to stay on and work.</span>
-      </a>
-
-      <a href="ireland.html" class="dest-flag-card">
-        <span class="dest-flag-code">DUB</span>
-        <svg width="52" height="35" viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1" height="2" fill="#169B62"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#FF883E"/></svg>
-        <span class="dest-flag-name">Ireland</span>
-        <span class="dest-flag-tag">EU-recognised degrees with strong post-study work opportunities.</span>
-      </a>
-
-      <a href="new-zealand.html" class="dest-flag-card">
-        <span class="dest-flag-code">AKL</span>
-        <svg width="52" height="35" viewBox="0 0 120 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="120" height="60" fill="#012169"/><svg x="0" y="0" width="60" height="30" viewBox="0 0 60 30"><clipPath id="dNZs"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="dNZt"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#dNZs)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#dNZt)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg><polygon fill="#fff" points="90.00,42.70 91.56,46.86 95.99,47.05 92.52,49.82 93.70,54.10 90.00,51.65 86.30,54.10 87.48,49.82 84.01,47.05 88.44,46.86"/><polygon fill="#C8102E" points="90.00,44.00 91.23,47.30 94.76,47.45 92.00,49.65 92.94,53.05 90.00,51.10 87.06,53.05 88.00,49.65 85.24,47.45 88.77,47.30"/><polygon fill="#fff" points="78.00,19.40 79.38,23.10 83.33,23.27 80.24,25.73 81.29,29.53 78.00,27.35 74.71,29.53 75.76,25.73 72.67,23.27 76.62,23.10"/><polygon fill="#C8102E" points="78.00,20.70 79.06,23.54 82.09,23.67 79.72,25.56 80.53,28.48 78.00,26.81 75.47,28.48 76.28,25.56 73.91,23.67 76.94,23.54"/><polygon fill="#fff" points="90.00,6.70 91.31,10.20 95.04,10.36 92.12,12.69 93.12,16.29 90.00,14.23 86.88,16.29 87.88,12.69 84.96,10.36 88.69,10.20"/><polygon fill="#C8102E" points="90.00,8.00 90.99,10.64 93.80,10.76 91.60,12.52 92.35,15.24 90.00,13.68 87.65,15.24 88.40,12.52 86.20,10.76 89.01,10.64"/><polygon fill="#fff" points="101.00,17.10 102.21,20.34 105.66,20.49 102.96,22.64 103.88,25.96 101.00,24.06 98.12,25.96 99.04,22.64 96.34,20.49 99.79,20.34"/><polygon fill="#C8102E" points="101.00,18.40 101.89,20.78 104.42,20.89 102.44,22.47 103.12,24.91 101.00,23.51 98.88,24.91 99.56,22.47 97.58,20.89 100.11,20.78"/></svg>
-        <span class="dest-flag-name">New Zealand</span>
-        <span class="dest-flag-tag">High-quality education in a safe, welcoming country, with a route to work after you graduate.</span>
-      </a>
-
-    </div>
-  </section>
-
-  <section class="cta-band on-bg" id="contact" aria-labelledby="cta-heading">
-    <div class="container">
+    <div class="route-cta">
       <div>
         <h2 id="cta-heading">Not sure which country is right for you?</h2>
         <p>Book a free consultation and we'll help you decide.</p>
       </div>
-      <div class="cta-actions">
-        <a href="tel:+254721796500" class="btn btn-outline">+254 721 796500</a>
-        <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary">Book a free consultation</a>
-      </div>
+      <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary">Book a free consultation</a>
     </div>
   </section>
 
@@ -167,9 +196,13 @@
       <div>
         <div class="footer-heading">CONTACT</div>
         <div class="footer-contact">
-          <div class="footer-contact-row">
+          <a class="footer-contact-row" href="https://www.google.com/maps/search/?api=1&amp;query=Daima%20Towers%2C%20Eldoret%2C%20Kenya" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
-            <span>Daima Towers, Mezzanine 1, Eldoret, Kenya</span>
+            <span>Daima Towers, Mezzanine 1, Eldoret, Kenya<span class="footer-contact-note footer-contact-link">Get directions<span class="sr-only"> on Google Maps (opens in a new tab)</span></span></span>
+          </a>
+          <div class="footer-contact-row">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+            <span>Mon&ndash;Fri, 8am&ndash;5pm<span class="footer-contact-note">Closed weekends &amp; public holidays</span></span>
           </div>
           <a class="footer-contact-row" href="tel:+254721796500">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3c0 1-.9 1.8-1.9 1.6C10.9 18.3 5.7 13.1 4.9 6.9 4.7 5.9 5 3.5 6 3.5Z"/></svg>
@@ -195,7 +228,7 @@
       <a class="footer-bottom-legal" href="https://student.studiesandawardsltd.com/login">Student Portal Login</a>
       <span class="footer-bottom-copyright">
         <span>&copy; <span id="current-year">2026</span> Studies and Awards Limited. All rights reserved.</span>
-        <span class="footer-bottom-note">Certified Data Controller &middot; ODPC Reg. No. <span class="nowrap">686-120C-9FF4</span></span>
+        <span class="footer-bottom-note">Certified Data Controller</span>
       </span>
       <div class="footer-bottom-social">
         <a href="https://www.facebook.com/studiesandawards/" class="social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9h-2.5c-.83 0-1.5.67-1.5 1.5V12h4l-.5 3.5H10V21h-3v-5.5H5V12h2v-2C7 7.5 8.5 5.5 11.5 5.5H14V9Z"/></svg></a>

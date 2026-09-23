@@ -47,6 +47,13 @@
 
   var yearEl = document.getElementById('current-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  // Home hero pass: "Class of" the next intake year, rolling over each September.
+  var classEl = document.getElementById('hero-pass-class');
+  if (classEl) {
+    var now = new Date();
+    classEl.textContent = 'CLASS OF ' + (now.getFullYear() + (now.getMonth() >= 8 ? 1 : 0));
+  }
 })();
 
 // Footer newsletter box — no backend on this site, so "subscribing" opens
@@ -257,12 +264,20 @@
   var animating = false;
   var ANIM_MS = 700;
 
-  members.forEach(function (member, i) {
+  // The strip holds the team twice: the second copy (hidden from screen
+  // readers) lets "Next" on the last person slide on to the first again
+  // instead of rewinding. Once it lands, the strip silently jumps back to the
+  // identical card in the first copy.
+  function buildCard(member, i, isClone) {
     var card = document.createElement('div');
     card.className = 'team-card';
-    card.setAttribute('role', 'group');
-    card.setAttribute('aria-roledescription', 'slide');
-    card.setAttribute('aria-label', (i + 1) + ' of ' + count);
+    if (isClone) {
+      card.setAttribute('aria-hidden', 'true');
+    } else {
+      card.setAttribute('role', 'group');
+      card.setAttribute('aria-roledescription', 'slide');
+      card.setAttribute('aria-label', (i + 1) + ' of ' + count);
+    }
 
     var photo = document.createElement('div');
     photo.className = 'team-card-photo';
@@ -270,7 +285,7 @@
     var img = document.createElement('img');
     img.className = 'team-card-photo-img';
     img.src = member.photo;
-    img.alt = member.name;
+    img.alt = isClone ? '' : member.name;
     img.loading = i < 5 ? 'eager' : 'lazy';
 
     var dots = document.createElement('div');
@@ -280,10 +295,14 @@
     photo.appendChild(img);
     photo.appendChild(dots);
     card.appendChild(photo);
-    strip.appendChild(card);
-  });
+    return card;
+  }
+
+  members.forEach(function (member, i) { strip.appendChild(buildCard(member, i, false)); });
+  members.forEach(function (member, i) { strip.appendChild(buildCard(member, i, true)); });
 
   var cards = strip.querySelectorAll('.team-card');
+  var pos = 0; // leftmost card's position in the strip, 0 .. 2 * count - 1
 
   function pad(n) { return n < 10 ? '0' + n : String(n); }
 
@@ -292,6 +311,24 @@
     var style = window.getComputedStyle(strip);
     var gap = parseFloat(style.columnGap || style.gap || '0') || 0;
     return cards[0].getBoundingClientRect().width + gap;
+  }
+
+  // Moves the strip so card `p` is leftmost (and the one in colour). Without
+  // animation it also switches off the photo transitions for that frame, so
+  // the jump between the two identical copies can't be seen.
+  function setPosition(p, animate) {
+    if (!animate) {
+      strip.classList.add('is-snapping');
+      strip.style.transition = 'none';
+    }
+    cards.forEach(function (card, i) { card.classList.toggle('is-active', i === p); });
+    strip.style.transform = 'translateX(-' + (p * stepWidth()) + 'px)';
+    if (!animate) {
+      // eslint-disable-next-line no-unused-expressions
+      strip.offsetHeight;
+      strip.style.transition = '';
+      strip.classList.remove('is-snapping');
+    }
   }
 
   // Fades a set of text elements out, swaps their content, then fades them
@@ -310,16 +347,8 @@
     }, 220);
   }
 
-  function render(index, opts) {
-    var silent = !!(opts && opts.silent);
+  function renderInfo(index, silent) {
     var member = members[index];
-
-    cards.forEach(function (card, i) { card.classList.toggle('is-active', i === index); });
-
-    strip.style.transition = silent ? 'none' : '';
-    // once the last cards are in view, stop sliding rather than leave empty space
-    var maxOffset = Math.max(0, strip.scrollWidth - viewport.clientWidth);
-    strip.style.transform = 'translateX(-' + Math.min(index * stepWidth(), maxOffset) + 'px)';
 
     progressEl.style.transition = silent ? 'none' : '';
     progressEl.style.width = (100 / count) + '%';
@@ -331,19 +360,30 @@
     liveEl.textContent = member.name + ', ' + member.role;
   }
 
-  function goTo(index, opts) {
-    var silent = !!(opts && opts.silent);
-    if (!silent) {
-      if (animating || index === activeIndex) return;
-      animating = true;
-      window.setTimeout(function () { animating = false; }, ANIM_MS);
+  function move(step) {
+    if (animating) return;
+    animating = true;
+    // Going back from the first person: jump to their twin in the second copy,
+    // so the strip can slide back on to the last person.
+    if (step < 0 && pos === 0) {
+      pos = count;
+      setPosition(pos, false);
     }
-    activeIndex = ((index % count) + count) % count;
-    render(activeIndex, opts);
+    pos += step;
+    activeIndex = pos % count;
+    setPosition(pos, true);
+    renderInfo(activeIndex, false);
+    window.setTimeout(function () {
+      animating = false;
+      if (pos >= count) {
+        pos -= count;
+        setPosition(pos, false);
+      }
+    }, ANIM_MS);
   }
 
-  function next() { goTo(activeIndex + 1); }
-  function prev() { goTo(activeIndex - 1); }
+  function next() { move(1); }
+  function prev() { move(-1); }
 
   nextBtn.addEventListener('click', next);
   prevBtn.addEventListener('click', prev);
@@ -371,12 +411,11 @@
   var resizeTimer = null;
   window.addEventListener('resize', function () {
     window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(function () {
-      render(activeIndex, { silent: true });
-    }, 120);
+    resizeTimer = window.setTimeout(function () { setPosition(pos, false); }, 120);
   });
 
-  render(0, { silent: true });
+  setPosition(0, false);
+  renderInfo(0, true);
 
   // ---- "View more" bio modal ----
   var overlay = document.getElementById('team-modal-overlay');
@@ -1075,6 +1114,7 @@ function createCursorFollower(options) {
   var phoneIcon = icon('<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/>', 18, 1.8);
   var mailIcon = icon('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>', 18, 1.8);
   var checkIcon = icon('<path d="M5 12.5l4.5 4.5L19 7"/>', 16, 2);
+  var clockIcon = icon('<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>', 16, 2);
   var closeIcon = icon('<path d="M6 6l12 12M18 6L6 18"/>', 20, 2);
   var chevronLeft = icon('<path d="m15 6-6 6 6 6"/>', 18, 2);
   var chevronRight = icon('<path d="m9 6 6 6-6 6"/>', 18, 2);
@@ -1092,6 +1132,7 @@ function createCursorFollower(options) {
       '    <p class="consult-sub" id="consult-sub">Pick the person who fits what you need. WhatsApp opens with your message already written, and you can edit it before you send.</p>',
       '    <p class="consult-topic" hidden><span>Asking about</span><strong></strong></p>',
       '    <p class="consult-assure">' + checkIcon + 'Free initial consultation &middot; no obligation</p>',
+      '    <p class="consult-assure consult-hours">' + clockIcon + 'Office open Mon&ndash;Fri, 8am&ndash;5pm</p>',
       '  </div>',
       '  <div class="consult-main">',
       '    <div class="consult-toolbar">',

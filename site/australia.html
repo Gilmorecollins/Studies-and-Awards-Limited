@@ -16,9 +16,9 @@
 <meta name="twitter:description" content="World-class universities and a relaxed, multicultural lifestyle — we guide you from application to arrival.">
 <!-- seo:end -->
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Oswald:wght@400;500;600&display=swap">
+<link rel="preload" href="assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/bebas-neue.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/oswald.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -350,9 +350,13 @@
       <div>
         <div class="footer-heading">CONTACT</div>
         <div class="footer-contact">
-          <div class="footer-contact-row">
+          <a class="footer-contact-row" href="https://www.google.com/maps/search/?api=1&amp;query=Daima%20Towers%2C%20Eldoret%2C%20Kenya" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
-            <span>Daima Towers, Mezzanine 1, Eldoret, Kenya</span>
+            <span>Daima Towers, Mezzanine 1, Eldoret, Kenya<span class="footer-contact-note footer-contact-link">Get directions<span class="sr-only"> on Google Maps (opens in a new tab)</span></span></span>
+          </a>
+          <div class="footer-contact-row">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+            <span>Mon&ndash;Fri, 8am&ndash;5pm<span class="footer-contact-note">Closed weekends &amp; public holidays</span></span>
           </div>
           <a class="footer-contact-row" href="tel:+254721796500">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3c0 1-.9 1.8-1.9 1.6C10.9 18.3 5.7 13.1 4.9 6.9 4.7 5.9 5 3.5 6 3.5Z"/></svg>
@@ -378,7 +382,7 @@
       <a class="footer-bottom-legal" href="https://student.studiesandawardsltd.com/login">Student Portal Login</a>
       <span class="footer-bottom-copyright">
         <span>&copy; <span id="current-year">2026</span> Studies and Awards Limited. All rights reserved.</span>
-        <span class="footer-bottom-note">Certified Data Controller &middot; ODPC Reg. No. <span class="nowrap">686-120C-9FF4</span></span>
+        <span class="footer-bottom-note">Certified Data Controller</span>
       </span>
       <div class="footer-bottom-social">
         <a href="https://www.facebook.com/studiesandawards/" class="social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9h-2.5c-.83 0-1.5.67-1.5 1.5V12h4l-.5 3.5H10V21h-3v-5.5H5V12h2v-2C7 7.5 8.5 5.5 11.5 5.5H14V9Z"/></svg></a>
