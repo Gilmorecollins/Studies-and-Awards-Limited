@@ -1455,49 +1455,6 @@ function createCursorFollower(options) {
   section.hidden = false;
 })();
 
-// Home page: the dashed zigzag connector behind the "How it works" steps.
-// Drawn from the actual on-screen position of each step's dot rather than
-// fixed coordinates, so it stays correct whatever the card heights turn out
-// to be (text length, font loading, viewport width) and self-corrects on
-// resize instead of drifting out of alignment.
-(function () {
-  'use strict';
-
-  var wrap = document.querySelector('.journey-wrap');
-  var svg = wrap && wrap.querySelector('.journey-line');
-  var path = svg && svg.querySelector('path');
-  var dots = wrap && [].slice.call(wrap.querySelectorAll('.journey-dot'));
-  if (!wrap || !path || !dots || dots.length < 2) return;
-
-  function draw() {
-    var box = wrap.getBoundingClientRect();
-    svg.setAttribute('width', box.width);
-    svg.setAttribute('height', box.height);
-
-    var points = dots.map(function (dot) {
-      var r = dot.getBoundingClientRect();
-      return { x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top };
-    });
-
-    var d = 'M' + points[0].x + ' ' + points[0].y;
-    for (var i = 1; i < points.length; i++) {
-      var a = points[i - 1], b = points[i];
-      var midX = (a.x + b.x) / 2;
-      d += ' C' + midX + ' ' + a.y + ' ' + midX + ' ' + b.y + ' ' + b.x + ' ' + b.y;
-    }
-    path.setAttribute('d', d);
-  }
-
-  draw();
-  window.addEventListener('load', draw);
-
-  var resizeTimer = null;
-  window.addEventListener('resize', function () {
-    window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(draw, 120);
-  });
-})();
-
 // Home page: "Why fly with us" pass. Clicking "Book a free consultation" flies
 // the plane from EDL to UNI first, then replays the click so the consultation
 // chooser (or the email fallback) handles it as usual. When the chooser
