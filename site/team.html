@@ -53,8 +53,12 @@
 <main id="main">
 
   <section class="page-hero" aria-labelledby="page-heading">
+    <svg class="page-hero-deco" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <circle cx="1220" cy="40" r="240" fill="#DCE6F7" opacity="0.6"/>
+      <circle cx="140" cy="290" r="160" fill="#DCE6F7" opacity="0.5"/>
+    </svg>
     <div class="container">
-      <span class="eyebrow">OUR TEAM</span>
+      <span class="hero-kicker"><span class="hero-kicker-rule" aria-hidden="true"></span>OUR TEAM</span>
       <h1 id="page-heading">The counsellors behind your application.</h1>
       <p>Based in Eldoret, our team works with you personally from your first visit until you arrive and start life abroad.</p>
     </div>
@@ -88,7 +92,7 @@
         <div class="team-progress-track"><div class="team-progress-fill" id="team-progress"></div></div>
 
         <div class="team-strip-viewport" id="team-strip-viewport" tabindex="0" aria-roledescription="carousel" aria-label="Our team">
-          <ul class="team-strip" id="team-strip"></ul>
+          <div class="team-strip" id="team-strip"></div>
         </div>
 
         <div class="team-active-row">
@@ -113,7 +117,7 @@
           <div class="team-modal-role" id="team-modal-role"></div>
           <a href="#" class="team-modal-linkedin" id="team-modal-linkedin" target="_blank" rel="noopener">LinkedIn</a>
         </div>
-        <img class="team-modal-photo" id="team-modal-photo" src="" alt="">
+        <img class="team-modal-photo" id="team-modal-photo" alt="">
       </div>
       <div class="team-modal-bio" id="team-modal-bio"></div>
     </div>
@@ -126,11 +130,8 @@
         <p>Book a free consultation with our counsellors today.</p>
       </div>
       <div class="cta-actions">
-        <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary">Book Free Consultation</a>
-        <a href="tel:+254721796500" class="cta-phone">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3c0 1-.9 1.8-1.9 1.6C10.9 18.3 5.7 13.1 4.9 6.9 4.7 5.9 5 3.5 6 3.5Z"/></svg>
-          +254 721 796500
-        </a>
+        <a href="tel:+254721796500" class="btn btn-outline">+254 721 796500</a>
+        <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary">Book a free consultation</a>
       </div>
     </div>
   </section>
@@ -158,6 +159,7 @@
           <a href="about.html">About Us</a>
           <a href="services.html">Services</a>
           <a href="team.html">Our Team</a>
+          <a href="https://www.magistersacco.org/">Financial Support</a>
           <a href="https://student.studiesandawardsltd.com/login">Student Portal</a>
         </div>
       </nav>
@@ -185,7 +187,7 @@
           </a>
           <a class="footer-contact-row" href="mailto:admissions@studiesandawardsltd.com">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4 6.5 12 12.5 20 6.5"/></svg>
-            <span>admissions@studiesandawardsltd.com</span>
+            <span>admissions@<wbr>studiesandawardsltd.com</span>
           </a>
         </div>
       </div>
@@ -201,12 +203,15 @@
     </div>
     <div class="container footer-bottom">
       <a class="footer-bottom-legal" href="https://student.studiesandawardsltd.com/login">Student Portal Login</a>
-      <span class="footer-bottom-copyright">&copy; <span id="current-year">2026</span> Studies and Awards Limited. All rights reserved.</span>
+      <span class="footer-bottom-copyright">
+        <span>&copy; <span id="current-year">2026</span> Studies and Awards Limited. All rights reserved.</span>
+        <span class="footer-bottom-note">Certified Data Controller &middot; ODPC Reg. No. <span class="nowrap">686-120C-9FF4</span></span>
+      </span>
       <div class="footer-bottom-social">
-        <a href="#" class="social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9h-2.5c-.83 0-1.5.67-1.5 1.5V12h4l-.5 3.5H10V21h-3v-5.5H5V12h2v-2C7 7.5 8.5 5.5 11.5 5.5H14V9Z"/></svg></a>
-        <a href="#" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.2" cy="7.8" r="0.6" fill="#FFFFFF"/></svg></a>
-        <a href="#" class="social-link" aria-label="YouTube"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="6" width="17" height="12" rx="2.5"/><path d="M10.5 10l4 2-4 2Z" fill="#FFFFFF" stroke="none"/></svg></a>
-        <a href="#" class="social-link" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5"/><circle cx="8.2" cy="8.2" r="0.9" fill="#FFFFFF" stroke="none"/><path d="M7 11.5v6M12.5 17.5v-3.5c0-1.4 1-2.3 2.2-2.3 1.2 0 1.8.8 1.8 2.3v3.5M12.5 11.5v6"/></svg></a>
+        <a href="https://www.facebook.com/studiesandawards/" class="social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9h-2.5c-.83 0-1.5.67-1.5 1.5V12h4l-.5 3.5H10V21h-3v-5.5H5V12h2v-2C7 7.5 8.5 5.5 11.5 5.5H14V9Z"/></svg></a>
+        <a href="https://www.instagram.com/studiesandawardslimited/" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.2" cy="7.8" r="0.6" fill="#FFFFFF"/></svg></a>
+        <a href="https://ke.linkedin.com/company/studies-and-awards-limited" class="social-link" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5"/><circle cx="8.2" cy="8.2" r="0.9" fill="#FFFFFF" stroke="none"/><path d="M7 11.5v6M12.5 17.5v-3.5c0-1.4 1-2.3 2.2-2.3 1.2 0 1.8.8 1.8 2.3v3.5M12.5 11.5v6"/></svg></a>
+        <a href="https://www.youtube.com/@studiesandawardslimited4356" class="social-link" aria-label="YouTube"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="6" width="17" height="12" rx="2.5"/><path d="M10.5 10l4 2-4 2Z" fill="#FFFFFF" stroke="none"/></svg></a>
       </div>
     </div>
   </div>

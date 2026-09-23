@@ -26,11 +26,15 @@
       if (event.target.closest('a')) closeNav();
     });
 
+    document.addEventListener('click', function (event) {
+      if (nav.classList.contains('is-open') && !nav.contains(event.target) && !toggle.contains(event.target)) closeNav();
+    });
+
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') closeNav();
     });
 
-    var mq = window.matchMedia('(min-width: 769px)');
+    var mq = window.matchMedia('(min-width: 1081px)');
     var handleViewportChange = function (event) {
       if (event.matches) closeNav();
     };
@@ -55,6 +59,10 @@
   if (!form) return;
 
   var input = document.getElementById('footer-subscribe-email');
+  var status = document.createElement('p');
+  status.className = 'footer-subscribe-status';
+  status.setAttribute('role', 'status');
+  form.parentNode.insertBefore(status, form.nextSibling);
 
   form.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -65,8 +73,7 @@
     var body = encodeURIComponent('Please add this email address to the newsletter list: ' + email);
     window.location.href = 'mailto:admissions@studiesandawardsltd.com?subject=' + subject + '&body=' + body;
 
-    form.classList.add('is-sent');
-    input.value = 'Check your mail app to send it';
+    status.textContent = 'Your email app should open with the request ready. Just press send.';
   });
 })();
 
@@ -169,7 +176,10 @@
       el.classList.toggle('is-active', i === index);
       el.setAttribute('aria-hidden', i === index ? 'false' : 'true');
     });
-    dots.forEach(function (el, i) { el.classList.toggle('is-active', i === index); });
+    dots.forEach(function (el, i) {
+      el.classList.toggle('is-active', i === index);
+      if (i === index) { el.setAttribute('aria-current', 'true'); } else { el.removeAttribute('aria-current'); }
+    });
     restartDotFill(index);
   }
 
@@ -248,11 +258,11 @@
   var ANIM_MS = 700;
 
   members.forEach(function (member, i) {
-    var li = document.createElement('li');
-    li.className = 'team-card';
-    li.setAttribute('role', 'group');
-    li.setAttribute('aria-roledescription', 'slide');
-    li.setAttribute('aria-label', (i + 1) + ' of ' + count);
+    var card = document.createElement('div');
+    card.className = 'team-card';
+    card.setAttribute('role', 'group');
+    card.setAttribute('aria-roledescription', 'slide');
+    card.setAttribute('aria-label', (i + 1) + ' of ' + count);
 
     var photo = document.createElement('div');
     photo.className = 'team-card-photo';
@@ -269,8 +279,8 @@
 
     photo.appendChild(img);
     photo.appendChild(dots);
-    li.appendChild(photo);
-    strip.appendChild(li);
+    card.appendChild(photo);
+    strip.appendChild(card);
   });
 
   var cards = strip.querySelectorAll('.team-card');
@@ -307,7 +317,9 @@
     cards.forEach(function (card, i) { card.classList.toggle('is-active', i === index); });
 
     strip.style.transition = silent ? 'none' : '';
-    strip.style.transform = 'translateX(-' + (index * stepWidth()) + 'px)';
+    // once the last cards are in view, stop sliding rather than leave empty space
+    var maxOffset = Math.max(0, strip.scrollWidth - viewport.clientWidth);
+    strip.style.transform = 'translateX(-' + Math.min(index * stepWidth(), maxOffset) + 'px)';
 
     progressEl.style.transition = silent ? 'none' : '';
     progressEl.style.width = (100 / count) + '%';
@@ -376,6 +388,7 @@
   var modalLinkedin = document.getElementById('team-modal-linkedin');
   var modalBio = document.getElementById('team-modal-bio');
   var lastFocused = null;
+  var hideTimer = null;
 
   function trapFocus(event) {
     if (event.key === 'Escape') { closeModal(); return; }
@@ -400,7 +413,7 @@
     modalPhoto.src = member.photo;
     modalPhoto.alt = member.name;
 
-    if (member.linkedin) {
+    if (/^https?:\/\//.test(member.linkedin || '')) {
       modalLinkedin.href = member.linkedin;
       modalLinkedin.hidden = false;
     } else {
@@ -414,6 +427,7 @@
       modalBio.appendChild(p);
     });
 
+    window.clearTimeout(hideTimer);
     lastFocused = document.activeElement;
     overlay.hidden = false;
     document.body.style.overflow = 'hidden';
@@ -426,7 +440,7 @@
     overlay.classList.remove('is-open');
     document.body.style.overflow = '';
     document.removeEventListener('keydown', trapFocus);
-    window.setTimeout(function () { overlay.hidden = true; }, 260);
+    hideTimer = window.setTimeout(function () { overlay.hidden = true; }, 260);
     if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
   }
 
@@ -872,7 +886,7 @@ function createCursorFollower(options) {
       ? 'Showing ' + shown + ' of ' + plural(total, 'institution', 'institutions')
       : plural(total, 'partner institution', 'partner institutions') + ' · select one to see its courses';
     data.emptyEl.hidden = shown > 0;
-    if (!shown) data.emptyEl.textContent = 'No institution or course in ' + current + ' matches “' + searchInput.value.trim() + '”. Try a broader word, such as “nursing” or “business”.';
+    if (!shown) data.emptyEl.textContent = 'No institution or course in ' + current + ' matches “' + searchInput.value.trim() + '”. Try a shorter or different word, or ask a counsellor what’s available.';
   }
 
   // Elements a keyboard user can actually reach: visible, and not tucked inside a
@@ -1057,7 +1071,7 @@ function createCursorFollower(options) {
   function icon(paths, size, width) {
     return '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="none" stroke="currentColor" stroke-width="' + width + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths + '</svg>';
   }
-  var whatsappIcon = icon('<path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.2L3.2 20.8l4.5-1.2A8.8 8.8 0 1 0 12 3.2Z"/><path d="M9.2 8.6c.2 2.6 2.7 5.1 5.3 5.4l1.1-1.3-1.9-.9-.8.6a3.9 3.9 0 0 1-1.4-1.4l.6-.8-.9-1.9-2 .3Z"/>', 18, 1.8);
+  var whatsappIcon = '<svg class="wa-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>';
   var phoneIcon = icon('<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/>', 18, 1.8);
   var mailIcon = icon('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>', 18, 1.8);
   var checkIcon = icon('<path d="M5 12.5l4.5 4.5L19 7"/>', 16, 2);
@@ -1181,6 +1195,9 @@ function createCursorFollower(options) {
     var card = el('li', 'consult-card' + (p.number ? '' : ' is-pending'));
     card.setAttribute('data-dept', m.department || '');
     card.style.setProperty('--i', String(Math.min(index, 10)));
+    var seat = el('span', 'consult-seat', (index < 9 ? '0' : '') + (index + 1));
+    seat.setAttribute('aria-hidden', 'true');
+    card.appendChild(seat);
     card.appendChild(photoFor(m, 56));
     card.appendChild(identity(m));
     if (m.helpsWith) card.appendChild(el('p', 'consult-help', m.helpsWith));
@@ -1197,20 +1214,15 @@ function createCursorFollower(options) {
   }
 
   // For visitors who don't know who to ask: the person flagged `startHere`.
-  function startCard(p) {
-    var m = p.m;
+  function startCard(p, index) {
     var box = el('section', 'consult-start');
     box.setAttribute('aria-labelledby', 'consult-start-tag');
-    var tag = el('span', 'consult-start-tag', 'Not sure who to pick? Start here');
+    var tag = el('p', 'consult-label', 'Not sure who to pick? Start here');
     tag.id = 'consult-start-tag';
     box.appendChild(tag);
-
-    var inner = el('div', 'consult-start-body');
-    inner.appendChild(photoFor(m, 64));
-    inner.appendChild(identity(m));
-    if (m.helpsWith) inner.appendChild(el('p', 'consult-help', m.helpsWith));
-    inner.appendChild(whatsappLink(p, 'consult-start-wa', 'Chat with ' + firstName(m) + ' on WhatsApp'));
-    box.appendChild(inner);
+    var board = el('ul', 'consult-grid');
+    board.appendChild(row(p, index));
+    box.appendChild(board);
     return box;
   }
 
@@ -1231,9 +1243,12 @@ function createCursorFollower(options) {
     if (startEl) startEl.hidden = !!activeDept;
     if (labelEl) labelEl.hidden = !!activeDept;
 
-    countEl.textContent = activeDept
-      ? shown + (shown === 1 ? ' person' : ' people') + ' in ' + activeDept
-      : cards.length + ' people to talk to';
+    var total = activeDept ? shown : cards.length;
+    countEl.textContent = '';
+    countEl.appendChild(el('span', 'consult-count-num', String(total)));
+    countEl.appendChild(el('span', 'consult-count-label', activeDept
+      ? (total === 1 ? ' person in ' : ' people in ') + activeDept
+      : ' people to talk to'));
     body.scrollTop = 0;
   }
 
@@ -1254,8 +1269,9 @@ function createCursorFollower(options) {
     }
 
     var start = null;
-    list.forEach(function (p) { if (!start && p.m.startHere && p.number) start = p; });
-    startEl = start ? startCard(start) : null;
+    var startIndex = -1;
+    list.forEach(function (p, i) { if (startIndex < 0 && p.m.startHere && p.number) { start = p; startIndex = i; } });
+    startEl = start ? startCard(start, startIndex) : null;
     labelEl = start ? el('p', 'consult-label', 'Or choose someone specific') : null;
     if (startEl) { body.appendChild(startEl); body.appendChild(labelEl); }
 
@@ -1439,4 +1455,146 @@ function createCursorFollower(options) {
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(draw, 120);
   });
+})();
+
+// Home page: "Why fly with us" pass. Clicking "Book a free consultation" flies
+// the plane from EDL to UNI first, then replays the click so the consultation
+// chooser (or the email fallback) handles it as usual. When the chooser
+// closes, the plane turns round and flies back to EDL for next time.
+(function () {
+  'use strict';
+
+  var pass = document.querySelector('.promise-pass');
+  var go = pass && pass.querySelector('.promise-pass-go');
+  if (!go) return;
+
+  var FLIGHT_MS = 600;
+  var TURN_MS = 150;
+  var NO_CHOOSER_RETURN_MS = 1500;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var replaying = false;
+  var busy = false;
+
+  function flyBack() {
+    pass.classList.add('is-returning');
+    window.setTimeout(function () {
+      pass.classList.remove('is-flown');
+      window.setTimeout(function () {
+        pass.classList.remove('is-returning');
+        busy = false;
+      }, FLIGHT_MS);
+    }, TURN_MS);
+  }
+
+  function returnWhenClosed() {
+    var overlay = document.getElementById('consult-overlay');
+    if (!overlay || overlay.hidden || !window.MutationObserver) {
+      window.setTimeout(flyBack, NO_CHOOSER_RETURN_MS);
+      return;
+    }
+    var observer = new MutationObserver(function () {
+      if (overlay.classList.contains('is-open')) return;
+      observer.disconnect();
+      flyBack();
+    });
+    observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  go.addEventListener('click', function (event) {
+    if (replaying || reduceMotion) return;
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (busy) return;
+    busy = true;
+    pass.classList.add('is-flown');
+    window.setTimeout(function () {
+      replaying = true;
+      go.click();
+      replaying = false;
+      returnWhenClosed();
+    }, FLIGHT_MS);
+  });
+})();
+
+// About page: the counsellor count in the hero's ticket facts, and the
+// "Inside Studies & Awards" department roster — both built from
+// js/team-data.js so they never drift out of sync with the real team.
+(function () {
+  'use strict';
+
+  var members = window.TEAM_MEMBERS;
+  if (!members || !members.length) return;
+
+  var countEl = document.getElementById('about-team-count');
+  if (countEl) countEl.textContent = members.length;
+
+  var roster = document.getElementById('about-roster');
+  if (!roster) return;
+
+  var counts = {};
+  members.forEach(function (m) {
+    counts[m.department] = (counts[m.department] || 0) + 1;
+  });
+
+  var order = window.CONSULT_DEPARTMENTS || [];
+  var depts = Object.keys(counts).sort(function (a, b) {
+    var ia = order.indexOf(a), ib = order.indexOf(b);
+    if (ia === -1) ia = order.length;
+    if (ib === -1) ib = order.length;
+    return ia - ib;
+  });
+
+  // each name keeps its trailing dot, so a wrapped line never starts with one
+  depts.forEach(function (d, i) {
+    var item = document.createElement('span');
+    item.className = 'roster-item';
+    var name = document.createElement('span');
+    name.className = 'roster-name roster-name-' + Math.min(counts[d], 4);
+    name.textContent = d;
+    item.appendChild(name);
+    if (i < depts.length - 1) {
+      var sep = document.createElement('span');
+      sep.className = 'roster-sep';
+      sep.setAttribute('aria-hidden', 'true');
+      sep.textContent = '•';
+      item.appendChild(sep);
+    }
+    roster.appendChild(item);
+    roster.appendChild(document.createTextNode(' '));
+  });
+})();
+
+// Services page: highlight the itinerary entry for the service being read —
+// the last service whose top has scrolled past a line just below the header.
+(function () {
+  'use strict';
+
+  var rail = document.querySelector('.svc-rail');
+  if (!rail) return;
+
+  var items = [];
+  Array.prototype.forEach.call(rail.querySelectorAll('a[href^="#"]'), function (a) {
+    var row = document.getElementById(a.getAttribute('href').slice(1));
+    if (row) items.push({ link: a, row: row });
+  });
+  if (!items.length) return;
+
+  var LINE = 200;
+  var ticking = false;
+
+  function update() {
+    ticking = false;
+    var current = null;
+    items.forEach(function (it) { if (it.row.getBoundingClientRect().top <= LINE) current = it; });
+    items.forEach(function (it) {
+      if (it === current) { it.link.setAttribute('aria-current', 'true'); } else { it.link.removeAttribute('aria-current'); }
+    });
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
 })();

@@ -80,13 +80,6 @@ const checkIcon = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" s
 
 const PLACEHOLDER_SLOTS = 3;
 
-const whyIcons = [
-  `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"/><path d="M20 5.5c0-.83-.67-1.5-1.5-1.5H13v16h5.5c.83 0 1.5-.67 1.5-1.5v-13Z"/><path d="M11 4v16"/></svg>`,
-  `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12.5 20 5l-4.5 17-3.5-7-7-2.5Z"/><path d="M12 15l-3-2.5"/></svg>`,
-  `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15.5H6l-2 2V8.5C4 7.12 5.12 6 6.5 6h7C14.88 6 16 7.12 16 8.5v3c0 1.38-1.12 2.5-2.5 2.5H8Z"/><path d="M14 9h3.5c1.38 0 2.5 1.12 2.5 2.5V18l-2-2h-4"/></svg>`,
-  `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.3 3.8 5.3 3.8 8.5s-1.3 6.2-3.8 8.5c-2.5-2.3-3.8-5.3-3.8-8.5S9.5 5.8 12 3.5Z"/></svg>`,
-];
-
 const countries = [
   {
     slug: 'australia',
@@ -314,10 +307,11 @@ function page(c) {
 </div>
 ` : '';
   const partnersScript = hasPartnerData ? `<script src="js/partners-${c.slug}.js"></script>\n` : '';
-  const whyCards = c.why.map((w, i) => `      <div class="card bullet-row" style="padding:26px;">
-        <div class="icon-circle" aria-hidden="true">${whyIcons[i % whyIcons.length]}</div>
-        <div><h3>${w[0]}</h3><p>${w[1]}</p></div>
-      </div>`).join('\n');
+  const whyItems = c.why.map((w, i) => `        <li class="why-item">
+          <span class="why-num" aria-hidden="true">0${i + 1}</span>
+          <h3>${w[0]}</h3>
+          <p>${w[1]}</p>
+        </li>`).join('\n');
 
   const areaChips = c.areas.map(a => `      <span class="chip">${a}</span>`).join('\n');
 
@@ -445,7 +439,7 @@ ${cityScroller}
   <section class="hero" style="margin-top:0;" aria-labelledby="hero-heading">
     <div class="container" style="grid-template-columns:1fr; text-align:center; padding-top:48px; padding-bottom:48px;">
       <div>
-        <span class="eyebrow" style="color:#FFB800; margin-bottom:16px; display:block;">STUDY DESTINATION &middot; ${c.code}</span>
+        <span style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:16px; font-family:'Bebas Neue', sans-serif; font-size:15px; letter-spacing:2.2px; color:#FFB800;"><span style="width:28px; height:2px; background:#FFB800; flex-shrink:0;" aria-hidden="true"></span>STUDY DESTINATION &middot; ${c.code}</span>
         <h1 id="hero-heading" style="font-size:46px;">Study in ${c.name}</h1>
         <p class="lead" style="margin:16px auto 30px; max-width:520px;">${c.tagline}</p>
         <div class="hero-actions" style="justify-content:center;">
@@ -462,9 +456,9 @@ ${cityScroller}
         <span class="eyebrow">WHY ${c.name.toUpperCase()}</span>
         <h2 id="why-heading">A destination built for ambitious students</h2>
       </div>
-      <div class="grid-2">
-${whyCards}
-      </div>
+      <ol class="why-list">
+${whyItems}
+      </ol>
     </div>
   </section>
 
@@ -476,7 +470,7 @@ ${areaChips}
   </section>
 
   <section class="section-paper" aria-labelledby="visa-heading">
-    <div class="container section-tight" style="display:grid; grid-template-columns:1fr 1fr; gap:56px;">
+    <div class="container section-tight grid-2" style="gap:56px;">
       <div>
         <div class="icon-circle" style="background:#FFFFFF; margin-bottom:20px;" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="1.5"/><circle cx="12" cy="9.5" r="2.2"/><path d="M8.5 16c.5-2 2-3 3.5-3s3 1 3.5 3"/></svg></div>
         <h2 id="visa-heading" style="font-size:22px; margin-bottom:14px;">Visa &amp; requirements</h2>
@@ -512,7 +506,10 @@ ${otherPills}
         <h2 id="cta-heading">Ready to study in ${c.name}?</h2>
         <p>Book a free consultation, or explore our other study destinations.</p>
       </div>
-      <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}" class="btn btn-primary">Book Free Consultation</a>
+      <div class="cta-actions">
+        <a href="tel:+254721796500" class="btn btn-outline">+254 721 796500</a>
+        <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}" class="btn btn-primary">Book a free consultation</a>
+      </div>
     </div>
   </section>
 
@@ -539,6 +536,7 @@ ${otherPills}
           <a href="about.html">About Us</a>
           <a href="services.html">Services</a>
           <a href="team.html">Our Team</a>
+          <a href="https://www.magistersacco.org/">Financial Support</a>
           <a href="https://student.studiesandawardsltd.com/login">Student Portal</a>
         </div>
       </nav>
@@ -561,7 +559,7 @@ ${footerDestLinks()}
           </a>
           <a class="footer-contact-row" href="mailto:admissions@studiesandawardsltd.com">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4 6.5 12 12.5 20 6.5"/></svg>
-            <span>admissions@studiesandawardsltd.com</span>
+            <span>admissions@<wbr>studiesandawardsltd.com</span>
           </a>
         </div>
       </div>
@@ -577,12 +575,15 @@ ${footerDestLinks()}
     </div>
     <div class="container footer-bottom">
       <a class="footer-bottom-legal" href="https://student.studiesandawardsltd.com/login">Student Portal Login</a>
-      <span class="footer-bottom-copyright">&copy; <span id="current-year">2026</span> Studies and Awards Limited. All rights reserved.</span>
+      <span class="footer-bottom-copyright">
+        <span>&copy; <span id="current-year">2026</span> Studies and Awards Limited. All rights reserved.</span>
+        <span class="footer-bottom-note">Certified Data Controller &middot; ODPC Reg. No. <span class="nowrap">686-120C-9FF4</span></span>
+      </span>
       <div class="footer-bottom-social">
-        <a href="#" class="social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9h-2.5c-.83 0-1.5.67-1.5 1.5V12h4l-.5 3.5H10V21h-3v-5.5H5V12h2v-2C7 7.5 8.5 5.5 11.5 5.5H14V9Z"/></svg></a>
-        <a href="#" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.2" cy="7.8" r="0.6" fill="#FFFFFF"/></svg></a>
-        <a href="#" class="social-link" aria-label="YouTube"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="6" width="17" height="12" rx="2.5"/><path d="M10.5 10l4 2-4 2Z" fill="#FFFFFF" stroke="none"/></svg></a>
-        <a href="#" class="social-link" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5"/><circle cx="8.2" cy="8.2" r="0.9" fill="#FFFFFF" stroke="none"/><path d="M7 11.5v6M12.5 17.5v-3.5c0-1.4 1-2.3 2.2-2.3 1.2 0 1.8.8 1.8 2.3v3.5M12.5 11.5v6"/></svg></a>
+        <a href="https://www.facebook.com/studiesandawards/" class="social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9h-2.5c-.83 0-1.5.67-1.5 1.5V12h4l-.5 3.5H10V21h-3v-5.5H5V12h2v-2C7 7.5 8.5 5.5 11.5 5.5H14V9Z"/></svg></a>
+        <a href="https://www.instagram.com/studiesandawardslimited/" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.2" cy="7.8" r="0.6" fill="#FFFFFF"/></svg></a>
+        <a href="https://ke.linkedin.com/company/studies-and-awards-limited" class="social-link" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5"/><circle cx="8.2" cy="8.2" r="0.9" fill="#FFFFFF" stroke="none"/><path d="M7 11.5v6M12.5 17.5v-3.5c0-1.4 1-2.3 2.2-2.3 1.2 0 1.8.8 1.8 2.3v3.5M12.5 11.5v6"/></svg></a>
+        <a href="https://www.youtube.com/@studiesandawardslimited4356" class="social-link" aria-label="YouTube"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="6" width="17" height="12" rx="2.5"/><path d="M10.5 10l4 2-4 2Z" fill="#FFFFFF" stroke="none"/></svg></a>
       </div>
     </div>
   </div>
