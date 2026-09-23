@@ -102,7 +102,7 @@ window.TEAM_MEMBERS = [
     shortBio: 'Joyner is the Assistant General Manager at Studies and Awards Limited, supporting operations across the team.',
     fullBio: [
       'Joyner is the Assistant General Manager at Studies and Awards Limited, supporting the General Manager in coordinating the team’s daily operations.',
-      'She helps keep the different departments — applications, compliance, client relations — working together smoothly, so nothing falls through the cracks on a student’s file.'
+      'She helps keep departments like applications, compliance and client relations working together smoothly, so nothing falls through the cracks on a student’s file.'
     ],
     photo: 'assets/team/joyner.jpg',
     thumb: 'assets/team/thumbs/joyner.jpg',

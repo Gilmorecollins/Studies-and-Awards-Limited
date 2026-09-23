@@ -13,7 +13,7 @@ window.DESTINATIONS = [
     name: 'Australia',
     code: 'SYD',
     welcome: 'The Land Down Under',
-    tagline: 'World-class universities and a relaxed, multicultural lifestyle — we guide you from application to arrival.'
+    tagline: 'World-class universities and a relaxed, multicultural lifestyle. We guide you from application to arrival.'
   },
   {
     slug: 'united-kingdom',
@@ -27,7 +27,7 @@ window.DESTINATIONS = [
     name: 'Germany',
     code: 'FRA',
     welcome: 'The Heart of Europe',
-    tagline: 'Tuition-friendly public universities — our German Language Training gets you ready to apply.'
+    tagline: 'Tuition-friendly public universities. Our German Language Training gets you ready to apply.'
   },
   {
     slug: 'canada',
