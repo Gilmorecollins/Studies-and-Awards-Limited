@@ -416,9 +416,9 @@ ${seoBlock({ title: `Study in ${esc(c.name)} — ${SITE_NAME}`, description: c.t
       <span class="brand-name">Studies &amp; Awards</span>
     </a>
     <nav class="primary-nav" id="primary-nav" aria-label="Primary">
-      <a href="about.html" class="nav-link">About Us</a>
-      <a href="services.html" class="nav-link">Services</a>
       <a href="destinations.html" class="nav-link" aria-current="page">Destinations</a>
+      <a href="services.html" class="nav-link">Services</a>
+      <a href="about.html" class="nav-link">About Us</a>
       <a href="team.html" class="nav-link">Team</a>
       <a href="https://student.studiesandawardsltd.com/login" class="nav-link muted">Student Portal</a>
       <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary nav-cta-mobile">Book Free Consultation</a>
