@@ -535,15 +535,17 @@ ${otherPills}
     </div>
   </section>
 
-  <section class="dest-cta" id="contact" aria-labelledby="cta-heading">
+  <section class="cta-band" id="contact" aria-labelledby="cta-heading">
     <div class="container">
-      <div>
-        <h2 id="cta-heading">Ready to study in ${c.name}?</h2>
-        <p>Book a free consultation, or explore our other study destinations.</p>
-      </div>
-      <div class="dest-cta-actions">
-        <a href="tel:+254721796500" class="dest-cta-phone">+254 721 796500</a>
-        <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}" class="btn btn-primary">Book a free consultation</a>
+      <div class="cta-panel">
+        <div>
+          <h2 id="cta-heading">Ready to study in ${c.name}?</h2>
+          <p>Book a free consultation, or explore our other study destinations.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="tel:+254721796500" class="cta-phone">+254 721 796500</a>
+          <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}" class="btn btn-primary">Book a free consultation</a>
+        </div>
       </div>
     </div>
   </section>
@@ -573,6 +575,7 @@ ${otherPills}
           <a href="team.html">Our Team</a>
           <a href="https://www.magistersacco.org/">Financial Support</a>
           <a href="portal/index.html">Student Portal</a>
+          <a href="https://student.studiesandawardsltd.com/staff-login">Staff Portal</a>
         </div>
       </nav>
       <nav aria-label="Destinations">

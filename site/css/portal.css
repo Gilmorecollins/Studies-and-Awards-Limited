@@ -145,7 +145,7 @@ html[data-sample="new"] [data-when="progress"] { display: none !important; }
 }
 .p-menu { display: none; flex-shrink: 0; width: 44px; height: 44px; margin-left: -8px; padding: 0; place-items: center; border: 0; border-radius: 10px; background: none; color: var(--ink); }
 .p-top-title { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.p-top-title h1 { font-size: 24px; font-weight: 700; line-height: 1.2; color: var(--ink); }
+.p-top-title h1 { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 34px; font-weight: 400; line-height: 1; letter-spacing: 0.01em; color: var(--ink); }
 .p-top-title p { font-size: 13.5px; color: var(--muted); }
 .p-top-tools { display: flex; align-items: center; gap: 16px; }
 .p-sample {
@@ -533,7 +533,7 @@ html[data-sample="progress"] .p-doc[data-sample-done] .p-doc-todo { display: non
 .p-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--on-dark-faint); }
 .p-signin-main { display: flex; align-items: center; justify-content: center; padding: 48px 24px; background: var(--paper); }
 .p-signin-form { width: min(440px, 100%); display: flex; flex-direction: column; gap: 20px; padding: 44px; background: #FFFFFF; border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 20px 50px rgba(0,27,94,0.08); }
-.p-signin-form h1 { margin-bottom: 6px; font-size: 28px; font-weight: 700; color: var(--ink); }
+.p-signin-form h1 { margin-bottom: 6px; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 44px; font-weight: 400; line-height: 1; letter-spacing: 0.01em; color: var(--ink); }
 .p-signin-form .p-muted { font-size: 14.5px; }
 .p-signin-form .p-field input { min-height: 50px; border-radius: 12px; font-size: 15px; }
 .p-preview-note { padding: 10px 14px; border: 1.5px dashed rgba(138,102,0,0.5); border-radius: 12px; background: #FFFBEF; font-size: 13px; line-height: 1.5; color: var(--brass-ink); }
@@ -579,7 +579,7 @@ html[data-sample="progress"] .p-doc[data-sample-done] .p-doc-todo { display: non
   :root { --pad: 16px; }
   body { font-size: 14.5px; }
   .p-top { min-height: 68px; }
-  .p-top-title h1 { font-size: 17px; line-height: 1.25; }
+  .p-top-title h1 { font-size: 26px; }
   .p-top-title p { display: none; }
   .p-top-tools { gap: 8px; }
   .p-sample { padding: 4px 8px; font-size: 10px; letter-spacing: 0.1em; }
@@ -657,5 +657,5 @@ html[data-sample="progress"] .p-doc[data-sample-done] .p-doc-todo { display: non
 }
 @media (max-width: 380px) {
   .p-stats-3, .p-stats-4 { grid-template-columns: minmax(0, 1fr); }
-  .p-top-title h1 { font-size: 17px; }
+  .p-top-title h1 { font-size: 26px; }
 }
