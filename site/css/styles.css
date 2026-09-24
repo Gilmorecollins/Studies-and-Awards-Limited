@@ -1346,30 +1346,91 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .about-value + .about-value { border-left: none; border-top: 1px solid var(--border); }
 }
 
-/* inside Studies & Awards: the department card */
-.about-inside { background: var(--paper); padding: clamp(64px, 7vw, 100px) 0; }
-.about-inside-grid { display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: clamp(40px, 5.6vw, 80px); }
-.about-inside-text { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
-.about-inside-text p { font-size: 17px; line-height: 1.7; color: var(--muted); max-width: 440px; }
-.about-inside-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; padding-bottom: 4px; border-bottom: 2px solid var(--brass); font-size: 15px; font-weight: 700; color: var(--ink); transition: border-color 150ms ease; }
+/* inside Studies & Awards: a mosaic with one square per person, so each
+   department's tile is as big as its team. Hovering (or focusing, or tapping)
+   a tile swaps its headcount for what that department does for you. */
+.about-inside { background: var(--paper); padding: clamp(64px, 6.7vw, 96px) 0; }
+.about-inside-col { max-width: 1200px; margin: 0 auto; }
+.about-inside-head { display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 24px clamp(40px, 5.6vw, 80px); align-items: end; margin-bottom: 44px; }
+.about-inside-title { display: flex; flex-direction: column; gap: 14px; }
+.about-inside h2 { font-size: clamp(44px, 4.7vw, 68px); line-height: 0.95; }
+.about-inside-text { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.about-inside-text p { font-size: 17px; line-height: 1.7; color: var(--muted); }
+.about-inside-link { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 4px; border-bottom: 2px solid var(--brass); font-size: 15px; font-weight: 700; color: var(--ink); transition: border-color 150ms ease; }
 .about-inside-link:hover { border-bottom-color: var(--ink); }
 .about-inside-link svg { transition: transform 150ms ease; }
 .about-inside-link:hover svg { transform: translateX(3px); }
-.about-depts { align-self: start; padding: 18px 32px 22px; background: #FFFFFF; border-radius: 24px; box-shadow: 0 14px 36px rgba(0,27,94,0.08); }
-.about-depts-title { padding: 8px 0 6px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-.about-depts-list { margin: 0; padding: 0; list-style: none; }
-.about-dept { display: flex; align-items: baseline; gap: 10px; padding: 12px 0; }
-.about-dept-name { font-size: 17px; font-weight: 600; color: var(--ink); }
-.about-dept-dots { flex-grow: 1; min-width: 16px; border-bottom: 2px dotted rgba(0,27,94,0.22); }
-.about-dept-count { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 24px; line-height: 1; color: var(--brass-ink); }
-@media (max-width: 960px) {
-  .about-inside-grid { grid-template-columns: minmax(0, 1fr); }
-  .about-depts { max-width: 560px; width: 100%; }
+
+.dept-mosaic {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(2, 200px);
+  grid-template-areas: 'mg mg ap ap ap co co cx' 'mg mg ie cr ad op sa we';
+  gap: 8px;
+  margin: 0; padding: 0; list-style: none;
 }
-@media (max-width: 480px) {
-  .about-depts { padding: 14px 20px 18px; border-radius: 18px; }
-  .about-dept { padding: 10px 0; }
-  .about-dept-name { font-size: 15px; }
+.dept-tile-mg { grid-area: mg; } .dept-tile-ap { grid-area: ap; } .dept-tile-co { grid-area: co; }
+.dept-tile-cx { grid-area: cx; } .dept-tile-ie { grid-area: ie; } .dept-tile-cr { grid-area: cr; }
+.dept-tile-ad { grid-area: ad; } .dept-tile-op { grid-area: op; } .dept-tile-sa { grid-area: sa; }
+.dept-tile-we { grid-area: we; }
+.dept-tile {
+  --tile-bg: #FFFFFF; --tile-fg: var(--ink); --tile-accent: var(--brass-ink);
+  display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
+  min-width: 0; padding: 20px; overflow: hidden;
+  border: 1px solid var(--border-soft); border-radius: 18px;
+  background: var(--tile-bg); color: var(--tile-fg);
+  cursor: default;
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+.dept-tile-mg { --tile-bg: var(--ink); --tile-fg: #FFFFFF; --tile-accent: var(--brass); }
+.dept-tile-ap { --tile-bg: var(--brass); --tile-fg: var(--ink); --tile-accent: var(--ink); }
+.dept-tile-co { --tile-bg: #00307F; --tile-fg: #FFFFFF; --tile-accent: var(--brass); }
+.dept-tile:hover, .dept-tile:focus-visible { box-shadow: 0 12px 28px rgba(0,27,94,0.12); transform: translateY(-2px); }
+.dept-tile:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.dept-tile-name { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: 22px; line-height: 1; letter-spacing: 0.01em; color: var(--tile-fg); }
+.dept-tile-big .dept-tile-name { font-size: 34px; }
+/* one-person tiles are narrow: a little less padding leaves room for the description */
+.dept-mosaic .dept-tile:not(.dept-tile-big) { padding: 16px; }
+.dept-mosaic .dept-tile:not(.dept-tile-big) .dept-tile-name { font-size: 21px; letter-spacing: 0; }
+/* the headcount and the description share one spot at the foot of the tile */
+.dept-tile-foot { display: grid; align-items: end; }
+.dept-tile-foot > p { grid-area: 1 / 1; transition: opacity 200ms ease; }
+.dept-tile-count { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tile-accent); }
+.dept-tile-desc { font-size: 12.5px; line-height: 1.4; color: var(--tile-fg); opacity: 0; }
+.dept-tile:hover .dept-tile-count, .dept-tile:focus .dept-tile-count { opacity: 0; }
+.dept-tile:hover .dept-tile-desc, .dept-tile:focus .dept-tile-desc { opacity: 1; }
+.dept-mosaic-note { margin-top: 20px; font-size: 13px; color: var(--muted); }
+
+@media (max-width: 1100px) {
+  .about-inside-head { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .about-inside-text p { max-width: 560px; }
+}
+/* narrower screens: the same sixteen squares, four across */
+@media (max-width: 1319px) {
+  .dept-mosaic {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(4, 170px);
+    grid-template-areas: 'mg mg co co' 'mg mg ie cr' 'ap ap ap cx' 'ad op sa we';
+  }
+}
+/* phones: every description is shown, so the tiles size to their text */
+@media (max-width: 640px) {
+  .dept-mosaic {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-template-areas: 'mg mg' 'ap ap' 'co co' 'cx ie' 'cr ad' 'op sa' 'we we';
+  }
+  .dept-tile { padding: 16px; border-radius: 14px; gap: 14px; }
+  .dept-tile:hover, .dept-tile:focus-visible { transform: none; }
+  .dept-tile-big .dept-tile-name { font-size: 28px; }
+  .dept-tile-foot { gap: 6px; }
+  .dept-tile-foot > p { grid-area: auto; }
+  .dept-tile-desc, .dept-tile:hover .dept-tile-desc, .dept-tile:focus .dept-tile-desc { opacity: 1; order: -1; }
+  .dept-tile:hover .dept-tile-count, .dept-tile:focus .dept-tile-count { opacity: 1; }
+  .dept-mosaic-note { display: none; }
+}
+@media (max-width: 374px) {
+  .dept-mosaic .dept-tile:not(.dept-tile-big) .dept-tile-name { font-size: 19px; }
 }
 
 /* call to action */

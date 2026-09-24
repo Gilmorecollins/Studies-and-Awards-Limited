@@ -1589,9 +1589,11 @@ function createCursorFollower(options) {
   });
 })();
 
-// About page: the counsellor count in the hero, and the "Inside Studies &
-// Awards" department card, both built from js/team-data.js so they never
-// drift out of sync with the real team.
+// About page: the counsellor count in the hero, and each department's
+// headcount in the "Inside Studies & Awards" mosaic, both from
+// js/team-data.js so the numbers never drift from the real team. (The tile
+// sizes, one square per person, are laid out in styles.css: a department
+// that grows or shrinks needs its grid area changed there too.)
 (function () {
   'use strict';
 
@@ -1601,46 +1603,16 @@ function createCursorFollower(options) {
   var countEl = document.getElementById('about-team-count');
   if (countEl) countEl.textContent = members.length;
 
-  var list = document.getElementById('about-depts');
-  if (!list) return;
-
   var counts = {};
   members.forEach(function (m) {
     counts[m.department] = (counts[m.department] || 0) + 1;
   });
 
-  // the chooser's department order, but with Management leading the card
-  var order = ['Management'].concat((window.CONSULT_DEPARTMENTS || []).filter(function (d) { return d !== 'Management'; }));
-  var depts = Object.keys(counts).sort(function (a, b) {
-    var ia = order.indexOf(a), ib = order.indexOf(b);
-    if (ia === -1) ia = order.length;
-    if (ib === -1) ib = order.length;
-    return ia - ib;
+  Array.prototype.forEach.call(document.querySelectorAll('.dept-tile[data-dept]'), function (tile) {
+    var n = counts[tile.getAttribute('data-dept')];
+    var el = tile.querySelector('.dept-tile-count');
+    if (n && el) el.textContent = n + (n === 1 ? ' person' : ' people');
   });
-
-  function span(cls, text) {
-    var el = document.createElement('span');
-    el.className = cls;
-    if (text != null) el.textContent = text;
-    return el;
-  }
-
-  list.textContent = '';
-  depts.forEach(function (d) {
-    var row = document.createElement('li');
-    row.className = 'about-dept';
-    row.appendChild(span('about-dept-name', d));
-    var dots = span('about-dept-dots');
-    dots.setAttribute('aria-hidden', 'true');
-    row.appendChild(dots);
-    var count = span('about-dept-count', counts[d]);
-    count.appendChild(span('sr-only', counts[d] === 1 ? ' person' : ' people'));
-    row.appendChild(count);
-    list.appendChild(row);
-  });
-
-  var title = document.getElementById('about-depts-title');
-  if (title) title.textContent = depts.length + ' departments · ' + members.length + ' people';
 })();
 
 // Route maps (about and destinations pages): hovering or focusing a country,
