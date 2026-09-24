@@ -76,9 +76,17 @@ function withSeoBlock(html, file) {
   return html.replace('</head>', () => `${block}\n</head>`);
 }
 
-const checkIcon = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8A6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;margin-top:2px;"><path d="M5 12.5l4.5 4.5L19 7"/></svg>`;
 
 const PLACEHOLDER_SLOTS = 3;
+
+// "How we help you get there": the same five steps on every destination page.
+const HELP_STEPS = [
+  'Counselling to shortlist the right course and university',
+  'IELTS/PTE preparation to meet the English requirement',
+  'Application &amp; admissions support through to your offer',
+  'Visa application guidance, step by step',
+  'Discounted student airfare when you&rsquo;re ready to fly',
+];
 
 const countries = [
   {
@@ -97,6 +105,7 @@ const countries = [
     visa: 'Studying in Australia generally requires a student visa, proof of enrolment, evidence of financial capacity, overseas student health cover, and an accepted English test score such as IELTS or PTE.',
     visaChanges: 'visa subclass, fees and financial thresholds',
     visaAuthority: 'the Australian government',
+    gallery: ['Melbourne', 'Brisbane', 'Hobart', 'Perth'],
     partners: [
       { city: 'Sydney', photo: 'assets/destinations/australia/sydney.jpg', fact: 'Home to the iconic Sydney Opera House, a UNESCO World Heritage Site with over one million roof tiles.' },
       { city: 'Melbourne', photo: 'assets/destinations/australia/melbourne.jpg', fact: 'Long ranked among the world\'s most liveable cities, known for its laneway cafés and arts scene.' },
@@ -307,13 +316,30 @@ function page(c) {
 </div>
 ` : '';
   const partnersScript = hasPartnerData ? `<script src="js/partners-${c.slug}.js"></script>\n` : '';
-  const whyItems = c.why.map((w, i) => `        <li class="why-item">
-          <span class="why-num" aria-hidden="true">0${i + 1}</span>
-          <h3>${w[0]}</h3>
-          <p>${w[1]}</p>
-        </li>`).join('\n');
+  const whyItems = c.why.map((w, i) => `          <li class="dest-why-item">
+            <span class="dest-why-num" aria-hidden="true">0${i + 1}</span>
+            <div>
+              <h3>${w[0]}</h3>
+              <p>${w[1]}</p>
+            </div>
+          </li>`).join('\n');
 
-  const areaChips = c.areas.map(a => `      <span class="chip">${a}</span>`).join('\n');
+  const areaChips = c.areas.map(a => `            <li class="dest-area">${a}</li>`).join('\n');
+
+  const helpSteps = HELP_STEPS.map((step, i) => `          <li><span class="dest-help-num" aria-hidden="true">0${i + 1}</span>${step}</li>`).join('\n');
+
+  // Four city photos for the page's editorial spots: three in the "Why" collage,
+  // one beside "How we help". A country may name them in `gallery`; otherwise
+  // they're the second to fifth slideshow cities (the first is already on screen).
+  // They use the smaller copies in <country>/editorial/ (see make-editorial-photos.mjs).
+  const galleryPicks = (() => {
+    const named = (c.gallery ?? []).map(n => c.partners.find(p => p.city === n)).filter(Boolean);
+    const rest = c.partners.slice(1).concat(c.partners.slice(0, 1)).filter(p => !named.includes(p));
+    return named.concat(rest).slice(0, 4);
+  })();
+  const galleryImg = (p, cls) => p
+    ? `<img class="${cls}" src="${p.photo.replace(/\/([^/]+)$/, '/editorial/$1')}" alt="${p.city}" loading="lazy" decoding="async"${p.position ? ` style="object-position:${p.position};"` : ''}>`
+    : '';
 
   const slideCount = c.partners.length > 0 ? c.partners.length : PLACEHOLDER_SLOTS;
 
@@ -346,18 +372,22 @@ function page(c) {
           </div>`;
       return `      <div class="city-panel" aria-hidden="true">
         <div class="city-panel-inner">
-          <div class="city-panel-index">${String(i + 1).padStart(2, '0')} / ${String(slideCount).padStart(2, '0')}</div>
-          <p class="city-panel-name">${p.city}</p>
-          <p class="city-panel-fact">${p.fact}</p>
+          <div class="city-panel-text">
+            <div class="city-panel-index">${String(i + 1).padStart(2, '0')} / ${String(slideCount).padStart(2, '0')}</div>
+            <p class="city-panel-name">${p.city}</p>
+            <p class="city-panel-fact">${p.fact}</p>
+          </div>
 ${info}
         </div>
       </div>`;
     })
     : Array.from({ length: PLACEHOLDER_SLOTS }, (_, i) => `      <div class="city-panel" aria-hidden="true">
         <div class="city-panel-inner">
-          <div class="city-panel-index">${String(i + 1).padStart(2, '0')} / ${String(slideCount).padStart(2, '0')}</div>
-          <p class="city-panel-name">[City]</p>
-          <p class="city-panel-fact">[A short, real fun fact about this city will go here.]</p>
+          <div class="city-panel-text">
+            <div class="city-panel-index">${String(i + 1).padStart(2, '0')} / ${String(slideCount).padStart(2, '0')}</div>
+            <p class="city-panel-name">[City]</p>
+            <p class="city-panel-fact">[A short, real fun fact about this city will go here.]</p>
+          </div>
           <div class="city-panel-info">
             <div class="city-panel-info-label">PARTNER INSTITUTIONS</div>
             <p>[Add a city photo, then list partner institutions here.]</p>
@@ -366,9 +396,13 @@ ${info}
       </div>`)
   ).join('\n');
 
-  const cityDots = Array.from({ length: slideCount }, (_, i) =>
-    `        <button type="button" class="city-dot" aria-label="Slide ${i + 1} of ${slideCount}"><span class="city-dot-fill"></span></button>`
-  ).join('\n');
+  // The filmstrip: one photo thumbnail per city (small copies in <country>/thumbs/,
+  // made by make-editorial-photos.mjs); the active one carries the progress bar.
+  const cityDots = Array.from({ length: slideCount }, (_, i) => {
+    const p = c.partners[i];
+    const thumb = p ? `<img src="${p.photo.replace(/\/([^/]+)$/, '/thumbs/$1')}" alt="" width="320" height="200" loading="lazy" decoding="async"${p.position ? ` style="object-position:${p.position};"` : ''}>` : '<span class="city-dot-blank"></span>';
+    return `        <button type="button" class="city-dot" aria-label="Slide ${i + 1} of ${slideCount}${p ? ': ' + p.city : ''}">${thumb}<span class="city-dot-name">${p ? p.city : '[City]'}</span><span class="city-dot-fill"></span></button>`;
+  }).join('\n');
 
   const cityScroller = `  <section class="city-scroller" id="city-scroller" data-interval="10000" aria-label="${c.name} destination showcase" aria-roledescription="carousel">
 ${cityImages}
@@ -387,7 +421,7 @@ ${cityDots}
   </section>`;
 
   const otherCountries = countries.filter(x => x.slug !== c.slug);
-  const otherPills = otherCountries.map(o => `      <a href="${o.slug}.html" class="pill-code">${o.code} &middot; ${o.name}</a>`).join('\n');
+  const otherPills = otherCountries.map(o => `        <a href="${o.slug}.html" class="dest-pill"><img src="assets/flags/${o.slug}.svg" alt="" width="30" height="20"><span class="dest-pill-code">${o.code}</span><span class="dest-pill-name">${o.name}</span></a>`).join('\n');
 
   return `<!doctype html>
 <html lang="en">
@@ -436,56 +470,57 @@ ${seoBlock({ title: `Study in ${esc(c.name)} — ${SITE_NAME}`, description: c.t
 
 ${cityScroller}
 
-  <section class="hero" style="margin-top:0;" aria-labelledby="hero-heading">
-    <div class="container" style="grid-template-columns:1fr; text-align:center; padding-top:48px; padding-bottom:48px;">
-      <div>
-        <span style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:16px; font-family:'Bebas Neue', sans-serif; font-size:15px; letter-spacing:2.2px; color:#FFB800;"><span style="width:28px; height:2px; background:#FFB800; flex-shrink:0;" aria-hidden="true"></span>STUDY DESTINATION &middot; ${c.code}</span>
-        <h1 id="hero-heading" style="font-size:46px;">Study in ${c.name}</h1>
-        <p class="lead" style="margin:16px auto 30px; max-width:520px;">${c.tagline}</p>
-        <div class="hero-actions" style="justify-content:center;">
-          <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}" class="btn btn-primary">Book Free Consultation</a>
-          <a href="destinations.html" class="btn btn-outline-w">View Other Destinations</a>
+  <section class="dest-intro" aria-labelledby="hero-heading">
+    <div class="container">
+      <span class="hero-kicker"><span class="hero-kicker-rule" aria-hidden="true"></span>STUDY DESTINATION &middot; ${c.code}</span>
+      <h1 id="hero-heading">Study in ${c.name}</h1>
+      <p>${c.tagline}</p>
+      <div class="dest-intro-actions">
+        <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}" class="btn btn-primary">Book Free Consultation</a>
+        <a href="destinations.html" class="btn btn-outline">View Other Destinations</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="dest-why" aria-labelledby="why-heading">
+    <div class="container dest-split">
+      <div class="dest-collage">
+        ${galleryImg(galleryPicks[0], 'dest-collage-a')}
+        ${galleryImg(galleryPicks[1], 'dest-collage-b')}
+        ${galleryImg(galleryPicks[2], 'dest-collage-c')}
+      </div>
+      <div class="dest-why-body">
+        <span class="dest-eyebrow">WHY ${c.name.toUpperCase()}</span>
+        <h2 id="why-heading">A destination built for ambitious students</h2>
+        <ol class="dest-why-list">
+${whyItems}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="dest-help" aria-labelledby="help-heading">
+    <div class="container dest-split dest-split-rev">
+      <div class="dest-help-body">
+        <span class="dest-eyebrow">HOW WE HELP YOU GET THERE</span>
+        <h2 id="help-heading">From your first visit to your first lecture</h2>
+        <ol class="dest-help-list">
+${helpSteps}
+        </ol>
+        <div class="dest-areas">
+          <h3 class="dest-eyebrow" id="areas-heading">POPULAR STUDY AREAS</h3>
+          <ul class="dest-areas-list" aria-labelledby="areas-heading">
+${areaChips}
+          </ul>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="section" style="padding-bottom:20px;" aria-labelledby="why-heading">
-    <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">WHY ${c.name.toUpperCase()}</span>
-        <h2 id="why-heading">A destination built for ambitious students</h2>
-      </div>
-      <ol class="why-list">
-${whyItems}
-      </ol>
-    </div>
-  </section>
-
-  <section class="container section-tight" aria-labelledby="areas-heading">
-    <h2 id="areas-heading" style="font-size:22px; margin-bottom:20px;">Popular study areas</h2>
-    <div style="display:flex; flex-wrap:wrap; gap:12px;">
-${areaChips}
-    </div>
-  </section>
-
-  <section class="section-paper" aria-labelledby="visa-heading">
-    <div class="container section-tight grid-2" style="gap:56px;">
-      <div>
-        <div class="icon-circle" style="background:#FFFFFF; margin-bottom:20px;" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="1.5"/><circle cx="12" cy="9.5" r="2.2"/><path d="M8.5 16c.5-2 2-3 3.5-3s3 1 3.5 3"/></svg></div>
-        <h2 id="visa-heading" style="font-size:22px; margin-bottom:14px;">Visa &amp; requirements</h2>
-        <p style="font-size:15px; color:#333333; line-height:1.7; margin-bottom:16px;">${c.visa}</p>
-        <p class="visa-note">Current ${c.visaChanges} are set by ${c.visaAuthority} and change periodically &mdash; confirm the exact requirements with a Studies &amp; Awards counsellor. <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}">Talk to a counsellor</a></p>
-      </div>
-      <div>
-        <div class="icon-circle" style="background:#FFFFFF; margin-bottom:20px;" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#001B5E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15.5H6l-2 2V8.5C4 7.12 5.12 6 6.5 6h7C14.88 6 16 7.12 16 8.5v3c0 1.38-1.12 2.5-2.5 2.5H8Z"/><path d="M14 9h3.5c1.38 0 2.5 1.12 2.5 2.5V18l-2-2h-4"/></svg></div>
-        <h2 style="font-size:22px; margin-bottom:14px;">How we help you get there</h2>
-        <div class="bullet-list" style="gap:12px;">
-          <div style="display:flex; align-items:flex-start; gap:14px;">${checkIcon}<span style="font-size:15px; color:#333333; line-height:1.6;">Counselling to shortlist the right course and university</span></div>
-          <div style="display:flex; align-items:flex-start; gap:14px;">${checkIcon}<span style="font-size:15px; color:#333333; line-height:1.6;">IELTS/PTE preparation to meet the English requirement</span></div>
-          <div style="display:flex; align-items:flex-start; gap:14px;">${checkIcon}<span style="font-size:15px; color:#333333; line-height:1.6;">Application &amp; admissions support through to your offer</span></div>
-          <div style="display:flex; align-items:flex-start; gap:14px;">${checkIcon}<span style="font-size:15px; color:#333333; line-height:1.6;">Visa application guidance, step by step</span></div>
-          <div style="display:flex; align-items:flex-start; gap:14px;">${checkIcon}<span style="font-size:15px; color:#333333; line-height:1.6;">Discounted student airfare when you're ready to fly</span></div>
+      <div class="dest-visa-wrap">
+        ${galleryImg(galleryPicks[3], 'dest-visa-photo')}
+        <div class="dest-visa">
+          <h3 class="dest-visa-title" id="visa-heading">Visa &amp; requirements</h3>
+          <p>${c.visa}</p>
+          <p class="dest-visa-small">Current ${c.visaChanges} are set by ${c.visaAuthority} and change from time to time.</p>
+          <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}">Confirm the current rules with a counsellor</a>
         </div>
       </div>
     </div>
@@ -493,21 +528,21 @@ ${areaChips}
 
   <section class="container section-tight next-dest-section" id="next-destination" data-current="${c.slug}" aria-label="Next destination"></section>
 
-  <section class="container section-tight" aria-label="Other destinations">
-    <h2 style="font-size:20px; margin-bottom:20px;">Other destinations</h2>
-    <div style="display:flex; flex-wrap:wrap; gap:12px;">
+  <section class="container dest-others" aria-labelledby="others-heading">
+    <h2 id="others-heading">Other destinations</h2>
+    <div class="dest-pills">
 ${otherPills}
     </div>
   </section>
 
-  <section class="cta-band on-bg" id="contact" aria-labelledby="cta-heading">
+  <section class="dest-cta" id="contact" aria-labelledby="cta-heading">
     <div class="container">
       <div>
         <h2 id="cta-heading">Ready to study in ${c.name}?</h2>
         <p>Book a free consultation, or explore our other study destinations.</p>
       </div>
-      <div class="cta-actions">
-        <a href="tel:+254721796500" class="btn btn-outline">+254 721 796500</a>
+      <div class="dest-cta-actions">
+        <a href="tel:+254721796500" class="dest-cta-phone">+254 721 796500</a>
         <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}" class="btn btn-primary">Book a free consultation</a>
       </div>
     </div>
@@ -683,8 +718,12 @@ if (!isMain) {
     samples = (sandbox.window.TESTIMONIALS || []).filter(t => t && t.sample).length;
   } catch { /* a broken data file is reported above */ }
   const samplesBlock = samples > 0 && SITE_URL !== '';
-  if (drifted.length || broken.length || samplesBlock) {
+  // The destination pages' collage and filmstrip photos are small copies made by make-editorial-photos.mjs.
+  const missingPhotos = [...new Set(outputs.flatMap(([, content]) => content.match(/assets\/destinations\/[\w-]+\/(?:editorial|thumbs)\/[\w-]+\.jpg/g) || []))]
+    .filter(rel => !existsSync(join(siteDir, rel)));
+  if (drifted.length || broken.length || samplesBlock || missingPhotos.length) {
     if (drifted.length) console.error('Out of date (hand-edited, or the generator is behind):\n  ' + drifted.map(([rel]) => rel).join('\n  '));
+    if (missingPhotos.length) console.error('Missing small city photos (run node tools/make-editorial-photos.mjs):\n  ' + missingPhotos.join('\n  '));
     if (broken.length) console.error('Script syntax errors (the page feature they power will not work):\n  ' + broken.join('\n  '));
     if (samplesBlock) console.error(`${samples} sample testimonial${samples === 1 ? '' : 's'} still in js/testimonials-data.js — replace with real quotes before deploying.`);
     process.exit(1);
