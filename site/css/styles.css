@@ -520,7 +520,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 .route-card:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(0,27,94,0.16); }
-.route-card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+/* a white inner ring shows on the navy hero, the navy outer ring on white */
+.route-card:focus-visible { outline: none; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 5px var(--ink); }
 .route-card-tile {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
   width: 76px; height: 76px; background: #F5F6F8; border-radius: 12px;
@@ -769,6 +770,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .how-actions { display: flex; align-items: center; gap: 18px 24px; flex-wrap: wrap; margin-top: 8px; }
 .how-phone { font-size: 15px; font-weight: 600; color: #FFFFFF; text-decoration: none; }
 .how-phone:hover { color: var(--brass); }
+.how-actions a:focus-visible, .team-cta-actions a:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
 
 .how-card { background: #FFFFFF; border-radius: 20px; box-shadow: 0 30px 60px rgba(0,0,0,0.3); transform: rotate(-1deg); overflow: hidden; }
 .how-card-head {
@@ -1284,7 +1286,17 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 
 /* left column */
-.team-counter { font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; color: var(--muted); margin-bottom: clamp(60px, 14vh, 160px); }
+.team-counter { font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; color: var(--muted); margin-bottom: clamp(48px, 11vh, 110px); }
+.team-dep {
+  display: inline-block; margin-bottom: 18px; padding: 3px 9px; min-height: 1.4em;
+  background: #FFF4D1; border-radius: 5px;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brass-ink);
+  transition: opacity 280ms ease, transform 280ms ease;
+}
+.team-dep.is-swapping, .team-ask-text.is-swapping { opacity: 0; transform: translateY(6px); }
+.team-ask { margin-top: 28px; padding-top: 16px; border-top: 1px dashed rgba(0,27,94,0.18); display: flex; flex-direction: column; gap: 4px; }
+.team-ask-label { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.team-ask-text { font-size: 14.5px; line-height: 1.55; color: var(--ink); min-height: 3.1em; transition: opacity 280ms ease, transform 280ms ease; }
 .team-bio {
   font-size: 14px;
   line-height: 1.75;
@@ -1743,6 +1755,16 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 
 
+/* five footer columns get too narrow here (the email breaks mid-word):
+   brand on its own row, then four */
+@media (max-width: 1360px) {
+  .footer-grid { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1.15fr); gap: 32px; }
+  .footer-grid > :first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 960px) {
+  .footer-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+
 @media (max-width: 900px) {
   .grid-3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
 
@@ -1791,6 +1813,67 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .team-join-btn { width: 100%; }
   .team-modal-head { flex-direction: column-reverse; }
   .team-modal-photo { width: 96px; height: 96px; }
+}
+
+/* ---------- team page: "Who you'll meet along the way" ----------
+   The five journey stops, each listing the people in that department.
+   The stop for the person showing in the slider above turns navy. */
+.team-stops { padding: 0 0 clamp(56px, 7vw, 80px); }
+.team-stops-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px 24px; flex-wrap: wrap; margin-bottom: 20px; }
+.team-stops-eyebrow { display: block; margin-bottom: 8px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
+.team-stops-head h2 { margin: 0; font-family: 'Montserrat', sans-serif; font-size: 30px; font-weight: 700; line-height: 1.2; letter-spacing: 0; color: var(--ink); }
+.team-stops-hint { font-size: 14px; color: var(--muted); }
+.team-stops-list { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.team-stops-list > li { display: flex; }
+.team-stop {
+  flex: 1; min-height: 190px; padding: 20px; box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 10px; text-align: left;
+  background: #FFFFFF; border: 1px solid rgba(0,27,94,0.12); border-radius: 14px;
+  font: inherit; color: var(--ink); cursor: pointer;
+  transition: background-color 250ms ease, border-color 250ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+@media (hover: hover) {
+  .team-stop:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(0,27,94,0.10); }
+}
+.team-stop:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.team-stop-num { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
+.team-stop-title { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 28px; line-height: 1; color: var(--ink); }
+.team-stop-who { flex-grow: 1; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.team-stop-faces { display: flex; }
+.team-stop-faces img { width: 36px; height: 36px; margin-right: -9px; border-radius: 50%; border: 2px solid #FFFFFF; object-fit: cover; object-position: top; background: #F0F1F3; }
+.team-stop.is-on { background: var(--ink); border-color: var(--ink); }
+.team-stop.is-on .team-stop-num { color: var(--brass); }
+.team-stop.is-on .team-stop-title { color: #FFFFFF; }
+.team-stop.is-on .team-stop-who { color: var(--on-dark-muted); }
+.team-stop.is-on .team-stop-faces img { border-color: var(--ink); }
+
+/* navy call-to-action panel at the foot of the team page */
+.team-cta-wrap { padding-bottom: clamp(64px, 7vw, 96px); }
+.team-cta {
+  padding: 36px 44px; background: var(--ink); border-radius: 20px; color: #FFFFFF;
+  display: flex; justify-content: space-between; align-items: center; gap: 24px 32px; flex-wrap: wrap;
+}
+.team-cta h2 { margin: 0 0 6px; font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 700; line-height: 1.25; letter-spacing: 0; color: #FFFFFF; }
+.team-cta p { font-size: 15px; color: var(--on-dark-muted); }
+.team-cta-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.team-cta-phone {
+  display: inline-flex; align-items: center; padding: 13px 22px; border-radius: 999px;
+  border: 1.5px solid rgba(255,255,255,0.35); color: #FFFFFF; font-size: 15px; font-weight: 600; text-decoration: none;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+.team-cta-phone:hover { border-color: var(--brass); color: var(--brass); }
+
+@media (max-width: 1100px) {
+  .team-stops-list { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(210px, 1fr); overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 2px 14px; margin: -4px -2px 0; }
+  .team-stops-list > li { scroll-snap-align: start; }
+}
+@media (max-width: 768px) {
+  .team-stops-head h2 { font-size: 24px; }
+  .team-stops-list { grid-auto-columns: 72%; }
+  .team-cta { padding: 28px 22px; border-radius: 16px; }
+  .team-cta h2 { font-size: 22px; }
+  .team-cta-actions { width: 100%; flex-direction: column; align-items: stretch; }
+  .team-cta-actions > a { justify-content: center; }
 }
 
 /* ---------- next destination (boarding-pass suggestion) ----------

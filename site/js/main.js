@@ -258,6 +258,9 @@
   var nextBtn = document.getElementById('team-next');
   var liveEl = document.getElementById('team-live');
   var viewMoreBtn = document.getElementById('team-view-more');
+  var depEl = document.getElementById('team-dep');
+  var askEl = document.getElementById('team-ask');
+  var stops = [].slice.call(document.querySelectorAll('.team-stop'));
 
   var count = members.length;
   var activeIndex = 0;
@@ -355,13 +358,47 @@
     progressEl.style.transform = 'translateX(' + (index * 100) + '%)';
 
     counterEl.textContent = pad(index + 1) + ' / ' + pad(count);
-    crossfadeText([nameEl, roleEl, bioEl], [member.name, member.role, member.shortBio], silent);
+    crossfadeText([nameEl, roleEl, bioEl, depEl, askEl],
+      [member.name, member.role, member.shortBio, member.department || '', member.helpsWith || ''], silent);
+    stops.forEach(function (stop) {
+      var on = stop.getAttribute('data-dep') === member.department;
+      stop.classList.toggle('is-on', on);
+      stop.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
 
     liveEl.textContent = member.name + ', ' + member.role;
   }
 
+  // Clicks that land mid-slide are queued rather than dropped, so pressing
+  // Next three times quickly moves three people (up to MAX_QUEUED extra, so a
+  // burst of clicks can't leave the strip sliding on for seconds).
+  var MAX_QUEUED = 3;
+  var queuedSteps = 0;
+  var queuedIndex = -1;
+
+  function finishSlide() {
+    animating = false;
+    if (pos >= count) {
+      pos -= count;
+      setPosition(pos, false);
+    }
+    if (queuedIndex >= 0) {
+      var target = queuedIndex;
+      queuedIndex = -1;
+      goTo(target);
+    } else if (queuedSteps) {
+      var step = queuedSteps > 0 ? 1 : -1;
+      queuedSteps -= step;
+      move(step);
+    }
+  }
+
   function move(step) {
-    if (animating) return;
+    if (animating) {
+      queuedIndex = -1;
+      queuedSteps = Math.max(-MAX_QUEUED, Math.min(MAX_QUEUED, queuedSteps + step));
+      return;
+    }
     animating = true;
     // Going back from the first person: jump to their twin in the second copy,
     // so the strip can slide back on to the last person.
@@ -373,17 +410,57 @@
     activeIndex = pos % count;
     setPosition(pos, true);
     renderInfo(activeIndex, false);
-    window.setTimeout(function () {
-      animating = false;
-      if (pos >= count) {
-        pos -= count;
-        setPosition(pos, false);
-      }
-    }, ANIM_MS);
+    window.setTimeout(finishSlide, ANIM_MS);
   }
 
   function next() { move(1); }
   function prev() { move(-1); }
+
+  // Slides forward (wrapping round the end) until `index` is the active card.
+  function goTo(index) {
+    if (animating) {
+      queuedSteps = 0;
+      queuedIndex = index;
+      return;
+    }
+    if (index === activeIndex) return;
+    animating = true;
+    pos = index > pos ? index : index + count;
+    activeIndex = index;
+    setPosition(pos, true);
+    renderInfo(activeIndex, false);
+    window.setTimeout(finishSlide, ANIM_MS);
+  }
+
+  // "Who you'll meet along the way": each stop lists the people in its
+  // department; clicking one slides the team strip to the first of them.
+  stops.forEach(function (stop) {
+    var dep = stop.getAttribute('data-dep');
+    var who = members.filter(function (m) { return m.department === dep; });
+    if (!who.length) { stop.parentNode.hidden = true; return; }
+    stop.querySelector('.team-stop-who').textContent = who.map(function (m) { return m.name; }).join(', ');
+    var faces = stop.querySelector('.team-stop-faces');
+    who.slice(0, 3).forEach(function (m) {
+      var img = document.createElement('img');
+      img.src = m.thumb || m.photo;
+      img.alt = '';
+      img.width = 36; img.height = 36;
+      img.loading = 'lazy';
+      faces.appendChild(img);
+    });
+    stop.addEventListener('click', function () {
+      goTo(members.indexOf(who[0]));
+      // If the strip has scrolled out of view above, bring it back so the
+      // change can be seen (clear of the sticky header).
+      var header = document.querySelector('.site-header');
+      var offset = header ? header.getBoundingClientRect().height + 16 : 16;
+      var top = section.querySelector('.team-slider-head').getBoundingClientRect().top;
+      if (top < offset) {
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: window.pageYOffset + top - offset, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    });
+  });
 
   nextBtn.addEventListener('click', next);
   prevBtn.addEventListener('click', prev);

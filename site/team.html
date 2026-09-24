@@ -69,8 +69,13 @@
 
       <div class="team-slider-left">
         <div class="team-counter" id="team-counter" aria-hidden="true"></div>
+        <span class="team-dep" id="team-dep"></span>
         <p class="team-bio" id="team-bio"></p>
         <button type="button" class="team-view-more" id="team-view-more">View more</button>
+        <div class="team-ask">
+          <span class="team-ask-label">Ask me about</span>
+          <p class="team-ask-text" id="team-ask"></p>
+        </div>
       </div>
 
       <div class="team-slider-right">
@@ -102,6 +107,60 @@
     <div class="sr-only" aria-live="polite" id="team-live"></div>
   </section>
 
+  <section class="team-stops" aria-labelledby="team-stops-heading">
+    <div class="container">
+      <div class="team-stops-head">
+        <div>
+          <span class="team-stops-eyebrow">YOUR JOURNEY, STEP BY STEP</span>
+          <h2 id="team-stops-heading">Who you'll meet along the way</h2>
+        </div>
+        <p class="team-stops-hint">Click a stop to meet that team.</p>
+      </div>
+      <ol class="team-stops-list">
+        <li>
+          <button type="button" class="team-stop" data-dep="Customer Experience" aria-pressed="false">
+            <span class="team-stop-num">Stop 01</span>
+            <span class="team-stop-title">Visit or call us</span>
+            <span class="team-stop-who"></span>
+            <span class="team-stop-faces" aria-hidden="true"></span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="team-stop" data-dep="IELTS &amp; PTE" aria-pressed="false">
+            <span class="team-stop-num">Stop 02</span>
+            <span class="team-stop-title">Prepare</span>
+            <span class="team-stop-who"></span>
+            <span class="team-stop-faces" aria-hidden="true"></span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="team-stop" data-dep="Applications" aria-pressed="false">
+            <span class="team-stop-num">Stop 03</span>
+            <span class="team-stop-title">Apply</span>
+            <span class="team-stop-who"></span>
+            <span class="team-stop-faces" aria-hidden="true"></span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="team-stop" data-dep="Compliance &amp; Verification" aria-pressed="false">
+            <span class="team-stop-num">Stop 04</span>
+            <span class="team-stop-title">Get your visa</span>
+            <span class="team-stop-who"></span>
+            <span class="team-stop-faces" aria-hidden="true"></span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="team-stop" data-dep="Client Relations" aria-pressed="false">
+            <span class="team-stop-num">Stop 05</span>
+            <span class="team-stop-title">Travel</span>
+            <span class="team-stop-who"></span>
+            <span class="team-stop-faces" aria-hidden="true"></span>
+          </button>
+        </li>
+      </ol>
+    </div>
+  </section>
+
   <div class="team-modal-overlay" id="team-modal-overlay" hidden>
     <div class="team-modal" role="dialog" aria-modal="true" aria-labelledby="team-modal-name" id="team-modal" tabindex="-1">
       <button type="button" class="team-modal-close" id="team-modal-close" aria-label="Close">&times;</button>
@@ -117,15 +176,17 @@
     </div>
   </div>
 
-  <section class="cta-band on-bg" id="contact" aria-labelledby="cta-heading">
+  <section class="team-cta-wrap" id="contact" aria-labelledby="cta-heading">
     <div class="container">
-      <div>
-        <h2 id="cta-heading">Ready to start your journey abroad?</h2>
-        <p>Book a free consultation with our counsellors today.</p>
-      </div>
-      <div class="cta-actions">
-        <a href="tel:+254721796500" class="btn btn-outline">+254 721 796500</a>
-        <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary">Book a free consultation</a>
+      <div class="team-cta">
+        <div>
+          <h2 id="cta-heading">Ready to start your journey abroad?</h2>
+          <p>Book a free consultation with our counsellors today.</p>
+        </div>
+        <div class="team-cta-actions">
+          <a href="tel:+254721796500" class="team-cta-phone">+254 721 796500</a>
+          <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary">Book a free consultation</a>
+        </div>
       </div>
     </div>
   </section>
