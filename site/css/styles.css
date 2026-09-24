@@ -471,7 +471,13 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 /* ---------- destinations index: the route map ----------
    Navy departures board with the routes out of Eldoret drawn on a dotted
    world map; the destination cards sit across its bottom edge. */
-.route-hero { background: var(--ink); color: #FFFFFF; padding: 80px 0 128px; overflow: hidden; }
+.route-hero {
+  --route-fade: 340px;
+  color: #FFFFFF; padding: 80px 0 300px; overflow: hidden;
+  /* navy eases into the page white behind the cards instead of stopping in
+     a hard line; the band runs on under the cards to give the fade room */
+  background: linear-gradient(to bottom, var(--ink) calc(100% - var(--route-fade)), #072163 calc(100% - var(--route-fade) * 0.9), #1B336F calc(100% - var(--route-fade) * 0.8), #374C81 calc(100% - var(--route-fade) * 0.7), #5A6B97 calc(100% - var(--route-fade) * 0.6), #808DAE calc(100% - var(--route-fade) * 0.5), #A5AFC6 calc(100% - var(--route-fade) * 0.4), #C8CEDC calc(100% - var(--route-fade) * 0.3), #E4E7EE calc(100% - var(--route-fade) * 0.2), #F8F9FA calc(100% - var(--route-fade) * 0.1), #FFFFFF 100%);
+}
 .route-hero-inner {
   max-width: 1200px; margin: 0 auto; padding: 0 clamp(24px, 4.5vw, 72px); box-sizing: content-box;
   display: grid; grid-template-columns: minmax(0, 440fr) minmax(0, 720fr); gap: 40px; align-items: start;
@@ -501,7 +507,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 
 .route-cards-wrap {
   position: relative; z-index: 1;
-  max-width: 1200px; margin: -110px auto 0; padding: 0 clamp(24px, 4.5vw, 72px) 88px; box-sizing: content-box;
+  max-width: 1200px; margin: -282px auto 0; padding: 0 clamp(24px, 4.5vw, 72px) 88px; box-sizing: content-box;
 }
 .route-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 .route-cards > li { display: flex; }
@@ -550,10 +556,10 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .route-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 900px) {
-  .route-hero { padding: 48px 0 96px; }
+  .route-hero { --route-fade: 240px; padding: 48px 0 236px; }
   .route-hero-inner { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .route-hero-copy { padding-top: 0; max-width: 560px; }
-  .route-cards-wrap { margin-top: -64px; }
+  .route-cards-wrap { margin-top: -204px; }
 }
 @media (max-width: 860px) {
   .route-cards { grid-template-columns: minmax(0, 1fr); }
