@@ -1627,12 +1627,23 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   position: absolute;
   left: 0; right: 0; top: calc(var(--city-top) + clamp(40px, 8vh, 96px));
   z-index: 2;
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 650ms ease, transform 650ms ease;
   pointer-events: none;
 }
-.city-panel.is-active { opacity: 1; transform: none; pointer-events: auto; }
+.city-panel.is-active { z-index: 3; pointer-events: auto; }
+/* The text and the partner card fade in on their own, not via the panel:
+   a fading (semi-transparent) panel would cut the card's frosted-glass blur
+   off from the photo until the fade finished, so it would pop in late. */
+.city-panel-text,
+.city-panel-info {
+  opacity: 0;
+  transform: translateY(24px);
+  /* the outgoing city clears quickly... */
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+/* ...then the incoming one rises in, so the two never show on top of each other */
+.city-panel.is-active .city-panel-text,
+.city-panel.is-active .city-panel-info { opacity: 1; transform: none; transition: opacity 650ms ease 220ms, transform 650ms ease 220ms; }
+.city-panel.is-active .city-panel-info { transition-delay: 280ms; }
 .city-panel-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 32px; padding: 0 var(--city-gutter); }
 .city-panel-text { display: flex; flex-direction: column; gap: 16px; width: min(560px, 58%); text-shadow: 0 1px 2px rgba(0,10,40,0.55), 0 0 18px rgba(0,10,40,0.45); }
 .city-panel-index {
