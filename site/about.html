@@ -52,72 +52,141 @@
 
 <main id="main">
 
-  <section class="page-hero" aria-labelledby="page-heading">
-    <svg class="page-hero-deco" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <circle cx="1220" cy="40" r="240" fill="#DCE6F7" opacity="0.6"/>
-      <circle cx="140" cy="290" r="160" fill="#DCE6F7" opacity="0.5"/>
-    </svg>
+  <section class="about-hero" aria-labelledby="page-heading">
     <div class="container">
-      <span class="hero-kicker"><span class="hero-kicker-rule" aria-hidden="true"></span>ABOUT US</span>
-      <h1 id="page-heading">Built in Eldoret, working across six countries.</h1>
-      <p>Studies and Awards Limited is an education consultancy connecting Kenyan students to trusted university partners abroad, from application to arrival.</p>
-      <div class="ticket-facts">
-        <div class="ticket-fact">
-          <span class="ticket-fact-value">ELDORET</span>
-          <span class="ticket-fact-label">Kenya</span>
+      <div class="about-col">
+        <span class="hero-kicker"><span class="hero-kicker-rule" aria-hidden="true"></span>ABOUT US</span>
+        <h1 id="page-heading">Built in Eldoret, working across six countries.</h1>
+        <p class="about-hero-lead">Studies and Awards Limited is an education consultancy connecting Kenyan students to trusted university partners abroad, from application to arrival.</p>
+        <ul class="about-facts" role="list">
+          <li><strong>ELDORET</strong> Kenya</li>
+          <li><strong>6</strong> Destination countries</li>
+          <li><strong id="about-team-count">16</strong> Counsellors on the team</li>
+          <li><strong>ODPC</strong> Certified data controller</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-routes" aria-labelledby="routes-heading" data-about-routes>
+    <div class="container">
+      <div class="about-col about-routes-inner">
+        <div class="about-routes-list">
+          <h2 id="routes-heading" class="about-routes-kicker">From Eldoret to</h2>
+          <ul role="list">
+          <li><button type="button" class="about-route" data-route="SYD" aria-pressed="false"><span class="about-route-code">SYD</span>Australia</button></li>
+          <li><button type="button" class="about-route" data-route="LHR" aria-pressed="false"><span class="about-route-code">LHR</span>United Kingdom</button></li>
+          <li><button type="button" class="about-route" data-route="FRA" aria-pressed="false"><span class="about-route-code">FRA</span>Germany</button></li>
+          <li><button type="button" class="about-route" data-route="YYZ" aria-pressed="false"><span class="about-route-code">YYZ</span>Canada</button></li>
+          <li><button type="button" class="about-route" data-route="DUB" aria-pressed="false"><span class="about-route-code">DUB</span>Ireland</button></li>
+          <li><button type="button" class="about-route" data-route="AKL" aria-pressed="false"><span class="about-route-code">AKL</span>New Zealand</button></li>
+          </ul>
+          <p class="about-routes-hint"><span class="about-hint-hover">Hover over a country to see its route</span><span class="about-hint-tap">Tap a country to see its route</span></p>
         </div>
-        <div class="ticket-fact">
-          <span class="ticket-fact-value">6</span>
-          <span class="ticket-fact-label">Destination countries</span>
-        </div>
-        <div class="ticket-fact">
-          <span class="ticket-fact-value" id="about-team-count"></span>
-          <span class="ticket-fact-label">Counsellors on the team</span>
-        </div>
-        <div class="ticket-fact">
-          <span class="ticket-fact-value">ODPC</span>
-          <span class="ticket-fact-label">Certified data controller</span>
+        <div class="about-routes-map">
+          <img src="assets/about/world-dots.svg" width="720" height="432" alt="World map showing routes from Eldoret, Kenya to Australia, the United Kingdom, Germany, Canada, Ireland and New Zealand">
+          <svg class="about-routes-lines" viewBox="0 0 720 432" aria-hidden="true" focusable="false">
+          <g class="about-line" data-route="SYD"><path d="M419.8,242.4 Q552.7,221.5 640,323.9"/><circle class="about-line-halo" cx="640" cy="323.9" r="7"/><circle class="about-line-end" cx="640" cy="323.9" r="3.6"/></g>
+          <g class="about-line" data-route="LHR"><path d="M419.8,242.4 Q417.2,161.6 346.9,121.6"/><circle class="about-line-halo" cx="346.9" cy="121.6" r="7"/><circle class="about-line-end" cx="346.9" cy="121.6" r="3.6"/></g>
+          <g class="about-line" data-route="FRA"><path d="M419.8,242.4 Q424.4,167.8 363.1,124.9"/><circle class="about-line-halo" cx="363.1" cy="124.9" r="7"/><circle class="about-line-end" cx="363.1" cy="124.9" r="3.6"/></g>
+          <g class="about-line" data-route="YYZ"><path d="M419.8,242.4 Q338.7,129.5 200,139.6"/><circle class="about-line-halo" cx="200" cy="139.6" r="7"/><circle class="about-line-end" cx="200" cy="139.6" r="3.6"/></g>
+          <g class="about-line" data-route="DUB"><path d="M419.8,242.4 Q413.3,156.5 336.7,117.2"/><circle class="about-line-halo" cx="336.7" cy="117.2" r="7"/><circle class="about-line-end" cx="336.7" cy="117.2" r="3.6"/></g>
+          <g class="about-line" data-route="AKL"><path d="M419.8,242.4 Q575.7,213.4 681.8,331.2"/><circle class="about-line-halo" cx="681.8" cy="331.2" r="7"/><circle class="about-line-end" cx="681.8" cy="331.2" r="3.6"/></g>
+            <circle cx="419.8" cy="242.4" r="20" class="about-origin about-origin-1"/>
+            <circle cx="419.8" cy="242.4" r="11" class="about-origin about-origin-2"/>
+            <circle cx="419.8" cy="242.4" r="5.5" class="about-origin about-origin-3"/>
+          </svg>
+        <button type="button" class="about-pin about-pin-below" data-route="SYD" aria-pressed="false" style="left: 88.889%; top: 74.977%;"><span class="sr-only">Route to </span>SYD<span class="sr-only"> Australia</span></button>
+        <button type="button" class="about-pin about-pin-above-far" data-route="LHR" aria-pressed="false" style="left: 48.181%; top: 28.148%;"><span class="sr-only">Route to </span>LHR<span class="sr-only"> United Kingdom</span></button>
+        <button type="button" class="about-pin about-pin-right" data-route="FRA" aria-pressed="false" style="left: 50.431%; top: 28.912%;"><span class="sr-only">Route to </span>FRA<span class="sr-only"> Germany</span></button>
+        <button type="button" class="about-pin about-pin-above" data-route="YYZ" aria-pressed="false" style="left: 27.778%; top: 32.315%;"><span class="sr-only">Route to </span>YYZ<span class="sr-only"> Canada</span></button>
+        <button type="button" class="about-pin about-pin-left" data-route="DUB" aria-pressed="false" style="left: 46.764%; top: 27.130%;"><span class="sr-only">Route to </span>DUB<span class="sr-only"> Ireland</span></button>
+        <button type="button" class="about-pin about-pin-right" data-route="AKL" aria-pressed="false" style="left: 94.694%; top: 76.667%;"><span class="sr-only">Route to </span>AKL<span class="sr-only"> New Zealand</span></button>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="promise-heading">
+  <section class="about-statement" aria-labelledby="promise-heading">
     <h2 id="promise-heading" class="sr-only">Our mission and vision</h2>
-    <div class="container about-promise">
-      <div class="about-promise-main">
-        <span class="eyebrow" style="color:var(--brass-ink);">OUR MISSION</span>
-        <p class="about-mission-quote">&ldquo;To facilitate access to quality education abroad for Kenyan students, ensuring affordability, transparency, and personalised support throughout their academic journey.&rdquo;</p>
-      </div>
-      <div class="about-promise-side">
-        <span class="eyebrow" style="color:var(--brass-ink);">OUR VISION</span>
-        <p>We envision a future where every Kenyan student has the opportunity to pursue international education, supported by expert guidance and tailored solutions that enable them to thrive academically and professionally on a global scale.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-paper" aria-labelledby="roster-heading">
     <div class="container">
-      <div class="section-head">
-        <span class="eyebrow" style="color:var(--brass-ink);">INSIDE STUDIES &amp; AWARDS</span>
-        <h2 id="roster-heading">One office. Every department you'll need.</h2>
-        <p>From IELTS training to visa compliance, it's all handled in the same Eldoret office. Your file doesn't get handed between agencies.</p>
+      <div class="about-col">
+        <div class="about-statement-row about-mission">
+          <h3 class="about-label">OUR MISSION</h3>
+          <p>To facilitate access to quality education abroad for Kenyan students, ensuring affordability, transparency, and personalised support throughout their academic journey.</p>
+        </div>
+        <div class="about-statement-row about-vision">
+          <h3 class="about-label">OUR VISION</h3>
+          <p>We envision a future where every Kenyan student has the opportunity to pursue international education, supported by expert guidance and tailored solutions that enable them to thrive academically and professionally on a global scale.</p>
+        </div>
       </div>
-      <p class="roster" id="about-roster" aria-label="Our departments"></p>
-      <p style="text-align:center; margin-top:44px;">
-        <a href="team.html" class="board-link" style="justify-content:center;">Meet the whole team <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></svg></a>
-      </p>
     </div>
   </section>
 
-  <section class="cta-band on-bg" id="contact" aria-labelledby="cta-heading">
+  <section class="about-values" aria-labelledby="values-heading">
+    <div class="container">
+      <div class="about-col">
+        <div class="about-values-head">
+          <h2 id="values-heading">What we stand for</h2>
+          <span class="about-label" aria-hidden="true">OUR VALUES</span>
+        </div>
+        <ul class="about-values-grid" role="list">
+        <li class="about-value">
+          <span class="about-value-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7a6 3 0 1 0 12 0a6 3 0 1 0-12 0 M8 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7 M4 12c0 1.7 2.7 3 6 3 M4 12v5c0 1.7 2.7 3 6 3"/></svg></span>
+          <h3>Access &amp; Affordability</h3>
+          <p>Affordable options so cost does not stand in the way of education.</p>
+        </li>
+        <li class="about-value">
+          <span class="about-value-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8 M15 7h6v6"/></svg></span>
+          <h3>Continuous Improvement</h3>
+          <p>Keeping up with new trends, tools and best practice in international education.</p>
+        </li>
+        <li class="about-value">
+          <span class="about-value-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z M9 12l2 2 4-4"/></svg></span>
+          <h3>Fraud-Free Application &amp; Verification</h3>
+          <p>Rigorous checks that protect students and partners alike.</p>
+        </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-inside" aria-labelledby="roster-heading">
+    <div class="container">
+      <div class="about-col about-inside-grid">
+        <div class="about-inside-text">
+          <span class="about-label">INSIDE STUDIES &amp; AWARDS</span>
+          <h2 id="roster-heading">One office. Every department you'll need.</h2>
+          <p>From IELTS training to visa compliance, it's all handled in the same Eldoret office. Your file doesn't get handed between agencies.</p>
+          <a href="team.html" class="about-inside-link">Meet the whole team <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="about-depts">
+          <h3 class="about-depts-title" id="about-depts-title">10 departments · 16 people</h3>
+          <ul class="about-depts-list" id="about-depts" role="list" aria-labelledby="about-depts-title">
+          <li class="about-dept"><span class="about-dept-name">Management</span><span class="about-dept-dots" aria-hidden="true"></span><span class="about-dept-count">4<span class="sr-only"> people</span></span></li>
+          <li class="about-dept"><span class="about-dept-name">Customer Experience</span><span class="about-dept-dots" aria-hidden="true"></span><span class="about-dept-count">1<span class="sr-only"> person</span></span></li>
+          <li class="about-dept"><span class="about-dept-name">Client Relations</span><span class="about-dept-dots" aria-hidden="true"></span><span class="about-dept-count">1<span class="sr-only"> person</span></span></li>
+          <li class="about-dept"><span class="about-dept-name">Applications</span><span class="about-dept-dots" aria-hidden="true"></span><span class="about-dept-count">3<span class="sr-only"> people</span></span></li>
+          <li class="about-dept"><span class="about-dept-name">IELTS &amp; PTE</span><span class="about-dept-dots" aria-hidden="true"></span><span class="about-dept-count">1<span class="sr-only"> person</span></span></li>
+          <li class="about-dept"><span class="about-dept-name">Compliance &amp; Verification</span><span class="about-dept-dots" aria-hidden="true"></span><span class="about-dept-count">2<span class="sr-only"> people</span></span></li>
+          <li class="about-dept"><span class="about-dept-name">Administration &amp; Accounts</span><span class="about-dept-dots" aria-hidden="true"></span><span class="about-dept-count">1<span class="sr-only"> person</span></span></li>
+          <li class="about-dept"><span class="about-dept-name">Operations</span><span class="about-dept-dots" aria-hidden="true"></span><span class="about-dept-count">1<span class="sr-only"> person</span></span></li>
+          <li class="about-dept"><span class="about-dept-name">Magister Sacco</span><span class="about-dept-dots" aria-hidden="true"></span><span class="about-dept-count">1<span class="sr-only"> person</span></span></li>
+          <li class="about-dept"><span class="about-dept-name">Masomo Welfare</span><span class="about-dept-dots" aria-hidden="true"></span><span class="about-dept-count">1<span class="sr-only"> person</span></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-cta" id="contact" aria-labelledby="cta-heading">
     <div class="container">
       <div>
         <h2 id="cta-heading">Ready to start your journey abroad?</h2>
         <p>Book a free consultation with our counsellors today.</p>
       </div>
-      <div class="cta-actions">
-        <a href="tel:+254721796500" class="btn btn-outline">+254 721 796500</a>
+      <div class="about-cta-actions">
+        <a href="tel:+254721796500" class="about-cta-phone">+254 721 796500</a>
         <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary">Book a free consultation</a>
       </div>
     </div>

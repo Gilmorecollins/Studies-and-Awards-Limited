@@ -429,20 +429,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .bullet-row h3 { font-size: 17px; margin: 0 0 6px; }
 .bullet-row p { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
-.pill-code {
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  font-weight: 500;
-  font-size: 13.5px;
-  letter-spacing: 0.04em;
-  background: var(--paper);
-  color: var(--ink);
-  padding: 8px 16px;
-  border-radius: 100px;
-  border: 1px solid var(--border);
-  transition: background-color 150ms ease;
-}
-.pill-code:hover { background: var(--brass); }
-
 /* ---------- destinations index: the route map ----------
    Navy departures board with the routes out of Eldoret drawn on a dotted
    world map; the destination cards sit across its bottom edge. */
@@ -1206,67 +1192,188 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .faq-item p a:hover { border-bottom-color: var(--ink); }
 .faq-item summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
-/* ---------- about: hero ticket facts ---------- */
+/* ---------- about page ----------
+   A long read: a big left-aligned headline, the clickable route map (hover,
+   focus or tap a country to light up its route from Eldoret), mission and
+   vision, values, the department card and a navy call to action. Every
+   section sits in the same 1040px reading column. */
 
-.ticket-facts { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 30px; }
-.ticket-fact { display: flex; flex-direction: column; gap: 3px; padding: 0 26px; text-align: center; border-left: 1px dashed var(--border); }
-.ticket-fact:first-child { border-left: none; }
-.ticket-fact-value { font-family: 'Bebas Neue', sans-serif; font-size: 23px; letter-spacing: 0.4px; line-height: 1; color: var(--ink); min-height: 23px; }
-.ticket-fact-label { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.about-col { max-width: 1040px; margin: 0 auto; }
+.about-label {
+  display: block;
+  margin: 0;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  color: var(--brass-ink);
+}
+
+.about-hero { padding: clamp(56px, 7.6vw, 110px) 0 64px; }
+.about-hero .hero-kicker { margin-bottom: 26px; }
+.about-hero h1 { font-size: clamp(46px, 8.6vw, 124px); line-height: 0.9; letter-spacing: 0; color: var(--ink); margin: 0 0 26px; }
+.about-hero-lead { max-width: 760px; font-size: clamp(17px, 1.46vw, 21px); line-height: 1.6; color: var(--text-prose); margin-bottom: 26px; }
+.about-facts { display: flex; flex-wrap: wrap; align-items: baseline; row-gap: 10px; margin: 0; padding: 0; list-style: none; }
+.about-facts li { display: flex; align-items: baseline; gap: 6px; font-size: 14px; color: var(--muted); }
+.about-facts li + li::before { content: '/'; padding: 0 18px; color: rgba(0,27,94,0.3); }
+.about-facts strong { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: 30px; line-height: 1; color: var(--ink); }
 @media (max-width: 640px) {
-  .ticket-facts { row-gap: 18px; }
-  .ticket-fact { flex: 0 0 50%; border-left: none; padding: 0 12px; }
+  .about-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; }
+  .about-facts li { flex-direction: column; gap: 2px; font-size: 13px; }
+  .about-facts li + li::before { content: none; }
 }
 
-/* ---------- about: mission/vision editorial ---------- */
+/* the route map: the list drives the map, and the map's code tags drive it too */
+.about-routes { background: var(--ink); overflow: hidden; }
+.about-routes-inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 740px);
+  justify-content: space-between;
+  gap: 24px;
+  padding: 56px 0 44px;
+}
+.about-routes-list { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; }
+.about-routes-kicker { margin: 0 0 8px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: var(--on-dark-muted); }
+.about-routes-list ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.about-route {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 2px 0;
+  border: none; background: none; cursor: pointer; text-align: left;
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 34px; line-height: 1; letter-spacing: 0.01em;
+  color: #FFFFFF;
+  transition: color 0.3s ease;
+}
+.about-route-code { color: var(--brass); transition: color 0.3s ease; }
+.about-route:focus-visible, .about-pin:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
+.about-routes-hint { margin-top: 18px; font-size: 13px; color: var(--on-dark-faint); transition: opacity 0.3s ease; }
+.about-hint-tap { display: none; }
+@media (hover: none) {
+  .about-hint-hover { display: none; }
+  .about-hint-tap { display: inline; }
+}
 
-.about-promise { display: flex; gap: 64px; align-items: flex-start; }
-.about-promise-main { flex: 1 1 60%; min-width: 0; }
-.about-mission-quote {
-  margin: 16px 0 0;
-  font-family: 'Montserrat', sans-serif;
-  font-style: italic;
-  font-weight: 600;
-  font-size: clamp(24px, 2.8vw, 32px);
-  line-height: 1.45;
-  color: var(--ink);
+.about-routes-map { position: relative; container-type: inline-size; margin: -66px 0 -64px; }
+.about-routes-map img, .about-routes-lines { display: block; width: 100%; height: auto; }
+.about-routes-lines { position: absolute; inset: 0; height: 100%; overflow: visible; }
+.about-line { transition: opacity 0.35s ease; }
+.about-line path { fill: none; stroke: var(--brass); stroke-width: 1.8; stroke-dasharray: 2 6; stroke-linecap: round; transition: stroke-width 0.3s ease; }
+.about-line-halo { fill: var(--brass); fill-opacity: 0.22; }
+.about-line-end { fill: #FFFFFF; }
+.about-origin { fill: var(--brass); }
+.about-origin-1 { fill-opacity: 0.14; }
+.about-origin-2 { fill-opacity: 0.3; }
+
+.about-pin {
+  position: absolute; z-index: 1;
+  padding: 4px 9px 3px;
+  border: 1.5px solid var(--brass); border-radius: 8px;
+  background: var(--ink); color: var(--brass);
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 17px; line-height: 1; letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: opacity 0.35s ease, background-color 0.2s ease, color 0.2s ease;
 }
-.about-promise-side { flex: 1 1 34%; min-width: 0; padding-left: 40px; border-left: 2px dashed var(--border); }
-.about-promise-side p { margin: 16px 0 0; font-size: 15px; line-height: 1.7; color: var(--muted); }
-@media (max-width: 768px) {
-  .about-promise { flex-direction: column; gap: 32px; }
-  .about-promise-side { padding-left: 0; padding-top: 28px; border-left: none; border-top: 2px dashed var(--border); }
+.about-pin-below { transform: translate(-50%, 12px); }
+.about-pin-above { transform: translate(-50%, calc(-100% - 13px)); }
+.about-pin-above-far { transform: translate(-50%, calc(-100% - 23px)); }
+.about-pin-left { transform: translate(calc(-100% - 12px), -50%); }
+.about-pin-right { transform: translate(12px, -50%); }
+/* the European tags crowd each other on a small map; the list still works */
+@container (max-width: 520px) {
+  .about-pin { display: none; }
 }
 
-/* ---------- about: department roster ----------
-   A flowing, departure-board-style line of real department names (built
-   from js/team-data.js) rather than a grid of stat cards — size varies
-   with how many people are in that department, so the weight of the
-   list itself carries the information instead of printed counts. */
+/* one route picked: the rest fade back */
+[data-route-active] .about-line { opacity: 0; }
+[data-route-active] .about-route { color: rgba(255,255,255,0.3); }
+[data-route-active] .about-route-code { color: rgba(255,184,0,0.3); }
+[data-route-active] .about-pin { opacity: 0.35; }
+[data-route-active] .about-routes-hint { opacity: 0; }
+[data-route-active] .about-line.is-active { opacity: 1; }
+[data-route-active] .about-line.is-active path { stroke-width: 2.6; }
+[data-route-active] .about-route.is-active { color: #FFFFFF; }
+[data-route-active] .about-route.is-active .about-route-code { color: var(--brass); }
+[data-route-active] .about-pin.is-active { opacity: 1; background: var(--brass); color: var(--ink); }
 
-.roster { max-width: 780px; margin: 0 auto; padding: 0; text-align: center; line-height: 2.3; }
-.roster-name {
-  display: inline-block;
-  white-space: nowrap;
-  font-family: 'Bebas Neue', sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.4px;
-  color: var(--ink);
+@media (max-width: 860px) {
+  .about-routes-inner { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 48px 0 20px; }
+  .about-routes-list ul { display: grid; grid-template-columns: repeat(2, max-content); gap: 8px 32px; }
+  /* the top of the map is open sea: tuck it up under the list */
+  .about-routes-map { margin: -7% -8px -24px; }
 }
-.roster-name-1 { font-size: 18px; color: var(--muted); }
-.roster-name-2 { font-size: 23px; }
-.roster-name-3 { font-size: 29px; }
-.roster-name-4 { font-size: 36px; color: var(--brass-ink); }
-.roster-item { white-space: nowrap; }
-.roster-sep { display: inline-block; margin: 0 16px; color: var(--brass); vertical-align: middle; }
-@media (max-width: 560px) {
-  .roster { line-height: 2.1; }
-  .roster-name-1 { font-size: 15px; }
-  .roster-name-2 { font-size: 18px; }
-  .roster-name-3 { font-size: 23px; }
-  .roster-name-4 { font-size: 28px; }
-  .roster-sep { margin: 0 10px; }
+@media (max-width: 480px) {
+  .about-route { font-size: 26px; gap: 8px; }
+  .about-routes-list ul { grid-template-columns: repeat(2, minmax(0, max-content)); gap: 6px 22px; }
 }
+@media (max-width: 374px) {
+  .about-route { font-size: 22px; gap: 6px; }
+  .about-routes-list ul { column-gap: 16px; }
+}
+
+/* mission and vision */
+.about-statement { padding: clamp(64px, 7.6vw, 110px) 0 clamp(56px, 7vw, 100px); }
+.about-statement-row { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; }
+.about-statement-row + .about-statement-row { margin-top: 80px; }
+.about-mission p { font-size: clamp(24px, 2.64vw, 38px); font-weight: 700; line-height: 1.32; color: var(--ink); text-wrap: pretty; }
+.about-vision p { font-size: clamp(16px, 1.32vw, 19px); line-height: 1.75; color: var(--text-prose); }
+@media (max-width: 860px) {
+  .about-statement-row { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .about-statement-row + .about-statement-row { margin-top: 48px; }
+}
+
+/* values */
+.about-values { padding-bottom: clamp(64px, 7vw, 100px); }
+.about-values-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-bottom: 20px; border-bottom: 2px solid var(--ink); }
+.about-values-head h2, .about-inside h2 { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: clamp(40px, 3.9vw, 56px); line-height: 1; letter-spacing: 0; }
+.about-values-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.about-value { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 36px 36px 8px; }
+.about-value:first-child { padding-left: 0; }
+.about-value + .about-value { border-left: 1px solid var(--border); }
+.about-value-icon { display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: #FFF4D1; color: var(--brass-ink); }
+.about-value h3 { font-size: 21px; line-height: 1.3; }
+.about-value p { font-size: 16px; line-height: 1.65; color: var(--muted); }
+@media (max-width: 860px) {
+  .about-values-grid { grid-template-columns: minmax(0, 1fr); }
+  .about-value, .about-value:first-child { padding: 28px 0; }
+  .about-value + .about-value { border-left: none; border-top: 1px solid var(--border); }
+}
+
+/* inside Studies & Awards: the department card */
+.about-inside { background: var(--paper); padding: clamp(64px, 7vw, 100px) 0; }
+.about-inside-grid { display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: clamp(40px, 5.6vw, 80px); }
+.about-inside-text { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+.about-inside-text p { font-size: 17px; line-height: 1.7; color: var(--muted); max-width: 440px; }
+.about-inside-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; padding-bottom: 4px; border-bottom: 2px solid var(--brass); font-size: 15px; font-weight: 700; color: var(--ink); transition: border-color 150ms ease; }
+.about-inside-link:hover { border-bottom-color: var(--ink); }
+.about-inside-link svg { transition: transform 150ms ease; }
+.about-inside-link:hover svg { transform: translateX(3px); }
+.about-depts { align-self: start; padding: 18px 32px 22px; background: #FFFFFF; border-radius: 24px; box-shadow: 0 14px 36px rgba(0,27,94,0.08); }
+.about-depts-title { padding: 8px 0 6px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.about-depts-list { margin: 0; padding: 0; list-style: none; }
+.about-dept { display: flex; align-items: baseline; gap: 10px; padding: 12px 0; }
+.about-dept-name { font-size: 17px; font-weight: 600; color: var(--ink); }
+.about-dept-dots { flex-grow: 1; min-width: 16px; border-bottom: 2px dotted rgba(0,27,94,0.22); }
+.about-dept-count { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 24px; line-height: 1; color: var(--brass-ink); }
+@media (max-width: 960px) {
+  .about-inside-grid { grid-template-columns: minmax(0, 1fr); }
+  .about-depts { max-width: 560px; width: 100%; }
+}
+@media (max-width: 480px) {
+  .about-depts { padding: 14px 20px 18px; border-radius: 18px; }
+  .about-dept { padding: 10px 0; }
+  .about-dept-name { font-size: 15px; }
+}
+
+/* call to action */
+.about-cta { background: var(--ink); }
+.about-cta > .container { max-width: 1340px; }
+.about-cta .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 32px 48px; padding-top: clamp(56px, 6vw, 88px); padding-bottom: clamp(56px, 6vw, 88px); }
+.about-cta h2 { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: clamp(40px, 4.4vw, 64px); line-height: 1; letter-spacing: 0; color: #FFFFFF; max-width: 640px; margin-bottom: 10px; }
+.about-cta p { font-size: 17px; color: var(--on-dark-muted); }
+.about-cta-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px 24px; }
+.about-cta-phone { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 30px; line-height: 1; letter-spacing: 0.03em; color: var(--brass); }
+.about-cta-phone:hover { color: #FFFFFF; }
+.about-cta a:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
 
 /* ---------- team page ---------- */
 

@@ -1589,9 +1589,9 @@ function createCursorFollower(options) {
   });
 })();
 
-// About page: the counsellor count in the hero's ticket facts, and the
-// "Inside Studies & Awards" department roster — both built from
-// js/team-data.js so they never drift out of sync with the real team.
+// About page: the counsellor count in the hero, and the "Inside Studies &
+// Awards" department card, both built from js/team-data.js so they never
+// drift out of sync with the real team.
 (function () {
   'use strict';
 
@@ -1601,15 +1601,16 @@ function createCursorFollower(options) {
   var countEl = document.getElementById('about-team-count');
   if (countEl) countEl.textContent = members.length;
 
-  var roster = document.getElementById('about-roster');
-  if (!roster) return;
+  var list = document.getElementById('about-depts');
+  if (!list) return;
 
   var counts = {};
   members.forEach(function (m) {
     counts[m.department] = (counts[m.department] || 0) + 1;
   });
 
-  var order = window.CONSULT_DEPARTMENTS || [];
+  // the chooser's department order, but with Management leading the card
+  var order = ['Management'].concat((window.CONSULT_DEPARTMENTS || []).filter(function (d) { return d !== 'Management'; }));
   var depts = Object.keys(counts).sort(function (a, b) {
     var ia = order.indexOf(a), ib = order.indexOf(b);
     if (ia === -1) ia = order.length;
@@ -1617,23 +1618,74 @@ function createCursorFollower(options) {
     return ia - ib;
   });
 
-  // each name keeps its trailing dot, so a wrapped line never starts with one
-  depts.forEach(function (d, i) {
-    var item = document.createElement('span');
-    item.className = 'roster-item';
-    var name = document.createElement('span');
-    name.className = 'roster-name roster-name-' + Math.min(counts[d], 4);
-    name.textContent = d;
-    item.appendChild(name);
-    if (i < depts.length - 1) {
-      var sep = document.createElement('span');
-      sep.className = 'roster-sep';
-      sep.setAttribute('aria-hidden', 'true');
-      sep.textContent = '•';
-      item.appendChild(sep);
-    }
-    roster.appendChild(item);
-    roster.appendChild(document.createTextNode(' '));
+  function span(cls, text) {
+    var el = document.createElement('span');
+    el.className = cls;
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  list.textContent = '';
+  depts.forEach(function (d) {
+    var row = document.createElement('li');
+    row.className = 'about-dept';
+    row.appendChild(span('about-dept-name', d));
+    var dots = span('about-dept-dots');
+    dots.setAttribute('aria-hidden', 'true');
+    row.appendChild(dots);
+    var count = span('about-dept-count', counts[d]);
+    count.appendChild(span('sr-only', counts[d] === 1 ? ' person' : ' people'));
+    row.appendChild(count);
+    list.appendChild(row);
+  });
+
+  var title = document.getElementById('about-depts-title');
+  if (title) title.textContent = depts.length + ' departments · ' + members.length + ' people';
+})();
+
+// About page: the route map. Hovering or focusing a country (in the list or
+// its code tag on the map) shows its route from Eldoret and fades the rest;
+// clicking or tapping keeps it shown until it's clicked again.
+(function () {
+  'use strict';
+
+  var band = document.querySelector('[data-about-routes]');
+  if (!band) return;
+
+  var controls = band.querySelectorAll('.about-route, .about-pin');
+  var lines = band.querySelectorAll('.about-line');
+  var hovered = null, pinned = null;
+
+  function render() {
+    var active = hovered || pinned;
+    if (active) band.setAttribute('data-route-active', active);
+    else band.removeAttribute('data-route-active');
+    Array.prototype.forEach.call(lines, function (el) {
+      el.classList.toggle('is-active', el.getAttribute('data-route') === active);
+    });
+    Array.prototype.forEach.call(controls, function (el) {
+      var code = el.getAttribute('data-route');
+      el.classList.toggle('is-active', code === active);
+      el.setAttribute('aria-pressed', code === pinned ? 'true' : 'false');
+    });
+  }
+
+  Array.prototype.forEach.call(controls, function (el) {
+    var code = el.getAttribute('data-route');
+    el.addEventListener('mouseenter', function () { hovered = code; render(); });
+    el.addEventListener('mouseleave', function () { if (hovered === code) { hovered = null; render(); } });
+    el.addEventListener('focus', function () { if (el.matches(':focus-visible')) { hovered = code; render(); } });
+    el.addEventListener('blur', function () { if (hovered === code) { hovered = null; render(); } });
+    el.addEventListener('click', function () {
+      pinned = pinned === code ? null : code;
+      // a tap also fires mouseenter/focus; let the pinned state decide what shows
+      hovered = null;
+      render();
+    });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && (pinned || hovered)) { pinned = hovered = null; render(); }
   });
 })();
 
