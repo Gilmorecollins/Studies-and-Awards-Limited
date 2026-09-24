@@ -454,7 +454,7 @@ ${seoBlock({ title: `Study in ${esc(c.name)} — ${SITE_NAME}`, description: c.t
       <a href="services.html" class="nav-link">Services</a>
       <a href="about.html" class="nav-link">About Us</a>
       <a href="team.html" class="nav-link">Team</a>
-      <a href="https://student.studiesandawardsltd.com/login" class="nav-link muted">Student Portal</a>
+      <a href="portal/index.html" class="nav-link muted">Student Portal</a>
       <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary nav-cta-mobile">Book Free Consultation</a>
     </nav>
     <div class="header-cta">
@@ -572,7 +572,7 @@ ${otherPills}
           <a href="services.html">Services</a>
           <a href="team.html">Our Team</a>
           <a href="https://www.magistersacco.org/">Financial Support</a>
-          <a href="https://student.studiesandawardsltd.com/login">Student Portal</a>
+          <a href="portal/index.html">Student Portal</a>
         </div>
       </nav>
       <nav aria-label="Destinations">
@@ -613,7 +613,7 @@ ${footerDestLinks()}
       </div>
     </div>
     <div class="container footer-bottom">
-      <a class="footer-bottom-legal" href="https://student.studiesandawardsltd.com/login">Student Portal Login</a>
+      <a class="footer-bottom-legal" href="portal/index.html">Student Portal Login</a>
       <span class="footer-bottom-copyright">
         <span>&copy; <span id="current-year">2026</span> Studies and Awards Limited. All rights reserved.</span>
         <span class="footer-bottom-note">Certified Data Controller</span>

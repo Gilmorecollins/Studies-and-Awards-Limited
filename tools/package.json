@@ -2,12 +2,14 @@
   "name": "studies-and-awards-tools",
   "private": true,
   "type": "module",
-  "description": "Build scripts for the Studies and Awards Limited website — generates the destination pages in ../site from the data in generate-countries.mjs.",
+  "description": "Build scripts for the Studies and Awards Limited website: generates the destination pages and the student portal pages in ../site.",
   "scripts": {
     "generate": "node generate-countries.mjs",
     "check": "node generate-countries.mjs --check",
     "photos": "node process-photos.mjs",
-    "thumbs": "node make-team-thumbs.mjs"
+    "thumbs": "node make-team-thumbs.mjs",
+    "portal": "node generate-portal.mjs",
+    "portal-check": "node generate-portal.mjs --check"
   },
   "dependencies": {
     "jimp": "^1.6.1"
