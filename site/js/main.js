@@ -1103,8 +1103,7 @@ function createCursorFollower(options) {
   var filtersWrap = null;
   var countEl = null;
   var topicEl = null;
-  var startEl = null;
-  var labelEl = null;
+  var startTag = null;
   var lastFocused = null;
   var hideTimer = null;
   var activeDept = '';
@@ -1204,12 +1203,12 @@ function createCursorFollower(options) {
       '<div class="consult-modal" role="dialog" aria-modal="true" aria-labelledby="consult-title" aria-describedby="consult-sub" id="consult-modal" tabindex="-1">',
       '  <button type="button" class="consult-close" aria-label="Close">' + closeIcon + '</button>',
       '  <div class="consult-head">',
-      '    <span class="eyebrow">FREE CONSULTATION</span>',
+      '    <span class="consult-eyebrow">Free consultation</span>',
       '    <h2 class="consult-title" id="consult-title">Who would you like to talk to?</h2>',
       '    <p class="consult-sub" id="consult-sub">Pick the person who fits what you need. WhatsApp opens with your message already written, and you can edit it before you send.</p>',
       '    <p class="consult-topic" hidden><span>Asking about</span><strong></strong></p>',
-      '    <p class="consult-assure">' + checkIcon + 'Free initial consultation &middot; no obligation</p>',
-      '    <p class="consult-assure consult-hours">' + clockIcon + 'Office open Mon&ndash;Fri, 8am&ndash;5pm</p>',
+      '    <p class="consult-assure">' + checkIcon + '<span>Free initial consultation &middot; no obligation</span></p>',
+      '    <p class="consult-assure consult-hours">' + clockIcon + '<span>Office open Mon&ndash;Fri, 8am&ndash;5pm</span></p>',
       '  </div>',
       '  <div class="consult-main">',
       '    <div class="consult-toolbar">',
@@ -1224,8 +1223,8 @@ function createCursorFollower(options) {
       '  </div>',
       '  <div class="consult-foot">',
       '    <p class="consult-foot-title">Prefer another way?</p>',
-      '    <a class="consult-foot-link" href="tel:' + OFFICE_TEL + '">' + phoneIcon + '<span>Call the office <b class="consult-foot-detail">' + OFFICE_TEL_LABEL + '</b></span></a>',
-      '    <a class="consult-foot-link" href="mailto:' + OFFICE_MAIL + '?subject=Free%20Consultation%20Request" data-consult-fallback>' + mailIcon + '<span>Email <b class="consult-foot-detail">' + OFFICE_MAIL + '</b></span></a>',
+      '    <a class="consult-foot-link" href="tel:' + OFFICE_TEL + '"><span class="consult-foot-icon">' + phoneIcon + '</span><span class="consult-foot-text"><b>Call the office</b><span class="consult-foot-detail">' + OFFICE_TEL_LABEL + '</span></span></a>',
+      '    <a class="consult-foot-link" href="mailto:' + OFFICE_MAIL + '?subject=Free%20Consultation%20Request" data-consult-fallback><span class="consult-foot-icon">' + mailIcon + '</span><span class="consult-foot-text"><b>Email us</b><span class="consult-foot-detail">' + OFFICE_MAIL.replace('@', '@<wbr>') + '</span></span></a>',
       '  </div>',
       '</div>'
     ].join('\n');
@@ -1268,12 +1267,12 @@ function createCursorFollower(options) {
     filtersWrap.classList.toggle('can-right', filters.scrollLeft < max - 4);
   }
 
-  function photoFor(member, size) {
+  function photoFor(member) {
     var photo = el('img', 'consult-photo');
-    photo.src = member.thumb || member.photo; // the small pre-framed portrait; the big photo only if a thumb is missing
+    photo.src = member.card || member.thumb || member.photo; // the framed 5:4 card portrait; the big photo only if it's missing
     photo.alt = '';
-    photo.width = size;
-    photo.height = size;
+    photo.width = 480;
+    photo.height = 384;
     photo.loading = 'lazy';
     photo.decoding = 'async';
     return photo;
@@ -1308,17 +1307,21 @@ function createCursorFollower(options) {
     return info;
   }
 
-  function row(p, index) {
+  // One portrait card: photo, name, role, what to ask them about, then
+  // WhatsApp and call. `start` marks the person offered to the undecided.
+  function row(p, index, start) {
     var m = p.m;
-    var card = el('li', 'consult-card' + (p.number ? '' : ' is-pending'));
+    var card = el('li', 'consult-card' + (p.number ? '' : ' is-pending') + (start ? ' is-start' : ''));
     card.setAttribute('data-dept', m.department || '');
     card.style.setProperty('--i', String(Math.min(index, 10)));
-    var seat = el('span', 'consult-seat', (index < 9 ? '0' : '') + (index + 1));
-    seat.setAttribute('aria-hidden', 'true');
-    card.appendChild(seat);
-    card.appendChild(photoFor(m, 56));
-    card.appendChild(identity(m));
-    if (m.helpsWith) card.appendChild(el('p', 'consult-help', m.helpsWith));
+    var figure = el('div', 'consult-card-photo');
+    figure.appendChild(photoFor(m));
+    card.appendChild(figure);
+    var content = el('div', 'consult-card-body');
+    card.appendChild(content);
+    if (start) content.appendChild(el('p', 'consult-start-tag', 'Not sure? Start here'));
+    content.appendChild(identity(m));
+    if (m.helpsWith) content.appendChild(el('p', 'consult-help', m.helpsWith));
 
     var actions = el('div', 'consult-actions');
     if (p.number) {
@@ -1327,21 +1330,8 @@ function createCursorFollower(options) {
     } else {
       actions.appendChild(el('span', 'consult-pending', 'Number coming soon'));
     }
-    card.appendChild(actions);
+    content.appendChild(actions);
     return card;
-  }
-
-  // For visitors who don't know who to ask: the person flagged `startHere`.
-  function startCard(p, index) {
-    var box = el('section', 'consult-start');
-    box.setAttribute('aria-labelledby', 'consult-start-tag');
-    var tag = el('p', 'consult-label', 'Not sure who to pick? Start here');
-    tag.id = 'consult-start-tag';
-    box.appendChild(tag);
-    var board = el('ul', 'consult-grid');
-    board.appendChild(row(p, index));
-    box.appendChild(board);
-    return box;
   }
 
   function applyDepartment() {
@@ -1357,9 +1347,8 @@ function createCursorFollower(options) {
       card.hidden = hide;
       if (!hide) shown++;
     });
-    // the "start here" shortcut belongs to the unfiltered view
-    if (startEl) startEl.hidden = !!activeDept;
-    if (labelEl) labelEl.hidden = !!activeDept;
+    // the "start here" tag belongs to the unfiltered view
+    if (startTag) startTag.hidden = !!activeDept;
 
     var total = activeDept ? shown : cards.length;
     countEl.textContent = '';
@@ -1386,16 +1375,16 @@ function createCursorFollower(options) {
       body.appendChild(el('p', 'consult-preview', 'Preview mode: people who don’t have a WhatsApp number yet are shown greyed out. Visitors won’t see them until a number is added in js/team-data.js.'));
     }
 
+    // The person flagged `startHere` (with a number) goes first, tagged for
+    // visitors who don't know who to ask; everyone else keeps the Team page order.
     var start = null;
-    var startIndex = -1;
-    list.forEach(function (p, i) { if (startIndex < 0 && p.m.startHere && p.number) { start = p; startIndex = i; } });
-    startEl = start ? startCard(start, startIndex) : null;
-    labelEl = start ? el('p', 'consult-label', 'Or choose someone specific') : null;
-    if (startEl) { body.appendChild(startEl); body.appendChild(labelEl); }
+    list.forEach(function (p) { if (!start && p.m.startHere && p.number) start = p; });
+    var ordered = start ? [start].concat(list.filter(function (p) { return p !== start; })) : list;
 
     grid = el('ul', 'consult-grid');
-    list.forEach(function (p, i) { grid.appendChild(row(p, i)); });
+    ordered.forEach(function (p, i) { grid.appendChild(row(p, i, p === start)); });
     body.appendChild(grid);
+    startTag = grid.querySelector('.consult-start-tag');
 
     // department filters — only worth showing when there's a real choice to narrow
     var departments = departmentsOf(list);

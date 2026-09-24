@@ -1,10 +1,11 @@
 // Team data, used by the Team page AND by the site-wide "Book Free Consultation"
 // chooser. Shape (TeamMember):
-//   { id, name, role, department, helpsWith, whatsapp, startHere?, shortBio, fullBio: string[], photo, thumb, linkedin? }
+//   { id, name, role, department, helpsWith, whatsapp, startHere?, shortBio, fullBio: string[], photo, thumb, card, linkedin? }
 // photo should be a 4:5 portrait (e.g. 960x1200) for the best crop in the slider.
-// thumb is the small square head-and-shoulders portrait used on the consultation
-// cards (assets/team/thumbs/<id>.jpg) — made from the photo by
-// `node tools/make-team-thumbs.mjs`; re-run it if a photo changes.
+// thumb is the small square head-and-shoulders portrait (assets/team/thumbs/<id>.jpg,
+// used on the Team page's journey stops) and card the 5:4 portrait on the
+// "Book Free Consultation" cards (assets/team/cards/<id>.jpg). Both are made from
+// the photo by `node tools/make-team-thumbs.mjs`; re-run it if a photo changes.
 //
 // Consultation chooser: when a visitor clicks any "Book Free Consultation" button
 // they pick who to talk to and go straight to that person's WhatsApp.
@@ -14,9 +15,9 @@
 //     opening an email exactly as before.
 //   - department: used for the filter buttons above the list.
 //   - helpsWith: one line telling a visitor what to come to this person for.
-//   - startHere: true on ONE person to offer them first, in a "Not sure who to
-//     pick? Start here" box, for visitors who don't know who to ask. Remove it
-//     and the box goes away.
+//   - startHere: true on ONE person to offer them first: their card leads the
+//     list with a "Not sure? Start here" tag, for visitors who don't know who to
+//     ask. Remove it and everyone is shown in the order below.
 //   People are listed in the same order as they appear below (the Team page order).
 //   Preview the full chooser (including people with no number yet) by adding
 //   ?consultPreview to any page's address.
@@ -58,6 +59,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/evelyne-choge.jpg',
     thumb: 'assets/team/thumbs/evelyne-choge.jpg',
+    card: 'assets/team/cards/evelyne-choge.jpg',
     linkedin: '#'
   },
   {
@@ -74,6 +76,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/mourine.jpg',
     thumb: 'assets/team/thumbs/mourine.jpg',
+    card: 'assets/team/cards/mourine.jpg',
     linkedin: '#'
   },
   {
@@ -90,6 +93,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/beatrice.jpg',
     thumb: 'assets/team/thumbs/beatrice.jpg',
+    card: 'assets/team/cards/beatrice.jpg',
     linkedin: '#'
   },
   {
@@ -106,6 +110,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/joyner.jpg',
     thumb: 'assets/team/thumbs/joyner.jpg',
+    card: 'assets/team/cards/joyner.jpg',
     linkedin: '#'
   },
   {
@@ -122,6 +127,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/tebby.jpg',
     thumb: 'assets/team/thumbs/tebby.jpg',
+    card: 'assets/team/cards/tebby.jpg',
     linkedin: '#'
   },
   {
@@ -138,6 +144,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/witney.jpg',
     thumb: 'assets/team/thumbs/witney.jpg',
+    card: 'assets/team/cards/witney.jpg',
     linkedin: '#'
   },
   {
@@ -154,6 +161,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/canisius-yego.jpg',
     thumb: 'assets/team/thumbs/canisius-yego.jpg',
+    card: 'assets/team/cards/canisius-yego.jpg',
     linkedin: '#'
   },
   {
@@ -170,6 +178,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/dennis.jpg',
     thumb: 'assets/team/thumbs/dennis.jpg',
+    card: 'assets/team/cards/dennis.jpg',
     linkedin: '#'
   },
   {
@@ -186,6 +195,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/winnie.jpg',
     thumb: 'assets/team/thumbs/winnie.jpg',
+    card: 'assets/team/cards/winnie.jpg',
     linkedin: '#'
   },
   {
@@ -202,6 +212,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/joy.jpg',
     thumb: 'assets/team/thumbs/joy.jpg',
+    card: 'assets/team/cards/joy.jpg',
     linkedin: '#'
   },
   {
@@ -218,6 +229,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/ian.jpg',
     thumb: 'assets/team/thumbs/ian.jpg',
+    card: 'assets/team/cards/ian.jpg',
     linkedin: '#'
   },
   {
@@ -234,6 +246,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/tina.jpg',
     thumb: 'assets/team/thumbs/tina.jpg',
+    card: 'assets/team/cards/tina.jpg',
     linkedin: '#'
   },
   {
@@ -251,6 +264,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/rahab.jpg',
     thumb: 'assets/team/thumbs/rahab.jpg',
+    card: 'assets/team/cards/rahab.jpg',
     linkedin: '#'
   },
   {
@@ -267,6 +281,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/talaam.jpg',
     thumb: 'assets/team/thumbs/talaam.jpg',
+    card: 'assets/team/cards/talaam.jpg',
     linkedin: '#'
   },
   {
@@ -283,6 +298,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/collins.jpg',
     thumb: 'assets/team/thumbs/collins.jpg',
+    card: 'assets/team/cards/collins.jpg',
     linkedin: '#'
   },
   {
@@ -299,6 +315,7 @@ window.TEAM_MEMBERS = [
     ],
     photo: 'assets/team/bethwel.jpg',
     thumb: 'assets/team/thumbs/bethwel.jpg',
+    card: 'assets/team/cards/bethwel.jpg',
     linkedin: '#'
   }
 ];
