@@ -453,10 +453,28 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 
 .route-map { position: relative; container-type: inline-size; }
 .route-map img { display: block; width: 100%; height: auto; }
+
+/* the routes out of Eldoret, drawn over the dotted map (destinations and
+   about pages). Hovering a country fades every other route back; see the
+   route highlighting script in main.js. */
+.map-lines { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.map-line { transition: opacity 0.35s ease; }
+.map-line path { fill: none; stroke: var(--brass); stroke-width: 1.8; stroke-dasharray: 2 6; stroke-linecap: round; transition: stroke-width 0.3s ease; }
+.map-line-halo { fill: var(--brass); fill-opacity: 0.22; }
+.map-line-end { fill: #FFFFFF; }
+.map-origin { fill: var(--brass); }
+.map-origin-1 { fill-opacity: 0.14; }
+.map-origin-2 { fill-opacity: 0.3; }
+[data-route-active] .map-line { opacity: 0; }
+[data-route-active] .map-line.is-active { opacity: 1; }
+[data-route-active] .map-line.is-active path { stroke-width: 2.6; }
 .route-map-labels { position: absolute; inset: 0; pointer-events: none; }
-.route-pin { position: absolute; display: flex; flex-direction: column; align-items: flex-start; }
+.route-pin { position: absolute; display: flex; flex-direction: column; align-items: flex-start; pointer-events: auto; transition: opacity 0.35s ease; }
+[data-route-active] .route-pin { opacity: 0.35; }
+[data-route-active] .route-pin.is-active { opacity: 1; }
+[data-route-active] .route-pin.is-active .route-pin-code { color: var(--brass); }
 .route-pin-right { align-items: flex-end; }
-.route-pin-code { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: clamp(13px, 3.056cqw, 22px); line-height: 1; color: #FFFFFF; }
+.route-pin-code { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: clamp(13px, 3.056cqw, 22px); line-height: 1; color: #FFFFFF; transition: color 0.3s ease; }
 .route-pin-name { font-size: clamp(9px, 1.53cqw, 11px); font-weight: 500; color: var(--on-dark-muted); white-space: nowrap; }
 .route-origin {
   position: absolute; transform: translateX(-50%); white-space: nowrap;
@@ -1254,15 +1272,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 
 .about-routes-map { position: relative; container-type: inline-size; margin: -66px 0 -64px; }
-.about-routes-map img, .about-routes-lines { display: block; width: 100%; height: auto; }
-.about-routes-lines { position: absolute; inset: 0; height: 100%; overflow: visible; }
-.about-line { transition: opacity 0.35s ease; }
-.about-line path { fill: none; stroke: var(--brass); stroke-width: 1.8; stroke-dasharray: 2 6; stroke-linecap: round; transition: stroke-width 0.3s ease; }
-.about-line-halo { fill: var(--brass); fill-opacity: 0.22; }
-.about-line-end { fill: #FFFFFF; }
-.about-origin { fill: var(--brass); }
-.about-origin-1 { fill-opacity: 0.14; }
-.about-origin-2 { fill-opacity: 0.3; }
+.about-routes-map img { display: block; width: 100%; height: auto; }
 
 .about-pin {
   position: absolute; z-index: 1;
@@ -1283,14 +1293,12 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .about-pin { display: none; }
 }
 
-/* one route picked: the rest fade back */
-[data-route-active] .about-line { opacity: 0; }
+/* one route picked: the rest fade back (the lines themselves are in the
+   shared .map-line rules with the destinations map) */
 [data-route-active] .about-route { color: rgba(255,255,255,0.3); }
 [data-route-active] .about-route-code { color: rgba(255,184,0,0.3); }
 [data-route-active] .about-pin { opacity: 0.35; }
 [data-route-active] .about-routes-hint { opacity: 0; }
-[data-route-active] .about-line.is-active { opacity: 1; }
-[data-route-active] .about-line.is-active path { stroke-width: 2.6; }
 [data-route-active] .about-route.is-active { color: #FFFFFF; }
 [data-route-active] .about-route.is-active .about-route-code { color: var(--brass); }
 [data-route-active] .about-pin.is-active { opacity: 1; background: var(--brass); color: var(--ink); }

@@ -1643,49 +1643,53 @@ function createCursorFollower(options) {
   if (title) title.textContent = depts.length + ' departments · ' + members.length + ' people';
 })();
 
-// About page: the route map. Hovering or focusing a country (in the list or
-// its code tag on the map) shows its route from Eldoret and fades the rest;
-// clicking or tapping keeps it shown until it's clicked again.
+// Route maps (about and destinations pages): hovering or focusing a country,
+// in a list, on a card or on its tag on the map, shows its route from Eldoret
+// and fades the rest. Buttons also keep their route shown when clicked or
+// tapped, until clicked again; Escape clears it.
+//   [data-route-scope]      wraps the map and everything that controls it
+//   [data-route-line=CODE]  one route drawn on the map
+//   [data-route=CODE]       anything that shows that route
 (function () {
   'use strict';
 
-  var band = document.querySelector('[data-about-routes]');
-  if (!band) return;
+  Array.prototype.forEach.call(document.querySelectorAll('[data-route-scope]'), function (scope) {
+    var controls = scope.querySelectorAll('[data-route]');
+    var lines = scope.querySelectorAll('[data-route-line]');
+    var hovered = null, pinned = null;
 
-  var controls = band.querySelectorAll('.about-route, .about-pin');
-  var lines = band.querySelectorAll('.about-line');
-  var hovered = null, pinned = null;
+    function render() {
+      var active = hovered || pinned;
+      if (active) scope.setAttribute('data-route-active', active);
+      else scope.removeAttribute('data-route-active');
+      Array.prototype.forEach.call(lines, function (el) {
+        el.classList.toggle('is-active', el.getAttribute('data-route-line') === active);
+      });
+      Array.prototype.forEach.call(controls, function (el) {
+        var code = el.getAttribute('data-route');
+        el.classList.toggle('is-active', code === active);
+        if (el.tagName === 'BUTTON') el.setAttribute('aria-pressed', code === pinned ? 'true' : 'false');
+      });
+    }
 
-  function render() {
-    var active = hovered || pinned;
-    if (active) band.setAttribute('data-route-active', active);
-    else band.removeAttribute('data-route-active');
-    Array.prototype.forEach.call(lines, function (el) {
-      el.classList.toggle('is-active', el.getAttribute('data-route') === active);
-    });
     Array.prototype.forEach.call(controls, function (el) {
       var code = el.getAttribute('data-route');
-      el.classList.toggle('is-active', code === active);
-      el.setAttribute('aria-pressed', code === pinned ? 'true' : 'false');
+      el.addEventListener('mouseenter', function () { hovered = code; render(); });
+      el.addEventListener('mouseleave', function () { if (hovered === code) { hovered = null; render(); } });
+      el.addEventListener('focus', function () { if (el.matches(':focus-visible')) { hovered = code; render(); } });
+      el.addEventListener('blur', function () { if (hovered === code) { hovered = null; render(); } });
+      if (el.tagName !== 'BUTTON') return;
+      el.addEventListener('click', function () {
+        pinned = pinned === code ? null : code;
+        // a tap also fires mouseenter/focus; let the pinned state decide what shows
+        hovered = null;
+        render();
+      });
     });
-  }
 
-  Array.prototype.forEach.call(controls, function (el) {
-    var code = el.getAttribute('data-route');
-    el.addEventListener('mouseenter', function () { hovered = code; render(); });
-    el.addEventListener('mouseleave', function () { if (hovered === code) { hovered = null; render(); } });
-    el.addEventListener('focus', function () { if (el.matches(':focus-visible')) { hovered = code; render(); } });
-    el.addEventListener('blur', function () { if (hovered === code) { hovered = null; render(); } });
-    el.addEventListener('click', function () {
-      pinned = pinned === code ? null : code;
-      // a tap also fires mouseenter/focus; let the pinned state decide what shows
-      hovered = null;
-      render();
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && (pinned || hovered)) { pinned = hovered = null; render(); }
     });
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && (pinned || hovered)) { pinned = hovered = null; render(); }
   });
 })();
 
