@@ -21,7 +21,9 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 // og:url and the share image all need a full web address, so they are only
 // written when this is set. Everything else (title, description, card type,
 // theme colour) is written either way. After setting it, run this script again.
-const SITE_URL = '';
+// For now this is the test address on Vercel. When the real domain is live,
+// swap it in here and run the script again.
+const SITE_URL = 'https://test-studies-and-awards-limited.vercel.app';
 const SITE_NAME = 'Studies and Awards Limited';
 const THEME_COLOUR = '#001B5E';
 const SEO_START = '<!-- seo:start — written by tools/generate-countries.mjs; edit the script, not this block -->';
@@ -346,13 +348,19 @@ function page(c) {
   // A city may set `position` (a CSS background-position, e.g. 'center bottom')
   // when its photo is close to square and the default centred crop cuts off the
   // subject on the full-screen slide.
-  const citySlideStyle = (p, i) => {
-    const style = (i === 0 ? `background-image:url('${p.photo}');` : '') + (p.position ? `background-position:${p.position};` : '');
-    return style ? ` style="${style}"` : '';
-  };
+  // Each slide has a 3:4 portrait crop (made by make-editorial-photos.mjs) that
+  // phones and portrait tablets load instead: they only ever see the middle of
+  // the wide photo, so the crop looks the same at well under half the weight.
+  const portraitOf = photo => photo.replace(/\/([^/]+)$/, '/portrait/$1');
+  const citySlideStyle = p => (p.position ? ` style="background-position:${p.position};"` : '');
+  // The first slide paints before main.js runs, so its photo is picked here by
+  // a media query rather than by the script.
+  const firstSlideCss = c.partners.length > 0
+    ? `<style>.city-img.is-first{background-image:url('${c.partners[0].photo}')}@media (max-aspect-ratio:3/4){.city-img.is-first{background-image:url('${portraitOf(c.partners[0].photo)}')}}</style>\n`
+    : '';
 
   const cityImages = (c.partners.length > 0
-    ? c.partners.map((p, i) => `      <div class="city-img" data-src="${p.photo}"${citySlideStyle(p, i)}></div>`)
+    ? c.partners.map((p, i) => `      <div class="city-img${i === 0 ? ' is-first' : ''}" data-src="${p.photo}" data-src-portrait="${portraitOf(p.photo)}"${citySlideStyle(p)}></div>`)
     : Array.from({ length: PLACEHOLDER_SLOTS }, () => `      <div class="city-img is-placeholder"></div>`)
   ).join('\n');
 
@@ -435,7 +443,7 @@ ${seoBlock({ title: `Study in ${esc(c.name)} — ${SITE_NAME}`, description: c.t
 <link rel="preload" href="assets/fonts/bebas-neue.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/oswald.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
-</head>
+${firstSlideCss}</head>
 <body>
 
 <a href="#main" class="skip-link">Skip to content</a>
@@ -594,7 +602,7 @@ ${footerDestLinks()}
           </a>
           <div class="footer-contact-row">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-            <span>Mon&ndash;Fri, 8am&ndash;5pm<span class="footer-contact-note">Closed weekends &amp; public holidays</span></span>
+            <span>Mon&ndash;Fri, 8am&ndash;5pm<span class="open-status" data-open-status hidden></span><span class="footer-contact-note">Closed weekends &amp; public holidays</span></span>
           </div>
           <a class="footer-contact-row" href="tel:+254721796500">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#B9C3E0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3c0 1-.9 1.8-1.9 1.6C10.9 18.3 5.7 13.1 4.9 6.9 4.7 5.9 5 3.5 6 3.5Z"/></svg>
@@ -715,15 +723,16 @@ if (!isMain) {
   });
   // Sample testimonials (`sample: true`) are stand-ins for design review. They never show on a real
   // website address, but setting SITE_URL means deployment is near — so refuse to pass while any remain.
+  // A *.vercel.app test address doesn't count: that is still a preview, not the launch.
   let samples = 0;
   try {
     const sandbox = { window: {} };
     vm.runInNewContext(readFileSync(join(siteDir, 'js', 'testimonials-data.js'), 'utf8'), sandbox);
     samples = (sandbox.window.TESTIMONIALS || []).filter(t => t && t.sample).length;
   } catch { /* a broken data file is reported above */ }
-  const samplesBlock = samples > 0 && SITE_URL !== '';
+  const samplesBlock = samples > 0 && SITE_URL !== '' && !/\.vercel\.app$/.test(SITE_URL);
   // The destination pages' collage photos are small copies made by make-editorial-photos.mjs.
-  const missingPhotos = [...new Set(outputs.flatMap(([, content]) => content.match(/assets\/destinations\/[\w-]+\/(?:editorial|thumbs)\/[\w-]+\.jpg/g) || []))]
+  const missingPhotos = [...new Set(outputs.flatMap(([, content]) => content.match(/assets\/destinations\/[\w-]+\/(?:editorial|thumbs|portrait)\/[\w-]+\.jpg/g) || []))]
     .filter(rel => !existsSync(join(siteDir, rel)));
   if (drifted.length || broken.length || samplesBlock || missingPhotos.length) {
     if (drifted.length) console.error('Out of date (hand-edited, or the generator is behind):\n  ' + drifted.map(([rel]) => rel).join('\n  '));

@@ -175,12 +175,29 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   shows a proper preview. The canonical link, `og:url` and the share picture
   need the site's full web address, so they are switched on by setting
   `SITE_URL` (e.g. `'https://studiesandawardsltd.com'`, no trailing slash) near
-  the top of `tools/generate-countries.mjs` and running it again. It's blank
-  until the site has a public address. The pictures are already made
+  the top of `tools/generate-countries.mjs` and running it again. It is set to
+  the test address, `https://test-studies-and-awards-limited.vercel.app`, for
+  now; swap in the real domain when it's live. The pictures are already made
   (`site/assets/share/`; rebuild with `node tools/make-share-images.mjs`), so
   they will show as "not referenced" in a file audit until `SITE_URL` is set.
   After going live, paste a page's address into Facebook's Sharing Debugger to
   refresh the cached preview. `--check` covers these blocks too.
+- **Page not found**: `site/404.html` is what Vercel shows for any address that
+  doesn't exist. It is served at the missing address itself (e.g. `/old/page`),
+  so every link and file in it starts with `/`. It is marked `noindex`.
+- **Opening hours badge**: the footer and the Find Us page show "Open now" or
+  when the office next opens, in Kenya time. `js/main.js` knows the fixed
+  public holidays and Easter; add Eid or any one-off closure to
+  `EXTRA_CLOSED_DAYS` there as `'YYYY-MM-DD'`.
+- **Slideshow photos on phones**: each city photo has a 3:4 crop in
+  `<country>/portrait/`, which phones and portrait tablets load instead of the
+  full 1920px photo. `node tools/make-editorial-photos.mjs` makes them.
+- **Direct links**: `team.html#<id>` (e.g. `team.html#miki`) opens on that
+  person, and `index.html#faq-visa` opens that FAQ answer (the ids are on the
+  `<details>` in `index.html`). Both update the address bar as visitors browse.
+- **Destination specialists**: give a team member `destinations: ['Germany']`
+  in `js/team-data.js` and they lead the consultation list, tagged "Best for
+  Germany", when someone books from that country's page.
 - **Testimonials**: the home page's "What people say" section is fed by
   `js/testimonials-data.js`. It currently holds three **sample** quotes
   (marked `sample: true`) so the layout can be reviewed. Samples show only on
@@ -192,7 +209,8 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   agreement, under a name they're happy to use (leave `sample` out). An entry
   with no quote or no name is skipped. With nothing to show the section stays
   hidden. `--check` reminds you while samples remain, and fails once
-  `SITE_URL` is set.
+  `SITE_URL` is set to a real domain (a `*.vercel.app` test address is
+  allowed).
 - **Publishing**: the live version is published as a Claude Artifact, not
   auto-deployed from this repo. Republish from `site/index.html` after
   making changes.
