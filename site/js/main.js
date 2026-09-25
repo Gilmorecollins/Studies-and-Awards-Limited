@@ -1721,12 +1721,12 @@ function createCursorFollower(options) {
     });
   });
 
-  // A few seconds after the lift comes into view, it goes up to Mezzanine 1 and
+  // A second after the lift comes into view, it goes up to Mezzanine 1 and
   // the doors open by themselves (unless the visitor has already pressed a
   // button). It waits until the lift is on screen, so on a phone, where the lift
   // is below the text, it doesn't open before anyone can see it. The text change
   // isn't announced this time: a screen reader shouldn't speak up unprompted.
-  var AUTO_OPEN_MS = 2500;
+  var AUTO_OPEN_MS = 1000;
   var live = hero.querySelector('.lift-now [aria-live]');
   function autoOpen() {
     if (touched) return;
