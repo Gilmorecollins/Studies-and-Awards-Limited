@@ -34,7 +34,8 @@
       if (event.key === 'Escape') closeNav();
     });
 
-    var mq = window.matchMedia('(min-width: 1181px)');
+    // the desktop menu's breakpoint, as rewritten for the laptop fit in styles.css
+    var mq = window.matchMedia('(min-width: 1181px), (min-width: 1024px) and (pointer: fine)');
     var handleViewportChange = function (event) {
       if (event.matches) closeNav();
     };
@@ -104,9 +105,9 @@
   window.addEventListener('scroll', updateScrolled, { passive: true });
 })();
 
-// Destination page: full-screen autoplaying city slideshow — crossfades
-// to the next city on a timer, or on demand via the filmstrip of city
-// thumbnails (.city-dot) and the pause button.
+// Destination page: full-screen autoplaying city slideshow. It crossfades
+// to the next city on a timer, or on demand via the progress bars along the
+// bottom (.city-dot, one per city) and the pause button.
 (function () {
   'use strict';
 
@@ -116,7 +117,6 @@
   var images = scroller.querySelectorAll('.city-img');
   var panels = scroller.querySelectorAll('.city-panel');
   var dots = scroller.querySelectorAll('.city-dot');
-  var bar = scroller.querySelector('.city-scroller-bar');
   var playToggle = scroller.querySelector('.city-play-toggle');
   var count = images.length;
   if (!count) return;
@@ -192,12 +192,6 @@
       if (i === index) { el.setAttribute('aria-current', 'true'); } else { el.removeAttribute('aria-current'); }
     });
     restartDotFill(index);
-
-    // On narrow screens the filmstrip scrolls sideways: keep the current city in view.
-    var dot = dots[index];
-    if (bar && dot && bar.scrollWidth > bar.clientWidth + 1) {
-      bar.scrollTo({ left: dot.offsetLeft - (bar.clientWidth - dot.offsetWidth) / 2, behavior: reduceMotion ? 'auto' : 'smooth' });
-    }
   }
 
   function goTo(index) {
@@ -280,6 +274,28 @@
   if (playToggle) playToggle.addEventListener('click', function () { resumeAfterHold = playing; });
 })();
 
+// A team member's portrait for the Team page, the journey stops and the
+// consultation cards. `kind` is 'photo' (the big portrait), 'thumb' (small
+// square) or 'card' (5:4). Someone whose photo hasn't arrived yet (blank in
+// team-data.js) gets a plain silhouette, so no page ever shows a broken image.
+(function () {
+  'use strict';
+
+  var silhouette = 'data:image/svg+xml,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">' +
+    '<rect width="400" height="500" fill="#EEF1F8"/>' +
+    '<circle cx="200" cy="190" r="72" fill="#C3CCE0"/>' +
+    '<path d="M60 500c0-92 62-150 140-150s140 58 140 150z" fill="#C3CCE0"/></svg>');
+
+  window.teamPortrait = function (member, kind) {
+    var order = kind === 'card' ? ['card', 'thumb', 'photo'] : kind === 'thumb' ? ['thumb', 'photo'] : ['photo'];
+    for (var i = 0; i < order.length; i++) {
+      if (member[order[i]]) return member[order[i]];
+    }
+    return silhouette;
+  };
+})();
+
 // Team section: horizontal member slider — the leftmost card is always the
 // active (full-colour) member, everything after it sits in halftone until
 // it slides into place — plus the "view more" bio modal.
@@ -330,7 +346,7 @@
 
     var img = document.createElement('img');
     img.className = 'team-card-photo-img';
-    img.src = member.photo;
+    img.src = window.teamPortrait(member, 'photo');
     img.alt = isClone ? '' : member.name;
     img.loading = i < 5 ? 'eager' : 'lazy';
 
@@ -478,14 +494,15 @@
   // "Who you'll meet along the way": each stop lists the people in its
   // department; clicking one slides the team strip to the first of them.
   stops.forEach(function (stop) {
-    var dep = stop.getAttribute('data-dep');
-    var who = members.filter(function (m) { return m.department === dep; });
+    // a stop can cover several departments: data-dep="One|Another"
+    var deps = stop.getAttribute('data-dep').split('|');
+    var who = members.filter(function (m) { return deps.indexOf(m.department) > -1; });
     if (!who.length) { stop.parentNode.hidden = true; return; }
     stop.querySelector('.team-stop-who').textContent = who.map(function (m) { return m.name; }).join(', ');
     var faces = stop.querySelector('.team-stop-faces');
     who.slice(0, 3).forEach(function (m) {
       var img = document.createElement('img');
-      img.src = m.thumb || m.photo;
+      img.src = window.teamPortrait(m, 'thumb');
       img.alt = '';
       img.width = 36; img.height = 36;
       img.loading = 'lazy';
@@ -569,7 +586,7 @@
     var member = members[activeIndex];
     modalName.textContent = member.name;
     modalRole.textContent = member.role;
-    modalPhoto.src = member.photo;
+    modalPhoto.src = window.teamPortrait(member, 'photo');
     modalPhoto.alt = member.name;
 
     if (/^https?:\/\//.test(member.linkedin || '')) {
@@ -610,6 +627,13 @@
   });
 })();
 
+// The page's CSS zoom: the "laptop fit" in styles.css scales the whole page
+// down in narrow laptop windows. Mouse positions arrive in real screen pixels,
+// so anything placed at a mouse position divides by this first.
+function pageZoom() {
+  return parseFloat(window.getComputedStyle(document.documentElement).zoom) || 1;
+}
+
 // Reusable cursor-follower component: a small circle that trails the mouse
 // with lerped easing, scales over interactive targets, and can be told to
 // stay visible (in an alternate style) while something like a modal is open.
@@ -643,6 +667,8 @@ function createCursorFollower(options) {
   var isDown = false;
   var isHover = false;
   var rafId = null;
+  var zoom = pageZoom();
+  window.addEventListener('resize', function () { zoom = pageZoom(); });
 
   function scaleFor() {
     if (isDown) return 0.8;
@@ -653,7 +679,7 @@ function createCursorFollower(options) {
   function tick() {
     curX += (mouseX - curX) * lerpFactor;
     curY += (mouseY - curY) * lerpFactor;
-    el.style.transform = 'translate3d(' + curX + 'px, ' + curY + 'px, 0) translate(-50%, -50%) scale(' + scaleFor() + ')';
+    el.style.transform = 'translate3d(' + curX / zoom + 'px, ' + curY / zoom + 'px, 0) translate(-50%, -50%) scale(' + scaleFor() + ')';
     rafId = window.requestAnimationFrame(tick);
   }
 
@@ -1312,7 +1338,7 @@ function createCursorFollower(options) {
 
   function photoFor(member) {
     var photo = el('img', 'consult-photo');
-    photo.src = member.card || member.thumb || member.photo; // the framed 5:4 card portrait; the big photo only if it's missing
+    photo.src = window.teamPortrait(member, 'card'); // the framed 5:4 card portrait; the smaller or bigger photo only if it's missing
     photo.alt = '';
     photo.width = 480;
     photo.height = 384;

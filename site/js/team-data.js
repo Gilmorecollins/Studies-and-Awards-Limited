@@ -1,6 +1,6 @@
 // Team data, used by the Team page AND by the site-wide "Book Free Consultation"
 // chooser. Shape (TeamMember):
-//   { id, name, role, department, helpsWith, whatsapp, startHere?, shortBio, fullBio: string[], photo, thumb, card, linkedin? }
+//   { id, name, role, department, helpsWith, whatsapp, startHere?, portalCounsellor?, shortBio, fullBio: string[], photo, thumb, card, linkedin? }
 // photo should be a 4:5 portrait (e.g. 960x1200) for the best crop in the slider.
 // thumb is the small square head-and-shoulders portrait (assets/team/thumbs/<id>.jpg,
 // used on the Team page's journey stops) and card the 5:4 portrait on the
@@ -18,6 +18,13 @@
 //   - startHere: true on ONE person to offer them first: their card leads the
 //     list with a "Not sure? Start here" tag, for visitors who don't know who to
 //     ask. Remove it and everyone is shown in the order below.
+//   - portalCounsellor: true on ONE person: the counsellor shown throughout the
+//     student portal (tools/generate-portal.mjs). It is separate from startHere
+//     because the person who greets visitors is not always the one who guides an
+//     application. Without it the portal uses the startHere person.
+//   - photo, thumb, card: leave them '' until a person's photo arrives; a plain
+//     silhouette is shown in the meantime. Then add the photo, add their row in
+//     tools/make-team-thumbs.mjs and run it.
 //   People are listed in the same order as they appear below (the Team page order).
 //   Preview the full chooser (including people with no number yet) by adding
 //   ?consultPreview to any page's address.
@@ -36,6 +43,7 @@ window.CONSULT_DEPARTMENTS = [
   'Client Relations',
   'Applications',
   'IELTS & PTE',
+  'Germany & German',
   'Compliance & Verification',
   'Administration & Accounts',
   'Operations',
@@ -148,6 +156,23 @@ window.TEAM_MEMBERS = [
     linkedin: '#'
   },
   {
+    id: 'karen',
+    name: 'Karen',
+    role: 'German Language Tutor',
+    department: 'Germany & German',
+    helpsWith: 'Learning German, and guidance on studying in Germany.',
+    whatsapp: '+254737173516',
+    shortBio: 'Karen is the German Language Tutor at Studies and Awards Limited, and also guides students who are considering Germany as a destination.',
+    fullBio: [
+      'Karen is the German Language Tutor at Studies and Awards Limited, teaching German to students who are preparing to study in Germany.',
+      'She also guides students on Germany as a destination, so she is the person to ask about studying there as well as about learning the language.'
+    ],
+    photo: 'assets/team/karen.jpg',
+    thumb: 'assets/team/thumbs/karen.jpg',
+    card: 'assets/team/cards/karen.jpg',
+    linkedin: '#'
+  },
+  {
     id: 'canisius-yego',
     name: 'Canisius Yego',
     role: 'Compliance and Verification Manager',
@@ -250,13 +275,31 @@ window.TEAM_MEMBERS = [
     linkedin: '#'
   },
   {
+    id: 'miki',
+    name: 'Miki',
+    role: 'Receptionist',
+    department: 'Customer Experience',
+    helpsWith: 'Your first point of contact at our office, who will point you to the right person.',
+    whatsapp: '+254143505796',
+    startHere: true,
+    shortBio: 'Miki is at the reception at Studies and Awards Limited, the first person students and visitors meet when they get in touch.',
+    fullBio: [
+      'Miki works at the reception at Studies and Awards Limited in Eldoret, and is the first point of contact for students and visitors who walk in or reach out.',
+      'He finds out what each person needs and directs them to the right member of the team, so nobody is left wondering who to ask.'
+    ],
+    photo: 'assets/team/miki.jpg',
+    thumb: 'assets/team/thumbs/miki.jpg',
+    card: 'assets/team/cards/miki.jpg',
+    linkedin: '#'
+  },
+  {
     id: 'rahab',
     name: 'Rahab Cherono',
     role: 'Customer Experience',
     department: 'Customer Experience',
     helpsWith: 'Your first questions about studying abroad, and what to do next.',
     whatsapp: '+254792376637',
-    startHere: true,
+    portalCounsellor: true,
     shortBio: 'Rahab looks after Customer Experience at Studies and Awards Limited, making sure every student’s journey with us feels supported.',
     fullBio: [
       'Rahab Cherono looks after Customer Experience at Studies and Awards Limited, making sure every student who reaches out gets a clear, timely response.',

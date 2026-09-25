@@ -6,7 +6,8 @@ import { Jimp, ResizeStrategy } from 'jimp';
 // Makes the smaller copies of the city photos used on the destination pages,
 // from the full-size slideshow photos:
 //   editorial/<city>.jpg  900px wide: the photo collage and "how we help" photo
-//   thumbs/<city>.jpg     320px wide: the slideshow's filmstrip of cities
+//   thumbs/<city>.jpg     320px wide: small thumbnails (no page uses these now: the
+//                         slideshow's city markers are plain progress bars)
 //
 //   node tools/make-editorial-photos.mjs          make any that are missing or out of date
 //   node tools/make-editorial-photos.mjs --all    remake every one
@@ -20,8 +21,7 @@ import { Jimp, ResizeStrategy } from 'jimp';
 //
 // Why not reuse the slideshow photos? Those are 1920px wide and up to ~500 KB
 // each; the editorial spots show them at most ~400px wide (800px on high-density
-// screens), so a 900px copy looks the same and is a fraction of the weight;
-// the filmstrip thumbnails are ~130px wide, so 320px is plenty.
+// screens), so a 900px copy looks the same and is a fraction of the weight.
 
 const SIZES = { editorial: { width: 900, quality: 70 }, thumbs: { width: 320, quality: 72 } };
 
