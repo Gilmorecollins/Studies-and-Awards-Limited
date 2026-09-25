@@ -182,7 +182,9 @@ p { margin: 0; }
   font-size: 14.5px;
   font-weight: 500;
   color: var(--text);
-  padding-bottom: 5px;
+  /* room for the gold underline below, matched above, so the words stay on
+     the same centre line as the logo and the button */
+  padding: 5px 0;
   white-space: nowrap;
 }
 .nav-link::after {
@@ -264,7 +266,13 @@ p { margin: 0; }
   grid-template-columns: minmax(0, 1.3fr) 140px 150px minmax(0, 1fr) minmax(0, 1.1fr);
   gap: 40px;
   padding-bottom: 48px;
-  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+/* the divider under the columns spans the content only, not the container's
+   side padding, so it starts under the logo and ends under the social icons */
+.footer-grid::after {
+  content: ''; position: absolute; bottom: 0; height: 1px;
+  left: clamp(24px, 4.5vw, 72px); right: clamp(24px, 4.5vw, 72px);
+  background: rgba(255,255,255,0.12);
 }
 .footer-brand-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .footer-brand-row .brand-name { color: #FFFFFF; font-size: 19px; }
@@ -2216,6 +2224,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 
 @media (max-width: 768px) {
   .container { padding-left: 20px; padding-right: 20px; }
+  .footer-grid::after { left: 20px; right: 20px; }
   .brand-name { font-size: 18px; }
 
   .hero-bg { display: none; }
