@@ -876,59 +876,14 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 
 .dest-pick-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) 230px; gap: 20px; }
 
-.dest-pick {
-  display: flex; flex-direction: column; gap: 16px;
-  padding: 30px;
-  background: #FFFFFF;
-  border: 2px solid rgba(0,27,94,0.06);
-  border-radius: 24px;
-  box-shadow: 0 12px 30px rgba(0,27,94,0.10);
-  text-decoration: none; color: var(--ink);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-.dest-pick:hover { transform: translateY(-8px); border-color: var(--brass); box-shadow: 0 28px 60px rgba(0,27,94,0.25); color: var(--ink); }
-.dest-pick:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-.dest-pick-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
-.dest-pick-flag { display: block; width: 68px; height: 46px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
-.dest-pick-tag {
-  padding: 5px 11px;
-  background: #FFF4D1; border-radius: 999px;
-  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11.5px; font-weight: 400;
-  letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;
-  color: var(--brass-ink);
-}
-.dest-pick-code::before { content: attr(data-code); }
-.dest-pick-code { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 96px; line-height: 0.82; color: rgba(0,27,94,0.1); }
-.dest-pick-name { margin-top: -8px; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 44px; line-height: 1; color: var(--ink); }
-.dest-pick-blurb { min-height: 4.65em; font-size: 15.5px; line-height: 1.6; color: var(--muted); }
-.dest-pick-foot {
-  margin-top: auto; padding-top: 16px;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  border-top: 1px dashed rgba(0,27,94,0.18);
-}
-.dest-pick-route {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 20px; letter-spacing: 0.04em;
-  color: var(--brass-ink); white-space: nowrap;
-}
-.dest-pick-route-arrow { flex-shrink: 0; margin-top: -2px; }
-.dest-pick-go { display: inline-flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 700; color: var(--ink); white-space: nowrap; }
-.dest-pick-arrow {
-  width: 38px; height: 38px; flex-shrink: 0;
-  display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 50%; background: var(--ink); color: var(--brass);
-  transition: background 0.2s ease, color 0.2s ease;
-}
-.dest-pick:hover .dest-pick-arrow { background: var(--brass); color: var(--ink); }
-
 .dest-pick-more {
   display: flex; flex-direction: column; justify-content: space-between; gap: 28px;
   padding: 30px 24px;
-  background: var(--ink); border-radius: 24px;
+  background: var(--ink); border-radius: var(--radius);
   text-decoration: none; color: #FFFFFF;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.dest-pick-more:hover { transform: translateY(-8px); box-shadow: 0 28px 60px rgba(0,27,94,0.25); color: #FFFFFF; }
+.dest-pick-more:hover { transform: translateY(-6px); box-shadow: 0 24px 50px rgba(0,27,94,0.22); color: #FFFFFF; }
 .dest-pick-more:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 .dest-pick-more-count { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 64px; line-height: 0.9; color: var(--brass); }
 .dest-pick-more-list { display: flex; flex-direction: column; gap: 8px; }
@@ -946,17 +901,10 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 @media (max-width: 640px) {
   .dest-pick-grid { grid-template-columns: 1fr; }
-  .dest-pick { padding: 26px 24px; }
-  .dest-pick-code { font-size: 80px; }
-  .dest-pick-name { font-size: 40px; }
-  .dest-pick-blurb { min-height: 0; }
-}
-@media (max-width: 400px) {
-  .dest-pick-tag { padding: 5px 9px; letter-spacing: 0.06em; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .dest-pick, .dest-pick-more { transition: none; }
-  .dest-pick:hover, .dest-pick-more:hover { transform: none; }
+  .dest-pick-more { transition: none; }
+  .dest-pick-more:hover { transform: none; }
 }
 
 /* ---------- home: "why choose us" boarding pass ---------- */
