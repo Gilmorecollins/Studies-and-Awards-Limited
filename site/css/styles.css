@@ -1522,13 +1522,13 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .loc-maps-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .loc-before-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 16px; height: 560px; }
 
-.loc-map { display: flex; flex-direction: column; gap: 12px; overflow: hidden; padding-bottom: 12px; border-radius: var(--radius); background: #E7EBF3; box-shadow: 0 16px 40px rgba(0,27,94,0.1); }
+.loc-map { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-soft); border-radius: var(--radius); background: #FFFFFF; box-shadow: 0 16px 40px rgba(0,27,94,0.1); }
 /* the steps card sits under the map rather than on it, so it never covers the
    map's zoom buttons or Google's logo and terms along the bottom edge */
 .loc-map iframe { display: block; flex: 1; min-height: 0; width: 100%; border: 0; }
 .lift-steps {
-  display: flex; flex-direction: column; gap: 6px; margin: 0 12px; padding: 14px 16px 12px;
-  border-radius: 16px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(0,27,94,0.1);
+  display: flex; flex-direction: column; gap: 6px; padding: 16px 18px 16px;
+  border-top: 1px solid var(--border-soft); background: #FFFFFF;
 }
 .lift-steps-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
 .loc-map-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: var(--ink); }
@@ -1571,7 +1571,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .loc-photos-next { right: 14px; }
 .loc-photos-nav:hover { background: #FFFFFF; }
 .loc-photos-nav:focus-visible, .loc-dot:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-.loc-photos-dots { position: absolute; right: 16px; bottom: 25px; z-index: 1; display: flex; gap: 6px; }
+.loc-photos-dots { position: absolute; right: 16px; bottom: 20px; z-index: 1; display: flex; gap: 6px; }
 .loc-photos-dots { align-items: center; }
 .loc-photos-play {
   display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; margin-right: 4px; padding: 0;
@@ -1619,6 +1619,10 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .lift-inside-sub { font-size: 13px; }
   .lift-actions > a { flex: 1 1 100%; justify-content: center; }
   .loc-photos { height: 360px; }
+  /* too narrow for the caption and the controls on one line: the controls go
+     to the top corner and the caption keeps the bottom to itself */
+  .loc-photos-dots { top: 16px; bottom: auto; }
+  .loc-slide figcaption { max-width: calc(100% - 32px); }
 }
 
 /* ---------- team page ---------- */
