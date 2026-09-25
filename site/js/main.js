@@ -34,7 +34,7 @@
       if (event.key === 'Escape') closeNav();
     });
 
-    var mq = window.matchMedia('(min-width: 1081px)');
+    var mq = window.matchMedia('(min-width: 1181px)');
     var handleViewportChange = function (event) {
       if (event.matches) closeNav();
     };

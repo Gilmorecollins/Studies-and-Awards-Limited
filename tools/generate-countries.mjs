@@ -58,7 +58,7 @@ function seoBlock({ title, description, path, image, imageAlt }) {
 
 // The hand-maintained pages: the generator only ever rewrites the marked block
 // inside their <head>; everything else on those pages stays exactly as written.
-const HAND_PAGES = ['index.html', 'about.html', 'services.html', 'team.html', 'destinations.html'];
+const HAND_PAGES = ['index.html', 'about.html', 'services.html', 'team.html', 'location.html', 'destinations.html'];
 
 function withSeoBlock(html, file) {
   const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1];
@@ -454,6 +454,7 @@ ${seoBlock({ title: `Study in ${esc(c.name)} — ${SITE_NAME}`, description: c.t
       <a href="services.html" class="nav-link">Services</a>
       <a href="about.html" class="nav-link">About Us</a>
       <a href="team.html" class="nav-link">Team</a>
+      <a href="location.html" class="nav-link">Find Us</a>
       <a href="portal/index.html" class="nav-link muted">Student Portal</a>
       <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary nav-cta-mobile">Book Free Consultation</a>
     </nav>
@@ -573,6 +574,7 @@ ${otherPills}
           <a href="about.html">About Us</a>
           <a href="services.html">Services</a>
           <a href="team.html">Our Team</a>
+          <a href="location.html">Find Us</a>
           <a href="https://www.magistersacco.org/">Financial Support</a>
           <a href="portal/index.html">Student Portal</a>
           <a href="https://student.studiesandawardsltd.com/staff-login">Staff Portal</a>
