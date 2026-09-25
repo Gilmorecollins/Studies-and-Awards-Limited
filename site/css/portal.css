@@ -660,6 +660,7 @@ html[data-sample="progress"] .p-doc[data-sample-done] .p-doc-todo { display: non
 @media (max-width: 480px) {
   .p-top-title h1 { font-size: 22px; }
   .p-sample { position: absolute; left: 50%; bottom: 0; z-index: 1; transform: translate(-50%, 50%); }
+  .p-content { padding-top: 32px; }
 }
 @media (max-width: 380px) {
   .p-stats-3, .p-stats-4 { grid-template-columns: minmax(0, 1fr); }
