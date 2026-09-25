@@ -1,6 +1,6 @@
 // Team data, used by the Team page AND by the site-wide "Book Free Consultation"
 // chooser. Shape (TeamMember):
-//   { id, name, role, department, helpsWith, whatsapp, startHere?, portalCounsellor?, shortBio, fullBio: string[], photo, thumb, card, linkedin? }
+//   { id, name, role, department, helpsWith, whatsapp, destinations?, startHere?, portalCounsellor?, shortBio, fullBio: string[], photo, thumb, card, linkedin? }
 // photo should be a 4:5 portrait (e.g. 960x1200) for the best crop in the slider.
 // thumb is the small square head-and-shoulders portrait (assets/team/thumbs/<id>.jpg,
 // used on the Team page's journey stops) and card the 5:4 portrait on the
@@ -15,6 +15,9 @@
 //     opening an email exactly as before.
 //   - department: used for the filter buttons above the list.
 //   - helpsWith: one line telling a visitor what to come to this person for.
+//   - destinations: the countries this person looks after, e.g. ['Germany'].
+//     When someone books from that country's page, they're listed first with a
+//     "Best for Germany" tag. Use the country name exactly as on the site.
 //   - startHere: true on ONE person to offer them first: their card leads the
 //     list with a "Not sure? Start here" tag, for visitors who don't know who to
 //     ask. Remove it and everyone is shown in the order below.
@@ -161,6 +164,7 @@ window.TEAM_MEMBERS = [
     role: 'German Language Tutor',
     department: 'Germany & German',
     helpsWith: 'Learning German, and guidance on studying in Germany.',
+    destinations: ['Germany'],
     whatsapp: '+254737173516',
     shortBio: 'Karen is the German Language Tutor at Studies and Awards Limited, and also guides students who are considering Germany as a destination.',
     fullBio: [

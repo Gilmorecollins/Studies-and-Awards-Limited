@@ -129,9 +129,12 @@
 
   // Lazy-load each background image only once, right before it's needed —
   // avoids fetching every city photo (potentially 9+ full-screen images) on load.
+  // Phones and portrait tablets get the 3:4 crop (data-src-portrait): they only
+  // ever see the middle of the wide photo, and the crop is far lighter.
+  var portrait = window.matchMedia && window.matchMedia('(max-aspect-ratio: 3/4)');
   function loadImage(el) {
     if (!el || el.dataset.loaded) return;
-    var src = el.getAttribute('data-src');
+    var src = (portrait && portrait.matches && el.getAttribute('data-src-portrait')) || el.getAttribute('data-src');
     if (!src) return;
     el.style.backgroundImage = "url('" + src + "')";
     el.dataset.loaded = 'true';
@@ -426,6 +429,7 @@
     });
 
     liveEl.textContent = member.name + ', ' + member.role;
+    if (!silent && window.history.replaceState) window.history.replaceState(null, '', '#' + member.id);
   }
 
   // Clicks that land mid-slide are queued rather than dropped, so pressing
@@ -551,8 +555,27 @@
     resizeTimer = window.setTimeout(function () { setPosition(pos, false); }, 120);
   });
 
-  setPosition(0, false);
-  renderInfo(0, true);
+  // A link like team.html#miki opens on that person, and moving through the
+  // team keeps the address on whoever is showing, so it can be copied and sent.
+  function indexFromHash() {
+    var id = '';
+    try { id = decodeURIComponent(window.location.hash.slice(1)); } catch (e) { /* malformed: ignore */ }
+    for (var i = 0; i < count; i++) if (members[i].id === id) return i;
+    return -1;
+  }
+  var linked = indexFromHash();
+  pos = activeIndex = Math.max(0, linked);
+  setPosition(pos, false);
+  renderInfo(activeIndex, true);
+  if (linked > -1) {
+    var header = document.querySelector('.site-header');
+    var top = section.getBoundingClientRect().top + window.pageYOffset - (header ? header.getBoundingClientRect().height : 0);
+    window.scrollTo(0, Math.max(0, top));
+  }
+  window.addEventListener('hashchange', function () {
+    var i = indexFromHash();
+    if (i > -1) goTo(i);
+  });
 
   // ---- "View more" bio modal ----
   var overlay = document.getElementById('team-modal-overlay');
@@ -1377,10 +1400,11 @@ function createCursorFollower(options) {
   }
 
   // One portrait card: photo, name, role, what to ask them about, then
-  // WhatsApp and call. `start` marks the person offered to the undecided.
-  function row(p, index, start) {
+  // WhatsApp and call. `start` marks the person offered to the undecided;
+  // `match` someone who looks after the destination being asked about.
+  function row(p, index, start, match) {
     var m = p.m;
-    var card = el('li', 'consult-card' + (p.number ? '' : ' is-pending') + (start ? ' is-start' : ''));
+    var card = el('li', 'consult-card' + (p.number ? '' : ' is-pending') + (start ? ' is-start' : '') + (match ? ' is-match' : ''));
     card.setAttribute('data-dept', m.department || '');
     card.style.setProperty('--i', String(Math.min(index, 10)));
     var figure = el('div', 'consult-card-photo');
@@ -1388,7 +1412,8 @@ function createCursorFollower(options) {
     card.appendChild(figure);
     var content = el('div', 'consult-card-body');
     card.appendChild(content);
-    if (start) content.appendChild(el('p', 'consult-start-tag', 'Not sure? Start here'));
+    if (match) content.appendChild(el('p', 'consult-start-tag consult-match-tag', 'Best for ' + topic));
+    else if (start) content.appendChild(el('p', 'consult-start-tag', 'Not sure? Start here'));
     content.appendChild(identity(m));
     if (m.helpsWith) content.appendChild(el('p', 'consult-help', m.helpsWith));
 
@@ -1444,16 +1469,20 @@ function createCursorFollower(options) {
       body.appendChild(el('p', 'consult-preview', 'Preview mode: people who don’t have a WhatsApp number yet are shown greyed out. Visitors won’t see them until a number is added in js/team-data.js.'));
     }
 
-    // The person flagged `startHere` (with a number) goes first, tagged for
-    // visitors who don't know who to ask; everyone else keeps the Team page order.
+    // Asked from a destination page: whoever lists that country in their
+    // `destinations` goes first, tagged "Best for <country>". Then the person
+    // flagged `startHere` (with a number), tagged for visitors who don't know
+    // who to ask; everyone else keeps the Team page order.
+    var matches = topic ? list.filter(function (p) { return (p.m.destinations || []).indexOf(topic) > -1; }) : [];
     var start = null;
-    list.forEach(function (p) { if (!start && p.m.startHere && p.number) start = p; });
-    var ordered = start ? [start].concat(list.filter(function (p) { return p !== start; })) : list;
+    list.forEach(function (p) { if (!start && p.m.startHere && p.number && matches.indexOf(p) < 0) start = p; });
+    var lead = matches.concat(start ? [start] : []);
+    var ordered = lead.concat(list.filter(function (p) { return lead.indexOf(p) < 0; }));
 
     grid = el('ul', 'consult-grid');
-    ordered.forEach(function (p, i) { grid.appendChild(row(p, i, p === start)); });
+    ordered.forEach(function (p, i) { grid.appendChild(row(p, i, p === start, matches.indexOf(p) > -1)); });
     body.appendChild(grid);
-    startTag = grid.querySelector('.consult-start-tag');
+    startTag = grid.querySelector('.is-start .consult-start-tag');
 
     // department filters — only worth showing when there's a real choice to narrow
     var departments = departmentsOf(list);
@@ -1981,4 +2010,161 @@ function createCursorFollower(options) {
   }, { passive: true });
   window.addEventListener('resize', update);
   update();
+})();
+
+// "Open now" badge next to the office hours (footer and Find Us), worked out
+// in Kenya time (UTC+3 all year) whatever the visitor's own time zone.
+// Knows the fixed public holidays and Easter. Days whose date moves each year
+// (Eid) or one-off closures go in EXTRA_CLOSED_DAYS as 'YYYY-MM-DD'.
+(function () {
+  'use strict';
+
+  var badges = document.querySelectorAll('[data-open-status]');
+  if (!badges.length) return;
+
+  var OPEN_HOUR = 8, CLOSE_HOUR = 17;
+  var EXTRA_CLOSED_DAYS = [];
+  // Jan 1, Labour Day, Madaraka, Mazingira, Mashujaa, Jamhuri, Christmas, Boxing Day
+  var FIXED_HOLIDAYS = ['01-01', '05-01', '06-01', '10-10', '10-20', '12-12', '12-25', '12-26'];
+  var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var key = function (d) { return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()); };
+  var addDays = function (d, n) { return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + n)); };
+
+  var easterCache = {};
+  function easter(year) { // Gregorian Easter Sunday (anonymous algorithm)
+    if (easterCache[year]) return easterCache[year];
+    var a = year % 19, b = Math.floor(year / 100), c = year % 100, d = Math.floor(b / 4), e = b % 4;
+    var f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+    var i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451);
+    var month = Math.floor((h + l - 7 * m + 114) / 31), day = ((h + l - 7 * m + 114) % 31) + 1;
+    return (easterCache[year] = new Date(Date.UTC(year, month - 1, day)));
+  }
+
+  function isHoliday(d) {
+    var ymd = key(d), md = ymd.slice(5);
+    if (FIXED_HOLIDAYS.indexOf(md) > -1 || EXTRA_CLOSED_DAYS.indexOf(ymd) > -1) return true;
+    // a fixed holiday that falls on a Sunday is taken on the Monday
+    if (d.getUTCDay() === 1 && FIXED_HOLIDAYS.indexOf(key(addDays(d, -1)).slice(5)) > -1) return true;
+    var e = easter(d.getUTCFullYear());
+    return ymd === key(addDays(e, -2)) || ymd === key(addDays(e, 1)); // Good Friday, Easter Monday
+  }
+
+  var isWorkday = function (d) { var w = d.getUTCDay(); return w > 0 && w < 6 && !isHoliday(d); };
+  var hourLabel = function (h) { return (h > 12 ? h - 12 : h) + (h >= 12 ? 'pm' : 'am'); };
+
+  function status() {
+    var now = new Date(Date.now() + 3 * 3600 * 1000); // Kenya wall clock in the UTC fields
+    var today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+    var minutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+    if (isWorkday(today) && minutes >= OPEN_HOUR * 60 && minutes < CLOSE_HOUR * 60) {
+      return { open: true, text: 'Open now · closes ' + hourLabel(CLOSE_HOUR) };
+    }
+    if (isWorkday(today) && minutes < OPEN_HOUR * 60) {
+      return { open: false, text: 'Closed · opens ' + hourLabel(OPEN_HOUR) + ' today' };
+    }
+    for (var n = 1; n < 14; n++) {
+      var day = addDays(today, n);
+      if (isWorkday(day)) {
+        return { open: false, text: 'Closed · opens ' + (n === 1 ? 'tomorrow' : DAYS[day.getUTCDay()]) + ' ' + hourLabel(OPEN_HOUR) };
+      }
+    }
+    return null;
+  }
+
+  function render() {
+    var s = status();
+    Array.prototype.forEach.call(badges, function (badge) {
+      if (!s) { badge.hidden = true; return; }
+      badge.textContent = s.text;
+      badge.classList.toggle('is-open', s.open);
+      badge.hidden = false;
+    });
+  }
+
+  render();
+  window.setInterval(render, 60 * 1000);
+})();
+
+// FAQ answers have their own addresses (index.html#faq-visa and so on): a link
+// to one opens that answer, and opening one puts its address in the address
+// bar, with a "Copy link" button beside it, so staff can send the answer itself.
+(function () {
+  'use strict';
+
+  var items = document.querySelectorAll('details.faq-item[id]');
+  if (!items.length) return;
+
+  function openFromHash(scroll) {
+    var id = window.location.hash.slice(1);
+    var item = id && document.getElementById(id);
+    if (!item || !item.classList.contains('faq-item')) return;
+    item.open = true;
+    if (scroll) item.scrollIntoView({ block: 'center' });
+  }
+
+  Array.prototype.forEach.call(items, function (item) {
+    var answer = item.querySelector('p');
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'faq-copy';
+    button.textContent = 'Copy link';
+    button.addEventListener('click', function () {
+      var url = window.location.href.split('#')[0] + '#' + item.id;
+      var done = function () {
+        button.textContent = 'Link copied';
+        window.setTimeout(function () { button.textContent = 'Copy link'; }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, function () { window.prompt('Copy this link:', url); });
+      } else {
+        window.prompt('Copy this link:', url);
+      }
+    });
+    (answer ? answer.parentNode : item).insertBefore(button, answer ? answer.nextSibling : null);
+
+    // on the visitor's click only (the first answer starts open, and browsers
+    // report that as a toggle too)
+    item.querySelector('summary').addEventListener('click', function () {
+      window.setTimeout(function () {
+        if (item.open && window.history.replaceState) window.history.replaceState(null, '', '#' + item.id);
+      }, 0);
+    });
+  });
+
+  openFromHash(false);
+  window.addEventListener('hashchange', function () { openFromHash(true); });
+})();
+
+// Find Us: "Copy address" puts the address on the clipboard; "Share location"
+// opens the phone's own share sheet where there is one (and WhatsApp, its
+// link, everywhere else).
+(function () {
+  'use strict';
+
+  var box = document.querySelector('[data-loc-share]');
+  if (!box) return;
+
+  var copyBtn = box.querySelector('[data-copy-address]');
+  if (copyBtn && navigator.clipboard && navigator.clipboard.writeText) {
+    var label = copyBtn.querySelector('span');
+    copyBtn.hidden = false;
+    copyBtn.addEventListener('click', function () {
+      navigator.clipboard.writeText(copyBtn.getAttribute('data-copy-address')).then(function () {
+        label.textContent = 'Address copied';
+        window.setTimeout(function () { label.textContent = 'Copy address'; }, 2000);
+      }, function () { /* clipboard refused: leave the button as it was */ });
+    });
+  }
+
+  var shareLink = box.querySelector('[data-share-location]');
+  var coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  if (shareLink && navigator.share && coarse) {
+    shareLink.addEventListener('click', function (event) {
+      event.preventDefault();
+      navigator.share({ title: 'Studies and Awards Limited', text: box.getAttribute('data-share-text') })
+        .catch(function () { /* closed the share sheet: nothing to do */ });
+    });
+  }
 })();
