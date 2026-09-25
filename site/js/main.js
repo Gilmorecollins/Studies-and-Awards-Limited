@@ -34,7 +34,8 @@
       if (event.key === 'Escape') closeNav();
     });
 
-    var mq = window.matchMedia('(min-width: 1181px)');
+    // the desktop menu's breakpoint, as rewritten for the laptop fit in styles.css
+    var mq = window.matchMedia('(min-width: 1181px), (min-width: 1024px) and (pointer: fine)');
     var handleViewportChange = function (event) {
       if (event.matches) closeNav();
     };
@@ -626,6 +627,13 @@
   });
 })();
 
+// The page's CSS zoom: the "laptop fit" in styles.css scales the whole page
+// down in narrow laptop windows. Mouse positions arrive in real screen pixels,
+// so anything placed at a mouse position divides by this first.
+function pageZoom() {
+  return parseFloat(window.getComputedStyle(document.documentElement).zoom) || 1;
+}
+
 // Reusable cursor-follower component: a small circle that trails the mouse
 // with lerped easing, scales over interactive targets, and can be told to
 // stay visible (in an alternate style) while something like a modal is open.
@@ -659,6 +667,8 @@ function createCursorFollower(options) {
   var isDown = false;
   var isHover = false;
   var rafId = null;
+  var zoom = pageZoom();
+  window.addEventListener('resize', function () { zoom = pageZoom(); });
 
   function scaleFor() {
     if (isDown) return 0.8;
@@ -669,7 +679,7 @@ function createCursorFollower(options) {
   function tick() {
     curX += (mouseX - curX) * lerpFactor;
     curY += (mouseY - curY) * lerpFactor;
-    el.style.transform = 'translate3d(' + curX + 'px, ' + curY + 'px, 0) translate(-50%, -50%) scale(' + scaleFor() + ')';
+    el.style.transform = 'translate3d(' + curX / zoom + 'px, ' + curY / zoom + 'px, 0) translate(-50%, -50%) scale(' + scaleFor() + ')';
     rafId = window.requestAnimationFrame(tick);
   }
 

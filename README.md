@@ -103,6 +103,20 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
     `border-bottom:none`), both copies of the ticker, and the meta description
   - `services.html`: a code pill in the "Available for" strip
 - **Styling**: `site/css/styles.css`.
+- **Laptop fit (why the site looks the same size on every laptop)**: laptops
+  give web pages very different window widths, because Windows and macOS
+  enlarge everything on high-resolution screens (a 1920x1200 screen at 150%
+  gives a page only 1280px; 1920x1080 at 125% gives 1536px). The site is laid
+  out for a window at least 1400px wide, so on a mouse/trackpad screen narrower
+  than that, the whole page is laid out at 1400px and scaled down to fit, the
+  same as zooming the browser out (at 1280px it shows at about 90%). It never
+  goes below 80% (windows from 1024px to 1120px wide). Windows 1400px and
+  wider, phones and tablets, and anything with a touch screen as its main
+  input are not scaled. It lives in the "laptop fit" block near the top of
+  `styles.css`, which also explains the two rules for editing that file: write
+  vw/vh sizes as `calc(4vw / var(--z, 1))`, and a new width breakpoint between
+  1024px and 1400px needs the extra real-width condition shown there. The
+  student portal has its own stylesheet (`css/portal.css`) and is not scaled.
 - **Destination photos**: put the raw photos in
   `source-assets/destination-photos/<Country>/` (one .jpg per city, named
   after the city), then run
