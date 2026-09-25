@@ -2012,17 +2012,20 @@ function createCursorFollower(options) {
   update();
 })();
 
-// "Open now" badge next to the office hours (footer and Find Us), worked out
-// in Kenya time (UTC+3 all year) whatever the visitor's own time zone.
+// Whether the office is open, worked out in Kenya time (UTC+3 all year)
+// whatever the visitor's own time zone: the "Open now" badge by the hours in
+// the footer, and the little door sign (OPEN / CLOSING / CLOSED) on Find Us.
 // Knows the fixed public holidays and Easter. Days whose date moves each year
 // (Eid) or one-off closures go in EXTRA_CLOSED_DAYS as 'YYYY-MM-DD'.
 (function () {
   'use strict';
 
   var badges = document.querySelectorAll('[data-open-status]');
-  if (!badges.length) return;
+  var sign = document.querySelector('[data-door-sign]');
+  if (!badges.length && !sign) return;
 
   var OPEN_HOUR = 8, CLOSE_HOUR = 17;
+  var SOON_MINUTES = 60; // the sign turns to CLOSING for the last hour
   var EXTRA_CLOSED_DAYS = [];
   // Jan 1, Labour Day, Madaraka, Mazingira, Mashujaa, Jamhuri, Christmas, Boxing Day
   var FIXED_HOLIDAYS = ['01-01', '05-01', '06-01', '10-10', '10-20', '12-12', '12-25', '12-26'];
@@ -2058,29 +2061,66 @@ function createCursorFollower(options) {
     var now = new Date(Date.now() + 3 * 3600 * 1000); // Kenya wall clock in the UTC fields
     var today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
     var minutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+    var close = hourLabel(CLOSE_HOUR), open = hourLabel(OPEN_HOUR);
     if (isWorkday(today) && minutes >= OPEN_HOUR * 60 && minutes < CLOSE_HOUR * 60) {
-      return { open: true, text: 'Open now · closes ' + hourLabel(CLOSE_HOUR) };
+      var soon = minutes >= CLOSE_HOUR * 60 - SOON_MINUTES;
+      return {
+        state: soon ? 'soon' : 'open',
+        text: 'Open now \u00b7 closes ' + close,
+        word: soon ? 'Closing' : 'Open',
+        back: soon ? 'Closing at ' + close : 'Here until ' + close
+      };
     }
-    if (isWorkday(today) && minutes < OPEN_HOUR * 60) {
-      return { open: false, text: 'Closed · opens ' + hourLabel(OPEN_HOUR) + ' today' };
-    }
-    for (var n = 1; n < 14; n++) {
+    var when = null;
+    if (isWorkday(today) && minutes < OPEN_HOUR * 60) when = 'today';
+    for (var n = 1; !when && n < 14; n++) {
       var day = addDays(today, n);
-      if (isWorkday(day)) {
-        return { open: false, text: 'Closed · opens ' + (n === 1 ? 'tomorrow' : DAYS[day.getUTCDay()]) + ' ' + hourLabel(OPEN_HOUR) };
-      }
+      if (isWorkday(day)) when = n === 1 ? 'tomorrow' : DAYS[day.getUTCDay()];
     }
-    return null;
+    if (!when) return null;
+    return {
+      state: 'closed',
+      text: 'Closed \u00b7 opens ' + (when === 'today' ? open + ' today' : when + ' ' + open),
+      word: 'Closed',
+      back: 'Back ' + when + ' at ' + open
+    };
   }
 
+  var lastState = '';
   function render() {
     var s = status();
     Array.prototype.forEach.call(badges, function (badge) {
       if (!s) { badge.hidden = true; return; }
       badge.textContent = s.text;
-      badge.classList.toggle('is-open', s.open);
+      badge.classList.toggle('is-open', s.state !== 'closed');
+      badge.classList.toggle('is-soon', s.state === 'soon');
       badge.hidden = false;
     });
+    if (sign) {
+      var plate = sign.querySelector('.door-sign-plate');
+      var back = sign.querySelector('[data-door-back]');
+      if (!s) { plate.hidden = true; back.hidden = true; return; }
+      sign.classList.toggle('is-open', s.state === 'open');
+      sign.classList.toggle('is-soon', s.state === 'soon');
+      sign.querySelector('[data-door-word]').textContent = s.word.toUpperCase();
+      // the plate is decoration; screen readers get "Open now." etc. here instead
+      back.textContent = '';
+      var said = document.createElement('span');
+      said.className = 'sr-only';
+      said.textContent = (s.state === 'closed' ? 'Closed now' : s.state === 'soon' ? 'Closing soon' : 'Open now') + '. ';
+      back.appendChild(said);
+      back.appendChild(document.createTextNode(s.back));
+      plate.hidden = false;
+      back.hidden = false;
+      // a little swing when the sign flips over while the page is open
+      if (lastState && lastState !== s.state) {
+        sign.classList.remove('is-swinging');
+        // eslint-disable-next-line no-unused-expressions
+        sign.offsetWidth;
+        sign.classList.add('is-swinging');
+      }
+    }
+    lastState = s ? s.state : '';
   }
 
   render();
