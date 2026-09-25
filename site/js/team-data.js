@@ -250,13 +250,30 @@ window.TEAM_MEMBERS = [
     linkedin: '#'
   },
   {
+    id: 'miki',
+    name: 'Miki',
+    role: 'Receptionist',
+    department: 'Customer Experience',
+    helpsWith: 'Your first point of contact at our office, who will point you to the right person.',
+    whatsapp: '',
+    startHere: true,
+    shortBio: 'Miki is at the reception at Studies and Awards Limited, the first person students and visitors meet when they get in touch.',
+    fullBio: [
+      'Miki works at the reception at Studies and Awards Limited in Eldoret, and is the first point of contact for students and visitors who walk in or reach out.',
+      'He finds out what each person needs and directs them to the right member of the team, so nobody is left wondering who to ask.'
+    ],
+    photo: 'assets/team/miki.jpg',
+    thumb: 'assets/team/thumbs/miki.jpg',
+    card: 'assets/team/cards/miki.jpg',
+    linkedin: '#'
+  },
+  {
     id: 'rahab',
     name: 'Rahab Cherono',
     role: 'Customer Experience',
     department: 'Customer Experience',
     helpsWith: 'Your first questions about studying abroad, and what to do next.',
     whatsapp: '+254792376637',
-    startHere: true,
     shortBio: 'Rahab looks after Customer Experience at Studies and Awards Limited, making sure every student’s journey with us feels supported.',
     fullBio: [
       'Rahab Cherono looks after Customer Experience at Studies and Awards Limited, making sure every student who reaches out gets a clear, timely response.',

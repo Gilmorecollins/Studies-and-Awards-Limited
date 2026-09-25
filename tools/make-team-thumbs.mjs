@@ -38,6 +38,7 @@ const framing = {
   'ian':            { eye: 325, headTop: 98, cardW: 860 },
   'joy':            { eye: 384, headTop: 175, cardW: 800 },
   'joyner':         { eye: 384, headTop: 204 },
+  'miki':           { eye: 408, headTop: 155 },
   'mourine':        { eye: 384, headTop: 262 },
   'rahab':          { eye: 372, headTop: 150 },
   'talaam':         { eye: 282, headTop: 75 },
