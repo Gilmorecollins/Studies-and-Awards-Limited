@@ -1564,6 +1564,15 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .loc-photos-nav:hover { background: #FFFFFF; }
 .loc-photos-nav:focus-visible, .loc-dot:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .loc-photos-dots { position: absolute; right: 16px; bottom: 25px; z-index: 1; display: flex; gap: 6px; }
+.loc-photos-dots { align-items: center; }
+.loc-photos-play {
+  display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; margin-right: 4px; padding: 0;
+  border: 0; border-radius: 50%; background: rgba(255,255,255,0.92); box-shadow: 0 0 0 1.5px rgba(0,27,94,0.25); color: var(--ink); cursor: pointer;
+}
+.loc-photos-play:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.loc-icon-play { display: none; }
+.loc-photos.is-paused .loc-icon-play { display: block; }
+.loc-photos.is-paused .loc-icon-pause { display: none; }
 .loc-dot { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 4px; background: #FFFFFF; box-shadow: 0 0 0 1.5px rgba(0,27,94,0.55); cursor: pointer; transition: width 250ms ease; }
 .loc-dot.is-active { width: 26px; background: var(--brass); }
 

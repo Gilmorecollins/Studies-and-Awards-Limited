@@ -1774,15 +1774,55 @@ function createCursorFollower(options) {
     });
   }
 
+  // Rotates by itself every few seconds, round and round. It holds still while
+  // the pointer is over it or keyboard focus is inside it, and while it's off
+  // screen; the pause button stops it for good. Visitors who ask their device
+  // for reduced motion get it paused from the start.
+  var ROTATE_MS = 5000;
+  var toggle = box.querySelector('[data-photos-toggle]');
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var playing = !reduceMotion, hovered = false, focused = false, inView = false, timer = null;
+
+  function schedule() {
+    window.clearTimeout(timer);
+    if (playing && inView && !hovered && !focused && !document.hidden) {
+      timer = window.setTimeout(function () { show(current + 1); schedule(); }, ROTATE_MS);
+    }
+  }
+  function setPlaying(on) {
+    playing = on;
+    box.classList.toggle('is-paused', !on);
+    if (toggle) toggle.setAttribute('aria-label', on ? 'Pause the photos' : 'Play the photos');
+    schedule();
+  }
+  setPlaying(playing);
+  if (toggle) toggle.addEventListener('click', function () { setPlaying(!playing); });
+
+  box.addEventListener('pointerenter', function (event) { if (event.pointerType === 'mouse') { hovered = true; schedule(); } });
+  box.addEventListener('pointerleave', function () { hovered = false; schedule(); });
+  // only keyboard focus holds it (a mouse click focuses the button too), and never
+  // the pause/play button itself, or pressing Play would leave it held
+  box.addEventListener('focusin', function (event) {
+    focused = event.target !== toggle && event.target.matches(':focus-visible');
+    schedule();
+  });
+  box.addEventListener('focusout', function (event) { if (!box.contains(event.relatedTarget)) { focused = false; schedule(); } });
+  document.addEventListener('visibilitychange', schedule);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) { inView = entries[0].isIntersecting; schedule(); }, { threshold: 0.4 }).observe(box);
+  } else {
+    inView = true; schedule();
+  }
+
   box.addEventListener('click', function (event) {
     var stepBtn = event.target.closest('[data-slide-step]');
-    if (stepBtn) { show(current + parseInt(stepBtn.getAttribute('data-slide-step'), 10)); return; }
+    if (stepBtn) { show(current + parseInt(stepBtn.getAttribute('data-slide-step'), 10)); schedule(); return; }
     var dot = event.target.closest('[data-slide-go]');
-    if (dot) show(parseInt(dot.getAttribute('data-slide-go'), 10));
+    if (dot) { show(parseInt(dot.getAttribute('data-slide-go'), 10)); schedule(); }
   });
   box.addEventListener('keydown', function (event) {
-    if (event.key === 'ArrowLeft') { show(current - 1); }
-    else if (event.key === 'ArrowRight') { show(current + 1); }
+    if (event.key === 'ArrowLeft') { show(current - 1); schedule(); }
+    else if (event.key === 'ArrowRight') { show(current + 1); schedule(); }
   });
 
   // swipe on touch screens (vertical scrolling still passes through: touch-action: pan-y)
@@ -1795,7 +1835,7 @@ function createCursorFollower(options) {
     if (startX === null) return;
     var dx = event.clientX - startX, dy = event.clientY - startY;
     startX = null;
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(current + (dx < 0 ? 1 : -1));
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { show(current + (dx < 0 ? 1 : -1)); schedule(); }
   });
   box.addEventListener('pointercancel', function () { startX = null; });
 })();
