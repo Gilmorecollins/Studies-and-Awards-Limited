@@ -1619,8 +1619,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .loc-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 500ms ease; }
 .loc-slide.is-active { opacity: 1; }
 .loc-slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
-.loc-slide-pending { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; font-size: 14px; color: var(--muted); }
-.loc-slide-pending svg { color: #A9B0BC; }
+.loc-slide[data-slide="2"] img { object-position: 50% 28%; }
 .loc-slide figcaption {
   position: absolute; left: 16px; bottom: 16px; max-width: calc(100% - 120px);
   padding: 7px 12px; border-radius: 999px; background: rgba(0,27,94,0.85);
