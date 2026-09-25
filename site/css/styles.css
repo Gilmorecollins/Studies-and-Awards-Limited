@@ -223,7 +223,7 @@ p { margin: 0; }
 }
 .site-header.header-overlay .brand-name,
 .site-header.header-overlay .nav-toggle { color: #FFFFFF; transition: color 250ms ease; }
-@media (min-width: 1081px) {
+@media (min-width: 1181px) {
   .site-header.header-overlay .nav-link:not(.muted) { color: #FFFFFF; }
   .site-header.header-overlay .nav-link.muted { color: rgba(255,255,255,0.75); }
 }
@@ -234,7 +234,7 @@ p { margin: 0; }
 }
 .site-header.header-overlay.is-scrolled .brand-name,
 .site-header.header-overlay.is-scrolled .nav-toggle { color: var(--ink); }
-@media (min-width: 1081px) {
+@media (min-width: 1181px) {
   .site-header.header-overlay.is-scrolled .nav-link:not(.muted) { color: var(--text); }
   .site-header.header-overlay.is-scrolled .nav-link.muted { color: var(--muted); }
 }
@@ -1419,6 +1419,74 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .dept-mosaic .dept-tile:not(.dept-tile-big) .dept-tile-name { font-size: 19px; }
 }
 
+/* ---------- find us page ----------
+   The building photo beside the office entrance and reception, then the
+   address card beside a map, then three steps for finding the office. */
+
+.loc-photos { padding-bottom: clamp(56px, 6vw, 88px); }
+.loc-gallery {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  height: clamp(560px, 50vw, 700px);
+}
+.loc-photo { display: flex; flex-direction: column; gap: 12px; min-height: 0; margin: 0; }
+.loc-photo-main { grid-row: 1 / 3; }
+.loc-photo img, .loc-photo-placeholder { flex: 1; min-height: 0; width: 100%; border-radius: var(--radius); }
+.loc-photo img { display: block; object-fit: cover; background: var(--paper); }
+.loc-photo-main img { object-position: 50% 62%; }
+.loc-photo-placeholder {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  background: var(--paper); border: 1.5px dashed var(--border);
+  font-size: 13px; color: var(--muted);
+}
+.loc-photo-placeholder svg { width: 34px; height: 34px; color: var(--brass-ink); }
+.loc-photo figcaption { display: flex; align-items: baseline; gap: 10px; font-size: 14px; color: var(--muted); }
+.loc-photo-num { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
+
+.loc-visit { background: var(--paper); padding: clamp(56px, 6.7vw, 96px) 0; }
+.loc-visit-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: clamp(32px, 5vw, 72px); align-items: stretch; }
+.loc-details { display: flex; flex-direction: column; align-items: flex-start; }
+.loc-details .eyebrow, .loc-steps .eyebrow { display: block; margin-bottom: 12px; color: var(--brass-ink); }
+.loc-list { display: flex; flex-direction: column; gap: 20px; margin: 28px 0 32px; padding: 0; list-style: none; }
+.loc-list li { display: flex; align-items: flex-start; gap: 14px; }
+.loc-list svg { flex-shrink: 0; margin-top: 1px; color: var(--brass-ink); }
+.loc-list span { display: flex; flex-direction: column; gap: 3px; font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+.loc-list strong { font-size: 16px; font-weight: 700; color: var(--ink); overflow-wrap: anywhere; }
+.loc-list a { color: inherit; }
+.loc-list a:hover { color: var(--brass-ink); }
+.loc-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px 28px; margin-top: auto; }
+.loc-map { min-height: 420px; border-radius: var(--radius); overflow: hidden; background: #E8ECF2; box-shadow: 0 14px 36px rgba(0,27,94,0.08); }
+.loc-map iframe { display: block; width: 100%; height: 100%; min-height: 420px; border: 0; }
+
+.loc-steps { padding: clamp(56px, 6.7vw, 96px) 0 0; }
+.loc-steps-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 32px 0 0; padding: 0; list-style: none; border-top: 2px solid var(--ink); }
+.loc-steps-list li { display: flex; flex-direction: column; gap: 10px; padding: 28px 32px 8px; }
+.loc-steps-list li:first-child { padding-left: 0; }
+.loc-steps-list li + li { border-left: 1px solid var(--border); }
+.loc-step-num { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 44px; line-height: 1; color: transparent; -webkit-text-stroke: 1.5px var(--brass-ink); }
+.loc-steps-list h3 { font-size: 19px; line-height: 1.3; }
+.loc-steps-list p { font-size: 15.5px; line-height: 1.65; color: var(--muted); }
+
+@media (max-width: 860px) {
+  .loc-gallery { height: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; gap: 16px; }
+  .loc-photo-main { grid-row: auto; grid-column: 1 / -1; }
+  .loc-photo-main img { flex: none; height: auto; aspect-ratio: 1 / 1; }
+  .loc-photo-pending .loc-photo-placeholder { flex: none; aspect-ratio: 4 / 3; }
+  .loc-photo figcaption { font-size: 13px; }
+  .loc-visit-grid { grid-template-columns: minmax(0, 1fr); }
+  .loc-map, .loc-map iframe { min-height: 340px; }
+  .loc-steps-list { grid-template-columns: minmax(0, 1fr); }
+  .loc-steps-list li, .loc-steps-list li:first-child { padding: 24px 0; }
+  .loc-steps-list li + li { border-left: none; border-top: 1px solid var(--border); }
+}
+@media (max-width: 480px) {
+  .loc-gallery { grid-template-columns: minmax(0, 1fr); }
+  .loc-photo-main img { aspect-ratio: 4 / 5; }
+  .loc-actions .btn { width: 100%; justify-content: center; }
+}
+
 /* ---------- team page ---------- */
 
 /* ---------- team slider ---------- */
@@ -1962,9 +2030,9 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    Responsive
    ========================================================================== */
 
-/* below ~1080px the full nav no longer fits beside the brand and buttons,
+/* below ~1180px the full nav no longer fits beside the brand and buttons,
    so it collapses into the menu button */
-@media (max-width: 1080px) {
+@media (max-width: 1180px) {
   .site-header .container { height: 68px; }
 
   .primary-nav {
@@ -1975,7 +2043,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    padding: 8px 20px 20px;
+    /* line the links up with the logo above (page gutter less the links' own 4px) */
+    padding: 8px calc(clamp(24px, 4.5vw, 72px) - 4px) 20px;
     transform: translateY(-8px);
     opacity: 0;
     visibility: hidden;
