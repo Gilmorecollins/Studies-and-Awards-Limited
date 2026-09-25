@@ -1388,16 +1388,16 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 
 .dept-mosaic {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  grid-template-rows: repeat(2, 200px);
-  grid-template-areas: 'mg mg ap ap ap co co cx' 'mg mg ie cr ad op sa we';
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: repeat(3, 200px);
+  grid-template-areas: 'mg mg ap ap ap cr' 'mg mg co co ie ge' 'cx cx ad op sa we';
   gap: 8px;
   margin: 0; padding: 0; list-style: none;
 }
 .dept-tile-mg { grid-area: mg; } .dept-tile-ap { grid-area: ap; } .dept-tile-co { grid-area: co; }
 .dept-tile-cx { grid-area: cx; } .dept-tile-ie { grid-area: ie; } .dept-tile-cr { grid-area: cr; }
 .dept-tile-ad { grid-area: ad; } .dept-tile-op { grid-area: op; } .dept-tile-sa { grid-area: sa; }
-.dept-tile-we { grid-area: we; }
+.dept-tile-we { grid-area: we; } .dept-tile-ge { grid-area: ge; }
 .dept-tile {
   --tile-bg: #FFFFFF; --tile-fg: var(--ink); --tile-accent: var(--brass-ink);
   display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
@@ -1430,12 +1430,12 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .about-inside-head { grid-template-columns: minmax(0, 1fr); align-items: start; }
   .about-inside-text p { max-width: 560px; }
 }
-/* narrower screens: the same sixteen squares, four across */
-@media (max-width: 1319px) {
+/* narrower screens: the same eighteen squares, three across */
+@media (max-width: 999px) {
   .dept-mosaic {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-rows: repeat(4, 170px);
-    grid-template-areas: 'mg mg co co' 'mg mg ie cr' 'ap ap ap cx' 'ad op sa we';
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(6, 170px);
+    grid-template-areas: 'mg mg cr' 'mg mg ad' 'ap ap ap' 'co co op' 'cx cx sa' 'ie ge we';
   }
 }
 /* phones: every description is shown, so the tiles size to their text */
@@ -1443,7 +1443,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .dept-mosaic {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: none;
-    grid-template-areas: 'mg mg' 'ap ap' 'co co' 'cx ie' 'cr ad' 'op sa' 'we we';
+    grid-template-areas: 'mg mg' 'ap ap' 'co co' 'cx cx' 'ie ge' 'cr ad' 'op sa' 'we we';
   }
   .dept-tile { padding: 16px; gap: 14px; }
   .dept-tile:hover, .dept-tile:focus-visible { transform: none; }

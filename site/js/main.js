@@ -273,6 +273,28 @@
   if (playToggle) playToggle.addEventListener('click', function () { resumeAfterHold = playing; });
 })();
 
+// A team member's portrait for the Team page, the journey stops and the
+// consultation cards. `kind` is 'photo' (the big portrait), 'thumb' (small
+// square) or 'card' (5:4). Someone whose photo hasn't arrived yet (blank in
+// team-data.js) gets a plain silhouette, so no page ever shows a broken image.
+(function () {
+  'use strict';
+
+  var silhouette = 'data:image/svg+xml,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">' +
+    '<rect width="400" height="500" fill="#EEF1F8"/>' +
+    '<circle cx="200" cy="190" r="72" fill="#C3CCE0"/>' +
+    '<path d="M60 500c0-92 62-150 140-150s140 58 140 150z" fill="#C3CCE0"/></svg>');
+
+  window.teamPortrait = function (member, kind) {
+    var order = kind === 'card' ? ['card', 'thumb', 'photo'] : kind === 'thumb' ? ['thumb', 'photo'] : ['photo'];
+    for (var i = 0; i < order.length; i++) {
+      if (member[order[i]]) return member[order[i]];
+    }
+    return silhouette;
+  };
+})();
+
 // Team section: horizontal member slider — the leftmost card is always the
 // active (full-colour) member, everything after it sits in halftone until
 // it slides into place — plus the "view more" bio modal.
@@ -323,7 +345,7 @@
 
     var img = document.createElement('img');
     img.className = 'team-card-photo-img';
-    img.src = member.photo;
+    img.src = window.teamPortrait(member, 'photo');
     img.alt = isClone ? '' : member.name;
     img.loading = i < 5 ? 'eager' : 'lazy';
 
@@ -471,14 +493,15 @@
   // "Who you'll meet along the way": each stop lists the people in its
   // department; clicking one slides the team strip to the first of them.
   stops.forEach(function (stop) {
-    var dep = stop.getAttribute('data-dep');
-    var who = members.filter(function (m) { return m.department === dep; });
+    // a stop can cover several departments: data-dep="One|Another"
+    var deps = stop.getAttribute('data-dep').split('|');
+    var who = members.filter(function (m) { return deps.indexOf(m.department) > -1; });
     if (!who.length) { stop.parentNode.hidden = true; return; }
     stop.querySelector('.team-stop-who').textContent = who.map(function (m) { return m.name; }).join(', ');
     var faces = stop.querySelector('.team-stop-faces');
     who.slice(0, 3).forEach(function (m) {
       var img = document.createElement('img');
-      img.src = m.thumb || m.photo;
+      img.src = window.teamPortrait(m, 'thumb');
       img.alt = '';
       img.width = 36; img.height = 36;
       img.loading = 'lazy';
@@ -562,7 +585,7 @@
     var member = members[activeIndex];
     modalName.textContent = member.name;
     modalRole.textContent = member.role;
-    modalPhoto.src = member.photo;
+    modalPhoto.src = window.teamPortrait(member, 'photo');
     modalPhoto.alt = member.name;
 
     if (/^https?:\/\//.test(member.linkedin || '')) {
@@ -1305,7 +1328,7 @@ function createCursorFollower(options) {
 
   function photoFor(member) {
     var photo = el('img', 'consult-photo');
-    photo.src = member.card || member.thumb || member.photo; // the framed 5:4 card portrait; the big photo only if it's missing
+    photo.src = window.teamPortrait(member, 'card'); // the framed 5:4 card portrait; the smaller or bigger photo only if it's missing
     photo.alt = '';
     photo.width = 480;
     photo.height = 384;

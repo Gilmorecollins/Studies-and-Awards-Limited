@@ -15,8 +15,9 @@ import vm from 'vm';
 // documents and paying need a server behind it; until then those actions say
 // so instead of pretending. Styles: site/css/portal.css. Behaviour: site/js/portal.js.
 //
-// The counsellor shown throughout is the team member flagged `startHere` in
-// site/js/team-data.js (name, role, photo and WhatsApp number come from there).
+// The counsellor shown throughout is the team member flagged `portalCounsellor`
+// in site/js/team-data.js (else the `startHere` person, else the first person);
+// name, role, photo and WhatsApp number come from there.
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const siteDir = join(__dirname, '..', 'site');
@@ -35,7 +36,7 @@ const team = (() => {
   vm.runInNewContext(readFileSync(join(siteDir, 'js', 'team-data.js'), 'utf8'), box);
   return box.window.TEAM_MEMBERS || [];
 })();
-const counsellorMember = team.find(m => m.startHere) || team[0];
+const counsellorMember = team.find(m => m.portalCounsellor) || team.find(m => m.startHere) || team[0];
 const waDigits = String(counsellorMember.whatsapp || '').replace(/\D/g, '');
 const counsellor = {
   name: counsellorMember.name,
