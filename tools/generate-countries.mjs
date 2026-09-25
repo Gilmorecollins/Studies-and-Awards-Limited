@@ -396,12 +396,11 @@ ${info}
       </div>`)
   ).join('\n');
 
-  // The filmstrip: one photo thumbnail per city (small copies in <country>/thumbs/,
-  // made by make-editorial-photos.mjs); the active one carries the progress bar.
+  // One progress bar per city along the foot of the slide; the city's name is its
+  // accessible name and its hover text, since the bars are too thin to label.
   const cityDots = Array.from({ length: slideCount }, (_, i) => {
     const p = c.partners[i];
-    const thumb = p ? `<img src="${p.photo.replace(/\/([^/]+)$/, '/thumbs/$1')}" alt="" width="320" height="200" loading="lazy" decoding="async"${p.position ? ` style="object-position:${p.position};"` : ''}>` : '<span class="city-dot-blank"></span>';
-    return `        <button type="button" class="city-dot" aria-label="Slide ${i + 1} of ${slideCount}${p ? ': ' + p.city : ''}">${thumb}<span class="city-dot-name">${p ? p.city : '[City]'}</span><span class="city-dot-fill"></span></button>`;
+    return `        <button type="button" class="city-dot" aria-label="Slide ${i + 1} of ${slideCount}${p ? ': ' + p.city : ''}"${p ? ` title="${esc(p.city)}"` : ''}><span class="city-dot-fill"></span></button>`;
   }).join('\n');
 
   const cityScroller = `  <section class="city-scroller" id="city-scroller" data-interval="10000" aria-label="${c.name} destination showcase" aria-roledescription="carousel">
@@ -723,7 +722,7 @@ if (!isMain) {
     samples = (sandbox.window.TESTIMONIALS || []).filter(t => t && t.sample).length;
   } catch { /* a broken data file is reported above */ }
   const samplesBlock = samples > 0 && SITE_URL !== '';
-  // The destination pages' collage and filmstrip photos are small copies made by make-editorial-photos.mjs.
+  // The destination pages' collage photos are small copies made by make-editorial-photos.mjs.
   const missingPhotos = [...new Set(outputs.flatMap(([, content]) => content.match(/assets\/destinations\/[\w-]+\/(?:editorial|thumbs)\/[\w-]+\.jpg/g) || []))]
     .filter(rel => !existsSync(join(siteDir, rel)));
   if (drifted.length || broken.length || samplesBlock || missingPhotos.length) {

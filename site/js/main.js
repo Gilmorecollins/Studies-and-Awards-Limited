@@ -104,9 +104,9 @@
   window.addEventListener('scroll', updateScrolled, { passive: true });
 })();
 
-// Destination page: full-screen autoplaying city slideshow — crossfades
-// to the next city on a timer, or on demand via the filmstrip of city
-// thumbnails (.city-dot) and the pause button.
+// Destination page: full-screen autoplaying city slideshow. It crossfades
+// to the next city on a timer, or on demand via the progress bars along the
+// bottom (.city-dot, one per city) and the pause button.
 (function () {
   'use strict';
 
@@ -116,7 +116,6 @@
   var images = scroller.querySelectorAll('.city-img');
   var panels = scroller.querySelectorAll('.city-panel');
   var dots = scroller.querySelectorAll('.city-dot');
-  var bar = scroller.querySelector('.city-scroller-bar');
   var playToggle = scroller.querySelector('.city-play-toggle');
   var count = images.length;
   if (!count) return;
@@ -192,12 +191,6 @@
       if (i === index) { el.setAttribute('aria-current', 'true'); } else { el.removeAttribute('aria-current'); }
     });
     restartDotFill(index);
-
-    // On narrow screens the filmstrip scrolls sideways: keep the current city in view.
-    var dot = dots[index];
-    if (bar && dot && bar.scrollWidth > bar.clientWidth + 1) {
-      bar.scrollTo({ left: dot.offsetLeft - (bar.clientWidth - dot.offsetWidth) / 2, behavior: reduceMotion ? 'auto' : 'smooth' });
-    }
   }
 
   function goTo(index) {
