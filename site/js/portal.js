@@ -53,6 +53,15 @@
   var side = $('#p-side');
   var menuBtn = $('.p-menu');
   var scrim = $('.p-scrim');
+  // close without moving focus (for when the visitor didn't close it themselves)
+  function closeDrawerQuietly() {
+    if (!side || !menuBtn || !side.classList.contains('is-open')) return;
+    side.classList.remove('is-open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.setAttribute('aria-label', 'Open menu');
+    if (scrim) scrim.hidden = true;
+    document.body.style.overflow = '';
+  }
   function setDrawer(open) {
     if (!side || !menuBtn) return;
     side.classList.toggle('is-open', open);
@@ -69,7 +78,7 @@
       if (event.key === 'Escape' && side.classList.contains('is-open')) setDrawer(false);
     });
     var wide = window.matchMedia('(min-width: 1081px)');
-    var onWide = function () { if (wide.matches && side.classList.contains('is-open')) { side.classList.remove('is-open'); if (scrim) scrim.hidden = true; document.body.style.overflow = ''; menuBtn.setAttribute('aria-expanded', 'false'); } };
+    var onWide = function () { if (wide.matches) closeDrawerQuietly(); };
     if (wide.addEventListener) wide.addEventListener('change', onWide); else if (wide.addListener) wide.addListener(onWide);
   }
 
@@ -85,6 +94,16 @@
     document.addEventListener('click', function (event) { if (!notes.hidden && !notes.contains(event.target)) setNotes(false); });
     document.addEventListener('keydown', function (event) { if (event.key === 'Escape' && !notes.hidden) { setNotes(false); bell.focus(); } });
   }
+
+  // Coming back with the browser's Back button can restore a page from the
+  // back/forward cache exactly as it was left: on a phone that's with the menu
+  // drawer still open (a drawer link is how the visitor left) and the page
+  // locked from scrolling. Put the page back to rest.
+  window.addEventListener('pageshow', function (event) {
+    if (!event.persisted) return;
+    closeDrawerQuietly();
+    if (bell && notes && !notes.hidden) setNotes(false);
+  });
 
   // ---- dialogs (native <dialog>: focus trap and Escape for free) ----
   document.addEventListener('click', function (event) {
