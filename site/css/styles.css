@@ -11,7 +11,6 @@
 @font-face { font-family: 'Montserrat'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../assets/fonts/montserrat-italic.woff2') format('woff2'); }
 @font-face { font-family: 'Bebas Neue'; font-style: normal; font-weight: 400; font-display: swap; src: url('../assets/fonts/bebas-neue.woff2') format('woff2'); }
 @font-face { font-family: 'Oswald'; font-style: normal; font-weight: 400 600; font-display: swap; src: url('../assets/fonts/oswald.woff2') format('woff2'); }
-@font-face { font-family: 'Caveat'; font-style: normal; font-weight: 600; font-display: swap; src: url('../assets/fonts/caveat.woff2') format('woff2'); }
 
 :root {
   --ink: #001B5E;              /* Deep Royal Blue — brand primary */
@@ -820,78 +819,100 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .how-actions .btn { width: 100%; justify-content: center; }
 }
 
-/* ---------- home: destinations showcase (flag cards + photo collage) ---------- */
+/* ---------- home: destinations (three picks + "+3" card) ---------- */
 
-#destinations { overflow: hidden; }
-.dest-showcase { display: flex; gap: 56px; align-items: flex-start; }
-.dest-showcase-intro { flex: 1 1 640px; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
-.dest-showcase-intro .eyebrow { color: var(--brass-ink); margin-bottom: 10px; display: block; }
-.dest-showcase-intro h2 { margin-bottom: 14px; }
-.dest-showcase-intro > p { font-size: 16px; color: var(--muted); line-height: 1.65; max-width: 600px; margin-bottom: 26px; }
-.dest-flag-grid { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; margin-bottom: 26px; }
-.dest-flag-card {
-  position: relative;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  padding: 22px 8px 18px;
-  background: #FFFFFF;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius);
-  box-shadow: 0 4px 14px rgba(0,27,94,0.06);
-  text-decoration: none; text-align: center;
-  transition: transform 180ms ease, box-shadow 180ms ease;
+.dest-pick-head {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+  gap: 24px 80px; align-items: end;
+  margin-bottom: 44px;
 }
-.dest-flag-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,27,94,0.12); }
-.dest-flag-card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-.dest-flag-code {
-  position: absolute; top: 10px; right: 10px;
-  padding: 2px 7px;
-  background: #FFF4D1; border-radius: 5px;
-  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+.dest-pick-head .eyebrow { display: block; margin-bottom: 12px; color: var(--brass-ink); }
+.dest-pick-head h2 { margin: 0; }
+.dest-pick-head p { margin: 0; font-size: 17px; line-height: 1.65; color: var(--muted); }
+
+.dest-pick-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) 230px; gap: 20px; }
+
+.dest-pick {
+  display: flex; flex-direction: column; gap: 16px;
+  padding: 30px;
+  background: #FFFFFF;
+  border: 2px solid rgba(0,27,94,0.06);
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(0,27,94,0.10);
+  text-decoration: none; color: var(--ink);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.dest-pick:hover { transform: translateY(-8px); border-color: var(--brass); box-shadow: 0 28px 60px rgba(0,27,94,0.25); color: var(--ink); }
+.dest-pick:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.dest-pick-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+.dest-pick-flag { display: block; width: 68px; height: 46px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.dest-pick-tag {
+  padding: 5px 11px;
+  background: #FFF4D1; border-radius: 999px;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11.5px; font-weight: 400;
+  letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;
   color: var(--brass-ink);
 }
-.dest-flag-card svg { display: block; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,27,94,0.18); }
-.dest-flag-name { font-size: 15px; font-weight: 700; color: var(--ink); white-space: nowrap; }
-.dest-flag-tag { display: block; margin-top: 2px; font-size: 12px; color: var(--muted); white-space: nowrap; }
-.dest-showcase-cta { white-space: nowrap; }
-
-.dest-showcase-art { flex: 1 1 380px; position: relative; min-height: 420px; }
-.dest-showcase-blob { position: absolute; right: -80px; top: -40px; width: 620px; height: 700px; max-width: none; z-index: 0; pointer-events: none; }
-.dest-photo { margin: 0; position: absolute; background: #FFFFFF; border-radius: var(--radius); box-shadow: 0 18px 40px rgba(0,22,48,0.22); }
-.dest-photo img { display: block; width: 100%; object-fit: cover; }
-.dest-photo-1 { left: 70px; top: 0; width: 300px; box-sizing: border-box; padding: 10px 10px 14px; transform: rotate(4deg); z-index: 2; }
-.dest-photo-1 img { height: 190px; }
-.dest-photo-2 { left: 0; top: 210px; width: 310px; box-sizing: border-box; padding: 10px 10px 0; transform: rotate(-4deg); z-index: 3; }
-.dest-photo-2 img { height: 220px; }
-.dest-photo-2 figcaption {
-  height: 72px;
-  display: flex; align-items: center; justify-content: flex-end;
-  padding-right: 14px;
-  font-family: 'Caveat', cursive; font-size: 27px; line-height: 1;
-  color: var(--ink); text-align: right;
+.dest-pick-code::before { content: attr(data-code); }
+.dest-pick-code { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 96px; line-height: 0.82; color: rgba(0,27,94,0.1); }
+.dest-pick-name { margin-top: -8px; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 44px; line-height: 1; color: var(--ink); }
+.dest-pick-blurb { min-height: 4.65em; font-size: 15.5px; line-height: 1.6; color: var(--muted); }
+.dest-pick-foot {
+  margin-top: auto; padding-top: 16px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  border-top: 1px dashed rgba(0,27,94,0.18);
 }
-
-@media (max-width: 1100px) {
-  .dest-showcase-art { flex-basis: 320px; }
-  .dest-photo-1, .dest-photo-2 { width: 240px; }
-  .dest-photo-1 img { height: 150px; }
-  .dest-photo-1 { left: 40px; }
-  .dest-photo-2 img { height: 170px; }
+.dest-pick-route {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 20px; letter-spacing: 0.04em;
+  color: var(--brass-ink); white-space: nowrap;
 }
+.dest-pick-route-arrow { flex-shrink: 0; margin-top: -2px; }
+.dest-pick-go { display: inline-flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.dest-pick-arrow {
+  width: 38px; height: 38px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; background: var(--ink); color: var(--brass);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.dest-pick:hover .dest-pick-arrow { background: var(--brass); color: var(--ink); }
 
+.dest-pick-more {
+  display: flex; flex-direction: column; justify-content: space-between; gap: 28px;
+  padding: 30px 24px;
+  background: var(--ink); border-radius: 24px;
+  text-decoration: none; color: #FFFFFF;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.dest-pick-more:hover { transform: translateY(-8px); box-shadow: 0 28px 60px rgba(0,27,94,0.25); color: #FFFFFF; }
+.dest-pick-more:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.dest-pick-more-count { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 64px; line-height: 0.9; color: var(--brass); }
+.dest-pick-more-list { display: flex; flex-direction: column; gap: 8px; }
+.dest-pick-more-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; font-weight: 600; color: #FFFFFF; }
+.dest-pick-more-code { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 17px; font-weight: 400; color: #7E8BB0; }
+.dest-pick-more-go { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: var(--brass); }
+.dest-pick-more-go svg { flex-shrink: 0; transition: transform 0.2s ease; }
+.dest-pick-more:hover .dest-pick-more-go svg { transform: translateX(3px); }
+
+@media (max-width: 1320px) {
+  .dest-pick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 900px) {
-  .dest-showcase { flex-direction: column; gap: 40px; }
-  .dest-showcase-blob { display: none; }
-  .dest-showcase-art {
-    flex: none; width: 100%;
-    position: static; min-height: 0;
-    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
-  }
-  .dest-photo { position: static; transform: none; width: 260px; }
-  .dest-photo img { height: auto; aspect-ratio: 4 / 3; }
+  .dest-pick-head { grid-template-columns: 1fr; margin-bottom: 32px; }
 }
-
-@media (max-width: 560px) {
-  .dest-flag-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+@media (max-width: 640px) {
+  .dest-pick-grid { grid-template-columns: 1fr; }
+  .dest-pick { padding: 26px 24px; }
+  .dest-pick-code { font-size: 80px; }
+  .dest-pick-name { font-size: 40px; }
+  .dest-pick-blurb { min-height: 0; }
+}
+@media (max-width: 400px) {
+  .dest-pick-tag { padding: 5px 9px; letter-spacing: 0.06em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dest-pick, .dest-pick-more { transition: none; }
+  .dest-pick:hover, .dest-pick-more:hover { transform: none; }
 }
 
 /* ---------- home: "why choose us" boarding pass ---------- */
