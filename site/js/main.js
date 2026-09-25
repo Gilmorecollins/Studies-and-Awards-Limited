@@ -1774,18 +1774,19 @@ function createCursorFollower(options) {
     });
   }
 
-  // Rotates by itself every few seconds, round and round. It holds still while
-  // the pointer is over it or keyboard focus is inside it, and while it's off
-  // screen; the pause button stops it for good. Visitors who ask their device
-  // for reduced motion get it paused from the start.
+  // Rotates by itself every few seconds, round and round, including while the
+  // pointer is over it (clicking through the photos then leaving the mouse
+  // there looked like it had stopped). It holds while keyboard focus is inside
+  // it and while it's off screen; the pause button stops it. Visitors who ask
+  // their device for reduced motion get it paused from the start.
   var ROTATE_MS = 5000;
   var toggle = box.querySelector('[data-photos-toggle]');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var playing = !reduceMotion, hovered = false, focused = false, inView = false, timer = null;
+  var playing = !reduceMotion, focused = false, inView = false, timer = null;
 
   function schedule() {
     window.clearTimeout(timer);
-    if (playing && inView && !hovered && !focused && !document.hidden) {
+    if (playing && inView && !focused && !document.hidden) {
       timer = window.setTimeout(function () { show(current + 1); schedule(); }, ROTATE_MS);
     }
   }
@@ -1798,8 +1799,6 @@ function createCursorFollower(options) {
   setPlaying(playing);
   if (toggle) toggle.addEventListener('click', function () { setPlaying(!playing); });
 
-  box.addEventListener('pointerenter', function (event) { if (event.pointerType === 'mouse') { hovered = true; schedule(); } });
-  box.addEventListener('pointerleave', function () { hovered = false; schedule(); });
   // only keyboard focus holds it (a mouse click focuses the button too), and never
   // the pause/play button itself, or pressing Play would leave it held
   box.addEventListener('focusin', function (event) {
