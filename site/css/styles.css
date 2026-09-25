@@ -1432,7 +1432,11 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .lift-hero .hero-kicker-rule { background: var(--brass); }
 .lift-hero h1 { margin: 0; font-size: clamp(56px, 6.7vw, 96px); line-height: 0.9; letter-spacing: 0; color: #FFFFFF; }
 .lift-lead { font-size: 18px; line-height: 1.6; color: var(--on-dark-muted); }
-.lift-now { align-self: stretch; display: flex; flex-direction: column; gap: 8px; min-height: 132px; padding: 22px 0; border-top: 1px solid rgba(255,255,255,0.15); border-bottom: 1px solid rgba(255,255,255,0.15); }
+/* the floors' texts are laid over each other (the others hidden), so the block is
+   always as tall as the longest one and nothing below it jumps when the floor changes */
+.lift-now { align-self: stretch; display: grid; padding: 22px 0; border-top: 1px solid rgba(255,255,255,0.15); border-bottom: 1px solid rgba(255,255,255,0.15); }
+.lift-now-state { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 8px; }
+.lift-now-sizer { visibility: hidden; }
 .lift-now-label { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass); }
 .lift-now-title { font-size: 20px; font-weight: 700; color: #FFFFFF; }
 .lift-now-text { font-size: 15px; line-height: 1.6; color: var(--on-dark-muted); }
@@ -1500,19 +1504,17 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .loc-maps-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .loc-before-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 16px; height: 560px; }
 
-.loc-map { position: relative; overflow: hidden; border-radius: var(--radius); background: #E7EBF3; box-shadow: 0 16px 40px rgba(0,27,94,0.1); }
-.loc-map iframe { display: block; width: 100%; height: 100%; border: 0; }
-.loc-map-chip {
-  position: absolute; right: 16px; top: 16px; display: inline-flex; align-items: center; gap: 8px;
-  padding: 8px 14px; border-radius: 10px; background: #FFFFFF; box-shadow: 0 6px 16px rgba(0,27,94,0.12);
-  font-size: 13px; font-weight: 700; color: var(--ink); pointer-events: none;
-}
-.loc-map-chip svg { color: var(--brass-ink); }
+.loc-map { display: flex; flex-direction: column; gap: 12px; overflow: hidden; padding-bottom: 12px; border-radius: var(--radius); background: #E7EBF3; box-shadow: 0 16px 40px rgba(0,27,94,0.1); }
+/* the steps card sits under the map rather than on it, so it never covers the
+   map's zoom buttons or Google's logo and terms along the bottom edge */
+.loc-map iframe { display: block; flex: 1; min-height: 0; width: 100%; border: 0; }
 .lift-steps {
-  position: absolute; left: 16px; right: 16px; bottom: 16px;
-  display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 12px;
-  border-radius: 16px; background: #FFFFFF; box-shadow: 0 12px 30px rgba(0,27,94,0.16);
+  display: flex; flex-direction: column; gap: 6px; margin: 0 12px; padding: 14px 16px 12px;
+  border-radius: 16px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(0,27,94,0.1);
 }
+.lift-steps-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
+.loc-map-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: var(--ink); }
+.loc-map-chip svg { color: var(--brass-ink); }
 .lift-steps-label { padding-left: 12px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
 .lift-steps-row { display: flex; align-items: stretch; gap: 6px; }
 .lift-steps-arrow { flex-shrink: 0; align-self: center; display: flex; color: var(--brass); }
@@ -1530,7 +1532,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .lift-step-text strong { font-size: 14.5px; font-weight: 700; color: var(--ink); }
 .lift-step-text span { font-size: 12.5px; line-height: 1.45; color: var(--muted); }
 
-.loc-photos { position: relative; overflow: hidden; border: 1px solid var(--border-soft); border-radius: var(--radius); background: #FFFFFF; box-shadow: 0 16px 40px rgba(0,27,94,0.1); }
+.loc-photos { position: relative; overflow: hidden; touch-action: pan-y; border: 1px solid var(--border-soft); border-radius: var(--radius); background: #FFFFFF; box-shadow: 0 16px 40px rgba(0,27,94,0.1); }
 .loc-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 500ms ease; }
 .loc-slide.is-active { opacity: 1; }
 .loc-slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
@@ -1552,7 +1554,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .loc-photos-nav:hover { background: #FFFFFF; }
 .loc-photos-nav:focus-visible, .loc-dot:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .loc-photos-dots { position: absolute; right: 16px; bottom: 25px; z-index: 1; display: flex; gap: 6px; }
-.loc-dot { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 4px; background: rgba(255,255,255,0.85); box-shadow: 0 0 0 1px rgba(0,27,94,0.2); cursor: pointer; transition: width 250ms ease; }
+.loc-dot { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 4px; background: #FFFFFF; box-shadow: 0 0 0 1.5px rgba(0,27,94,0.55); cursor: pointer; transition: width 250ms ease; }
 .loc-dot.is-active { width: 26px; background: var(--brass); }
 
 @media (max-width: 1180px) {
@@ -1573,9 +1575,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 @media (max-width: 700px) {
   /* the steps card would cover most of a small map: it moves under it */
-  .loc-map { height: auto; overflow: visible; background: none; box-shadow: none; }
-  .loc-map iframe { height: 320px; border-radius: var(--radius); box-shadow: 0 16px 40px rgba(0,27,94,0.1); }
-  .lift-steps { position: static; margin-top: 12px; }
+  .loc-map { height: auto; }
+  .loc-map iframe { flex: none; height: 320px; }
   .lift-steps-row { flex-direction: column; }
   .lift-steps-arrow { transform: rotate(90deg); }
   .loc-photos { height: 420px; }

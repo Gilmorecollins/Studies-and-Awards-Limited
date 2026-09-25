@@ -1678,6 +1678,22 @@ function createCursorFollower(options) {
   var steps = document.querySelectorAll('.lift-step');
   var buttons = document.querySelectorAll('[data-floor-go]');
 
+  // Hidden copies of every floor's text, laid under the live one (see
+  // .lift-now in styles.css), keep the block as tall as the longest text.
+  var box = hero.querySelector('.lift-now');
+  Object.keys(FLOORS).forEach(function (key) {
+    var copy = document.createElement('div');
+    copy.className = 'lift-now-state lift-now-sizer';
+    copy.setAttribute('aria-hidden', 'true');
+    ['label', 'title', 'text'].forEach(function (part) {
+      var el = document.createElement(part === 'title' ? 'strong' : 'span');
+      el.className = 'lift-now-' + part;
+      el.textContent = FLOORS[key][part === 'label' ? 'hint' : part];
+      copy.appendChild(el);
+    });
+    box.appendChild(copy);
+  });
+
   function goTo(floor, stepButton) {
     var info = FLOORS[floor];
     hero.setAttribute('data-floor', floor);
@@ -1696,11 +1712,42 @@ function createCursorFollower(options) {
     });
   }
 
+  var autoTimer = null, touched = false;
   buttons.forEach(function (b) {
     b.addEventListener('click', function () {
+      touched = true;
+      window.clearTimeout(autoTimer);
       goTo(b.getAttribute('data-floor-go'), b.classList.contains('lift-step') ? b : null);
     });
   });
+
+  // A few seconds after the lift comes into view, it goes up to Mezzanine 1 and
+  // the doors open by themselves (unless the visitor has already pressed a
+  // button). It waits until the lift is on screen, so on a phone, where the lift
+  // is below the text, it doesn't open before anyone can see it. The text change
+  // isn't announced this time: a screen reader shouldn't speak up unprompted.
+  var AUTO_OPEN_MS = 2500;
+  var live = hero.querySelector('.lift-now [aria-live]');
+  function autoOpen() {
+    if (touched) return;
+    if (live) live.setAttribute('aria-live', 'off');
+    goTo('M1');
+    if (live) window.setTimeout(function () { live.setAttribute('aria-live', 'polite'); }, 1000);
+  }
+  var lift = hero.querySelector('.lift-car');
+  if ('IntersectionObserver' in window && lift) {
+    var seen = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          if (!autoTimer && !touched) autoTimer = window.setTimeout(autoOpen, AUTO_OPEN_MS);
+          seen.disconnect();
+        }
+      });
+    }, { threshold: 0.6 });
+    seen.observe(lift);
+  } else {
+    autoTimer = window.setTimeout(autoOpen, AUTO_OPEN_MS);
+  }
 })();
 
 // Find Us page: the photo carousel (building, entrance, reception).
@@ -1737,6 +1784,20 @@ function createCursorFollower(options) {
     if (event.key === 'ArrowLeft') { show(current - 1); }
     else if (event.key === 'ArrowRight') { show(current + 1); }
   });
+
+  // swipe on touch screens (vertical scrolling still passes through: touch-action: pan-y)
+  var startX = null, startY = 0;
+  box.addEventListener('pointerdown', function (event) {
+    if (event.pointerType === 'mouse' || event.target.closest('button')) return;
+    startX = event.clientX; startY = event.clientY;
+  });
+  box.addEventListener('pointerup', function (event) {
+    if (startX === null) return;
+    var dx = event.clientX - startX, dy = event.clientY - startY;
+    startX = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(current + (dx < 0 ? 1 : -1));
+  });
+  box.addEventListener('pointercancel', function () { startX = null; });
 })();
 
 // Route maps (about and destinations pages): hovering or focusing a country,
