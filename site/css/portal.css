@@ -655,7 +655,12 @@ html[data-sample="progress"] .p-doc[data-sample-done] .p-doc-todo { display: non
   .p-signin-form { padding: 28px 22px; }
   .p-free { flex-direction: column; align-items: flex-start; gap: 16px; padding: 22px; }
 }
+/* small phones: the title needs the width, so the "Sample data" badge hangs
+   off the bottom edge of the top bar like a tab instead of sitting in the row */
+@media (max-width: 480px) {
+  .p-top-title h1 { font-size: 22px; }
+  .p-sample { position: absolute; left: 50%; bottom: 0; z-index: 1; transform: translate(-50%, 50%); }
+}
 @media (max-width: 380px) {
   .p-stats-3, .p-stats-4 { grid-template-columns: minmax(0, 1fr); }
-  .p-top-title h1 { font-size: 26px; }
 }

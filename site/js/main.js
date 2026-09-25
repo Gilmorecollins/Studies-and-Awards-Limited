@@ -184,6 +184,8 @@
     panels.forEach(function (el, i) {
       el.classList.toggle('is-active', i === index);
       el.setAttribute('aria-hidden', i === index ? 'false' : 'true');
+      // the other cities' buttons are invisible: keep them out of the Tab order too
+      el.inert = i !== index;
     });
     dots.forEach(function (el, i) {
       el.classList.toggle('is-active', i === index);
@@ -243,6 +245,39 @@
       goTo(i);
     });
   });
+
+  // Hold still while someone is using the current city: keyboard focus on its
+  // buttons, or the pointer over its partner card. Otherwise the city could
+  // change mid-read (and take the focused button away). Carries on afterwards
+  // if it was playing.
+  var focusHeld = false, hoverHeld = false, holding = false, resumeAfterHold = false;
+  function updateHold() {
+    var hold = focusHeld || hoverHeld;
+    if (hold && !holding) {
+      holding = true;
+      resumeAfterHold = playing;
+      if (playing) pause();
+    } else if (!hold && holding) {
+      holding = false;
+      if (resumeAfterHold && !playing) play();
+    }
+  }
+  panels.forEach(function (panel) {
+    panel.addEventListener('focusin', function () { focusHeld = true; updateHold(); });
+    panel.addEventListener('focusout', function (event) {
+      // still here, or gone into the partner list or consultation pop-up it opened
+      var to = event.relatedTarget;
+      if (to && (panel.contains(to) || to.closest('#partners-overlay, #consult-overlay'))) return;
+      focusHeld = false; updateHold();
+    });
+    var card = panel.querySelector('.city-panel-info');
+    if (card) {
+      card.addEventListener('pointerenter', function (event) { if (event.pointerType === 'mouse') { hoverHeld = true; updateHold(); } });
+      card.addEventListener('pointerleave', function () { hoverHeld = false; updateHold(); });
+    }
+  });
+  // pressing play/pause, or picking a city, is the visitor taking over
+  if (playToggle) playToggle.addEventListener('click', function () { resumeAfterHold = playing; });
 })();
 
 // Team section: horizontal member slider — the leftmost card is always the
@@ -759,7 +794,7 @@ function createCursorFollower(options) {
     '        <div class="next-dest-main">',
     '          <span class="eyebrow next-dest-eyebrow">' + (wrapped ? 'Full circle' : 'Next stop') + ' &middot; ' + pad(toIndex + 1) + ' / ' + pad(list.length) + '</span>',
     '          <h2 class="next-dest-title">Want to see another destination?</h2>',
-    '          <p class="next-dest-lead">Next on the route is <strong>' + esc(to.name) + '</strong> &mdash; <em>' + esc(to.welcome) + '</em>.</p>',
+    '          <p class="next-dest-lead">Next on the route is <strong>' + esc(to.name) + '</strong>, <em>' + esc(to.welcome) + '</em>.</p>',
     '          <p class="next-dest-tagline">' + esc(to.tagline) + '</p>',
     '          <div class="next-dest-route" aria-hidden="true">',
     '            <div class="next-dest-stop"><span class="next-dest-stop-code">' + esc(from.code) + '</span><span class="next-dest-stop-name">' + esc(from.name) + '</span></div>',
@@ -1508,7 +1543,7 @@ function createCursorFollower(options) {
     var card = document.createElement('article');
     card.className = 'testimonial-card' + (t.sample ? ' is-sample' : '');
     if (t.sample) {
-      card.appendChild(add('span', 'testimonial-sample', 'Sample — replace before launch'));
+      card.appendChild(add('span', 'testimonial-sample', 'Sample: replace before launch'));
       samples++;
     }
     card.insertAdjacentHTML('beforeend', quoteIcon);

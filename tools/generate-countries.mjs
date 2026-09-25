@@ -407,7 +407,7 @@ ${info}
   const cityScroller = `  <section class="city-scroller" id="city-scroller" data-interval="10000" aria-label="${c.name} destination showcase" aria-roledescription="carousel">
 ${cityImages}
     <div class="city-scroller-vignette"></div>
-    <div class="city-scroller-top-label">Welcome to ${c.name} <strong>&mdash; ${c.welcome}</strong></div>
+    <div class="city-scroller-top-label">Welcome to ${c.name} <strong>&middot; ${c.welcome}</strong></div>
 ${cityPanels}
     <div class="city-scroller-bar" role="group" aria-label="Choose a city">
 ${cityDots}

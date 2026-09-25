@@ -1329,7 +1329,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .about-value { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 36px 36px 8px; }
 .about-value:first-child { padding-left: 0; }
 .about-value + .about-value { border-left: 1px solid var(--border); }
-.about-value-icon { display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: #FFF4D1; color: var(--brass-ink); }
+.about-value-icon { display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 16px; background: var(--ink); color: var(--brass); box-shadow: 0 10px 22px rgba(0,27,94,0.16); }
 .about-value h3 { font-size: 21px; line-height: 1.3; }
 .about-value p { font-size: 16px; line-height: 1.65; color: var(--muted); }
 @media (max-width: 860px) {

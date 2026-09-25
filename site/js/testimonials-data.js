@@ -9,10 +9,10 @@
 //
 // A real quote is a person's own words, published with their agreement, under
 // a name they are happy to use. Shape:
-//   { quote: '…', name: 'A. Wanjiru', detail: 'Student — Australia, 2026' }
+//   { quote: '…', name: 'A. Wanjiru', detail: 'Student, Australia, 2026' }
 // (`detail` is optional; leave `sample` out for a real quote.)
 window.TESTIMONIALS = [
-  { sample: true, quote: 'Every step was explained clearly, so I always knew what to do next.', name: 'A. Student', detail: 'Student — Germany' },
-  { sample: true, quote: 'The team was quick to reply and patient with all of our questions.', name: 'B. Parent', detail: 'Parent — Australia' },
-  { sample: true, quote: 'I felt supported from my first consultation right up to my departure.', name: 'C. Student', detail: 'Student — Canada' }
+  { sample: true, quote: 'Every step was explained clearly, so I always knew what to do next.', name: 'A. Student', detail: 'Student, Germany' },
+  { sample: true, quote: 'The team was quick to reply and patient with all of our questions.', name: 'B. Parent', detail: 'Parent, Australia' },
+  { sample: true, quote: 'I felt supported from my first consultation right up to my departure.', name: 'C. Student', detail: 'Student, Canada' }
 ];
