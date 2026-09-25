@@ -476,6 +476,9 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .map-lines { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .map-line { transition: opacity 0.35s ease; }
 .map-line path { fill: none; stroke: var(--brass); stroke-width: 1.8; stroke-dasharray: 2 6; stroke-linecap: round; transition: stroke-width 0.3s ease; }
+/* an invisible, much wider copy of each route: easy to point at, even though
+   the drawn line is thin (the rest of the drawing ignores the pointer) */
+.map-line path.map-line-hit { stroke: transparent; stroke-width: 18; stroke-dasharray: none; pointer-events: stroke; cursor: pointer; }
 .map-line-halo { fill: var(--brass); fill-opacity: 0.22; }
 .map-line-end { fill: #FFFFFF; }
 .map-origin { fill: var(--brass); }
@@ -504,42 +507,40 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   position: relative; z-index: 1;
   max-width: 1200px; margin: -282px auto 0; padding: 0 clamp(24px, 4.5vw, 72px) 88px; box-sizing: content-box;
 }
-.route-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.route-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 .route-cards > li { display: flex; }
-.route-card {
-  flex: 1; display: grid; grid-template-columns: 76px minmax(0, 1fr) 44px; align-items: center; column-gap: 20px;
-  padding: 26px 22px 26px 24px;
-  background: #FFFFFF; border: 1px solid rgba(0,27,94,0.09); border-radius: var(--radius);
-  box-shadow: 0 10px 28px rgba(0,27,94,0.10);
-  color: var(--ink); text-decoration: none;
-  transition: transform 180ms ease, box-shadow 180ms ease;
+/* each destination: a flag banner (the flag under a navy fade, the route and
+   the big airport code), then the name, a line about it and an explore link */
+.dest-card {
+  display: flex; flex-direction: column; width: 100%; overflow: hidden;
+  border: 2px solid rgba(0,27,94,0.06); border-radius: var(--radius); background: #FFFFFF;
+  box-shadow: 0 10px 30px rgba(0,27,94,0.10);
+  transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease;
 }
-.route-card:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(0,27,94,0.16); }
-/* a white inner ring shows on the navy hero, the navy outer ring on white */
-.route-card:focus-visible { outline: none; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 5px var(--ink); }
-.route-card-tile {
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
-  width: 76px; height: 76px; background: #F5F6F8; border-radius: 12px;
+.dest-card:hover, .dest-card.is-active { transform: translateY(-6px); border-color: var(--brass); box-shadow: 0 24px 50px rgba(0,27,94,0.22); }
+.dest-card:focus-visible { outline: none; border-color: var(--brass); box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 5px var(--ink); }
+.dest-card-banner { position: relative; display: block; height: 118px; overflow: hidden; background: var(--ink); }
+.dest-card-flag { position: absolute; inset: 0; display: block; width: 100%; height: 100%; filter: saturate(0.9); }
+.dest-card-banner::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(0,27,94,0.92) 0%, rgba(0,27,94,0.55) 55%, rgba(0,27,94,0.15) 100%);
 }
-.route-card-flag { display: block; width: 44px; height: 30px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,27,94,0.18); }
-.route-card-num { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; line-height: 1; color: var(--muted); }
-.route-card-body { display: flex; flex-direction: column; min-width: 0; }
-.route-card-name { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 30px; line-height: 1; letter-spacing: 0.01em; color: var(--ink); }
-.route-card-route {
-  display: flex; align-items: center; gap: 6px; margin: 12px 0 10px;
-  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 600; letter-spacing: 0.1em; line-height: 1;
+.dest-card-route, .dest-card-code { position: absolute; left: 24px; z-index: 1; }
+.dest-card-route { bottom: 64px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; letter-spacing: 0.18em; color: #D5DCEE; display: inline-flex; align-items: center; gap: 6px; }
+.dest-card-route-arrow { flex-shrink: 0; }
+.dest-card-code { bottom: 16px; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 56px; line-height: 0.85; color: var(--brass); }
+.dest-card-body { display: flex; flex-direction: column; flex-grow: 1; gap: 10px; padding: 20px 24px 22px; }
+.dest-card-name { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 34px; line-height: 1; letter-spacing: 0.01em; color: var(--ink); }
+/* room for three lines, so every card in a row (and both rows) is the same height */
+.dest-card-tag { min-height: 4.65em; font-size: 14.5px; line-height: 1.55; color: var(--muted); }
+.dest-card-go { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 6px; font-size: 14px; font-weight: 700; color: var(--ink); }
+.dest-card-arrow {
+  display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; flex-shrink: 0;
+  border-radius: 50%; background: var(--ink); color: var(--brass);
+  transition: background-color 250ms ease, color 250ms ease, transform 250ms ease;
 }
-.route-card-from { color: var(--muted); }
-.route-card-to { color: var(--brass-ink); }
-.route-card-dash { flex: 1; min-width: 12px; max-width: 48px; border-top: 1.5px dashed rgba(0,27,94,0.22); }
-.route-card-plane { flex-shrink: 0; color: var(--brass-ink); transform: rotate(90deg); transition: transform 240ms ease; }
-.route-card:hover .route-card-plane { transform: rotate(90deg) translateY(-3px); }
-.route-card-tag { font-size: 14px; line-height: 1.55; color: var(--muted); }
-.route-card-go {
-  display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%;
-  background: var(--ink); color: var(--brass); transition: transform 180ms ease;
-}
-.route-card:hover .route-card-go { transform: translateX(3px); }
+/* .is-active: its route is highlighted on the map (pointer on the line or its label) */
+.dest-card:hover .dest-card-arrow, .dest-card.is-active .dest-card-arrow { background: var(--brass); color: var(--ink); transform: translateX(3px); }
 
 @media (max-width: 1240px) {
   .route-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -557,14 +558,13 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .route-hero-inner, .route-cards-wrap { padding-left: 20px; padding-right: 20px; }
   .route-hero h1 { font-size: 40px; }
   .route-cards-wrap { padding-bottom: 56px; }
-  .route-cards { gap: 14px; }
-  .route-card { grid-template-columns: 64px minmax(0, 1fr) 38px; column-gap: 14px; padding: 20px 16px; }
-  .route-card-tile { width: 64px; height: 64px; gap: 8px; }
-  .route-card-flag { width: 38px; height: 26px; }
-  .route-card-name { font-size: 26px; }
-  .route-card-route { margin: 10px 0 8px; }
-  .route-card-tag { font-size: 13.5px; }
-  .route-card-go { width: 38px; height: 38px; }
+  .route-cards { gap: 16px; }
+  .dest-card-banner { height: 104px; }
+  .dest-card-code { font-size: 48px; }
+  .dest-card-route { bottom: 56px; }
+  .dest-card-body { padding: 18px 20px 20px; }
+  .dest-card-name { font-size: 30px; }
+  .dest-card-tag { min-height: 0; font-size: 14px; }
 }
 
 /* ---------- CTA band ----------

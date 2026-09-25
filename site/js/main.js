@@ -1883,6 +1883,40 @@ function createCursorFollower(options) {
       });
     });
 
+    // Pointing at a drawn route shows it too (and lights up its card or list
+    // entry). Each line has a wide invisible copy to catch the pointer; where
+    // routes run close together (Sydney and Auckland, the three European ones)
+    // the one nearest the pointer wins, not whichever happens to be drawn on top.
+    var svg = scope.querySelector('.map-lines');
+    if (svg && lines.length) {
+      var samples = Array.prototype.map.call(lines, function (line) {
+        var path = line.querySelector('path:not(.map-line-hit)');
+        var len = path.getTotalLength(), pts = [];
+        for (var i = 0; i <= 60; i++) pts.push(path.getPointAtLength(len * i / 60));
+        return { code: line.getAttribute('data-route-line'), pts: pts };
+      });
+      var nearest = function (event) {
+        var m = svg.getScreenCTM(); if (!m) return null;
+        var pt = svg.createSVGPoint(); pt.x = event.clientX; pt.y = event.clientY;
+        var p = pt.matrixTransform(m.inverse()), best = null, bestD = Infinity;
+        samples.forEach(function (s) {
+          s.pts.forEach(function (q) { var d = (q.x - p.x) * (q.x - p.x) + (q.y - p.y) * (q.y - p.y); if (d < bestD) { bestD = d; best = s.code; } });
+        });
+        return best;
+      };
+      svg.addEventListener('pointermove', function (event) {
+        if (!event.target.classList.contains('map-line-hit')) return;
+        var code = nearest(event);
+        if (code && code !== hovered) { hovered = code; render(); }
+      });
+      svg.addEventListener('pointerout', function (event) {
+        var to = event.relatedTarget;
+        if (event.target.classList.contains('map-line-hit') && !(to && to.classList && to.classList.contains('map-line-hit'))) {
+          hovered = null; render();
+        }
+      });
+    }
+
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && (pinned || hovered)) { pinned = hovered = null; render(); }
     });
