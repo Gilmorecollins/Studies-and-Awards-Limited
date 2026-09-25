@@ -255,7 +255,7 @@ window.TEAM_MEMBERS = [
     role: 'Receptionist',
     department: 'Customer Experience',
     helpsWith: 'Your first point of contact at our office, who will point you to the right person.',
-    whatsapp: '',
+    whatsapp: '+254143505796',
     startHere: true,
     shortBio: 'Miki is at the reception at Studies and Awards Limited, the first person students and visitors meet when they get in touch.',
     fullBio: [
