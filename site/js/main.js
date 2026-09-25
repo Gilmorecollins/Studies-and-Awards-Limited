@@ -1650,6 +1650,95 @@ function createCursorFollower(options) {
   });
 })();
 
+// Find Us page: the lift. Pressing M1 (on the lift's panel, or the arrival
+// steps under the map) opens the doors onto our reception and the text beside
+// the lift moves on to the next step; G takes it back down.
+(function () {
+  'use strict';
+
+  var hero = document.querySelector('[data-lift]');
+  if (!hero) return;
+
+  var FLOORS = {
+    G: {
+      hint: 'PRESS M1 TO GO UP',
+      title: 'Ground floor: come to Daima Towers',
+      text: 'Look for the tall tower with the curved glass front. The main entrance is under the red “The Eldoret Daima Towers” sign.'
+    },
+    M1: {
+      hint: 'YOU’VE ARRIVED',
+      title: 'Mezzanine 1: say hello at reception',
+      text: 'Our office is on Mezzanine 1, just above the ground floor. Tell us you’re here about studying abroad and we’ll introduce you to the right counsellor.'
+    }
+  };
+  var hint = hero.querySelector('[data-lift-hint]');
+  var title = hero.querySelector('[data-lift-title]');
+  var text = hero.querySelector('[data-lift-text]');
+  var floorEl = hero.querySelector('[data-lift-floor]');
+  var steps = document.querySelectorAll('.lift-step');
+  var buttons = document.querySelectorAll('[data-floor-go]');
+
+  function goTo(floor, stepButton) {
+    var info = FLOORS[floor];
+    hero.setAttribute('data-floor', floor);
+    floorEl.textContent = floor;
+    hint.textContent = info.hint;
+    title.textContent = info.title;
+    text.textContent = info.text;
+    hero.querySelectorAll('.lift-btn').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-floor-go') === floor ? 'true' : 'false');
+    });
+    // the step highlighted is the one pressed, or the floor's first step
+    var on = stepButton || [].filter.call(steps, function (st) { return st.getAttribute('data-floor-go') === floor; })[0];
+    steps.forEach(function (st) {
+      st.classList.toggle('is-on', st === on);
+      st.setAttribute('aria-pressed', st === on ? 'true' : 'false');
+    });
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      goTo(b.getAttribute('data-floor-go'), b.classList.contains('lift-step') ? b : null);
+    });
+  });
+})();
+
+// Find Us page: the photo carousel (building, entrance, reception).
+(function () {
+  'use strict';
+
+  var box = document.querySelector('[data-loc-carousel]');
+  if (!box) return;
+  var slides = box.querySelectorAll('.loc-slide');
+  var dots = box.querySelectorAll('.loc-dot');
+  var current = 0;
+
+  function show(i) {
+    current = (i + slides.length) % slides.length;
+    slides.forEach(function (sl, k) {
+      var on = k === current;
+      sl.classList.toggle('is-active', on);
+      if (on) { sl.removeAttribute('aria-hidden'); sl.inert = false; }
+      else { sl.setAttribute('aria-hidden', 'true'); sl.inert = true; }
+    });
+    dots.forEach(function (d, k) {
+      d.classList.toggle('is-active', k === current);
+      if (k === current) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
+    });
+  }
+
+  box.addEventListener('click', function (event) {
+    var stepBtn = event.target.closest('[data-slide-step]');
+    if (stepBtn) { show(current + parseInt(stepBtn.getAttribute('data-slide-step'), 10)); return; }
+    var dot = event.target.closest('[data-slide-go]');
+    if (dot) show(parseInt(dot.getAttribute('data-slide-go'), 10));
+  });
+  box.addEventListener('keydown', function (event) {
+    if (event.key === 'ArrowLeft') { show(current - 1); }
+    else if (event.key === 'ArrowRight') { show(current + 1); }
+  });
+})();
+
 // Route maps (about and destinations pages): hovering or focusing a country,
 // in a list, on a card or on its tag on the map, shows its route from Eldoret
 // and fades the rest. Buttons also keep their route shown when clicked or
