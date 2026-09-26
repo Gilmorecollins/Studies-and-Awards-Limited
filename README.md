@@ -124,9 +124,11 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   student portal has its own stylesheet (`css/portal.css`) and is not scaled.
 - **Colours and dark mode**: every page, the student portal included, comes
   in a light and a dark theme. Visitors get their device's own setting (a
-  phone or laptop set to dark shows the dark site) until they press the sun
-  and moon switch in the header, which is saved on their device for the whole
-  site. Choosing the same as their device forgets the choice again, so the
+  phone or laptop set to dark shows the dark site) until they switch it
+  themselves (the pull cord on laptops and desktops, the sun and moon button
+  in the header on phones, tablets and the portal), which is saved on their
+  device for the whole site. Choosing the same as their device forgets the
+  choice again, so the
   page goes back to following the device. How it fits together:
   - **Colours.** `styles.css` (and `portal.css`, the same way) has two kinds.
     *Theme colours* are the variables at the top of the file (`--bg`,
@@ -156,6 +158,21 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
     `styles.css` and `portal.css`, and `js/theme.js` (loaded by every page,
     just before `main.js` or `portal.js`) keeps it in step and saves the
     choice.
+  - **The pull cord.** On laptops and desktops (mouse or trackpad, 1024px and
+    wider) the main site's switch is a cord with a gold knob hanging at the
+    right end of the page, like a lamp's pull chain, and the header's sun and
+    moon button is hidden there: pull the knob down past the click, or click
+    it, and the theme switches. It is a proper button too: Tab reaches it
+    just after the header, screen readers hear "Dark mode, toggle button",
+    and Enter or Space switches. Phones, tablets and the student portal keep
+    the sun and moon button instead. `js/theme.js` builds the cord (a small
+    rope simulation that stops when the cord is still) and it presses the
+    hidden header button, so the choice is saved the same way. Its look is
+    `.pull-cord` in `styles.css` (colour `--cord`), which is also where the
+    header button is hidden; its length, weight and how far to pull are the
+    numbers at the top of the "Pull cord" block in `theme.js`. With "reduce
+    motion" on, it hangs still and a click switches. Inspired by PullCord
+    from FeralUI (feralui.dev/pullcord).
   - **Not covered.** The Google map on Find Us stays light (Google draws it).
     Photos, flags and team portraits are the same in both themes.
 - **Destination photos**: put the raw photos in

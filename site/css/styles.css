@@ -49,6 +49,7 @@
   --hero-circle: #DCE6F7;      /* the soft circles behind the home page hero */
   --pass-glow: #DCE6F7;        /* the glow under the "Why choose" pass */
   --cursor: #141414;           /* the circle that follows the mouse */
+  --cord: rgba(0, 27, 94, 0.5); /* the pull cord at the right end of the page */
 
   /* Navy tints and shadows, as scales named by their light strength:
      --tint-10 is navy at 10% here and white at 12% in dark mode;
@@ -109,6 +110,7 @@
   --hero-circle: #15245A;
   --pass-glow: #1C3A8A;
   --cursor: #F1F4FA;
+  --cord: rgba(241, 244, 250, 0.55);
   --tint-rgb: 255 255 255;
   --tint-k: 1.2;
   --shadow-rgb: 0 0 0;
@@ -362,6 +364,39 @@ p { margin: 0; }
 /* switching theme changes every colour at once, rather than letting the
    elements that fade their colours on hover drift over one by one */
 .theme-switching *, .theme-switching *::before, .theme-switching *::after { transition: none !important; }
+
+/* the pull cord (theme.js): hangs at the right end of the page on laptops and
+   desktops, where it is the theme switch and the header's sun and moon button
+   is hidden (phones and tablets keep the button). Only the cord and its knob
+   take the mouse; the rest of its box lets clicks through to the page. */
+.pull-cord {
+  display: none;
+  position: fixed; top: 0; right: 0; z-index: 50;
+  overflow: visible;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1.5px rgba(0,0,0,0.22));
+}
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .pull-cord { display: block; }
+  .site-header .theme-toggle { display: none; }
+}
+.pull-cord:focus { outline: none; }
+.pull-cord-ring { fill: none; stroke: none; }
+.pull-cord:focus-visible .pull-cord-ring { stroke: var(--line-strong); stroke-width: 2; }
+.pull-cord-line { fill: none; stroke: var(--cord); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.pull-cord-hit { fill: none; stroke: transparent; stroke-width: 16; stroke-linecap: round; pointer-events: stroke; cursor: grab; }
+.pull-cord-knob { pointer-events: all; cursor: grab; }
+.pull-cord.is-dragging .pull-cord-knob,
+.pull-cord.is-dragging .pull-cord-hit { cursor: grabbing; }
+.pull-cord-bead { fill: var(--brass); stroke: rgba(0,27,94,0.25); stroke-width: 1; }
+.pull-cord-knob:hover .pull-cord-bead { fill: var(--brass-hover); }
+.pull-cord-icon { fill: none; stroke: var(--ink); stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+.pull-cord-sun { display: none; }
+:root[data-theme="dark"] .pull-cord-sun { display: inline; }
+:root[data-theme="dark"] .pull-cord-moon { display: none; }
+/* the knob gives a little pulse as it clicks */
+.pull-cord.is-clicked .pull-cord-bead { animation: pull-cord-click 240ms ease-out; transform-box: fill-box; transform-origin: center; }
+@keyframes pull-cord-click { 50% { transform: scale(1.14); } }
 
 /* ---------- transparent header overlaying a full-bleed hero photo ---------- */
 .site-header.header-overlay {
