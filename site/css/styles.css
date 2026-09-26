@@ -430,6 +430,23 @@ p { margin: 0; }
   .site-header.header-overlay.is-scrolled .nav-link.muted { color: var(--muted); }
 }
 
+/* ---------- see-through header over the home page hero ----------
+   At the top of the home page the header has no background or line of its
+   own: the hero runs up behind it (see .hero-light), so its grey and circles
+   carry on behind the nav. The header keeps its usual colours and position,
+   and turns back into the usual solid header once the page scrolls (main.js)
+   or while the phone menu is open below it. */
+.site-header.header-clear {
+  background: transparent;
+  border-bottom-color: transparent;
+  transition: background-color 250ms ease, border-color 250ms ease;
+}
+.site-header.header-clear.is-scrolled,
+.site-header.header-clear:has(.primary-nav.is-open) {
+  background: var(--bg);
+  border-bottom-color: var(--border-soft);
+}
+
 /* ---------- footer ---------- */
 
 .site-footer { background: var(--paper); padding: clamp(20px, calc(3vw / var(--z, 1)), 40px); }
@@ -575,6 +592,24 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .hero-light h1 { color: var(--text-strong); }
 .hero-light p.lead { color: var(--muted); }
 .hero-light .hero-trust { color: var(--muted); }
+/* under the see-through header (.header-clear): the hero is pulled up behind
+   the header and padded back down by the same, so everything in it stays
+   where it was. The pull is the header's height, line included (84px + 1px),
+   and a pixel to spare: when the laptop fit scales the page, the 1px line
+   stays a whole pixel, and without the spare a sliver of the page would show
+   above the hero. The spare pixel sits above the page, out of sight.
+   The circles keep the box they had and carry on up behind the nav rather
+   than being stretched to fill it. */
+.header-clear ~ main > .hero-light {
+  --under-header: 86px;
+  margin-top: calc(-1 * var(--under-header));
+  padding-top: var(--under-header);
+}
+.header-clear ~ main > .hero-light .hero-deco {
+  top: var(--under-header);
+  height: calc(100% - var(--under-header));
+  overflow: visible;
+}
 .hero-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2.2px; color: var(--brass-ink); }
 .hero-kicker-rule { width: 28px; height: 2px; background: var(--brass-ink); flex-shrink: 0; }
 
@@ -2355,6 +2390,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    so it collapses into the menu button */
 @media (max-width: 1023.98px), (max-width: 1180px) and (pointer: coarse), (max-width: 1180px) and (pointer: none) {
   .site-header .container { height: 68px; }
+  .header-clear ~ main > .hero-light { --under-header: 70px; }
 
   .primary-nav {
     position: fixed;

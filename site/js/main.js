@@ -85,12 +85,13 @@
   });
 })();
 
-// Transparent header over a full-bleed hero photo — turns solid once the
-// page scrolls past the hero so nav text stays readable over lighter content.
+// Transparent header over a full-bleed hero photo (.header-overlay, the
+// destination pages) or over the home page hero (.header-clear). It turns
+// solid once the page scrolls, so nav text stays readable over the content below.
 (function () {
   'use strict';
 
-  var header = document.querySelector('.site-header.header-overlay');
+  var header = document.querySelector('.site-header.header-overlay, .site-header.header-clear');
   if (!header) return;
 
   var updateScrolled = function () {
