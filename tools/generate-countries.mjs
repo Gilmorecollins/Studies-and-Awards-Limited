@@ -2,6 +2,7 @@ import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync } from 
 import vm from 'vm';
 import { fileURLToPath } from 'url';
 import { dirname, join, resolve } from 'path';
+import { THEME_SCRIPT, themeToggle } from './theme-markup.mjs';
 
 // Resolve paths relative to this script's location, not the caller's cwd,
 // so `node tools/generate-countries.mjs` works the same from anywhere.
@@ -29,11 +30,13 @@ const THEME_COLOUR = '#001B5E';
 const SEO_START = '<!-- seo:start — written by tools/generate-countries.mjs; edit the script, not this block -->';
 const SEO_END = '<!-- seo:end -->';
 
+
 // `title` and `description` must already be safe inside an HTML attribute.
 function seoBlock({ title, description, path, image, imageAlt }) {
   const absolute = rel => `${SITE_URL}${rel.startsWith('/') ? '' : '/'}${rel}`;
   const lines = [
     SEO_START,
+    THEME_SCRIPT,
     `<meta name="theme-color" content="${THEME_COLOUR}">`,
     '<meta property="og:type" content="website">',
     `<meta property="og:site_name" content="${SITE_NAME}">`,
@@ -466,6 +469,7 @@ ${firstSlideCss}</head>
       <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary nav-cta-mobile">Book Free Consultation</a>
     </nav>
     <div class="header-cta">
+      ${themeToggle('      ')}
       <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary">Book Free Consultation</a>
       <button class="nav-toggle" aria-label="Open menu" aria-controls="primary-nav" aria-expanded="false">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -642,7 +646,8 @@ ${footerDestLinks()}
 ${partnersModal}
 <script src="js/team-data.js"></script>
 <script src="js/destinations-data.js"></script>
-${partnersScript}<script src="js/main.js"></script>
+${partnersScript}<script src="js/theme.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
 `;

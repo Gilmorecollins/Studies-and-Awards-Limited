@@ -9,6 +9,8 @@ site/              The actual website. Open site/index.html in a browser,
   js/main.js        Shared JS (nav toggle, destination-page slideshow,
                     "next destination" boarding-pass card, partner
                     institutions dialog, "Book Free Consultation" chooser)
+  js/theme.js       The dark mode switch (sun and moon button), on every
+                    page including the student portal
   js/team-data.js   The staff: bios for the Team page, plus each person's
                     department, what they help with and WhatsApp number for
                     the consultation chooser. Loaded on every page.
@@ -39,6 +41,9 @@ tools/              Build scripts, not part of the deployed site.
                             footer.
                             Run:   node tools/generate-countries.mjs
                             Check: node tools/generate-countries.mjs --check
+  theme-markup.mjs         The dark mode <head> script and the sun and moon
+                            switch's markup, shared by generate-countries.mjs
+                            and generate-portal.mjs.
   process-photos.mjs       Resizes and compresses raw destination photos from
                             source-assets/ into web-ready ones in site/assets/.
                             Run: node tools/process-photos.mjs <source folder> <site folder>
@@ -117,6 +122,42 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   vw/vh sizes as `calc(4vw / var(--z, 1))`, and a new width breakpoint between
   1024px and 1400px needs the extra real-width condition shown there. The
   student portal has its own stylesheet (`css/portal.css`) and is not scaled.
+- **Colours and dark mode**: every page, the student portal included, comes
+  in a light and a dark theme. Visitors get their device's own setting (a
+  phone or laptop set to dark shows the dark site) until they press the sun
+  and moon switch in the header, which is saved on their device for the whole
+  site. Choosing the same as their device forgets the choice again, so the
+  page goes back to following the device. How it fits together:
+  - **Colours.** `styles.css` (and `portal.css`, the same way) has two kinds.
+    *Theme colours* are the variables at the top of the file (`--bg`,
+    `--paper`, `--surface`, `--text-strong`, `--text`, `--muted`, `--border`,
+    `--line-strong`, the `--tint-NN` and `--shadow-NN` scales, and a few more,
+    each with a note). Their dark values sit right below in
+    `:root[data-theme="dark"]`, the only place dark mode is defined. *Fixed
+    colours* are the brand colours (`--ink` navy, `--brass` gold) and any
+    colour written out as a value; they look the same in both themes.
+  - **Which to use when editing.** Anything that sits on the page, a card or a
+    dialog takes a theme colour: `var(--text-strong)` for headings and links,
+    `var(--text)` or `var(--muted)` for body text, `var(--bg)`/`var(--paper)`/
+    `var(--surface)` for backgrounds, `var(--border)` or `var(--line-strong)`
+    for lines, `var(--tint-10)` for a faint navy wash, `var(--shadow-12)` for a
+    shadow. Anything on something that never changes (a navy band, a photo, a
+    gold button) takes a fixed colour: text on gold is `var(--ink)`, text on
+    navy is white or `var(--on-dark-muted)`. A new colour for the page needs a
+    theme variable with a dark value in that block.
+  - **Choosing the theme before the page is drawn.** A one-line script in each
+    page's `<head>` sets `data-theme` on `<html>`, so nobody sees the light
+    page flash first. It is `THEME_SCRIPT` in `tools/theme-markup.mjs`, which
+    both generators write into their pages; `404.html` has a hand copy.
+    Without JavaScript the site shows the light theme.
+  - **The switch.** Its markup is `themeToggle()` in `tools/theme-markup.mjs`
+    (used by both generators); the hand-maintained pages and `404.html` carry
+    the same button, written in by hand. Its styles are `.theme-toggle` in
+    `styles.css` and `portal.css`, and `js/theme.js` (loaded by every page,
+    just before `main.js` or `portal.js`) keeps it in step and saves the
+    choice.
+  - **Not covered.** The Google map on Find Us stays light (Google draws it).
+    Photos, flags and team portraits are the same in both themes.
 - **Destination photos**: put the raw photos in
   `source-assets/destination-photos/<Country>/` (one .jpg per city, named
   after the city), then run

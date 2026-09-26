@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join, resolve } from 'path';
 import vm from 'vm';
+import { THEME_SCRIPT, themeToggle } from './theme-markup.mjs';
 
 // Builds the student portal pages in site/portal/ from the templates below, so
 // the sidebar, header and footer stay identical on every page.
@@ -13,7 +14,8 @@ import vm from 'vm';
 // Everything a student sees is SAMPLE DATA (the `sample` object below): the
 // portal is a front end only. Signing in, saving an application, uploading
 // documents and paying need a server behind it; until then those actions say
-// so instead of pretending. Styles: site/css/portal.css. Behaviour: site/js/portal.js.
+// so instead of pretending. Styles: site/css/portal.css. Behaviour: site/js/portal.js,
+// and site/js/theme.js for the dark mode switch (shared with the main site).
 //
 // The counsellor shown throughout is the team member flagged `portalCounsellor`
 // in site/js/team-data.js (else the `startHere` person, else the first person);
@@ -163,6 +165,7 @@ const head = title => `<!doctype html>
 <link rel="preload" href="../assets/fonts/bebas-neue.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/oswald.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../css/portal.css">
+${THEME_SCRIPT}
 <script>try { if (localStorage.getItem('sa-portal-sample') === 'new') document.documentElement.setAttribute('data-sample', 'new'); } catch (e) {}</script>
 </head>`;
 
@@ -224,6 +227,7 @@ ${nav}
         <button type="button" class="p-sample" aria-describedby="p-sample-tip">Sample data<span class="p-sample-mode" data-when="progress">In progress</span><span class="p-sample-mode" data-when="new">New student</span></button>
         <span class="sr-only" id="p-sample-tip">This is a preview filled with sample data. Press to switch between a student part-way through and a brand-new student.</span>
         <a class="p-top-mail" href="mailto:${OFFICE_MAIL}">${icon('mail', 15)}${OFFICE_MAIL}</a>
+        ${themeToggle('        ')}
         <div class="p-notify">
           <button type="button" class="p-bell" aria-expanded="false" aria-controls="p-notes" aria-label="Notifications">${icon('bell', 18)}<span class="p-bell-dot" data-when="progress"></span></button>
           <div class="p-notes" id="p-notes" hidden>
@@ -246,7 +250,8 @@ ${body}
   </div>
 </div>
 <div class="p-toast" role="status" aria-live="polite"></div>
-${dialogs}<script src="../js/portal.js"></script>
+${dialogs}<script src="../js/theme.js"></script>
+<script src="../js/portal.js"></script>
 </body>
 </html>
 `;
@@ -751,6 +756,9 @@ ${points.map(([ic, t]) => `      <li><span>${icon(ic, 17)}</span>${t}</li>`).joi
     <p class="p-signin-contact"><a href="tel:${OFFICE_TEL}">${icon('phone', 16)}${OFFICE_TEL_LABEL}</a><span class="p-dot" aria-hidden="true"></span><a href="mailto:${OFFICE_MAIL}">${icon('mail', 16)}${OFFICE_MAIL}</a></p>
   </section>
   <main class="p-signin-main" id="p-content">
+    <div class="p-signin-tools">
+      ${themeToggle('      ')}
+    </div>
     <form class="p-signin-form" data-signin-form novalidate>
       <div>
         <h1>Sign in</h1>
@@ -768,6 +776,7 @@ ${points.map(([ic, t]) => `      <li><span>${icon(ic, 17)}</span>${t}</li>`).joi
     </form>
   </main>
 </div>
+<script src="../js/theme.js"></script>
 <script src="../js/portal.js"></script>
 </body>
 </html>
