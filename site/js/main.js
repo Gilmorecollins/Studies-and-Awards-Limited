@@ -49,12 +49,6 @@
   var yearEl = document.getElementById('current-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // Home hero pass: "Class of" the next intake year, rolling over each September.
-  var classEl = document.getElementById('hero-pass-class');
-  if (classEl) {
-    var now = new Date();
-    classEl.textContent = 'CLASS OF ' + (now.getFullYear() + (now.getMonth() >= 8 ? 1 : 0));
-  }
 })();
 
 // Footer newsletter box — no backend on this site, so "subscribing" opens
@@ -2223,4 +2217,34 @@ function createCursorFollower(options) {
         .catch(function () { /* closed the share sheet: nothing to do */ });
     });
   }
+})();
+
+// Home hero: the airport codes round the globe. Pointing at, focusing or
+// tapping one shows that country's card under the globe (the card stays
+// until another code is picked).
+(function () {
+  'use strict';
+
+  var codes = document.querySelectorAll('[data-globe-code]');
+  if (!codes.length) return;
+  var cards = document.querySelectorAll('[data-globe-card]');
+
+  function show(code) {
+    Array.prototype.forEach.call(codes, function (el) {
+      var on = el.getAttribute('data-globe-code') === code;
+      el.classList.toggle('is-active', on);
+      el.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    Array.prototype.forEach.call(cards, function (card) {
+      card.hidden = card.getAttribute('data-globe-card') !== code;
+    });
+  }
+
+  Array.prototype.forEach.call(codes, function (el) {
+    var code = el.getAttribute('data-globe-code');
+    var pick = function () { if (!el.classList.contains('is-active')) show(code); };
+    el.addEventListener('mouseenter', pick);
+    el.addEventListener('focus', pick);
+    el.addEventListener('click', pick);
+  });
 })();

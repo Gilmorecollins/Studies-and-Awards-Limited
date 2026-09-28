@@ -66,60 +66,85 @@
 
 <main id="main">
 
-  <section class="hero hero-light" aria-labelledby="hero-heading">
-    <svg class="hero-deco" viewBox="0 0 1440 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <circle cx="1180" cy="120" r="420" opacity="0.6"/>
-      <circle cx="1260" cy="560" r="260" opacity="0.5"/>
-      <path d="M-20 560 C260 520 420 610 640 560 C820 520 900 420 1040 400" stroke="#FDC21B" stroke-width="2" stroke-dasharray="6 10" fill="none" opacity="0.9"/>
-    </svg>
-    <div class="container">
-      <div>
-        <span class="hero-kicker"><span class="hero-kicker-rule" aria-hidden="true"></span>STUDY ABROAD &middot; FROM ELDORET TO THE WORLD</span>
-        <h1 id="hero-heading">Your path to studying abroad<br>starts <em>here.</em></h1>
-        <p class="lead">Personalised guidance from your first visit until you arrive and start life in the country of your choice: test prep, applications, visas, and travel, all in one place.</p>
-        <div class="hero-actions">
-          <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary">Book Free Consultation
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#001B5E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></svg>
-          </a>
-          <a href="destinations.html" class="btn btn-outline">Explore Destinations</a>
+  <section class="hero-globe" aria-labelledby="hero-heading">
+    <div class="container hero-globe-inner">
+      <div class="hero-globe-art">
+        <div class="globe">
+          <span class="globe-ring" aria-hidden="true"></span>
+          <div class="globe-sphere" aria-hidden="true">
+            <div class="globe-map"><img src="assets/home/globe-map.svg" alt="" width="720" height="432"><img src="assets/home/globe-map.svg" alt="" width="720" height="432"></div>
+            <span class="globe-shine"></span>
+          </div>
+          <div class="globe-codes" role="group" aria-label="Pick a destination">
+            <button type="button" class="globe-code is-active" data-globe-code="SYD" aria-pressed="true" aria-controls="globe-cards" style="left: -2.77%; top: 19.53%;">SYD<span class="sr-only"> Australia</span></button>
+            <button type="button" class="globe-code" data-globe-code="LHR" aria-pressed="false" aria-controls="globe-cards" style="left: 34.23%; top: -8.85%;">LHR<span class="sr-only"> United Kingdom</span></button>
+            <button type="button" class="globe-code" data-globe-code="FRA" aria-pressed="false" aria-controls="globe-cards" style="left: 84.95%; top: 0.09%;">FRA<span class="sr-only"> Germany</span></button>
+            <button type="button" class="globe-code" data-globe-code="YYZ" aria-pressed="false" aria-controls="globe-cards" style="left: 110.70%; top: 44.69%;">YYZ<span class="sr-only"> Canada</span></button>
+            <button type="button" class="globe-code" data-globe-code="DUB" aria-pressed="false" aria-controls="globe-cards" style="left: 93.08%; top: 93.08%;">DUB<span class="sr-only"> Ireland</span></button>
+            <button type="button" class="globe-code" data-globe-code="AKL" aria-pressed="false" aria-controls="globe-cards" style="left: 44.69%; top: 110.70%;">AKL<span class="sr-only"> New Zealand</span></button>
+          </div>
         </div>
-        <div class="hero-trust">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#16803C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>
-          Free initial consultation &middot; no obligation
+        <div class="globe-cards" id="globe-cards">
+        <a href="australia.html" class="globe-card" data-globe-card="SYD">
+          <img class="globe-card-flag" src="assets/flags/australia.svg" alt="" width="54" height="36">
+          <span class="globe-card-text">
+            <span class="globe-card-name"><span class="sr-only">Explore </span>Australia</span>
+            <span class="globe-card-sub"><span class="globe-card-route" aria-hidden="true">EDL <svg class="globe-card-route-arrow" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg> SYD</span> &middot; Great lifestyle</span>
+          </span>
+          <span class="globe-card-go" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a href="united-kingdom.html" class="globe-card" data-globe-card="LHR" hidden>
+          <img class="globe-card-flag" src="assets/flags/united-kingdom.svg" alt="" width="54" height="36">
+          <span class="globe-card-text">
+            <span class="globe-card-name"><span class="sr-only">Explore </span>United Kingdom</span>
+            <span class="globe-card-sub"><span class="globe-card-route" aria-hidden="true">EDL <svg class="globe-card-route-arrow" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg> LHR</span> &middot; World-class education</span>
+          </span>
+          <span class="globe-card-go" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a href="germany.html" class="globe-card" data-globe-card="FRA" hidden>
+          <img class="globe-card-flag" src="assets/flags/germany.svg" alt="" width="54" height="36">
+          <span class="globe-card-text">
+            <span class="globe-card-name"><span class="sr-only">Explore </span>Germany</span>
+            <span class="globe-card-sub"><span class="globe-card-route" aria-hidden="true">EDL <svg class="globe-card-route-arrow" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg> FRA</span> &middot; Innovation &amp; research</span>
+          </span>
+          <span class="globe-card-go" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a href="canada.html" class="globe-card" data-globe-card="YYZ" hidden>
+          <img class="globe-card-flag" src="assets/flags/canada.svg" alt="" width="54" height="36">
+          <span class="globe-card-text">
+            <span class="globe-card-name"><span class="sr-only">Explore </span>Canada</span>
+            <span class="globe-card-sub"><span class="globe-card-route" aria-hidden="true">EDL <svg class="globe-card-route-arrow" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg> YYZ</span> &middot; Diverse &amp; inclusive</span>
+          </span>
+          <span class="globe-card-go" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a href="ireland.html" class="globe-card" data-globe-card="DUB" hidden>
+          <img class="globe-card-flag" src="assets/flags/ireland.svg" alt="" width="54" height="36">
+          <span class="globe-card-text">
+            <span class="globe-card-name"><span class="sr-only">Explore </span>Ireland</span>
+            <span class="globe-card-sub"><span class="globe-card-route" aria-hidden="true">EDL <svg class="globe-card-route-arrow" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg> DUB</span> &middot; Growing opportunities</span>
+          </span>
+          <span class="globe-card-go" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a href="new-zealand.html" class="globe-card" data-globe-card="AKL" hidden>
+          <img class="globe-card-flag" src="assets/flags/new-zealand.svg" alt="" width="54" height="36">
+          <span class="globe-card-text">
+            <span class="globe-card-name"><span class="sr-only">Explore </span>New Zealand</span>
+            <span class="globe-card-sub"><span class="globe-card-route" aria-hidden="true">EDL <svg class="globe-card-route-arrow" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg> AKL</span> &middot; Safe &amp; welcoming</span>
+          </span>
+          <span class="globe-card-go" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
         </div>
       </div>
-      <div class="hero-art">
-        <div class="hero-pass">
-          <div class="hero-pass-main">
-            <div class="hero-pass-row">
-              <span class="hero-pass-label">STUDENT BOARDING PASS</span>
-              <span class="hero-pass-pill" id="hero-pass-class">CLASS OF 2027</span>
-            </div>
-            <div class="hero-pass-route">
-              <div class="hero-pass-stop">
-                <span class="hero-pass-code">EDL</span>
-                <span class="hero-pass-place">Eldoret, Kenya</span>
-              </div>
-              <div class="hero-pass-track" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>
-              </div>
-              <div class="hero-pass-stop is-to">
-                <span class="hero-pass-code">???</span>
-                <span class="hero-pass-place">Your dream university</span>
-              </div>
-            </div>
-            <div class="hero-pass-checklist">
-              <div class="hero-pass-check"><span class="hero-pass-check-num">01</span>Test prep</div>
-              <div class="hero-pass-check"><span class="hero-pass-check-num">02</span>Applications</div>
-              <div class="hero-pass-check"><span class="hero-pass-check-num">03</span>Visa guidance</div>
-              <div class="hero-pass-check"><span class="hero-pass-check-num">04</span>Student airfare</div>
-            </div>
+      <div class="hero-globe-copy">
+        <span class="hero-kicker"><span class="hero-kicker-rule" aria-hidden="true"></span>STUDY ABROAD &middot; FROM ELDORET TO THE WORLD</span>
+        <h1 id="hero-heading">Your path to studying abroad <span class="hero-globe-accent">starts here.</span></h1>
+        <p class="hero-globe-lead">Personalised guidance from your first visit until you arrive and start life in the country of your choice: test prep, applications, visas, and travel, all in one place.</p>
+        <div class="hero-globe-actions">
+          <div class="hero-globe-buttons">
+            <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary">Book a free consultation</a>
+            <a href="destinations.html" class="btn btn-outline">Explore Destinations</a>
           </div>
-          <div class="hero-pass-stub">
-            <div class="hero-pass-stub-logo"><img src="assets/logo-mark.png" alt="Studies and Awards logo" width="44" height="29"></div>
-            <span class="hero-pass-stub-text">EST.<br>ELDORET<br>KENYA</span>
-            <div class="hero-pass-barcode" aria-hidden="true"></div>
-          </div>
+          <span class="hero-globe-trust">Free initial consultation &middot; no obligation</span>
         </div>
       </div>
     </div>
