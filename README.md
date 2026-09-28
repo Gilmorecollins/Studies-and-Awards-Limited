@@ -15,9 +15,9 @@ site/              The actual website. Open site/index.html in a browser,
                     department, what they help with and WhatsApp number for
                     the consultation chooser. Loaded on every page.
   js/testimonials-data.js
-                    Real quotes for the home page's "What people say"
-                    section. Empty for now, and the section stays hidden
-                    until it has at least one real quote.
+                    Quotes for the home page's "Testimonials" section.
+                    Samples for now (shown only on your own copy); the
+                    section stays hidden until it has a quote to show.
   js/destinations-data.js
                     GENERATED. Destination registry (name, airport code,
                     tagline) in journey order. Each destination page
@@ -256,19 +256,32 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
 - **Destination specialists**: give a team member `destinations: ['Germany']`
   in `js/team-data.js` and they lead the consultation list, tagged "Best for
   Germany", when someone books from that country's page.
-- **Testimonials**: the home page's "What people say" section is fed by
-  `js/testimonials-data.js`. It currently holds three **sample** quotes
-  (marked `sample: true`) so the layout can be reviewed. Samples show only on
-  your own copy of the site (opened as a file, or on localhost), each tagged
-  "Sample: replace before launch", and are hidden automatically on any real
-  website address (add `?testimonialsPreview` to an address to see them
-  anywhere). **Before you deploy, replace them with real quotes**, each as
-  `{ quote, name, detail }`, in the person's own words, published with their
-  agreement, under a name they're happy to use (leave `sample` out). An entry
-  with no quote or no name is skipped. With nothing to show the section stays
-  hidden. `--check` reminds you while samples remain, and fails once
-  `SITE_URL` is set to a real domain (a `*.vercel.app` test address is
-  allowed).
+- **Testimonials**: the home page's "Testimonials" section is fed by
+  `js/testimonials-data.js`. Each student gets their own soft raised card:
+  their photo (or initials), name and who they are, their rating beside the
+  average, and their words. The cards sit in a row, three across on a laptop,
+  two on a tablet and one on a phone; when there are more than fit, the row
+  scrolls sideways (swipe, trackpad, or the arrow keys once it has focus) and
+  dots appear below to jump along it. It never moves on its own. It
+  currently holds three **sample** quotes (marked `sample: true`) so the
+  layout can be reviewed. Samples show only on your own copy of the site
+  (opened as a file, or on localhost), each tagged "Sample: replace before
+  launch", and are hidden automatically on any real website address (add
+  `?testimonialsPreview` to an address to see them anywhere). **Before you
+  deploy, replace them with real quotes**, each as
+  `{ quote, story, name, detail, photo, rating }` (only `quote` and `name`
+  are needed), in the person's own words, published with their agreement,
+  under a name they're happy to use (leave `sample` out). `story` is more of
+  their words, shown smaller under the quote; `photo` is a square photo, used
+  only with their agreement; `rating` is their score out of 5. A card shows a
+  rating box only for a student who gave a rating, with the average of the
+  ratings on the page beside it once two or more have. An entry with no
+  quote or no name is skipped. With nothing to show the section stays
+  hidden. `--check` reminds
+  you while samples remain, and fails once `SITE_URL` is set to a real domain
+  (a `*.vercel.app` test address is allowed). The "WHAT PEOPLE SAY" line
+  above the heading is in `index.html`; a figure such as "500+ happy
+  students" can go there once you have a real count.
 - **Publishing**: the live version is published as a Claude Artifact, not
   auto-deployed from this repo. Republish from `site/index.html` after
   making changes.

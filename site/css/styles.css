@@ -51,6 +51,9 @@
   --pass-glow: #DCE6F7;        /* the glow under the "Why choose" pass */
   --cursor: #141414;           /* the circle that follows the mouse */
   --cord: rgba(0, 27, 94, 0.5); /* the pull cord at the right end of the page */
+  --soft: #ECEFF5;             /* the soft raised panels of the home page testimonials */
+  --soft-hi: rgba(255, 255, 255, 0.9);  /* ...their light edge, above and left */
+  --soft-lo: rgba(0, 27, 94, 0.15);     /* ...and their shadow, below and right */
 
   /* Navy tints and shadows, as scales named by their light strength:
      --tint-10 is navy at 10% here and white at 12% in dark mode;
@@ -68,6 +71,7 @@
   --tint-18: rgb(var(--tint-rgb) / calc(0.18 * var(--tint-k)));
   --tint-30: rgb(var(--tint-rgb) / calc(0.30 * var(--tint-k)));
   --tint-35: rgb(var(--tint-rgb) / calc(0.35 * var(--tint-k)));
+  --tint-50: rgb(var(--tint-rgb) / calc(0.50 * var(--tint-k)));
   --shadow-06: rgb(var(--shadow-rgb) / calc(0.06 * var(--shadow-k)));
   --shadow-07: rgb(var(--shadow-rgb) / calc(0.07 * var(--shadow-k)));
   --shadow-08: rgb(var(--shadow-rgb) / calc(0.08 * var(--shadow-k)));
@@ -113,6 +117,9 @@
   --pass-glow: #1C3A8A;
   --cursor: #F1F4FA;
   --cord: rgba(241, 244, 250, 0.55);
+  --soft: #0E162E;
+  --soft-hi: rgba(255, 255, 255, 0.05);
+  --soft-lo: rgba(0, 0, 0, 0.5);
   --tint-rgb: 255 255 255;
   --tint-k: 1.2;
   --shadow-rgb: 0 0 0;
@@ -1413,22 +1420,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .dest-visa { position: relative; width: auto; min-width: 0; margin: -48px 16px 0; }
 }
 
-/* ---------- home: stories layout (testimonials intro + grid) ---------- */
-
-.stories-layout { display: flex; gap: 64px; align-items: flex-start; }
-.stories-intro { width: 340px; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
-.stories-intro .eyebrow { color: var(--brass-ink); }
-.stories-intro p { font-size: 15.5px; color: var(--muted); line-height: 1.65; }
-/* a long link: let it wrap like text, underline and all, instead of stretching the column */
-.stories-share { display: inline; line-height: 1.9; }
-.stories-share svg { display: inline-block; vertical-align: -2px; margin-left: 6px; }
-.stories-content { flex-grow: 1; min-width: 0; }
-
-@media (max-width: 900px) {
-  .stories-layout { flex-direction: column; align-items: stretch; gap: 32px; }
-  .stories-intro { width: auto; }
-}
-
 /* ---------- home: FAQ ---------- */
 
 .faq-wrap { max-width: 820px; margin: 0 auto; }
@@ -2046,76 +2037,143 @@ a.about-pin:hover { color: var(--brass); }
 .team-join-btn:focus-visible,
 .team-modal-close:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
 
-/* ---------- testimonials (home page; hidden until js/testimonials-data.js has real quotes) ---------- */
+/* ---------- testimonials (home page; hidden until js/testimonials-data.js has quotes to show) ----------
+   A soft raised card for each student, in a row: the cards are the same
+   colour as the section around them and stand out only by a light edge above
+   and to the left and a shadow below and to the right; the student's own
+   rating is pressed in the same way. main.js builds the cards and the dots. */
 
-/* the first quote is featured full-width; any further quotes fall into a
-   plain two-column grid below it (this wraps cleanly for any count) */
-.testimonial-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px 56px;
-}
-.testimonial-grid:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
-.testimonial-card {
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--brass);
-  border-radius: var(--radius);
-  padding: 30px;
-  background: var(--surface);
-}
-.testimonial-quote { font-style: italic; color: var(--text-prose); font-size: 14.5px; line-height: 1.7; margin-bottom: 18px; }
-.testimonial-meta { font-size: 13.5px; font-weight: 700; color: var(--text-strong); }
-.testimonial-role { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.testimonials { background: var(--soft); }
+/* the page gutter, so the row can run out to the screen edge (and scroll
+   there) while its cards still line up with the rest of the page; and the
+   box the cards-per-row rules below measure */
+.testi-wrap { --gutter: clamp(24px, calc(4.5vw / var(--z, 1)), 72px); container-type: inline-size; }
+@media (max-width: 768px) { .testi-wrap { --gutter: 20px; } } /* as .container there */
+.testi-head { max-width: 560px; margin: 0 auto clamp(32px, calc(4.5vw / var(--z, 1)), 56px); text-align: center; }
+.testi-head .eyebrow { display: block; margin-bottom: 14px; color: var(--brass-ink); }
+.testi-head h2 { margin-bottom: 16px; }
+.testi-head p { font-size: 16px; line-height: 1.6; color: var(--muted); }
+.testi-preview { max-width: 640px; margin: 0 auto 32px; }
 
-.testimonial-grid > .testimonial-card:first-child {
-  grid-column: 1 / -1;
+/* the row: three cards across, two on a tablet, one on a phone (below);
+   more than fit scroll sideways and stop at each card. Its padding is room
+   for the cards' shadows, taken back by the negative margins. */
+.testi-row {
+  --testi-gap: 28px;
   position: relative;
+  display: flex; gap: var(--testi-gap);
+  margin: -32px calc(-1 * var(--gutter)) -48px;
+  padding: 32px var(--gutter) 48px;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+.testi-row::-webkit-scrollbar { display: none; }
+.testi-row:focus-visible { outline: 2px solid var(--line-strong); outline-offset: -8px; border-radius: 36px; }
+/* a card part way out of view fades out at the edge of the row rather than
+   being cut off, on whichever side there is more to see (main.js sets the
+   classes as it scrolls) */
+@property --fade-l { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --fade-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
+.testi-row {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent);
+  transition: --fade-l 200ms ease, --fade-r 200ms ease;
+}
+.testi-row.is-past-start { --fade-l: var(--gutter); }
+.testi-row.is-before-end { --fade-r: var(--gutter); }
+/* fewer cards than fit: centred (the margins fold away once the row scrolls) */
+.testi-row > :first-child { margin-left: auto; }
+.testi-row > :last-child { margin-right: auto; }
+
+.testi-card {
+  flex: 0 0 calc((100% - 2 * var(--testi-gap)) / 3);
+  min-width: 0;
+  display: flex; flex-direction: column;
+  padding: 28px 26px 30px;
+  border-radius: 28px;
+  background: var(--soft);
+  box-shadow: -9px -9px 22px var(--soft-hi), 12px 14px 30px var(--soft-lo);
+  scroll-snap-align: start;
+}
+.testi-card > .testi-sample { align-self: flex-start; }
+@container (max-width: 959px) {
+  .testi-card { flex-basis: calc((100% - var(--testi-gap)) / 2); }
+}
+/* phones: one card, with the edge of the next one showing */
+@container (max-width: 559px) {
+  .testi-row { --testi-gap: 16px; }
+  .testi-card {
+    flex-basis: calc(100% - 28px);
+    padding: 22px 20px 24px;
+    border-radius: 24px;
+    box-shadow: -6px -6px 16px var(--soft-hi), 8px 10px 22px var(--soft-lo);
+  }
+}
+
+/* who they are */
+.testi-person { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.testi-avatar {
+  width: 64px; height: 64px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
   overflow: hidden;
-  padding: 44px 48px 32px;
-  border: none;
-  border-radius: var(--radius);
-  box-shadow: 0 4px 14px var(--shadow-06);
+  background: linear-gradient(140deg, #0A2A7A, var(--ink));
+  box-shadow: 5px 7px 14px var(--soft-lo), -4px -4px 10px var(--soft-hi);
+  /* initials, when there is no photo */
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 26px; line-height: 1; letter-spacing: 0.04em; color: var(--brass);
 }
-.testimonial-grid > .testimonial-card:first-child::before {
-  content: '\201D';
-  position: absolute; right: 32px; top: -18px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 180px; line-height: 1;
-  color: var(--brass);
-  opacity: 0.5;
-  pointer-events: none;
-}
-.testimonial-grid > .testimonial-card:first-child svg { display: none; }
-.testimonial-grid > .testimonial-card:first-child .testimonial-quote {
-  position: relative;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 22px;
-  line-height: 1.5;
-  color: var(--text-strong);
-  max-width: 640px;
-  margin-bottom: 4px;
-}
-.testimonial-grid > .testimonial-card:first-child .testimonial-meta {
-  position: relative;
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border-soft);
-  font-size: 16px;
-}
-.testimonial-grid > .testimonial-card:not(:first-child):not(.is-sample) {
-  border: none; padding: 0; background: none; border-radius: 0;
-}
-.testimonial-grid > .testimonial-card:not(:first-child) .testimonial-quote {
-  font-style: normal;
-  font-size: 16.5px;
-  color: var(--text-subtle);
-}
-.testimonial-grid > .testimonial-card:not(:first-child) svg { display: none; }
+.testi-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.testi-who { min-width: 0; }
+.testi-name { font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text-strong); overflow-wrap: anywhere; }
+.testi-detail { margin-top: 3px; font-size: 14px; line-height: 1.4; color: var(--muted); }
 
-@media (max-width: 640px) {
-  .testimonial-grid { grid-template-columns: 1fr; }
+/* the average, and their own rating pressed in beside it */
+.testi-score { display: flex; align-items: center; gap: 14px; margin-top: 24px; }
+.testi-score-avg { flex: 1 1 0; min-width: 0; padding-left: 4px; }
+.testi-score-own {
+  flex: 1.4 1 0; min-width: 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  box-shadow: inset 5px 5px 12px var(--soft-lo), inset -5px -5px 12px var(--soft-hi);
 }
+.testi-score-own:only-child { flex: 0 1 auto; }
+.testi-score-num { display: flex; align-items: center; gap: 7px; font-size: 20px; font-weight: 700; line-height: 1.2; color: var(--text-strong); }
+.testi-star { flex-shrink: 0; fill: var(--brass); }
+.testi-score-label { margin-top: 5px; font-size: 13px; line-height: 1.35; color: var(--muted); }
+
+/* their words */
+.testi-quote { margin: 26px 0 0; }
+.testi-mark { display: block; width: 36px; height: auto; margin-bottom: 18px; fill: var(--brass); }
+.testi-quote-lead { font-size: 17px; font-weight: 700; line-height: 1.6; color: var(--text-strong); }
+.testi-quote-more { margin-top: 14px; font-size: 14.5px; line-height: 1.7; color: var(--muted); }
+
+/* the dots, when the row scrolls: short bars, the current one longer and
+   gold. Each is a 40 x 32 button, so it is easy to hit on a phone. */
+.testi-dots { display: flex; justify-content: center; margin-top: 36px; }
+.testi-dots[hidden] { display: none; }
+.testi-dot {
+  width: 40px; height: 32px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: none; border-radius: 8px;
+  background: none;
+  cursor: pointer;
+}
+.testi-dot::before {
+  content: '';
+  width: 24px; height: 5px;
+  border-radius: 3px;
+  background: var(--tint-50);
+  transition: width 250ms ease, background-color 250ms ease;
+}
+.testi-dot:hover::before { background: var(--muted); }
+.testi-dot.is-active::before { width: 36px; background: var(--brass-ink); }
+.testi-dot:focus-visible { outline: 2px solid var(--line-strong); outline-offset: -2px; }
+
+.testi-share { display: flex; width: fit-content; max-width: 100%; margin: 32px auto 0; }
 
 /* ---------- futuristic full-screen city slideshow ---------- */
 
@@ -3316,10 +3374,9 @@ html.is-leaving body { opacity: 0; transition: opacity 220ms ease; }
 }
 
 /* a sample testimonial (design review only; hidden on real website addresses) */
-.testimonial-card.is-sample { position: relative; border-style: dashed; border-top-style: solid; }
-.testimonial-sample {
+.testi-sample {
   display: table; /* its own line, shrunk to fit */
-  margin-bottom: 14px; padding: 4px 10px;
+  margin-bottom: 18px; padding: 4px 10px;
   border-radius: 999px; background: var(--gold-tint-soft); border: 1px solid var(--brass);
   font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-strong);
 }
