@@ -618,10 +618,10 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 
 /* ---------- home hero: the globe ----------
    A globe on the left, its dotted world map (with the routes from Eldoret)
-   turning slowly, a gold dashed ring round it carrying the six airport
-   codes, and below it the card of whichever code was last pointed at,
-   focused or tapped (main.js). The headline and buttons sit on the right.
-   The ring and the codes are placed as fractions of the globe's size, so
+   turning slowly, and a gold dashed ring round it carrying the six
+   destination flags, each a link to that country's page (its name shows
+   under it on hover or focus). The headline and buttons sit on the right.
+   The ring and the flags are placed as fractions of the globe's size, so
    the whole thing scales with --globe. */
 .hero-globe {
   position: relative; overflow: hidden;
@@ -634,7 +634,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   padding-top: clamp(64px, calc(6.2vw / var(--z, 1)), 90px);
   padding-bottom: clamp(64px, calc(6.2vw / var(--z, 1)), 90px);
 }
-.hero-globe-art { display: flex; flex-direction: column; align-items: center; gap: calc(var(--globe) * 0.2); min-width: 0; }
+.hero-globe-art { display: flex; justify-content: center; min-width: 0; padding: calc(var(--globe) * 0.1) 0; }
 .globe { position: relative; width: var(--globe); aspect-ratio: 1; flex-shrink: 0; }
 .globe-ring { position: absolute; inset: -10.93%; border: 2px dashed var(--brass); border-radius: 50%; pointer-events: none; }
 .globe-sphere {
@@ -653,43 +653,27 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .globe-map img { display: block; flex: none; width: 50%; height: 100%; }
 @keyframes globe-spin { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .globe-shine { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.18), rgba(255,255,255,0) 45%); }
-.globe-code {
+.globe-flag {
   position: absolute; z-index: 1; transform: translate(-50%, -50%);
-  padding: 6px 12px; border: 1.5px solid var(--brass); border-radius: 999px;
-  background: var(--surface); box-shadow: 0 6px 14px rgba(0,27,94,0.1); cursor: pointer;
-  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 18px; line-height: 1.1; letter-spacing: 0.06em;
-  color: var(--text-strong);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  display: block; padding: 3px; border-radius: 9px;
+  background: var(--surface); box-shadow: 0 0 0 1.5px var(--brass), 0 8px 18px rgba(0,27,94,0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.globe-code.is-active { background: var(--brass); color: var(--ink); }
-.globe-code:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
-.globe-cards { display: flex; justify-content: center; width: 100%; }
-.globe-card {
-  display: flex; align-items: center; gap: 16px;
-  width: min(100%, 392px); box-sizing: border-box; padding: 16px 20px;
-  border: 1.5px solid var(--brass); border-radius: var(--radius); background: var(--surface);
-  box-shadow: 0 18px 40px rgba(0,27,94,0.15);
-  text-decoration: none; color: var(--text-strong);
-  animation: globe-card-in 0.3s ease;
+/* max-content and no max-width: the flag at the ring's right edge sits past
+   the globe's box and would otherwise be squeezed to nothing */
+.globe-flag { width: max-content; }
+.globe-flag img { display: block; width: 48px; height: 32px; max-width: none; object-fit: cover; border-radius: 6px; }
+.globe-flag:hover, .globe-flag:focus-visible { z-index: 2; transform: translate(-50%, -50%) scale(1.12); box-shadow: 0 0 0 3px var(--brass), 0 12px 24px rgba(0,27,94,0.25); }
+.globe-flag:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 4px; }
+.globe-flag-name {
+  position: absolute; left: 50%; top: calc(100% + 8px); transform: translate(-50%, -4px);
+  padding: 4px 10px; border-radius: 999px; white-space: nowrap; pointer-events: none;
+  background: var(--ink); color: #FFFFFF;
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 15px; line-height: 1.1; letter-spacing: 0.06em;
+  opacity: 0; transition: opacity 0.2s ease, transform 0.2s ease;
 }
-.globe-card[hidden] { display: none; }
-@keyframes globe-card-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.globe-card:hover { color: var(--text-strong); }
-.globe-card:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 4px; }
-.globe-card-flag { flex-shrink: 0; width: 54px; height: 36px; object-fit: cover; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,27,94,0.18); }
-.globe-card-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex-grow: 1; }
-.globe-card-name { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 30px; line-height: 1; color: var(--text-strong); }
-.globe-card-sub { font-size: 13px; color: var(--muted); }
-.globe-card-route { display: inline-flex; align-items: center; gap: 4px; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 16px; color: var(--brass-ink); }
-.globe-card-route-arrow { flex-shrink: 0; }
-.globe-card-go {
-  flex-shrink: 0; margin-left: 10px; width: 38px; height: 38px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--ink); color: var(--brass);
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-}
-.globe-card:hover .globe-card-go { background: var(--brass); color: var(--ink); transform: translateX(3px); }
-:root[data-theme="dark"] .globe-card-go { background: var(--brass); color: var(--ink); }
+.globe-flag:hover .globe-flag-name, .globe-flag:focus-visible .globe-flag-name { opacity: 1; transform: translate(-50%, 0); }
+:root[data-theme="dark"] .globe-flag-name { background: var(--brass); color: var(--ink); }
 
 .hero-globe-copy { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
 .hero-globe .hero-kicker { margin: 0; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 13px; letter-spacing: 0.18em; }
@@ -708,16 +692,13 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .hero-globe-copy { order: -1; gap: 22px; }
 }
 @media (max-width: 480px) {
-  .globe-code { padding: 5px 9px; font-size: 15px; }
+  .globe-flag img { width: 38px; height: 25px; }
   .hero-globe .hero-kicker { font-size: 12px; letter-spacing: 0.1em; }
-  .globe-card { gap: 12px; padding: 14px 16px; }
-  .globe-card-name { font-size: 26px; }
-  .globe-card-go { margin-left: 0; width: 34px; height: 34px; }
   .hero-globe-buttons .btn { flex: 1 1 100%; justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .globe-map { animation: none; }
-  .globe-card { animation: none; }
+  .globe-flag, .globe-flag-name { transition: none; }
 }
 
 /* inner-page hero: kicker, a big left-aligned headline and a lead line */
@@ -1760,16 +1741,15 @@ a.about-pin:hover { color: var(--brass); }
 .lift-inside-logo { display: flex; align-items: center; justify-content: center; width: 84px; height: 84px; border-radius: 20px; background: #FFFFFF; }
 .lift-inside-logo img { width: 60px; height: auto; }
 .lift-inside-title { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: clamp(34px, calc(3.5vw / var(--z, 1)), 50px); line-height: 0.95; color: var(--ink); }
-.lift-inside-sub { font-size: 15px; font-weight: 600; color: #3D3000; }
 .lift-door { position: absolute; top: 0; width: 50%; height: 100%; transition: transform 900ms ease; }
 .lift-door-l { left: 0; background: linear-gradient(90deg, #8E9BB8, #C9D1E2); border-right: 1px solid #6F7C99; }
 .lift-door-r { right: 0; background: linear-gradient(270deg, #8E9BB8, #C9D1E2); border-left: 1px solid #6F7C99; }
 .lift-sill { width: calc(var(--car-w) + 80px); height: 8px; margin-top: -16px; border-radius: 4px; background: #33466F; }
-.lift-panel { display: flex; flex-direction: column; gap: 18px; padding: 24px 18px; border: 2px solid #2A4A9A; border-radius: 40px; background: #0A2A72; }
+.lift-panel { display: flex; flex-direction: column; gap: 14px; padding: 18px 14px; border: 2px solid #2A4A9A; border-radius: 34px; background: #0A2A72; }
 .lift-btn {
-  width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--brass);
+  width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--brass);
   background: #0A2A72; color: var(--on-dark-muted); cursor: pointer;
-  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 30px; line-height: 1;
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 24px; line-height: 1;
   box-shadow: 0 0 0 5px rgba(255,184,0,0.12);
   transition: background-color 200ms ease, color 200ms ease;
 }
@@ -1784,43 +1764,10 @@ a.about-pin:hover { color: var(--brass); }
 .loc-before { background: var(--paper); padding: clamp(56px, calc(7vw / var(--z, 1)), 100px) 0; }
 .loc-before-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px 40px; margin-bottom: 36px; }
 .loc-before-head .eyebrow { display: block; margin-bottom: 10px; color: var(--brass-ink); }
-.loc-maps-btn {
-  display: inline-flex; align-items: center; gap: 9px; padding: 14px 24px; border-radius: 999px;
-  background: var(--ink); font-size: 15px; font-weight: 700; color: #FFFFFF;
-  transition: background-color 150ms ease;
-}
-.loc-maps-btn svg { color: var(--brass); }
-.loc-maps-btn:hover { background: #0A2A72; color: #FFFFFF; }
-.loc-maps-btn:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
 .loc-before-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 16px; height: 560px; }
 
 .loc-map { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-soft); border-radius: var(--radius); background: var(--surface); box-shadow: 0 16px 40px var(--shadow-10); }
-/* the steps card sits under the map rather than on it, so it never covers the
-   map's zoom buttons or Google's logo and terms along the bottom edge */
 .loc-map iframe { display: block; flex: 1; min-height: 0; width: 100%; border: 0; }
-.lift-steps {
-  display: flex; flex-direction: column; gap: 6px; padding: 16px 18px 16px;
-  border-top: 1px solid var(--border-soft); background: var(--surface);
-}
-.lift-steps-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
-.loc-map-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: var(--text-strong); }
-.loc-map-chip svg { color: var(--brass-ink); }
-.lift-steps-label { padding-left: 12px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
-.lift-steps-row { display: flex; align-items: stretch; gap: 6px; }
-.lift-steps-arrow { flex-shrink: 0; align-self: center; display: flex; color: var(--brass); }
-.lift-step {
-  flex: 1 1 0; min-width: 0; display: flex; align-items: flex-start; gap: 12px; padding: 12px;
-  border: 0; border-radius: 12px; background: transparent; cursor: pointer; text-align: left; font-family: inherit;
-  transition: background-color 200ms ease;
-}
-.lift-step:hover { background: var(--paper); }
-.lift-step.is-on { background: var(--gold-tint); }
-.lift-step:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; }
-.lift-step-icon { flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: var(--paper); color: var(--text-strong); transition: background-color 200ms ease; }
-.lift-step.is-on .lift-step-icon { background: var(--brass); }
-.lift-step-text { display: flex; flex-direction: column; gap: 3px; }
-.lift-step-text strong { font-size: 14.5px; font-weight: 700; color: var(--text-strong); }
-.lift-step-text span { font-size: 12.5px; line-height: 1.45; color: var(--muted); }
 
 .loc-photos { position: relative; overflow: hidden; touch-action: pan-y; border: 1px solid var(--border-soft); border-radius: var(--radius); background: var(--surface); box-shadow: 0 16px 40px var(--shadow-10); }
 .loc-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 500ms ease; }
@@ -1857,9 +1804,9 @@ a.about-pin:hover { color: var(--brass); }
 
 @media (max-width: 1023.98px), (max-width: 1180px) and (pointer: coarse), (max-width: 1180px) and (pointer: none) {
   .lift { --car-w: 320px; gap: 24px; }
-  .lift-btn { width: 60px; height: 60px; font-size: 26px; }
+  .lift-btn { width: 50px; height: 50px; font-size: 22px; }
 }
-/* the steps card needs the map's full width: map above the photos */
+/* narrower screens: the map above the photos */
 @media (max-width: 1023.98px), (max-width: 1100px) and (pointer: coarse), (max-width: 1100px) and (pointer: none) {
   .loc-before-grid { grid-template-columns: minmax(0, 1fr); height: auto; }
   .loc-map { height: 520px; }
@@ -1872,11 +1819,7 @@ a.about-pin:hover { color: var(--brass); }
   .loc-photos { height: 480px; }
 }
 @media (max-width: 700px) {
-  /* the steps card would cover most of a small map: it moves under it */
-  .loc-map { height: auto; }
-  .loc-map iframe { flex: none; height: 320px; }
-  .lift-steps-row { flex-direction: column; }
-  .lift-steps-arrow { transform: rotate(90deg); }
+  .loc-map { height: 380px; }
   .loc-photos { height: 420px; }
 }
 @media (max-width: 560px) {
@@ -1887,7 +1830,6 @@ a.about-pin:hover { color: var(--brass); }
   .lift-inside-logo { width: 64px; height: 64px; border-radius: 16px; }
   .lift-inside-logo img { width: 46px; }
   .lift-inside-title { font-size: 30px; }
-  .lift-inside-sub { font-size: 13px; }
   .lift-actions > a { flex: 1 1 100%; justify-content: center; }
   .loc-photos { height: 360px; }
   /* too narrow for the caption and the controls on one line: the controls go
@@ -3451,6 +3393,5 @@ html.is-leaving body { opacity: 0; transition: opacity 220ms ease; }
 @media (max-width: 560px) {
   .loc-actions { width: 100%; }
   .loc-action { flex: 1 1 0; justify-content: center; padding: 12px 10px; font-size: 14px; }
-  .loc-actions .loc-maps-btn { flex: 1 1 100%; justify-content: center; }
 }
 .open-status.is-soon::before { background: var(--brass); box-shadow: 0 0 0 3px rgba(255,184,0,0.22); }

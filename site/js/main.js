@@ -1700,9 +1700,9 @@ function createCursorFollower(options) {
   });
 })();
 
-// Find Us page: the lift. Pressing M1 (on the lift's panel, or the arrival
-// steps under the map) opens the doors onto our reception and the text beside
-// the lift moves on to the next step; G takes it back down.
+// Find Us page: the lift. Pressing M1 on the lift's panel opens the doors onto
+// our reception and the text beside the lift moves on to the next floor; G
+// takes it back down.
 (function () {
   'use strict';
 
@@ -1718,14 +1718,13 @@ function createCursorFollower(options) {
     M1: {
       hint: 'YOU’VE ARRIVED',
       title: 'Mezzanine 1: say hello at reception',
-      text: 'Our office is on Mezzanine 1, just above the ground floor. Tell us you’re here about studying abroad and we’ll introduce you to the right counsellor.'
+      text: 'Tell us you’re here about studying abroad and we’ll introduce you to the right counsellor.'
     }
   };
   var hint = hero.querySelector('[data-lift-hint]');
   var title = hero.querySelector('[data-lift-title]');
   var text = hero.querySelector('[data-lift-text]');
   var floorEl = hero.querySelector('[data-lift-floor]');
-  var steps = document.querySelectorAll('.lift-step');
   var buttons = document.querySelectorAll('[data-floor-go]');
 
   // Hidden copies of every floor's text, laid under the live one (see
@@ -1744,7 +1743,7 @@ function createCursorFollower(options) {
     box.appendChild(copy);
   });
 
-  function goTo(floor, stepButton) {
+  function goTo(floor) {
     var info = FLOORS[floor];
     hero.setAttribute('data-floor', floor);
     floorEl.textContent = floor;
@@ -1754,12 +1753,6 @@ function createCursorFollower(options) {
     hero.querySelectorAll('.lift-btn').forEach(function (b) {
       b.setAttribute('aria-pressed', b.getAttribute('data-floor-go') === floor ? 'true' : 'false');
     });
-    // the step highlighted is the one pressed, or the floor's first step
-    var on = stepButton || [].filter.call(steps, function (st) { return st.getAttribute('data-floor-go') === floor; })[0];
-    steps.forEach(function (st) {
-      st.classList.toggle('is-on', st === on);
-      st.setAttribute('aria-pressed', st === on ? 'true' : 'false');
-    });
   }
 
   var autoTimer = null, touched = false;
@@ -1767,7 +1760,7 @@ function createCursorFollower(options) {
     b.addEventListener('click', function () {
       touched = true;
       window.clearTimeout(autoTimer);
-      goTo(b.getAttribute('data-floor-go'), b.classList.contains('lift-step') ? b : null);
+      goTo(b.getAttribute('data-floor-go'));
     });
   });
 
@@ -2217,34 +2210,4 @@ function createCursorFollower(options) {
         .catch(function () { /* closed the share sheet: nothing to do */ });
     });
   }
-})();
-
-// Home hero: the airport codes round the globe. Pointing at, focusing or
-// tapping one shows that country's card under the globe (the card stays
-// until another code is picked).
-(function () {
-  'use strict';
-
-  var codes = document.querySelectorAll('[data-globe-code]');
-  if (!codes.length) return;
-  var cards = document.querySelectorAll('[data-globe-card]');
-
-  function show(code) {
-    Array.prototype.forEach.call(codes, function (el) {
-      var on = el.getAttribute('data-globe-code') === code;
-      el.classList.toggle('is-active', on);
-      el.setAttribute('aria-pressed', on ? 'true' : 'false');
-    });
-    Array.prototype.forEach.call(cards, function (card) {
-      card.hidden = card.getAttribute('data-globe-card') !== code;
-    });
-  }
-
-  Array.prototype.forEach.call(codes, function (el) {
-    var code = el.getAttribute('data-globe-code');
-    var pick = function () { if (!el.classList.contains('is-active')) show(code); };
-    el.addEventListener('mouseenter', pick);
-    el.addEventListener('focus', pick);
-    el.addEventListener('click', pick);
-  });
 })();
