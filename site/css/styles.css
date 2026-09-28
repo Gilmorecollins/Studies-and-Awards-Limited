@@ -634,7 +634,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   padding-top: clamp(64px, calc(6.2vw / var(--z, 1)), 90px);
   padding-bottom: clamp(64px, calc(6.2vw / var(--z, 1)), 90px);
 }
-.hero-globe-art { display: flex; flex-direction: column; align-items: center; gap: calc(var(--globe) * 0.242); min-width: 0; }
+.hero-globe-art { display: flex; flex-direction: column; align-items: center; gap: calc(var(--globe) * 0.2); min-width: 0; }
 .globe { position: relative; width: var(--globe); aspect-ratio: 1; flex-shrink: 0; }
 .globe-ring { position: absolute; inset: -10.93%; border: 2px dashed var(--brass); border-radius: 50%; pointer-events: none; }
 .globe-sphere {
