@@ -60,6 +60,14 @@
   window.addEventListener('storage', function (event) {
     if (event.key === 'theme' || event.key === null) apply(saved() || deviceTheme());
   });
+
+  // Back and Forward bring a page back exactly as it was left (the browser's
+  // back/forward cache), theme and all, without running the <head> script
+  // again. So a page left in dark mode came back dark even after the visitor
+  // had switched to light on the next page. Check the saved choice again.
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) apply(saved() || deviceTheme());
+  });
 })();
 
 // Pull cord: a second, playful way to switch the theme on laptops and desktops.

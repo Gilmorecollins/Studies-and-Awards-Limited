@@ -1469,6 +1469,17 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   transition: color 0.3s ease;
 }
 .about-route-code { color: var(--brass); transition: color 0.3s ease; }
+.about-route:hover { color: #FFFFFF; }
+/* the arrow says the country opens its page: shown on hover, and after a
+   first tap on phones (a second tap then opens it) */
+.about-route { position: relative; display: inline-flex; }
+.about-route-go {
+  position: absolute; left: 100%; top: 50%; margin: -10px 0 0 8px;
+  color: var(--brass); opacity: 0; transform: translateX(-6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.about-route:hover .about-route-go, .about-route.is-active .about-route-go, .about-route:focus-visible .about-route-go { opacity: 1; transform: translateX(0); }
+a.about-pin:hover { color: var(--brass); }
 .about-route:focus-visible, .about-pin:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
 .about-routes-hint { margin-top: 18px; font-size: 13px; color: var(--on-dark-faint); transition: opacity 0.3s ease; }
 .about-hint-tap { display: none; }

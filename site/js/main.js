@@ -1898,7 +1898,10 @@ function createCursorFollower(options) {
 // Route maps (about and destinations pages): hovering or focusing a country,
 // in a list, on a card or on its tag on the map, shows its route from Eldoret
 // and fades the rest. Buttons also keep their route shown when clicked or
-// tapped, until clicked again; Escape clears it.
+// tapped, until clicked again; Escape clears it. Links marked
+// data-route-preview (the About page's countries) open their page on a click,
+// but on a touch screen, which can't hover, the first tap shows the route and
+// a second tap on the same country opens it.
 //   [data-route-scope]      wraps the map and everything that controls it
 //   [data-route-line=CODE]  one route drawn on the map
 //   [data-route=CODE]       anything that shows that route
@@ -1930,6 +1933,18 @@ function createCursorFollower(options) {
       el.addEventListener('mouseleave', function () { if (hovered === code) { hovered = null; render(); } });
       el.addEventListener('focus', function () { if (el.matches(':focus-visible')) { hovered = code; render(); } });
       el.addEventListener('blur', function () { if (hovered === code) { hovered = null; render(); } });
+      if (el.hasAttribute('data-route-preview')) {
+        var touch = false;
+        el.addEventListener('pointerdown', function (event) { touch = event.pointerType === 'touch' || event.pointerType === 'pen'; });
+        el.addEventListener('click', function (event) {
+          if (!touch || pinned === code) return; // mouse, keyboard, or a second tap: follow the link
+          event.preventDefault();
+          pinned = code;
+          hovered = null;
+          render();
+        });
+        return;
+      }
       if (el.tagName !== 'BUTTON') return;
       el.addEventListener('click', function () {
         pinned = pinned === code ? null : code;
