@@ -15,9 +15,18 @@ site/              The actual website. Open site/index.html in a browser,
                     department, what they help with and WhatsApp number for
                     the consultation chooser. Loaded on every page.
   js/testimonials-data.js
-                    Quotes for the home page's "Testimonials" section.
-                    Samples for now (shown only on your own copy); the
-                    section stays hidden until it has a quote to show.
+                    SAMPLE testimonials, shown only on your own copy while
+                    none are switched on. Real ones are managed in admin/.
+  js/testimonial-card.js
+                    Builds one testimonial card, for the home page and for
+                    the admin page's preview.
+  js/supabase-config.js
+                    The Supabase project's address and publishable key,
+                    for the home page testimonials and the admin page.
+  admin/index.html  The testimonials admin page (sign in, then add, edit,
+                    reorder, show or hide, delete). Not linked from the
+                    site. With js/admin.js, css/admin.css and
+                    js/vendor/supabase.js (a pinned copy of supabase-js).
   js/destinations-data.js
                     GENERATED. Destination registry (name, airport code,
                     tagline) in journey order. Each destination page
@@ -92,9 +101,9 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   reports a page, port that hand edit into the generator first, or the
   regenerate will silently discard it. It also confirms every script in
   `site/js/` still parses (a stray keystroke in a hand-edited file such as
-  `team-data.js` would otherwise silently switch its feature off), and reminds
-  you about leftover sample testimonials. `--out <dir>` writes the generated
-  files somewhere else so you can diff them safely.
+  `team-data.js` would otherwise silently switch its feature off).
+  `--out <dir>` writes the generated files somewhere else so you can diff
+  them safely.
 - **Adding a country**: add an entry to `countries` in `generate-countries.mjs`
   (its position in the list is the journey order for the "next destination"
   cards) and regenerate. That creates the page, and adds it to the footer of
@@ -265,32 +274,53 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
 - **Destination specialists**: give a team member `destinations: ['Germany']`
   in `js/team-data.js` and they lead the consultation list, tagged "Best for
   Germany", when someone books from that country's page.
-- **Testimonials**: the home page's "Testimonials" section is fed by
-  `js/testimonials-data.js`. Each student gets their own soft raised card:
-  their photo (or initials), name and who they are, their rating beside the
-  average, and their words. The cards sit in a row, three across on a laptop,
-  two on a tablet and one on a phone; when there are more than fit, the row
-  scrolls sideways (swipe, trackpad, or the arrow keys once it has focus) and
-  dots appear below to jump along it. It never moves on its own. It
-  currently holds three **sample** quotes (marked `sample: true`) so the
-  layout can be reviewed. Samples show only on your own copy of the site
-  (opened as a file, or on localhost), each tagged "Sample: replace before
-  launch", and are hidden automatically on any real website address (add
-  `?testimonialsPreview` to an address to see them anywhere). **Before you
-  deploy, replace them with real quotes**, each as
-  `{ quote, story, name, detail, photo, rating }` (only `quote` and `name`
-  are needed), in the person's own words, published with their agreement,
-  under a name they're happy to use (leave `sample` out). `story` is more of
-  their words, shown smaller under the quote; `photo` is a square photo, used
-  only with their agreement; `rating` is their score out of 5. A card shows a
-  rating box only for a student who gave a rating, with the average of the
-  ratings on the page beside it once two or more have. An entry with no
-  quote or no name is skipped. With nothing to show the section stays
-  hidden. `--check` reminds
-  you while samples remain, and fails once `SITE_URL` is set to a real domain
-  (a `*.vercel.app` test address is allowed). The "WHAT PEOPLE SAY" line
-  above the heading is in `index.html`; a figure such as "500+ happy
-  students" can go there once you have a real count.
+- **Testimonials**: the home page's "Testimonials" section shows a soft
+  raised card for each student: their photo (or initials), name and who they
+  are, their rating beside the average, and their words. The cards sit in a
+  row, three across on a laptop, two on a tablet and one on a phone; when
+  there are more than fit, the row scrolls sideways (swipe, trackpad, or the
+  arrow keys once it has focus) and dots appear below to jump along it. It
+  never moves on its own. A card shows a rating box only for a student who
+  gave a rating, with the average of the ratings on the page beside it once
+  two or more have. The "WHAT PEOPLE SAY" line above the heading is in
+  `index.html`; a figure such as "500+ happy students" can go there once you
+  have a real count.
+- **Adding and changing testimonials (the admin page)**: go to
+  `admin/index.html` on the site (e.g. `https://<your site>/admin/`) and sign
+  in. There you can add a testimonial (name, who they are, their words, more
+  of their story, a rating, a photo), see a preview of the card as you type,
+  edit it, change the order, show it on the website or hide it, and delete it.
+  Changes appear on the home page straight away, with no editing of files or
+  republishing. A testimonial can only be shown on the website once you tick
+  that the person has agreed to it (under that name, and with that photo), and
+  the database itself refuses otherwise. Photos are cropped square
+  (480 x 480) in the browser before uploading.
+  - **Where it lives**: the Supabase project "Studies and Awards Project"
+    (`js/supabase-config.js` has its address and publishable key; the
+    publishable key is meant to be public). The table is
+    `public.testimonials`; photos are in the `testimonial-photos` storage
+    bucket. The home page reads the switched-on ones directly; if the
+    database can't be reached the section just stays hidden.
+  - **Who can make changes**: only accounts whose email is in the
+    `public.admins` table (and confirmed). This is enforced by the database's
+    row level security, not by the page, so nobody else can change anything
+    whatever they do in their browser. Visitors can only read the switched-on
+    testimonials.
+  - **Adding an admin**: in the Supabase dashboard, Authentication, Users,
+    "Add user", "Create new user", enter their email and a temporary password
+    and tick "Auto Confirm User". Then add their email to the admin list with
+    SQL (SQL Editor): `insert into public.admins (email) values
+    ('name@example.com');` (lowercase). They can change the password from the
+    admin page ("Change password"). To remove someone:
+    `delete from public.admins where email = 'name@example.com';` and delete
+    the user in Authentication. Admins are added by hand, so in
+    Authentication, Sign In / Providers, switch off "Allow new users to sign
+    up".
+  - **Samples**: `js/testimonials-data.js` holds sample testimonials for
+    reviewing the layout. They show only when nothing is switched on, and only
+    on your own copy of the site (opened as a file, or on localhost) or with
+    `?testimonialsPreview` in the address, each tagged "Sample: preview
+    only". Visitors on the live site never see them.
 - **Publishing**: the live version is published as a Claude Artifact, not
   auto-deployed from this repo. Republish from `site/index.html` after
   making changes.

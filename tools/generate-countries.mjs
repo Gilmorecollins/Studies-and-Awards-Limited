@@ -726,28 +726,19 @@ if (!isMain) {
     try { new vm.Script(readFileSync(join(siteDir, 'js', f), 'utf8'), { filename: f }); return []; }
     catch (e) { return [`js/${f}: ${e.message}`]; }
   });
-  // Sample testimonials (`sample: true`) are stand-ins for design review. They never show on a real
-  // website address, but setting SITE_URL means deployment is near — so refuse to pass while any remain.
-  // A *.vercel.app test address doesn't count: that is still a preview, not the launch.
-  let samples = 0;
-  try {
-    const sandbox = { window: {} };
-    vm.runInNewContext(readFileSync(join(siteDir, 'js', 'testimonials-data.js'), 'utf8'), sandbox);
-    samples = (sandbox.window.TESTIMONIALS || []).filter(t => t && t.sample).length;
-  } catch { /* a broken data file is reported above */ }
-  const samplesBlock = samples > 0 && SITE_URL !== '' && !/\.vercel\.app$/.test(SITE_URL);
+  // (Testimonials: the real ones live in the Supabase database and are managed from site/admin/;
+  // js/testimonials-data.js only holds samples, which show on your own copy and never on a real
+  // website address, so they need no check here.)
   // The destination pages' collage photos are small copies made by make-editorial-photos.mjs.
   const missingPhotos = [...new Set(outputs.flatMap(([, content]) => content.match(/assets\/destinations\/[\w-]+\/(?:editorial|thumbs|portrait)\/[\w-]+\.jpg/g) || []))]
     .filter(rel => !existsSync(join(siteDir, rel)));
-  if (drifted.length || broken.length || samplesBlock || missingPhotos.length) {
+  if (drifted.length || broken.length || missingPhotos.length) {
     if (drifted.length) console.error('Out of date (hand-edited, or the generator is behind):\n  ' + drifted.map(([rel]) => rel).join('\n  '));
     if (missingPhotos.length) console.error('Missing small city photos (run node tools/make-editorial-photos.mjs):\n  ' + missingPhotos.join('\n  '));
     if (broken.length) console.error('Script syntax errors (the page feature they power will not work):\n  ' + broken.join('\n  '));
-    if (samplesBlock) console.error(`${samples} sample testimonial${samples === 1 ? '' : 's'} still in js/testimonials-data.js — replace with real quotes before deploying.`);
     process.exit(1);
   }
   console.log(`All ${outputs.length} generated files match the generator, and every site script parses.`);
-  if (samples) console.log(`note: ${samples} sample testimonial${samples === 1 ? '' : 's'} in js/testimonials-data.js (shown only on your own copy). Replace with real quotes before you deploy.`);
 } else {
   for (const [rel, content] of outputs) {
     const out = join(outDir, rel);

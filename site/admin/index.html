@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Testimonials admin | Studies and Awards</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t)})()</script>
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin">
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="admin-bar">
+  <div class="admin-bar-inner">
+    <a href="../index.html" class="brand" aria-label="Studies and Awards home">
+      <span class="brand-mark" aria-hidden="true"><img src="../assets/logo-mark.png" alt="" width="120" height="80"></span>
+      <span class="brand-name">Studies &amp; Awards</span>
+    </a>
+    <span class="admin-bar-title">Testimonials admin</span>
+    <div class="admin-bar-user" id="admin-user" hidden>
+      <span class="admin-bar-email" id="admin-email"></span>
+      <button type="button" class="admin-link-btn" id="admin-password-btn">Change password</button>
+      <button type="button" class="btn btn-outline admin-signout" data-signout>Sign out</button>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="admin-main">
+
+  <p class="admin-loading" id="view-loading">Loading&hellip;</p>
+
+  <!-- signing in -->
+  <section class="admin-card admin-signin" id="view-signin" aria-labelledby="signin-heading" hidden>
+    <h1 id="signin-heading">Sign in</h1>
+    <p class="admin-lead">For staff who manage the testimonials on the home page.</p>
+    <form id="signin-form" novalidate>
+      <div class="admin-field">
+        <label for="signin-email">Email</label>
+        <input type="email" id="signin-email" autocomplete="username" required>
+      </div>
+      <div class="admin-field">
+        <label for="signin-password">Password</label>
+        <input type="password" id="signin-password" autocomplete="current-password" required>
+      </div>
+      <p class="admin-error" id="signin-error" role="alert" hidden></p>
+      <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+    </form>
+  </section>
+
+  <!-- signed in, but not on the admin list -->
+  <section class="admin-card" id="view-denied" aria-labelledby="denied-heading" hidden>
+    <h1 id="denied-heading">This account can&rsquo;t manage testimonials</h1>
+    <p class="admin-lead">You&rsquo;re signed in as <strong id="denied-email"></strong>, which isn&rsquo;t on the admin list. Ask the site owner to add it, then sign in again.</p>
+    <button type="button" class="btn btn-outline" data-signout>Sign out</button>
+  </section>
+
+  <!-- the testimonials -->
+  <section class="admin-list-view" id="view-list" aria-labelledby="list-heading" hidden>
+    <div class="admin-list-head">
+      <div>
+        <h1 id="list-heading">Testimonials</h1>
+        <p class="admin-lead" id="list-summary"></p>
+      </div>
+      <button type="button" class="btn btn-primary" id="add-btn">Add a testimonial</button>
+    </div>
+    <p class="admin-notice" id="list-notice" role="status" aria-live="polite" hidden></p>
+    <ol class="admin-list" id="admin-list"></ol>
+    <div class="admin-empty" id="admin-empty" hidden>
+      <p>No testimonials yet. Add the first one; it stays hidden until you switch it on.</p>
+    </div>
+    <p class="admin-foot-note">Only the testimonials that are <strong>on the website</strong> show on the home page, in this order. <a href="../index.html#testimonials" target="_blank" rel="noopener">Open the home page</a></p>
+  </section>
+
+</main>
+
+<!-- adding or editing a testimonial -->
+<dialog class="admin-dialog admin-editor" id="editor" aria-labelledby="editor-heading">
+  <form id="editor-form" method="dialog" novalidate>
+    <div class="admin-dialog-head">
+      <h2 id="editor-heading">Add a testimonial</h2>
+      <button type="button" class="admin-close" data-close aria-label="Close">&times;</button>
+    </div>
+    <div class="admin-editor-body">
+      <div class="admin-editor-fields">
+        <div class="admin-field">
+          <label for="f-name">Name <span class="admin-req">(needed)</span></label>
+          <input type="text" id="f-name" maxlength="80" required aria-describedby="f-name-hint">
+          <p class="admin-hint" id="f-name-hint">As they are happy for it to appear, e.g. &ldquo;Wanjiru K.&rdquo;</p>
+        </div>
+        <div class="admin-field">
+          <label for="f-detail">Who they are</label>
+          <input type="text" id="f-detail" maxlength="120" aria-describedby="f-detail-hint">
+          <p class="admin-hint" id="f-detail-hint">e.g. &ldquo;Student, Canada, 2026&rdquo; or &ldquo;Parent of a student in Australia&rdquo;</p>
+        </div>
+        <div class="admin-field">
+          <label for="f-quote">Their words <span class="admin-req">(needed)</span></label>
+          <textarea id="f-quote" rows="3" maxlength="400" required aria-describedby="f-quote-count"></textarea>
+          <p class="admin-hint admin-count" id="f-quote-count" data-count-for="f-quote"></p>
+        </div>
+        <div class="admin-field">
+          <label for="f-story">More of their story</label>
+          <textarea id="f-story" rows="4" maxlength="1200" aria-describedby="f-story-count"></textarea>
+          <p class="admin-hint admin-count" id="f-story-count" data-count-for="f-story"></p>
+        </div>
+        <div class="admin-field">
+          <label for="f-rating">Their rating</label>
+          <select id="f-rating">
+            <option value="">No rating</option>
+            <option value="5">5</option>
+            <option value="4.5">4.5</option>
+            <option value="4">4</option>
+            <option value="3.5">3.5</option>
+            <option value="3">3</option>
+            <option value="2.5">2.5</option>
+            <option value="2">2</option>
+            <option value="1.5">1.5</option>
+            <option value="1">1</option>
+          </select>
+        </div>
+        <fieldset class="admin-field admin-photo">
+          <legend>Photo</legend>
+          <div class="admin-photo-row">
+            <span class="admin-photo-thumb" id="photo-thumb" aria-hidden="true"></span>
+            <div class="admin-photo-actions">
+              <label class="btn btn-outline admin-file-btn" for="f-photo">Choose a photo</label>
+              <input type="file" id="f-photo" class="sr-only" accept="image/jpeg,image/png,image/webp">
+              <button type="button" class="admin-link-btn" id="photo-remove" hidden>Remove photo</button>
+            </div>
+          </div>
+          <p class="admin-hint">Optional. A clear photo of their face, used only with their agreement. It is cropped square and shown round; without one, their initials show.</p>
+        </fieldset>
+        <div class="admin-checks">
+          <label class="admin-check">
+            <input type="checkbox" id="f-consent">
+            <span>They have agreed to this being on the website, under this name<span id="f-consent-photo"> and with this photo</span>.</span>
+          </label>
+          <label class="admin-check">
+            <input type="checkbox" id="f-published">
+            <span>Show it on the website</span>
+          </label>
+        </div>
+      </div>
+      <div class="admin-editor-preview">
+        <p class="admin-preview-label">Preview</p>
+        <div class="testimonials admin-preview-box">
+          <ul class="testi-row admin-preview-row" id="preview" aria-label="Preview of the card"></ul>
+        </div>
+      </div>
+    </div>
+    <div class="admin-dialog-foot">
+      <p class="admin-error" id="editor-error" role="alert" hidden></p>
+      <button type="button" class="btn btn-outline" data-close>Cancel</button>
+      <button type="submit" class="btn btn-primary" id="editor-save">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- deleting -->
+<dialog class="admin-dialog admin-confirm" id="confirm" aria-labelledby="confirm-heading">
+  <form method="dialog">
+    <h2 id="confirm-heading">Delete this testimonial?</h2>
+    <p id="confirm-text"></p>
+    <p class="admin-error" id="confirm-error" role="alert" hidden></p>
+    <div class="admin-dialog-foot">
+      <button type="button" class="btn btn-outline" data-close>Keep it</button>
+      <button type="button" class="btn admin-danger" id="confirm-delete">Delete</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- changing the password -->
+<dialog class="admin-dialog admin-confirm" id="password" aria-labelledby="password-heading">
+  <form id="password-form" method="dialog" novalidate>
+    <h2 id="password-heading">Change your password</h2>
+    <div class="admin-field">
+      <label for="new-password">New password</label>
+      <input type="password" id="new-password" autocomplete="new-password" minlength="10" required aria-describedby="new-password-hint">
+      <p class="admin-hint" id="new-password-hint">At least 10 characters.</p>
+    </div>
+    <div class="admin-field">
+      <label for="new-password-2">The same again</label>
+      <input type="password" id="new-password-2" autocomplete="new-password" required>
+    </div>
+    <p class="admin-error" id="password-error" role="alert" hidden></p>
+    <div class="admin-dialog-foot">
+      <button type="button" class="btn btn-outline" data-close>Cancel</button>
+      <button type="submit" class="btn btn-primary">Change password</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="../js/vendor/supabase.js"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/testimonial-card.js"></script>
+<script src="../js/admin.js"></script>
+</body>
+</html>
