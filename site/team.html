@@ -75,41 +75,44 @@
   </section>
 
   <section class="team-slider" id="team-slider" aria-labelledby="team-heading">
-    <div class="container team-slider-grid">
+    <div class="container">
 
-      <div class="team-slider-left">
-        <div class="team-counter" id="team-counter" aria-hidden="true"></div>
-        <span class="team-dep" id="team-dep"></span>
-        <p class="team-bio" id="team-bio"></p>
-        <button type="button" class="team-view-more" id="team-view-more">View more</button>
-        <div class="team-ask">
-          <span class="team-ask-label">Ask me about</span>
-          <p class="team-ask-text" id="team-ask"></p>
+      <div class="team-slider-head">
+        <div>
+          <span class="team-eyebrow">OUR TEAM</span>
+          <h2 class="team-heading" id="team-heading">The team</h2>
         </div>
-      </div>
-
-      <div class="team-slider-right">
-        <div class="team-slider-head">
-          <h2 class="team-heading" id="team-heading">The Team</h2>
+        <div class="team-slider-controls">
+          <div class="team-counter" id="team-counter" aria-hidden="true"></div>
           <div class="team-nav" role="group" aria-label="Team slider controls">
             <button type="button" class="team-nav-btn" id="team-prev">Previous</button>
             <span class="team-nav-divider" aria-hidden="true"></span>
             <button type="button" class="team-nav-btn" id="team-next">Next</button>
           </div>
         </div>
+      </div>
 
-        <div class="team-progress-track"><div class="team-progress-fill" id="team-progress"></div></div>
+      <div class="team-chips" id="team-chips" role="group" aria-label="Jump to a department"></div>
 
-        <div class="team-strip-viewport" id="team-strip-viewport" tabindex="0" aria-roledescription="carousel" aria-label="Our team">
-          <div class="team-strip" id="team-strip"></div>
+      <div class="team-strip-viewport" id="team-strip-viewport" tabindex="0" aria-roledescription="carousel" aria-label="Our team">
+        <div class="team-strip" id="team-strip"></div>
+      </div>
+
+      <div class="team-info">
+        <div class="team-info-who">
+          <div class="team-active-name" id="team-active-name"></div>
+          <div class="team-active-role" id="team-active-role"></div>
         </div>
-
-        <div class="team-active-row">
-          <div class="team-active-name-wrap">
-            <div class="team-active-name" id="team-active-name"></div>
-            <div class="team-active-role" id="team-active-role"></div>
+        <div class="team-info-bio">
+          <p class="team-bio" id="team-bio"></p>
+          <button type="button" class="team-view-more" id="team-view-more">View more</button>
+        </div>
+        <div class="team-info-ask">
+          <div class="team-ask">
+            <span class="team-ask-label">Ask me about</span>
+            <p class="team-ask-text" id="team-ask"></p>
           </div>
-          <a href="mailto:admissions@studiesandawardsltd.com?subject=Join%20Our%20Team" class="team-join-btn">Join Our Team</a>
+          <a href="mailto:admissions@studiesandawardsltd.com?subject=Join%20Our%20Team" class="team-join-btn">Join our team</a>
         </div>
       </div>
 

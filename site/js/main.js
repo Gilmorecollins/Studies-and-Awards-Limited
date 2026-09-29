@@ -310,12 +310,11 @@
   var bioEl = document.getElementById('team-bio');
   var nameEl = document.getElementById('team-active-name');
   var roleEl = document.getElementById('team-active-role');
-  var progressEl = document.getElementById('team-progress');
   var prevBtn = document.getElementById('team-prev');
   var nextBtn = document.getElementById('team-next');
   var liveEl = document.getElementById('team-live');
   var viewMoreBtn = document.getElementById('team-view-more');
-  var depEl = document.getElementById('team-dep');
+  var chipsEl = document.getElementById('team-chips');
   var askEl = document.getElementById('team-ask');
   var deptCards = {}; // the "Our departments" cards, by department name (built below)
 
@@ -362,6 +361,31 @@
   members.forEach(function (member, i) { strip.appendChild(buildCard(member, i, true)); });
 
   var cards = strip.querySelectorAll('.team-card');
+
+  // Department chips above the strip: one per department, in the order the
+  // team is listed; a chip jumps the strip to the first person in it, and the
+  // current person's department is the one filled in.
+  var chips = [];
+  if (chipsEl) {
+    members.forEach(function (member, i) {
+      var dep = member.department;
+      if (!dep || chips.some(function (c) { return c.getAttribute('data-dep') === dep; })) return;
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'team-chip';
+      chip.setAttribute('data-dep', dep);
+      chip.setAttribute('aria-pressed', 'false');
+      chip.textContent = dep;
+      chip.addEventListener('click', function () { goTo(i); });
+      chipsEl.appendChild(chip);
+      chips.push(chip);
+    });
+  }
+
+  // Clicking a photo in the strip brings that person to the front.
+  cards.forEach(function (card, k) {
+    card.addEventListener('click', function () { goTo(k % count); });
+  });
   var pos = 0; // leftmost card's position in the strip, 0 .. 2 * count - 1
 
   function pad(n) { return n < 10 ? '0' + n : String(n); }
@@ -410,13 +434,20 @@
   function renderInfo(index, silent) {
     var member = members[index];
 
-    progressEl.style.transition = silent ? 'none' : '';
-    progressEl.style.width = (100 / count) + '%';
-    progressEl.style.transform = 'translateX(' + (index * 100) + '%)';
 
     counterEl.textContent = pad(index + 1) + ' / ' + pad(count);
-    crossfadeText([nameEl, roleEl, bioEl, depEl, askEl],
-      [member.name, member.role, member.shortBio, member.department || '', member.helpsWith || ''], silent);
+    crossfadeText([nameEl, roleEl, bioEl, askEl],
+      [member.name, member.role, member.shortBio, member.helpsWith || ''], silent);
+    chips.forEach(function (chip) {
+      var on = chip.getAttribute('data-dep') === member.department;
+      chip.classList.toggle('is-active', on);
+      chip.setAttribute('aria-pressed', on ? 'true' : 'false');
+      // on phones the chips are one row to swipe: keep the current one in view
+      if (on && chipsEl.scrollWidth > chipsEl.clientWidth) {
+        var left = chip.offsetLeft - (chipsEl.clientWidth - chip.offsetWidth) / 2;
+        chipsEl.scrollTo({ left: Math.max(0, left), behavior: silent ? 'auto' : 'smooth' });
+      }
+    });
     Object.keys(deptCards).forEach(function (dept) {
       deptCards[dept].classList.toggle('is-current', dept === (member.department || ''));
     });

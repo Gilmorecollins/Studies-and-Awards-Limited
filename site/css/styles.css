@@ -1868,69 +1868,37 @@ a.about-pin:hover { color: var(--brass); }
 @media (prefers-reduced-motion: reduce) {
   .cursor-follower { display: none !important; }
 }
-.team-slider-grid {
-  display: grid;
-  grid-template-columns: minmax(180px, 23%) 1fr;
-  gap: clamp(32px, calc(5vw / var(--z, 1)), 64px);
-  align-items: start;
-}
-
-/* left column */
-.team-counter { font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; color: var(--muted); margin-bottom: clamp(48px, calc(11vh / var(--z, 1)), 110px); }
-.team-dep {
-  display: inline-block; margin-bottom: 18px; padding: 3px 9px; min-height: 1.4em;
-  background: var(--gold-tint); border-radius: 5px;
-  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brass-ink);
-  transition: opacity 280ms ease, transform 280ms ease;
-}
-.team-dep.is-swapping, .team-ask-text.is-swapping { opacity: 0; transform: translateY(6px); }
-.team-ask { margin-top: 28px; padding-top: 16px; border-top: 1px dashed var(--tint-18); display: flex; flex-direction: column; gap: 4px; }
-.team-ask-label { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-.team-ask-text { font-size: 14.5px; line-height: 1.55; color: var(--text-strong); min-height: 3.1em; transition: opacity 280ms ease, transform 280ms ease; }
-.team-bio {
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--muted);
-  min-height: 8.5em;
-  transition: opacity 280ms ease, transform 280ms ease;
-}
-.team-bio.is-swapping { opacity: 0; transform: translateY(6px); }
-.team-view-more {
-  display: inline-flex;
-  margin-top: 28px;
-  padding: 0 0 4px;
-  background: none;
-  border: none;
-  border-bottom: 2px solid var(--brass);
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text-strong);
-  cursor: pointer;
-  transition: border-color 150ms ease;
-}
-.team-view-more:hover { border-bottom-color: var(--line-strong); }
-
-/* right column head */
-.team-slider-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 24px; }
-.team-heading { margin: 0; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: clamp(34px, calc(4.2vw / var(--z, 1)), 54px); line-height: 0.95; letter-spacing: 0.01em; color: var(--text-strong); }
-.team-nav { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+/* Team page slider: heading with the counter and Previous / Next, a row of
+   department chips (a chip jumps the strip to its first person), the photo
+   strip with the current person leftmost in colour and the rest in halftone,
+   then that person's name, bio and "ask me about" in three columns. */
+.team-slider-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 26px; }
+.team-eyebrow { display: block; margin-bottom: 10px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
+.team-heading { margin: 0; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: clamp(44px, calc(4.45vw / var(--z, 1)), 64px); line-height: 0.95; letter-spacing: 0; color: var(--text-strong); }
+.team-slider-controls { display: flex; align-items: center; gap: 24px; flex-shrink: 0; padding-bottom: 4px; }
+.team-counter { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; color: var(--muted); }
+.team-nav { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
 .team-nav-btn {
   background: none; border: none; padding: 4px 2px; cursor: pointer;
-  font-family: 'Oswald', sans-serif; font-size: 11.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--text-strong); transition: color 150ms ease;
 }
 .team-nav-btn:hover:not(:disabled) { color: var(--brass-ink); }
 .team-nav-btn:disabled { color: var(--border); cursor: default; }
 .team-nav-divider { width: 1px; height: 12px; background: var(--border); }
 
-/* progress rule */
-.team-progress-track { position: relative; height: 1px; background: var(--border-soft); margin-bottom: clamp(24px, calc(4vw / var(--z, 1)), 40px); }
-.team-progress-fill {
-  position: absolute; top: -1px; left: 0; height: 2px;
-  background: var(--progress);
-  transition: transform 700ms cubic-bezier(0.77, 0, 0.175, 1), width 700ms cubic-bezier(0.77, 0, 0.175, 1);
+/* department chips */
+.team-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+.team-chip {
+  padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 999px;
+  background: var(--surface); color: var(--text-strong); cursor: pointer;
+  font-family: inherit; font-size: 13px; font-weight: 600; line-height: 1.2;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
+.team-chip:hover { border-color: var(--line-strong); }
+.team-chip.is-active { background: var(--ink); border-color: var(--ink); color: #FFFFFF; }
+:root[data-theme="dark"] .team-chip.is-active { background: var(--brass); border-color: var(--brass); color: var(--ink); }
+.team-chip:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
 
 /* photo strip */
 .team-strip-viewport { overflow: hidden; }
@@ -1939,7 +1907,7 @@ a.about-pin:hover { color: var(--brass); }
   will-change: transform;
   transition: transform 700ms cubic-bezier(0.77, 0, 0.175, 1);
 }
-.team-card { flex: 0 0 clamp(120px, 21%, 220px); }
+.team-card { flex: 0 0 clamp(150px, 18.33%, 220px); cursor: pointer; }
 .team-card-photo {
   position: relative;
   aspect-ratio: 4 / 5;
@@ -1948,6 +1916,7 @@ a.about-pin:hover { color: var(--brass); }
   background: #F0F1F3;
 }
 .team-card-photo-img { width: 100%; height: 100%; object-fit: cover; transition: filter 700ms ease; filter: grayscale(1) contrast(1.3) brightness(1.65); }
+.team-card:hover .team-card-photo-img { filter: grayscale(1) contrast(1.2) brightness(1.4); }
 .team-card-dots {
   position: absolute; inset: 0;
   background-image: radial-gradient(#B8C4D6 1.1px, transparent 1.4px);
@@ -1956,30 +1925,49 @@ a.about-pin:hover { color: var(--brass); }
   opacity: 0.95;
   transition: opacity 700ms ease;
 }
+.team-card.is-active { cursor: default; }
 .team-card.is-active .team-card-photo-img { filter: none; }
 .team-card.is-active .team-card-dots { opacity: 0; }
 .team-strip.is-snapping .team-card-photo-img,
 .team-strip.is-snapping .team-card-dots { transition: none !important; }
 
-/* active member name / role + join button */
-.team-active-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-top: clamp(20px, calc(3vw / var(--z, 1)), 32px); }
-.team-active-name-wrap { overflow: hidden; }
+/* the current person: name and role, bio, ask me about + join */
+.team-info {
+  display: grid; grid-template-columns: minmax(0, 330px) minmax(0, 1fr) minmax(0, 320px);
+  gap: clamp(28px, calc(3.5vw / var(--z, 1)), 50px); align-items: start;
+  margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--border-soft);
+}
+.team-info-who { display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
 .team-active-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(22px, calc(2.4vw / var(--z, 1)), 30px);
-  letter-spacing: 0.02em;
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400;
+  font-size: clamp(38px, calc(3.5vw / var(--z, 1)), 50px); line-height: 0.95; letter-spacing: 0;
   color: var(--text-strong);
-  text-transform: uppercase;
   transition: opacity 280ms ease, transform 280ms ease;
 }
-.team-active-role { font-size: 13px; color: var(--muted); margin-top: 4px; transition: opacity 280ms ease, transform 280ms ease; }
+.team-active-role { font-size: 15px; font-weight: 600; color: var(--muted); transition: opacity 280ms ease, transform 280ms ease; }
 .team-active-name.is-swapping, .team-active-role.is-swapping { opacity: 0; transform: translateY(8px); }
+.team-info-bio { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+.team-bio {
+  margin: 0; font-size: 15px; line-height: 1.75; color: var(--text-prose);
+  min-height: 5.25em;
+  transition: opacity 280ms ease, transform 280ms ease;
+}
+.team-bio.is-swapping, .team-ask-text.is-swapping { opacity: 0; transform: translateY(6px); }
+.team-view-more {
+  display: inline-flex; padding: 0 0 4px;
+  background: none; border: none; border-bottom: 2px solid var(--brass);
+  font-family: inherit; font-size: 15px; font-weight: 700; color: var(--text-strong);
+  cursor: pointer; transition: border-color 150ms ease;
+}
+.team-view-more:hover { border-bottom-color: var(--line-strong); }
+.team-info-ask { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
+.team-ask { display: flex; flex-direction: column; gap: 6px; }
+.team-ask-label { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.team-ask-text { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--text-strong); min-height: 3em; transition: opacity 280ms ease, transform 280ms ease; }
 .team-join-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  padding: 13px 26px;
-  border-radius: 999px;
-  border: 1.5px solid var(--line-strong);
-  font-family: 'Oswald', sans-serif; font-size: 11.5px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 24px; border: 1.5px solid var(--line-strong); border-radius: 999px;
+  font-size: 14.5px; font-weight: 600; white-space: nowrap;
   color: var(--text-strong);
   transition: background-color 150ms ease, color 150ms ease;
 }
@@ -2490,11 +2478,9 @@ a.about-pin:hover { color: var(--brass); }
 @media (max-width: 900px) {
   .grid-3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
 
-  .team-slider-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "right" "left"; }
-  .team-slider-left { grid-area: left; }
-  .team-slider-right { grid-area: right; }
-  .team-counter { margin-bottom: 20px; }
-  .team-card { flex: 0 0 38%; }
+  .team-card { flex: 0 0 30%; }
+  .team-info { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .team-info-who { grid-column: 1 / -1; }
 
   .footer-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 32px; }
 }
@@ -2522,9 +2508,18 @@ a.about-pin:hover { color: var(--brass); }
   .footer-bottom-legal, .footer-bottom-copyright, .footer-bottom-social { justify-self: center; }
 
   .team-slider { padding: 40px 0 56px; }
-  .team-slider-grid { gap: 24px; }
-  .team-card { flex: 0 0 68%; }
-  .team-active-row { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .team-slider-head { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .team-card { flex: 0 0 62%; }
+  /* the chips become one row to swipe along (it follows the current person) */
+  .team-chips {
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+    margin: 0 -20px 22px; padding: 2px 20px;
+  }
+  .team-chips::-webkit-scrollbar { display: none; }
+  .team-chip { flex-shrink: 0; }
+  .team-info { grid-template-columns: minmax(0, 1fr); gap: 22px; margin-top: 28px; }
+  .team-bio { min-height: 0; }
+  .team-info-ask { align-items: stretch; }
   .team-join-btn { width: 100%; }
   .team-modal-head { flex-direction: column-reverse; }
   .team-modal-photo { width: 96px; height: 96px; }
