@@ -2086,8 +2086,18 @@ a.about-pin:hover { color: var(--brass); }
   background: var(--soft);
   box-shadow: -9px -9px 22px var(--soft-hi), 12px 14px 30px var(--soft-lo);
   scroll-snap-align: start;
+  transition: transform 250ms ease, box-shadow 250ms ease;
 }
 .testi-card > .testi-sample { align-self: flex-start; }
+/* a card lifts a little under the mouse */
+@media (hover: hover) {
+  .testi-card:hover { transform: translateY(-6px); box-shadow: -10px -10px 26px var(--soft-hi), 16px 22px 40px var(--soft-lo); }
+}
+/* the cards rise into place one after another the first time the section
+   comes into view (main.js adds the classes; --i is each card's place) */
+.testi-row.is-waiting .testi-card { opacity: 0; }
+.testi-row.is-in .testi-card { animation: testi-rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--i, 0) * 110ms); }
+@keyframes testi-rise { from { opacity: 0; transform: translateY(28px); } }
 @container (max-width: 959px) {
   .testi-card { flex-basis: calc((100% - var(--testi-gap)) / 2); }
 }
@@ -2140,8 +2150,10 @@ a.about-pin:hover { color: var(--brass); }
 .testi-quote-more { margin-top: 14px; font-size: 14.5px; line-height: 1.7; color: var(--muted); }
 
 /* the dots, when the row scrolls: short bars, the current one longer and
-   gold. Each is a 40 x 32 button, so it is easy to hit on a phone. */
-.testi-dots { display: flex; justify-content: center; margin-top: 36px; }
+   gold. Each is a 40 x 32 button, so it is easy to hit on a phone. Beside
+   them, the pause / play button for the auto-play. */
+.testi-controls { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 36px; }
+.testi-dots { display: flex; justify-content: center; }
 .testi-dots[hidden] { display: none; }
 .testi-dot {
   width: 40px; height: 32px; padding: 0;
@@ -2160,6 +2172,30 @@ a.about-pin:hover { color: var(--brass); }
 .testi-dot:hover::before { background: var(--muted); }
 .testi-dot.is-active::before { width: 36px; background: var(--brass-ink); }
 .testi-dot:focus-visible { outline: 2px solid var(--line-strong); outline-offset: -2px; }
+/* while it plays, the current dot fills up from the left until the row moves
+   on; the end of this fill is what moves it (main.js listens for it), so
+   pausing the fill pauses the auto-play, and with reduced motion (no
+   animations) it never moves by itself */
+@property --testi-fill { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
+.testi-dots.is-playing .testi-dot.is-active::before {
+  background: linear-gradient(to right, var(--brass-ink) var(--testi-fill), var(--tint-50) var(--testi-fill));
+  animation: testi-fill 6s linear forwards;
+}
+.testi-dots.is-playing.is-held .testi-dot.is-active::before { animation-play-state: paused; }
+@keyframes testi-fill { from { --testi-fill: 0%; } to { --testi-fill: 100%; } }
+.testi-play {
+  width: 32px; height: 32px; flex-shrink: 0; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); border-radius: 50%;
+  background: transparent; color: var(--text-strong);
+  cursor: pointer;
+}
+.testi-play[hidden] { display: none; }
+.testi-play:hover { background: var(--tint-06); }
+.testi-play:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; }
+.testi-play-go { display: none; }
+.testi-play.is-stopped .testi-play-go { display: block; }
+.testi-play.is-stopped .testi-play-pause { display: none; }
 
 .testi-share { display: flex; width: fit-content; max-width: 100%; margin: 32px auto 0; }
 

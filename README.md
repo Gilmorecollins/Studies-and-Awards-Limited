@@ -279,8 +279,15 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   are, their rating beside the average, and their words. The cards sit in a
   row, three across on a laptop, two on a tablet and one on a phone; when
   there are more than fit, the row scrolls sideways (swipe, trackpad, or the
-  arrow keys once it has focus) and dots appear below to jump along it. It
-  never moves on its own. A card shows a rating box only for a student who
+  arrow keys once it has focus) and dots appear below to jump along it. The
+  cards rise in one after another the first time the section comes into
+  view, the average rating counts up, and a card lifts a little under the
+  mouse. When there are more cards than fit, the row also plays by itself:
+  the current dot fills up over 6 seconds and the row moves on one card,
+  looping back at the end. It holds while the mouse is over the cards or
+  dots or they have the focus, stops for good once the visitor moves it
+  themselves, has a pause / play button beside the dots, and never moves
+  for visitors who ask their device for reduced motion. A card shows a rating box only for a student who
   gave a rating, with the average of the ratings on the page beside it once
   two or more have. The "WHAT PEOPLE SAY" line above the heading is in
   `index.html`; a figure such as "500+ happy students" can go there once you

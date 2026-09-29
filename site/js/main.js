@@ -1619,8 +1619,10 @@ function createCursorFollower(options) {
 // (three across on a laptop, two on a tablet, one on a phone). When there are
 // more than fit, the row scrolls sideways (a swipe, a trackpad, or the arrow
 // keys once it has focus) and the dots below appear, one for each place it
-// can stop; the current one is longer. It never moves on its own, so nobody
-// loses their place while reading.
+// can stop; the current one is longer. It also plays gently by itself, with a
+// pause button, holding whenever the visitor is reading or using it (see
+// "motion" below). The cards rise in the first time the section comes into
+// view, and the average rating counts up.
 //
 // The testimonials come from the Supabase database (js/supabase-config.js),
 // where they are added and switched on in the admin page (admin/index.html):
@@ -1755,6 +1757,7 @@ function createCursorFollower(options) {
       if (scrolls) row.setAttribute('tabindex', '0');
       else row.removeAttribute('tabindex');
       update();
+      syncPlay();
     }
 
     // the current dot: the place nearest to where the row is now; and which
@@ -1787,6 +1790,113 @@ function createCursorFollower(options) {
         update();
       });
     }, { passive: true });
+
+    // ---- motion: the cards rise in, the average counts up, and the row plays ----
+    // Auto-play: while the section is in view, the current dot fills up over
+    // 6 seconds and the row then moves on one place, looping back to the start.
+    // The fill (styles.css) is the clock, so holding the fill holds the play.
+    // It holds while the mouse is over the cards or dots or they have the
+    // focus, stops for good once the visitor moves the row themselves (a click,
+    // drag, swipe, key, sideways wheel or dot), and the button pauses and
+    // plays it. It only plays when there are more cards than fit, and never
+    // for visitors who ask for reduced motion.
+    var playBtn = document.getElementById('testimonial-play');
+    var playing = true;
+    var hovering = false;
+    var focused = false;
+    var inView = !window.IntersectionObserver;
+    var canPlay = false;
+    var reduced = function () { return !!(still && still.matches); };
+
+    function syncPlay() {
+      canPlay = !!playBtn && stops.length > 1 && !reduced();
+      if (playBtn) {
+        playBtn.hidden = !canPlay;
+        playBtn.classList.toggle('is-stopped', !playing);
+        playBtn.setAttribute('aria-label', playing ? 'Pause the testimonials' : 'Play the testimonials');
+      }
+      dotsBox.classList.toggle('is-playing', canPlay && playing);
+      dotsBox.classList.toggle('is-held', hovering || focused || !inView);
+    }
+
+    function stopPlaying() {
+      if (!playing) return;
+      playing = false;
+      syncPlay();
+    }
+
+    dotsBox.addEventListener('animationend', function (event) {
+      if (event.animationName !== 'testi-fill' || !canPlay || !playing || !stops.length) return;
+      row.scrollTo({ left: stops[(current + 1) % stops.length].at, behavior: 'smooth' });
+    });
+    if (playBtn) {
+      playBtn.addEventListener('click', function () {
+        playing = !playing;
+        syncPlay();
+      });
+    }
+    row.addEventListener('pointerdown', stopPlaying);
+    row.addEventListener('keydown', stopPlaying);
+    row.addEventListener('wheel', function (event) {
+      if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) stopPlaying();
+    }, { passive: true });
+    dotsBox.addEventListener('click', stopPlaying);
+    [row, dotsBox].forEach(function (area) {
+      area.addEventListener('mouseenter', function () { hovering = true; syncPlay(); });
+      area.addEventListener('mouseleave', function () { hovering = false; syncPlay(); });
+      area.addEventListener('focusin', function () { focused = true; syncPlay(); });
+      area.addEventListener('focusout', function (event) {
+        var to = event.relatedTarget;
+        focused = !!(to && (row.contains(to) || dotsBox.contains(to)));
+        syncPlay();
+      });
+    });
+    if (still) {
+      if (still.addEventListener) still.addEventListener('change', syncPlay);
+      else if (still.addListener) still.addListener(syncPlay);
+    }
+
+    // the average rating counts up from 0 to itself
+    function countUp() {
+      Array.prototype.forEach.call(row.querySelectorAll('.testi-score-avg .testi-score-num'), function (num) {
+        var text = num.firstChild;
+        if (!text || text.nodeType !== 3) return;
+        var target = text.nodeValue;
+        var value = parseFloat(target);
+        if (!(value > 0)) return;
+        var decimals = (target.split('.')[1] || '').length;
+        var start = null;
+        text.nodeValue = (0).toFixed(decimals);
+        window.requestAnimationFrame(function frame(now) {
+          if (start === null) start = now;
+          var k = Math.min(1, (now - start) / 1200);
+          text.nodeValue = k < 1 ? (value * (1 - Math.pow(1 - k, 3))).toFixed(decimals) : target;
+          if (k < 1) window.requestAnimationFrame(frame);
+        });
+      });
+    }
+
+    // the first time the section comes into view: the cards rise in, one after
+    // another, and the average counts up; being in view also lets it play
+    if (window.IntersectionObserver) {
+      if (!reduced()) {
+        row.classList.add('is-waiting');
+        cards.forEach(function (card, i) { card.style.setProperty('--i', Math.min(i, 5)); });
+      }
+      var arrived = false;
+      new IntersectionObserver(function (entries) {
+        inView = entries[entries.length - 1].isIntersecting;
+        if (inView && !arrived) {
+          arrived = true;
+          row.classList.remove('is-waiting');
+          if (!reduced()) {
+            row.classList.add('is-in');
+            countUp();
+          }
+        }
+        syncPlay();
+      }, { threshold: 0.25 }).observe(row);
+    }
 
     measure();
     if (window.ResizeObserver) new ResizeObserver(measure).observe(row);
