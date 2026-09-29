@@ -253,6 +253,15 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
 - **Direct links**: `team.html#<id>` (e.g. `team.html#miki`) opens on that
   person, and `index.html#faq-visa` opens that FAQ answer (the ids are on the
   `<details>` in `index.html`). Both update the address bar as visitors browse.
+- **Departments**: each person's `department` in `js/team-data.js` places
+  them in the Team page's "Our departments" section: a numbered card per
+  department, in the order its people first appear in the file, so keep each
+  department's people together. Choosing a person there opens their bio. The
+  same names drive the chooser's filter buttons and the About page's "Inside
+  Studies & Awards" mosaic, where each department has a tile in `about.html`
+  sized one square per person in `styles.css` (`.dept-mosaic`). A new or
+  renamed department needs its tile there, and the head counts fill in from
+  `team-data.js`.
 - **Destination specialists**: give a team member `destinations: ['Germany']`
   in `js/team-data.js` and they lead the consultation list, tagged "Best for
   Germany", when someone books from that country's page.

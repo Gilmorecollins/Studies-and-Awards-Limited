@@ -1589,14 +1589,14 @@ a.about-pin:hover { color: var(--brass); }
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   grid-template-rows: repeat(3, 200px);
-  grid-template-areas: 'mg mg ap ap ap cr' 'mg mg co co ie ge' 'cx cx ad op sa we';
+  grid-template-areas: 'dr pa ap ap ap do' 'co co vi vi gs ac' 'ad ad ad la la cx';
   gap: 8px;
   margin: 0; padding: 0; list-style: none;
 }
-.dept-tile-mg { grid-area: mg; } .dept-tile-ap { grid-area: ap; } .dept-tile-co { grid-area: co; }
-.dept-tile-cx { grid-area: cx; } .dept-tile-ie { grid-area: ie; } .dept-tile-cr { grid-area: cr; }
-.dept-tile-ad { grid-area: ad; } .dept-tile-op { grid-area: op; } .dept-tile-sa { grid-area: sa; }
-.dept-tile-we { grid-area: we; } .dept-tile-ge { grid-area: ge; }
+.dept-tile-dr { grid-area: dr; } .dept-tile-pa { grid-area: pa; } .dept-tile-ap { grid-area: ap; }
+.dept-tile-do { grid-area: do; } .dept-tile-co { grid-area: co; } .dept-tile-vi { grid-area: vi; }
+.dept-tile-gs { grid-area: gs; } .dept-tile-ac { grid-area: ac; } .dept-tile-ad { grid-area: ad; }
+.dept-tile-la { grid-area: la; } .dept-tile-cx { grid-area: cx; }
 .dept-tile {
   --tile-bg: var(--surface); --tile-fg: var(--text-strong); --tile-accent: var(--brass-ink);
   display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
@@ -1606,9 +1606,9 @@ a.about-pin:hover { color: var(--brass); }
   cursor: default;
   transition: box-shadow 200ms ease, transform 200ms ease;
 }
-.dept-tile-mg { --tile-bg: var(--ink); --tile-fg: #FFFFFF; --tile-accent: var(--brass); }
+.dept-tile-dr { --tile-bg: var(--ink); --tile-fg: #FFFFFF; --tile-accent: var(--brass); }
 .dept-tile-ap { --tile-bg: var(--brass); --tile-fg: var(--ink); --tile-accent: var(--ink); }
-.dept-tile-co { --tile-bg: #00307F; --tile-fg: #FFFFFF; --tile-accent: var(--brass); }
+.dept-tile-ad { --tile-bg: #00307F; --tile-fg: #FFFFFF; --tile-accent: var(--brass); }
 .dept-tile:hover, .dept-tile:focus-visible { box-shadow: 0 12px 28px var(--shadow-12); transform: translateY(-2px); }
 .dept-tile:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
 .dept-tile-name { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: 22px; line-height: 1; letter-spacing: 0.01em; color: var(--tile-fg); }
@@ -1634,7 +1634,7 @@ a.about-pin:hover { color: var(--brass); }
   .dept-mosaic {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: repeat(6, 170px);
-    grid-template-areas: 'mg mg cr' 'mg mg ad' 'ap ap ap' 'co co op' 'cx cx sa' 'ie ge we';
+    grid-template-areas: 'dr pa do' 'ap ap ap' 'co co gs' 'vi vi ac' 'ad ad ad' 'la la cx';
   }
 }
 /* phones: every description is shown, so the tiles size to their text */
@@ -1642,7 +1642,7 @@ a.about-pin:hover { color: var(--brass); }
   .dept-mosaic {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: none;
-    grid-template-areas: 'mg mg' 'ap ap' 'co co' 'cx cx' 'ie ge' 'cr ad' 'op sa' 'we we';
+    grid-template-areas: 'dr pa' 'ap ap' 'do gs' 'co co' 'vi vi' 'ac cx' 'ad ad' 'la la';
   }
   .dept-tile { padding: 16px; gap: 14px; }
   .dept-tile:hover, .dept-tile:focus-visible { transform: none; }
@@ -2530,45 +2530,58 @@ a.about-pin:hover { color: var(--brass); }
   .team-modal-photo { width: 96px; height: 96px; }
 }
 
-/* ---------- team page: "Who you'll meet along the way" ----------
-   The five journey stops, each listing the people in that department.
-   The stop for the person showing in the slider above turns navy. */
-.team-stops { padding: 0 0 clamp(56px, calc(7vw / var(--z, 1)), 80px); }
-.team-stops-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px 24px; flex-wrap: wrap; margin-bottom: 20px; }
-.team-stops-eyebrow { display: block; margin-bottom: 8px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
-.team-stops-head h2 { margin: 0; }
-.team-stops-hint { font-size: 14px; color: var(--muted); }
-.team-stops-list { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
-.team-stops-list > li { display: flex; }
-.team-stop {
-  flex: 1; min-height: 190px; padding: 20px; box-sizing: border-box;
-  display: flex; flex-direction: column; gap: 10px; text-align: left;
+/* ---------- team page: "Our departments" ----------
+   A card for each department, numbered, listing its people (main.js builds
+   them from team-data.js). Choosing a person opens their bio. The card for
+   the person showing in the slider above turns navy. The cards flow down
+   newspaper columns (01, 02, 03 down the first, and so on), so each card is
+   only as tall as its people: three columns on a laptop, two on a tablet,
+   one on a phone, as many 300px columns as fit. */
+.team-depts { padding: 0 0 clamp(56px, calc(7vw / var(--z, 1)), 80px); }
+.team-depts-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px 24px; flex-wrap: wrap; margin-bottom: 20px; }
+.team-depts-eyebrow { display: block; margin-bottom: 8px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
+.team-depts-head h2 { margin: 0; }
+.team-depts-hint { max-width: 420px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.team-depts-grid { margin: 0; padding: 0; list-style: none; columns: 3 300px; column-gap: 14px; }
+.team-dept {
+  min-width: 0;
+  display: flex; flex-direction: column; gap: 14px;
+  margin-bottom: 14px;
+  break-inside: avoid;
+  padding: 20px 16px 14px;
   background: var(--surface); border: 1px solid var(--tint-12); border-radius: var(--radius);
-  font: inherit; color: var(--text-strong); cursor: pointer;
-  transition: background-color 250ms ease, border-color 250ms ease, transform 180ms ease, box-shadow 180ms ease;
+  transition: background-color 250ms ease, border-color 250ms ease;
 }
-@media (hover: hover) {
-  .team-stop:hover { transform: translateY(-3px); box-shadow: 0 12px 26px var(--shadow-10); }
+.team-dept-head { display: flex; flex-direction: column; gap: 6px; padding: 0 6px; }
+.team-dept-num { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; color: var(--brass-ink); }
+.team-dept-count { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.team-dept-name { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: 28px; line-height: 1; letter-spacing: 0.01em; color: var(--text-strong); }
+.team-dept-people { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.team-dept-person {
+  width: 100%;
+  display: flex; align-items: center; gap: 14px;
+  padding: 8px 6px;
+  border: none; border-radius: 12px;
+  background: transparent;
+  font: inherit; text-align: left; color: var(--text-strong);
+  cursor: pointer;
+  transition: background-color 150ms ease;
 }
-.team-stop:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
-.team-stop-num { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
-.team-stop-title { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 28px; line-height: 1; color: var(--text-strong); }
-.team-stop-who { flex-grow: 1; font-size: 13px; line-height: 1.5; color: var(--muted); }
-.team-stop-faces { display: flex; }
-.team-stop-faces img { width: 36px; height: 36px; margin-right: -9px; border-radius: 50%; border: 2px solid var(--surface); object-fit: cover; object-position: top; background: #F0F1F3; }
-.team-stop.is-on { background: var(--ink); border-color: var(--ink); }
-.team-stop.is-on .team-stop-num { color: var(--brass); }
-.team-stop.is-on .team-stop-title { color: #FFFFFF; }
-.team-stop.is-on .team-stop-who { color: var(--on-dark-muted); }
-.team-stop.is-on .team-stop-faces img { border-color: var(--ink); }
-
-@media (max-width: 1023.98px), (max-width: 1100px) and (pointer: coarse), (max-width: 1100px) and (pointer: none) {
-  .team-stops-list { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(210px, 1fr); overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 2px 14px; margin: -4px -2px 0; }
-  .team-stops-list > li { scroll-snap-align: start; }
-}
-@media (max-width: 768px) {
-  .team-stops-list { grid-auto-columns: 72%; }
-}
+.team-dept-person:hover { background: var(--tint-06); }
+.team-dept-person:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 0; }
+.team-dept-person img { width: 52px; height: 52px; flex-shrink: 0; border-radius: 50%; object-fit: cover; object-position: top; background: #F0F1F3; }
+.team-dept-person-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.team-dept-person-name { font-size: 15.5px; font-weight: 700; line-height: 1.3; color: var(--text-strong); overflow-wrap: anywhere; }
+.team-dept-person-role { font-size: 13px; line-height: 1.4; color: var(--muted); }
+/* the department of the person showing in the slider */
+.team-dept.is-current { background: var(--ink); border-color: var(--ink); }
+.team-dept.is-current .team-dept-num { color: var(--brass); }
+.team-dept.is-current .team-dept-name,
+.team-dept.is-current .team-dept-person-name { color: #FFFFFF; }
+.team-dept.is-current .team-dept-count,
+.team-dept.is-current .team-dept-person-role { color: var(--on-dark-muted); }
+.team-dept.is-current .team-dept-person:hover { background: rgba(255, 255, 255, 0.1); }
+.team-dept.is-current .team-dept-person:focus-visible { outline-color: #FFFFFF; }
 
 /* ---------- next destination (boarding-pass suggestion) ----------
    Built by the "Destination pages" block in js/main.js from js/destinations-data.js.

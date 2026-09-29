@@ -272,7 +272,7 @@
   if (playToggle) playToggle.addEventListener('click', function () { resumeAfterHold = playing; });
 })();
 
-// A team member's portrait for the Team page, the journey stops and the
+// A team member's portrait for the Team page, its department sections and the
 // consultation cards. `kind` is 'photo' (the big portrait), 'thumb' (small
 // square) or 'card' (5:4). Someone whose photo hasn't arrived yet (blank in
 // team-data.js) gets a plain silhouette, so no page ever shows a broken image.
@@ -317,7 +317,7 @@
   var viewMoreBtn = document.getElementById('team-view-more');
   var depEl = document.getElementById('team-dep');
   var askEl = document.getElementById('team-ask');
-  var stops = [].slice.call(document.querySelectorAll('.team-stop'));
+  var deptCards = {}; // the "Our departments" cards, by department name (built below)
 
   var count = members.length;
   var activeIndex = 0;
@@ -417,10 +417,8 @@
     counterEl.textContent = pad(index + 1) + ' / ' + pad(count);
     crossfadeText([nameEl, roleEl, bioEl, depEl, askEl],
       [member.name, member.role, member.shortBio, member.department || '', member.helpsWith || ''], silent);
-    stops.forEach(function (stop) {
-      var on = stop.getAttribute('data-dep') === member.department;
-      stop.classList.toggle('is-on', on);
-      stop.setAttribute('aria-pressed', on ? 'true' : 'false');
+    Object.keys(deptCards).forEach(function (dept) {
+      deptCards[dept].classList.toggle('is-current', dept === (member.department || ''));
     });
 
     liveEl.textContent = member.name + ', ' + member.role;
@@ -490,36 +488,63 @@
     window.setTimeout(finishSlide, ANIM_MS);
   }
 
-  // "Who you'll meet along the way": each stop lists the people in its
-  // department; clicking one slides the team strip to the first of them.
-  stops.forEach(function (stop) {
-    // a stop can cover several departments: data-dep="One|Another"
-    var deps = stop.getAttribute('data-dep').split('|');
-    var who = members.filter(function (m) { return deps.indexOf(m.department) > -1; });
-    if (!who.length) { stop.parentNode.hidden = true; return; }
-    stop.querySelector('.team-stop-who').textContent = who.map(function (m) { return m.name; }).join(', ');
-    var faces = stop.querySelector('.team-stop-faces');
-    who.slice(0, 3).forEach(function (m) {
-      var img = document.createElement('img');
-      img.src = window.teamPortrait(m, 'thumb');
-      img.alt = '';
-      img.width = 36; img.height = 36;
-      img.loading = 'lazy';
-      faces.appendChild(img);
-    });
-    stop.addEventListener('click', function () {
-      goTo(members.indexOf(who[0]));
-      // If the strip has scrolled out of view above, bring it back so the
-      // change can be seen (clear of the sticky header).
-      var header = document.querySelector('.site-header');
-      var offset = header ? header.getBoundingClientRect().height + 16 : 16;
-      var top = section.querySelector('.team-slider-head').getBoundingClientRect().top;
-      if (top < offset) {
-        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        window.scrollTo({ top: window.pageYOffset + top - offset, behavior: reduce ? 'auto' : 'smooth' });
+  // "Our departments": a card for each department, in the order its people
+  // first appear in team-data.js, listing its people. Choosing a person opens
+  // their bio, the same one as "View more". The card for the person showing
+  // in the slider is marked (renderInfo).
+  var deptList = document.getElementById('team-depts');
+  if (deptList) {
+    var depts = [];
+    var byDept = {};
+    members.forEach(function (m) {
+      var dept = m.department || '';
+      if (!byDept[dept]) {
+        byDept[dept] = [];
+        depts.push(dept);
       }
+      byDept[dept].push(m);
     });
-  });
+    var add = function (tag, className, text) {
+      var node = document.createElement(tag);
+      node.className = className;
+      if (text != null) node.textContent = text;
+      return node;
+    };
+    depts.forEach(function (dept, i) {
+      var people = byDept[dept];
+      var item = add('li', 'team-dept');
+      var head = add('div', 'team-dept-head');
+      head.appendChild(add('span', 'team-dept-num', pad(i + 1)));
+      head.appendChild(add('h3', 'team-dept-name', dept));
+      head.appendChild(add('span', 'team-dept-count', people.length + (people.length === 1 ? ' person' : ' people')));
+      item.appendChild(head);
+      var list = add('ul', 'team-dept-people');
+      people.forEach(function (m) {
+        var btn = add('button', 'team-dept-person');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', m.name + ', ' + m.role + '. Read more');
+        var img = document.createElement('img');
+        img.src = window.teamPortrait(m, 'thumb');
+        img.alt = '';
+        img.width = 52;
+        img.height = 52;
+        img.loading = 'lazy';
+        btn.appendChild(img);
+        var text = add('span', 'team-dept-person-text');
+        text.appendChild(add('span', 'team-dept-person-name', m.name));
+        text.appendChild(add('span', 'team-dept-person-role', m.role));
+        btn.appendChild(text);
+        btn.addEventListener('click', function () { openModal(m, btn); });
+        var li = document.createElement('li');
+        li.appendChild(btn);
+        list.appendChild(li);
+      });
+      item.appendChild(list);
+      deptList.appendChild(item);
+      deptCards[dept] = item;
+    });
+    deptList.closest('section').hidden = false;
+  }
 
   nextBtn.addEventListener('click', next);
   prevBtn.addEventListener('click', prev);
@@ -600,8 +625,11 @@
     }
   }
 
-  function openModal() {
-    var member = members[activeIndex];
+  // the bio of `member` (from the department sections), else of whoever the
+  // slider is showing; closing it goes back to `trigger`, the button that
+  // opened it (a mouse click does not focus a button in every browser)
+  function openModal(member, trigger) {
+    if (!member || !member.name) member = members[activeIndex];
     modalName.textContent = member.name;
     modalRole.textContent = member.role;
     modalPhoto.src = window.teamPortrait(member, 'photo');
@@ -622,7 +650,7 @@
     });
 
     window.clearTimeout(hideTimer);
-    lastFocused = document.activeElement;
+    lastFocused = trigger || document.activeElement;
     overlay.hidden = false;
     document.body.style.overflow = 'hidden';
     window.requestAnimationFrame(function () { overlay.classList.add('is-open'); });
@@ -638,7 +666,7 @@
     if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
   }
 
-  viewMoreBtn.addEventListener('click', openModal);
+  viewMoreBtn.addEventListener('click', function () { openModal(members[activeIndex], viewMoreBtn); });
   modalClose.addEventListener('click', closeModal);
   overlay.addEventListener('click', function (event) {
     if (event.target === overlay) closeModal();
