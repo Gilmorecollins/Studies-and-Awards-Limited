@@ -1904,6 +1904,56 @@ function createCursorFollower(options) {
   }
 })();
 
+// "Check your eligibility for Australia" ([data-ai-checker], on the home page
+// and the Australia page): the AI eligibility checker, built as its own app
+// (the Studies-and-Awards-AI project). Until it is live the button opens a
+// short "coming soon" note with a way to book a consultation instead. Once it
+// is live, put its address in AI_CHECKER_URL: the "Coming soon" tag goes and
+// the button takes visitors straight there.
+(function () {
+  'use strict';
+
+  var AI_CHECKER_URL = '';
+
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-ai-checker]'));
+  if (!buttons.length) return;
+
+  if (AI_CHECKER_URL) {
+    buttons.forEach(function (button) {
+      var tag = button.querySelector('.ai-check-tag');
+      if (tag) tag.hidden = true;
+      button.addEventListener('click', function () { window.location.href = AI_CHECKER_URL; });
+    });
+    return;
+  }
+
+  var note = null;
+  function build() {
+    note = document.createElement('dialog');
+    note.className = 'ai-soon';
+    note.setAttribute('aria-labelledby', 'ai-soon-title');
+    note.innerHTML =
+      '<button type="button" class="ai-soon-close" aria-label="Close">&times;</button>' +
+      '<span class="ai-check-tag">Coming soon</span>' +
+      '<h2 id="ai-soon-title">Check your eligibility for Australia</h2>' +
+      '<p>We&rsquo;re building an online checker that compares your KCSE results with the entry requirements of Australian universities and colleges, and shows the courses you could apply for.</p>' +
+      '<p>Until it&rsquo;s ready, our counsellors will check this with you at a free consultation.</p>' +
+      '<a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20Australia" class="btn btn-primary">Book a free consultation</a>';
+    note.querySelector('.ai-soon-close').addEventListener('click', function () { note.close(); });
+    // the consultation chooser opens over the page, so the note steps aside first
+    note.querySelector('.btn').addEventListener('click', function () { note.close(); });
+    document.body.appendChild(note);
+  }
+
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      if (!note) build();
+      if (note.showModal) note.showModal();
+      else window.location.href = note.querySelector('.btn').href;
+    });
+  });
+})();
+
 // Home page: "Why fly with us" pass. Clicking "Book a free consultation" flies
 // the plane from EDL to UNI first, then replays the click so the consultation
 // chooser (or the email fallback) handles it as usual. When the chooser
