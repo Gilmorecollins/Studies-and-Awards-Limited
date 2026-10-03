@@ -1100,12 +1100,19 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   padding: 88px clamp(24px, calc(4.5vw / var(--z, 1)), 72px);
   display: grid; grid-template-columns: minmax(0, 440fr) minmax(0, 672fr); gap: clamp(40px, calc(6vw / var(--z, 1)), 88px); align-items: center;
 }
-.how-intro { display: flex; flex-direction: column; gap: 20px; }
-.how-eyebrow { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass); }
-.how-intro h2 { margin: 0; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: clamp(56px, calc(6.7vw / var(--z, 1)), 96px); line-height: 0.92; letter-spacing: 0.015em; color: #FFFFFF; }
-.how-intro p { font-size: 17px; line-height: 1.6; color: var(--on-dark-muted); }
+/* the hero's type: Manrope for the heading, labels and buttons, Source Sans 3
+   for the text, sentence case throughout (the airport codes keep Bebas) */
+.how-intro { display: flex; flex-direction: column; gap: 20px; font-family: 'Source Sans 3', 'Montserrat', sans-serif; }
+.how-eyebrow { font-size: 1rem; font-weight: 500; color: var(--on-dark-muted); }
+.how-intro h2 {
+  margin: 0; font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 800;
+  font-size: clamp(2rem, calc(3.3vw / var(--z, 1)), 3rem); line-height: 1.1; letter-spacing: -0.025em;
+  text-wrap: balance; color: #FFFFFF;
+}
+.how-intro p { font-size: 1.1rem; line-height: 1.65; color: var(--on-dark-muted); }
 .how-actions { display: flex; align-items: center; gap: 18px 24px; flex-wrap: wrap; margin-top: 8px; }
-.how-phone { font-size: 15px; font-weight: 600; color: #FFFFFF; text-decoration: none; }
+.how .btn { font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 700; }
+.how-phone { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 600; color: #FFFFFF; text-decoration: none; }
 .how-phone:hover { color: var(--brass); }
 .how-actions a:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
 
@@ -1114,7 +1121,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   padding: 22px 36px; background: var(--paper); border-bottom: 1px solid var(--tint-10);
   display: flex; justify-content: space-between; align-items: center; gap: 16px;
 }
-.how-card-label { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
+.how-card-label { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--text-strong); }
 .how-card-route { display: flex; align-items: center; gap: 10px; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 26px; line-height: 1; color: var(--text-strong); white-space: nowrap; }
 .how-card-route svg { color: var(--brass-ink); }
 .how-list { margin: 0; padding: 6px 36px 14px; list-style: none; }
@@ -1127,9 +1134,9 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 .how-box.is-ticked { background: var(--brass); border-color: var(--brass); }
 .how-item-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.how-item-body h3 { margin: 0; font-family: 'Montserrat', sans-serif; font-size: 19px; font-weight: 700; line-height: 1.3; letter-spacing: 0; color: var(--text-strong); }
-.how-item-body p { font-size: 14.5px; line-height: 1.6; color: var(--muted); }
-.how-num { justify-self: end; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.08em; color: var(--brass-ink); }
+.how-item-body h3 { margin: 0; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1.15rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; color: var(--text-strong); }
+.how-item-body p { font-family: 'Source Sans 3', 'Montserrat', sans-serif; font-size: 1rem; line-height: 1.55; color: var(--muted); }
+.how-num { justify-self: end; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; color: var(--brass-ink); }
 
 @media (max-width: 1000px) {
   .how-inner { grid-template-columns: minmax(0, 1fr); padding-top: 64px; padding-bottom: 72px; gap: 44px; }
@@ -1138,16 +1145,15 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 @media (max-width: 768px) {
   .how-inner { padding: 48px 20px 56px; gap: 36px; }
   .how-intro { gap: 16px; }
-  .how-intro h2 { font-size: 56px; }
-  .how-intro p { font-size: 16px; }
+  .how-intro p { font-size: 1.05rem; }
   .how-card { transform: rotate(-0.6deg); }
   .how-card-head { padding: 16px 20px; }
   .how-card-route { font-size: 22px; gap: 6px; }
   .how-list { padding: 2px 20px 8px; }
   .how-item { grid-template-columns: 28px minmax(0, 1fr) 24px; gap: 14px; padding: 18px 0; }
   .how-box { width: 28px; height: 28px; }
-  .how-item-body h3 { font-size: 17px; }
-  .how-item-body p { font-size: 14px; }
+  .how-item-body h3 { font-size: 1.05rem; }
+  .how-item-body p { font-size: 0.97rem; }
   .how-deco { width: 380px; height: 380px; right: -180px; bottom: -160px; }
 }
 @media (max-width: 420px) {
