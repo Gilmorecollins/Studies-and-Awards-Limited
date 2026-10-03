@@ -668,6 +668,15 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .globe-map img { display: block; flex: none; width: 50%; height: 100%; }
 @keyframes globe-spin { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .globe-shine { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.18), rgba(255,255,255,0) 45%); }
+/* the sphere (js/globe.js): the dots and routes drawn on a canvas 130% of the
+   globe, so the route arcs can rise above its edge; under the flags. Once it
+   runs, the flat map underneath is hidden and the ball gets a faint
+   atmosphere. */
+.globe-canvas { position: absolute; inset: -15%; width: 130%; height: 130%; pointer-events: none; }
+.globe.is-3d .globe-map { display: none; }
+.globe.is-3d .globe-sphere {
+  box-shadow: inset -33px -23px 61px rgba(0,0,0,0.45), inset 10px 8px 30px rgba(120,160,255,0.12), 0 0 0 1px rgba(140,175,255,0.18), 0 0 46px rgba(70,120,255,0.22);
+}
 .globe-flag {
   position: absolute; z-index: 1; transform: translate(-50%, -50%);
   display: block; padding: 3px; border-radius: 9px;
