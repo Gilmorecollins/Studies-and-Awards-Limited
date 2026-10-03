@@ -2518,6 +2518,24 @@ function createCursorFollower(options) {
 
   openFromHash(false);
   window.addEventListener('hashchange', function () { openFromHash(true); });
+
+  // Arriving on a link to an answer: sections above the FAQ can still grow
+  // after the jump (the testimonials load a moment later), which pushes the
+  // answer down the page and out of sight. For a few seconds, while the
+  // visitor hasn't scrolled or tapped, bring it back into view each time the
+  // page changes height.
+  var target = window.location.hash && document.getElementById(window.location.hash.slice(1));
+  if (target && target.classList.contains('faq-item') && window.ResizeObserver) {
+    var settle = function () { target.scrollIntoView({ block: 'start', behavior: 'auto' }); };
+    var stop = function () {
+      watcher.disconnect();
+      ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (type) { window.removeEventListener(type, stop, true); });
+    };
+    var watcher = new ResizeObserver(settle);
+    watcher.observe(document.body);
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (type) { window.addEventListener(type, stop, true); });
+    window.setTimeout(stop, 10000);
+  }
 })();
 
 // Find Us: "Copy address" puts the address on the clipboard; "Share location"
