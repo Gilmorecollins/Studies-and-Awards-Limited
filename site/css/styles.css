@@ -2023,6 +2023,9 @@ a.about-pin:hover { color: var(--brass); }
   color: var(--text-strong); border-bottom: 1px solid transparent;
 }
 .team-modal-linkedin:hover { border-bottom-color: var(--line-strong); }
+/* An author `display` beats the user-agent [hidden] rule, so without this the
+   link stayed visible (and focusable) even when main.js set hidden = true. */
+.team-modal-linkedin[hidden] { display: none; }
 .team-modal-photo { width: 120px; height: 120px; border-radius: var(--radius-sm); object-fit: cover; object-position: 50% 8%; flex-shrink: 0; }
 .team-modal-bio p { font-size: 14px; line-height: 1.75; color: var(--text-prose); margin-bottom: 14px; }
 .team-modal-bio p:last-child { margin-bottom: 0; }

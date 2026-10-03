@@ -118,6 +118,13 @@
     $('admin-user').hidden = true;
     items = [];
     $('admin-list').textContent = '';
+    // A sign-out (or a session that can no longer be renewed) must not leave
+    // an editor dialog open over the now-inert sign-in card with a client's
+    // details in it, nor leave Save able to fire a write with no session.
+    editing = null;
+    toDelete = null;
+    busy = false;
+    Array.prototype.forEach.call(document.querySelectorAll('dialog[open]'), function (d) { d.close(); });
     showView('view-signin');
   }
 
@@ -150,7 +157,15 @@
 
   // a sign-out in another tab, or a session that can no longer be renewed
   db.auth.onAuthStateChange(function (event) {
-    if (event === 'SIGNED_OUT') signedOut();
+    if (event === 'SIGNED_OUT') { signedOut(); return; }
+    // A sign-in in another tab: adopt it here too, so this tab doesn't sit on
+    // a stale sign-in card while the browser holds a valid session.
+    if (event === 'SIGNED_IN' && !$('view-signin').hidden) {
+      db.auth.getSession().then(function (res) {
+        var session = res && res.data && res.data.session;
+        if (session) signedIn(session);
+      });
+    }
   });
 
   // ---------- the list ----------
@@ -280,6 +295,7 @@
 
   // moves item i one place up (-1) or down (1), then saves every position that changed
   function move(i, dir) {
+    if (busy) return; // one reorder at a time: overlapping write sets can collide
     var j = i + dir;
     if (j < 0 || j >= items.length) return;
     var order = items.slice();
@@ -297,6 +313,7 @@
       return copy;
     });
     renderList({ id: moved.id, action: dir < 0 ? 'up' : 'down' });
+    busy = true;
     Promise.all(changes.map(function (c) {
       return db.from('testimonials').update({ position: c.position }).eq('id', c.id).select('id').single();
     })).then(function (results) {
@@ -305,7 +322,7 @@
     }).catch(function (err) {
       notice('The new order couldn’t be saved. ' + friendly(err));
       load();
-    });
+    }).then(function () { busy = false; });
   }
 
   $('add-btn').addEventListener('click', function () { openEditor(null); });
@@ -499,7 +516,21 @@
     $('f-detail').value = t && t.detail ? t.detail : '';
     $('f-quote').value = t ? t.quote : '';
     $('f-story').value = t && t.story ? t.story : '';
-    $('f-rating').value = t && t.rating != null ? String(Number(t.rating)) : '';
+    // A stored rating that isn't one of the fixed options (set outside this
+    // page) must not display as "No rating" and then be written back as null
+    // on an unrelated save, so carry it as an extra option.
+    var ratingSel = $('f-rating');
+    Array.prototype.forEach.call(ratingSel.querySelectorAll('option[data-custom-rating]'), function (o) { o.remove(); });
+    var ratingValue = t && t.rating != null ? String(Number(t.rating)) : '';
+    var ratingKnown = Array.prototype.some.call(ratingSel.options, function (o) { return o.value === ratingValue; });
+    if (ratingValue && !ratingKnown) {
+      var extra = document.createElement('option');
+      extra.value = ratingValue;
+      extra.textContent = ratingValue;
+      extra.setAttribute('data-custom-rating', '');
+      ratingSel.appendChild(extra);
+    }
+    ratingSel.value = ratingValue;
     $('f-consent').checked = !!(t && t.consent);
     $('f-published').checked = !!(t && t.published);
     setError($('editor-error'), message || '');

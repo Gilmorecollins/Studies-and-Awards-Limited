@@ -176,7 +176,7 @@ const countries = [
       { city: 'Hamburg', photo: 'assets/destinations/germany/hamburg.jpg', fact: 'Germany\'s second-largest city and a major port, built around more canals and bridges than Amsterdam and Venice combined.' },
       { city: 'Frankfurt', photo: 'assets/destinations/germany/frankfurt.jpg', fact: 'Continental Europe\'s financial capital, home to the European Central Bank and one of the world\'s busiest airports.' },
       { city: 'Stuttgart', photo: 'assets/destinations/germany/stuttgart.jpg', fact: 'Home to Mercedes-Benz and Porsche, at the heart of Germany\'s automotive and engineering industry.' },
-      { city: 'D&uuml;sseldorf', photo: 'assets/destinations/germany/dusseldorf.jpg', fact: 'A fashion and trade-fair hub on the Rhine, home to one of Europe\'s largest Japanese communities.' },
+      { city: 'Düsseldorf', photo: 'assets/destinations/germany/dusseldorf.jpg', fact: 'A fashion and trade-fair hub on the Rhine, home to one of Europe\'s largest Japanese communities.' },
       { city: 'Leipzig', photo: 'assets/destinations/germany/leipzig.jpg', fact: 'A historic centre of music and publishing, once home to Johann Sebastian Bach and now a fast-growing student city.' },
       { city: 'Bremen', photo: 'assets/destinations/germany/bremen.jpg', fact: 'One of Germany\'s oldest port cities, famously the setting of the Brothers Grimm tale "The Town Musicians of Bremen".' },
       { city: 'Cologne', photo: 'assets/destinations/germany/cologne.jpg', fact: 'Home to Cologne Cathedral, a UNESCO World Heritage Site that took more than 600 years to complete, on the banks of the Rhine.' },
@@ -716,6 +716,10 @@ const unknownCountries = Object.keys(partnerData).filter(name => !countries.some
 const isMain = fileURLToPath(import.meta.url).toLowerCase() === resolve(process.argv[1] || '').toLowerCase();
 const args = isMain ? process.argv.slice(2) : [];
 const outFlag = args.indexOf('--out');
+if (outFlag > -1 && (!args[outFlag + 1] || args[outFlag + 1].startsWith('--'))) {
+  console.error('usage: node tools/generate-countries.mjs [--out <dir>] [--check]');
+  process.exit(2);
+}
 const outDir = outFlag > -1 ? resolve(args[outFlag + 1]) : siteDir;
 
 if (!isMain) {
@@ -737,8 +741,16 @@ if (!isMain) {
   // The destination pages' collage photos are small copies made by make-editorial-photos.mjs.
   const missingPhotos = [...new Set(outputs.flatMap(([, content]) => content.match(/assets\/destinations\/[\w-]+\/(?:editorial|thumbs|portrait)\/[\w-]+\.jpg/g) || []))]
     .filter(rel => !existsSync(join(siteDir, rel)));
-  if (drifted.length || broken.length || missingPhotos.length) {
+  // A country renamed or dropped leaves its partner script behind, and the drift check above
+  // cannot see it: `outputs` only ever describes today's countries.
+  const expected = new Set(outputs.map(([rel]) => rel));
+  const orphans = readdirSync(join(siteDir, 'js'))
+    .filter(f => /^partners-.*\.js$/.test(f))
+    .map(f => `js/${f}`)
+    .filter(rel => !expected.has(rel));
+  if (drifted.length || broken.length || missingPhotos.length || orphans.length) {
     if (drifted.length) console.error('Out of date (hand-edited, or the generator is behind):\n  ' + drifted.map(([rel]) => rel).join('\n  '));
+    if (orphans.length) console.error('Generated files this script no longer produces (country renamed or removed?):\n  ' + orphans.join('\n  '));
     if (missingPhotos.length) console.error('Missing small city photos (run node tools/make-editorial-photos.mjs):\n  ' + missingPhotos.join('\n  '));
     if (broken.length) console.error('Script syntax errors (the page feature they power will not work):\n  ' + broken.join('\n  '));
     process.exit(1);

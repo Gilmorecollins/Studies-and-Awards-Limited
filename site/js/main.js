@@ -390,11 +390,16 @@
 
   function pad(n) { return n < 10 ? '0' + n : String(n); }
 
+  // Both halves must be LAYOUT pixels. `:root` carries a CSS zoom (see the
+  // ladder in css/styles.css), and under `zoom` getBoundingClientRect()
+  // reports the zoomed visual size while columnGap stays a layout length.
+  // Adding the two mixed units under-shifted every step, so the coloured
+  // card drifted further right of the left edge the further you paged.
   function stepWidth() {
     if (!cards.length) return 0;
     var style = window.getComputedStyle(strip);
     var gap = parseFloat(style.columnGap || style.gap || '0') || 0;
-    return cards[0].getBoundingClientRect().width + gap;
+    return cards[0].offsetWidth + gap;
   }
 
   // Moves the strip so card `p` is leftmost (and the one in colour). Without
@@ -643,7 +648,13 @@
   function trapFocus(event) {
     if (event.key === 'Escape') { closeModal(); return; }
     if (event.key !== 'Tab') return;
-    var focusable = modal.querySelectorAll('a[href], button:not([disabled])');
+    // Filtered by visibility, like focusables() above: an element hidden with
+    // display:none is still matched by querySelectorAll but cannot take focus,
+    // which would break the wrap-around at either end of the modal.
+    var focusable = Array.prototype.filter.call(
+      modal.querySelectorAll('a[href], button:not([disabled])'),
+      function (el) { return el.offsetParent !== null; }
+    );
     if (!focusable.length) return;
     var first = focusable[0];
     var last = focusable[focusable.length - 1];
@@ -670,6 +681,9 @@
       modalLinkedin.href = member.linkedin;
       modalLinkedin.hidden = false;
     } else {
+      // Drop the href as well as hiding it: the template ships href="#", and
+      // with target="_blank" that opened a duplicate of this same page.
+      modalLinkedin.removeAttribute('href');
       modalLinkedin.hidden = true;
     }
 
@@ -745,7 +759,8 @@ function createCursorFollower(options) {
   var isHover = false;
   var rafId = null;
   var zoom = pageZoom();
-  window.addEventListener('resize', function () { zoom = pageZoom(); });
+  function onResize() { zoom = pageZoom(); }
+  window.addEventListener('resize', onResize);
 
   function scaleFor() {
     if (isDown) return 0.8;
@@ -812,6 +827,7 @@ function createCursorFollower(options) {
       document.removeEventListener('mousedown', onDown);
       document.removeEventListener('mouseup', onUp);
       if (modalObserver) modalObserver.disconnect();
+      window.removeEventListener('resize', onResize);
       if (el.parentNode) el.parentNode.removeChild(el);
     }
   };

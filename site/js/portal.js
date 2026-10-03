@@ -281,7 +281,16 @@
   });
 
   // ---- sign out ----
-  $$('[data-signout]').forEach(function (a) { a.addEventListener('click', function () { store('sa-portal-signed-in', null); }); });
+  // Signing out has to take the student's own data with it: the application
+  // draft holds their passport number, date of birth and address, and this is
+  // often a shared machine in a counselling office.
+  $$('[data-signout]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      ['sa-portal-apply-progress', 'sa-portal-apply-new', 'sa-portal-shortlist',
+        'sa-portal-sample', 'sa-portal-apply-course', 'sa-portal-signed-in'
+      ].forEach(function (key) { store(key, null); });
+    });
+  });
 
   // ---- apply: steps, sections, saved draft, progress ----
   var form = $('#apply-form');
@@ -303,6 +312,7 @@
       var out = {};
       $$('input, select, textarea', form).forEach(function (el) {
         if (!el.name || el.type === 'file') return;
+        if (el.type === 'checkbox') { if (el.checked) out[el.name] = el.value; return; }
         if (el.type === 'radio') { if (el.checked) out[el.name] = el.value; return; }
         if (el.value) out[el.name] = el.value;
       });
@@ -311,18 +321,25 @@
     function fill(data) {
       $$('input, select, textarea', form).forEach(function (el) {
         if (!el.name || el.type === 'file') return;
-        if (el.type === 'radio') el.checked = data[el.name] === el.value;
+        if (el.type === 'checkbox') el.checked = !!data[el.name];
+        else if (el.type === 'radio') el.checked = data[el.name] === el.value;
         else el.value = data[el.name] || '';
       });
     }
     function filled(el) {
+      if (el.type === 'checkbox') return el.checked;
       if (el.type === 'radio') return !!$('input[name="' + el.name + '"]:checked', form);
       return !!el.value.trim();
     }
     function sectionState(section) {
+      // A section the student has marked as not applicable (the passport
+      // opt-out) counts as done, and so does one whose required fields are all
+      // filled. A section left with no required field at all can therefore
+      // only complete through that explicit opt-out.
+      var skipped = $$('[data-section-skip]', section).some(function (el) { return el.checked; });
       var req = $$('[required]', section);
       var any = $$('input, select, textarea', section).some(function (el) { return el.name && el.type !== 'file' && filled(el); });
-      var done = req.length > 0 && req.every(filled);
+      var done = skipped || (req.length > 0 && req.every(filled));
       return done ? 'complete' : any ? 'started' : 'empty';
     }
     function update() {
@@ -436,7 +453,7 @@
         if (file.size > 5 * 1024 * 1024) { toast('That file is over 5MB. Try a smaller scan or photo.'); input.value = ''; return; }
         row.classList.add('is-picked');
         var name = $('.p-doc-file', row);
-        name.textContent = file.name + ' (kept on this device while the portal is a preview)';
+        name.textContent = file.name + ' (selected for this preview — the file is not stored)';
         name.hidden = false;
         $('.p-doc-picked', row).hidden = false;
         $('.p-doc-btn-text', row).textContent = 'Replace';
@@ -451,12 +468,17 @@
     if (applyCourse) {
       store('sa-portal-apply-course', null);
       var f = form.elements;
-      if (f.pref1_course && !f.pref1_course.value) {
+      // An explicit "Apply" on a course always wins, even when an earlier
+      // draft already filled preference 1. Guarding on an empty preference
+      // meant the second Apply was silently ignored — the student saw the
+      // previous course and a button that appeared to do nothing.
+      if (f.pref1_course) {
         f.pref1_course.value = applyCourse.name;
-        f.pref1_uni.value = applyCourse.uni;
+        if (f.pref1_uni) f.pref1_uni.value = applyCourse.uni;
         if (f.pref1_country) f.pref1_country.value = applyCourse.country;
         update();
         save(true);
+        toast('Preference 1 set to ' + applyCourse.name + '.');
       }
     }
   }
@@ -466,10 +488,16 @@
     var a = event.target.closest('[data-apply-course]');
     if (!a) return;
     var card = a.closest('.p-course');
+    // Without this the fallback in $() would read the page's first <h2> and
+    // quietly store the wrong course.
+    var heading = card && $('h2', card);
+    if (!heading) return;
+    var uni = $('.p-course-uni', card);
+    var city = $('.p-course-city', card);
     store('sa-portal-apply-course', {
-      name: $('h2', card).textContent,
-      uni: $('.p-course-uni', card).textContent,
-      country: ($('.p-course-city', card).textContent.split(', ')[1] || ''),
+      name: heading.textContent,
+      uni: uni ? uni.textContent : '',
+      country: city ? (city.textContent.split(', ')[1] || '') : '',
     });
   });
 })();

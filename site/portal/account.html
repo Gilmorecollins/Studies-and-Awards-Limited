@@ -94,7 +94,9 @@
         <form class="p-card p-basic" aria-labelledby="basic-title" data-account-form novalidate>
           <h2 id="basic-title">Basic info</h2>
           <div class="p-grid p-grid-2">
-            <fieldset class="p-field p-span-2"><legend>Gender</legend><div class="p-choices"><label class="p-choice"><input type="radio" name="acc_gender" value="Male"><span>Male</span></label><label class="p-choice"><input type="radio" name="acc_gender" value="Female"><span>Female</span></label></div></fieldset>
+            // checked: matches the sample student's gender in js/portal.js (SEED), so the
+  // account page and the application form agree about who this is.
+  <fieldset class="p-field p-span-2"><legend>Gender</legend><div class="p-choices"><label class="p-choice"><input type="radio" name="acc_gender" value="Male"><span>Male</span></label><label class="p-choice"><input type="radio" name="acc_gender" value="Female" checked><span>Female</span></label></div></fieldset>
             <div class="p-field"><label for="acc-first">First name <span class="p-req" aria-hidden="true">*</span></label><input id="acc-first" name="first" required value="Amina" autocomplete="given-name"></div>
             <div class="p-field"><label for="acc-middle">Middle name</label><input id="acc-middle" name="middle" placeholder="Middle name" autocomplete="additional-name"></div>
             <div class="p-field"><label for="acc-last">Last name <span class="p-req" aria-hidden="true">*</span></label><input id="acc-last" name="last" required value="Chebet" autocomplete="family-name"></div>

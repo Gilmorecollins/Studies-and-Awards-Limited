@@ -39,12 +39,18 @@ const team = (() => {
   return box.window.TEAM_MEMBERS || [];
 })();
 const counsellorMember = team.find(m => m.portalCounsellor) || team.find(m => m.startHere) || team[0];
+if (!counsellorMember) {
+  throw new Error('generate-portal: site/js/team-data.js must define at least one member — the portal needs a counsellor.');
+}
 const waDigits = String(counsellorMember.whatsapp || '').replace(/\D/g, '');
+const counsellorPhoto = counsellorMember.thumb || counsellorMember.photo || '';
 const counsellor = {
   name: counsellorMember.name,
   first: counsellorMember.name.split(' ')[0],
   role: counsellorMember.role,
-  photo: '../' + (counsellorMember.thumb || counsellorMember.photo),
+  // '' when the member has no photo yet (team-data.js documents that state):
+  // a bare '../' is a directory URL and renders as a broken image.
+  photo: counsellorPhoto ? '../' + counsellorPhoto : '',
   wa: text => waDigits ? `https://wa.me/${waDigits}?text=${encodeURIComponent(text)}` : `mailto:${OFFICE_MAIL}`,
   tel: waDigits ? '+' + waDigits : OFFICE_TEL,
 };
@@ -177,7 +183,7 @@ const brand = (href, big) => `<a class="p-brand${big ? ' p-brand-lg' : ''}" href
 const counsellorCard = (eyebrow = 'Your counsellor') => `<section class="p-card p-counsellor" aria-label="Your counsellor">
           <span class="p-eyebrow">${eyebrow}</span>
           <div class="p-counsellor-who">
-            <img src="${counsellor.photo}" alt="" width="64" height="64">
+            ${counsellor.photo ? `<img src="${counsellor.photo}" alt="" width="64" height="64">` : ''}
             <div><p class="p-counsellor-name">${esc(counsellor.name)}</p><p class="p-counsellor-role">${esc(counsellor.role)}</p></div>
           </div>
           <div class="p-counsellor-actions">
@@ -394,7 +400,11 @@ const field = (name, label, { type = 'text', required = true, span = 1, placehol
   }
   return `<div class="p-field p-span-${span}"><label for="f-${name}">${label}${required ? ' ' + req : ''}</label>${control}</div>`;
 };
-const choice = (name, label, opts, { required = true, span = 1 } = {}) => `<fieldset class="p-field p-span-${span}"><legend>${label}${required ? ' ' + req : ''}</legend><div class="p-choices">${opts.map((o, i) => `<label class="p-choice"><input type="radio" name="${name}" value="${o}"${required && i === 0 ? ' required' : ''}><span>${o}</span></label>`).join('')}</div></fieldset>`;
+const choice = (name, label, opts, { required = true, span = 1, checked = '' } = {}) => `<fieldset class="p-field p-span-${span}"><legend>${label}${required ? ' ' + req : ''}</legend><div class="p-choices">${opts.map((o, i) => `<label class="p-choice"><input type="radio" name="${name}" value="${o}"${required && i === 0 ? ' required' : ''}${checked === o ? ' checked' : ''}><span>${o}</span></label>`).join('')}</div></fieldset>`;
+// A whole-section opt-out, read by js/portal.js as [data-section-skip]: it lets
+// a student who has no passport yet still complete their profile, which is
+// what the section's own hint tells them to do.
+const skip = (name, label, { span = 3 } = {}) => `<div class="p-field p-span-${span}"><label class="p-choice"><input type="checkbox" name="${name}" data-section-skip value="Yes"><span>${label}</span></label></div>`;
 
 const COUNTRIES = ['Kenya', 'Uganda', 'Tanzania', 'Rwanda', 'South Sudan', 'Ethiopia', 'Other'];
 const DESTINATIONS = ['Australia', 'United Kingdom', 'Germany', 'Canada', 'Ireland', 'New Zealand', 'Not sure yet'];
@@ -434,7 +444,8 @@ const SECTIONS = [
                   ${field('passport_country', 'Issuing country', { options: COUNTRIES })}
                   ${field('passport_issued', 'Date of issue', { type: 'date' })}
                   ${field('passport_expires', 'Expiry date', { type: 'date' })}
-                  <p class="p-hint p-span-2 p-hint-box">No passport yet? Leave this for now and ask your counsellor; we&rsquo;ll guide you through applying for one.</p>`],
+                  ${skip('passport_none', 'I don&rsquo;t have a passport yet')}
+                  <p class="p-hint p-span-2 p-hint-box">No passport yet? Tick the box above &mdash; that completes this section &mdash; and ask your counsellor; we&rsquo;ll guide you through applying for one.</p>`],
   ['permanent_address', 'Permanent address', addressFields('perm')],
   ['nationality_info', 'Nationality', `${field('birth_country', 'Country of birth', { options: COUNTRIES })}
                   ${field('birth_place', 'Place of birth')}
@@ -638,9 +649,9 @@ function fees() {
               </tr>`).join('\n');
   const body = `      <div data-when="progress" class="p-stack">
         <div class="p-stats p-stats-3">
-          <div class="p-card p-stat p-stat-navy"><span class="p-eyebrow p-eyebrow-gold">Outstanding</span><span class="p-stat-value">${kes(due.reduce((t, i) => t + i.amount, 0))}</span><span class="p-stat-note">${due.length} invoice &middot; due ${due[0].due}</span></div>
+          <div class="p-card p-stat p-stat-navy"><span class="p-eyebrow p-eyebrow-gold">Outstanding</span><span class="p-stat-value">${kes(due.reduce((t, i) => t + i.amount, 0))}</span><span class="p-stat-note">${due.length ? `${due.length} invoice &middot; due ${due[0].due}` : 'Nothing outstanding'}</span></div>
           ${stat('check', kes(paid.reduce((t, i) => t + i.amount, 0)), 'Paid to date', `${paid.length} invoices paid`)}
-          ${stat('calendar', due[0].due.replace(/ \d{4}$/, ''), 'Next due date', `Invoice #${due[0].no}`)}
+          ${due.length ? stat('calendar', due[0].due.replace(/ \d{4}$/, ''), 'Next due date', `Invoice #${due[0].no}`) : stat('calendar', 'Nothing due', 'Next due date', 'No unpaid invoices')}
         </div>
         <section class="p-card p-table-card" aria-labelledby="inv-title">
           <div class="p-card-head"><h2 id="inv-title">My invoices</h2>
@@ -716,7 +727,9 @@ function account() {
         <form class="p-card p-basic" aria-labelledby="basic-title" data-account-form novalidate>
           <h2 id="basic-title">Basic info</h2>
           <div class="p-grid p-grid-2">
-            ${choice('acc_gender', 'Gender', ['Male', 'Female'], { span: 2, required: false })}
+            // checked: matches the sample student's gender in js/portal.js (SEED), so the
+  // account page and the application form agree about who this is.
+  ${choice('acc_gender', 'Gender', ['Male', 'Female'], { span: 2, required: false, checked: 'Female' })}
             <div class="p-field"><label for="acc-first">First name ${req}</label><input id="acc-first" name="first" required value="${sample.first}" autocomplete="given-name"></div>
             <div class="p-field"><label for="acc-middle">Middle name</label><input id="acc-middle" name="middle" placeholder="Middle name" autocomplete="additional-name"></div>
             <div class="p-field"><label for="acc-last">Last name ${req}</label><input id="acc-last" name="last" required value="${sample.last}" autocomplete="family-name"></div>

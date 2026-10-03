@@ -36,6 +36,10 @@ const sourceRoot = join(repoRoot, 'source-assets', 'destination-photos');
 const args = process.argv.slice(2);
 const changedOnly = args.includes('--changed');
 const outFlag = args.indexOf('--out');
+if (outFlag > -1 && (!args[outFlag + 1] || args[outFlag + 1].startsWith('--'))) {
+  console.error('usage: node tools/process-photos.mjs [--changed] [--out <dir>] <source> <site-name>');
+  process.exit(2);
+}
 const outOverride = outFlag > -1 ? resolve(args[outFlag + 1]) : null;
 const outValueIndex = outFlag > -1 ? outFlag + 1 : -1; // the directory after --out isn't a positional argument
 const positional = args.filter((a, i) => !a.startsWith('--') && i !== outValueIndex);

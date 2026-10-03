@@ -64,9 +64,11 @@ const cardDir = join(outRoot, 'cards');
 mkdirSync(thumbDir, { recursive: true });
 mkdirSync(cardDir, { recursive: true });
 
+let written = 0;
+const skipped = [];
 for (const [id, f] of Object.entries(framing)) {
   const src = join(teamDir, `${id}.jpg`);
-  if (!existsSync(src)) { console.error(`missing ${id}.jpg — skipped`); continue; }
+  if (!existsSync(src)) { console.error(`missing ${id}.jpg — skipped`); skipped.push(id); continue; }
   const img = await Jimp.read(src);
   const { width, height } = img.bitmap;
 
@@ -98,7 +100,8 @@ for (const [id, f] of Object.entries(framing)) {
   card.resize({ w: CARD.w, h: CARD.h, mode: ResizeStrategy.BICUBIC });
   const cardOut = join(cardDir, `${id}.jpg`);
   await card.write(cardOut, { quality: 80 });
+  written++;
 
   console.log(`${id.padEnd(15)} thumb ${side}px at (${left},${top}) ${(statSync(out).size / 1024).toFixed(0)} KB · card ${cw}x${ch} at (${cleft},${ctop}) ${(statSync(cardOut).size / 1024).toFixed(0)} KB`);
 }
-console.log(`\nWrote ${Object.keys(framing).length} thumbs and cards to ${outRoot}`);
+console.log(`\nWrote ${written} of ${Object.keys(framing).length} thumbs and cards to ${outRoot}${skipped.length ? ` (skipped: ${skipped.join(', ')})` : ''}`);
