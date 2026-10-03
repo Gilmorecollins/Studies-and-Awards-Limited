@@ -1920,8 +1920,8 @@ function createCursorFollower(options) {
   }
 })();
 
-// "Check your eligibility for Australia" ([data-ai-checker], on the home page
-// and the Australia page): the AI eligibility checker, built as its own app
+// "Check your eligibility for Australia" ([data-ai-checker], on the Australia
+// page): the AI eligibility checker, built as its own app
 // (the Studies-and-Awards-AI project). Until it is live the button opens a
 // short "coming soon" note with a way to book a consultation instead. Once it
 // is live, put its address in AI_CHECKER_URL: the "Coming soon" tag goes and
