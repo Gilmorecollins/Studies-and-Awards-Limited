@@ -1240,7 +1240,7 @@ function createCursorFollower(options) {
 //
 // It takes over any link whose address is the consultation email (so all the
 // existing buttons work without being edited), plus anything marked
-// data-consult. Progressive enhancement: until at least one person has a
+// data-consult; data-consult-dept opens it on one department. Progressive enhancement: until at least one person has a
 // `whatsapp` number in team-data.js, it steps aside and the buttons keep opening
 // an email, exactly as before — and the email link stays the fallback for
 // new-tab clicks and for visitors without JavaScript.
@@ -1594,15 +1594,39 @@ function createCursorFollower(options) {
     }
   }
 
+  // A button with data-consult-dept="Visa" opens on that department's people
+  // (the Services page's "Ask about visas"), when its filter is on show.
+  function chipFor(trigger) {
+    var dept = trigger.getAttribute('data-consult-dept');
+    if (!dept || filtersWrap.hidden) return null;
+    var chips = filters.querySelectorAll('.consult-chip');
+    for (var i = 0; i < chips.length; i++) {
+      if (chips[i].getAttribute('data-dept') === dept) return chips[i];
+    }
+    return null;
+  }
+
   function open(trigger) {
     if (!overlay) buildShell();
     topic = topicFor(trigger);
     render();
+    var chip = chipFor(trigger);
+    if (chip) {
+      activeDept = chip.getAttribute('data-dept');
+      applyDepartment();
+    }
 
     window.clearTimeout(hideTimer);
     lastFocused = trigger;
     overlay.hidden = false;
     document.body.style.overflow = 'hidden';
+    // bring its filter into view: scroll only the filter row (scrollIntoView
+    // would scroll the page behind the chooser too)
+    if (chip) {
+      var row = filters.getBoundingClientRect();
+      var box = chip.getBoundingClientRect();
+      filters.scrollLeft += (box.left + box.width / 2) - (row.left + row.width / 2);
+    }
     updateScroll();
     window.requestAnimationFrame(function () { overlay.classList.add('is-open'); });
     modal.focus();
@@ -2337,38 +2361,50 @@ function createCursorFollower(options) {
   });
 })();
 
-// Services page: highlight the itinerary entry for the service being read —
-// the last service whose top has scrolled past a line just below the header.
+// Services page: the people who look after each step. Each list names them by
+// id (data-people="rahab dennis") and they're filled in from js/team-data.js,
+// so a new photo, name or role there shows here too; each one links to their
+// card on the Team page. Someone missing from the team data is left out.
 (function () {
   'use strict';
 
-  var rail = document.querySelector('.svc-rail');
-  if (!rail) return;
+  var lists = document.querySelectorAll('.svc-people[data-people]');
+  var members = window.TEAM_MEMBERS;
+  if (!lists.length || !members) return;
 
-  var items = [];
-  Array.prototype.forEach.call(rail.querySelectorAll('a[href^="#"]'), function (a) {
-    var row = document.getElementById(a.getAttribute('href').slice(1));
-    if (row) items.push({ link: a, row: row });
-  });
-  if (!items.length) return;
+  var byId = {};
+  members.forEach(function (m) { byId[m.id] = m; });
 
-  var LINE = 200;
-  var ticking = false;
-
-  function update() {
-    ticking = false;
-    var current = null;
-    items.forEach(function (it) { if (it.row.getBoundingClientRect().top <= LINE) current = it; });
-    items.forEach(function (it) {
-      if (it === current) { it.link.setAttribute('aria-current', 'true'); } else { it.link.removeAttribute('aria-current'); }
-    });
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text) node.textContent = text;
+    return node;
   }
 
-  window.addEventListener('scroll', function () {
-    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
-  }, { passive: true });
-  window.addEventListener('resize', update);
-  update();
+  Array.prototype.forEach.call(lists, function (list) {
+    list.getAttribute('data-people').split(/\s+/).forEach(function (id) {
+      var m = byId[id];
+      if (!m) return;
+      var link = el('a', 'svc-person');
+      link.href = 'team.html#' + encodeURIComponent(m.id);
+      var img = el('img');
+      img.src = window.teamPortrait ? window.teamPortrait(m, 'thumb') : m.thumb;
+      img.alt = '';
+      img.width = 48;
+      img.height = 48;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      link.appendChild(img);
+      var text = el('span', 'svc-person-text');
+      text.appendChild(el('span', 'svc-person-name', m.name));
+      text.appendChild(el('span', 'svc-person-role', m.role || m.department));
+      link.appendChild(text);
+      var item = el('li');
+      item.appendChild(link);
+      list.appendChild(item);
+    });
+  });
 })();
 
 // Whether the office is open, worked out in Kenya time (UTC+3 all year)

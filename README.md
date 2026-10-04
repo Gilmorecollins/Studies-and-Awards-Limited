@@ -222,7 +222,8 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   PDF (Sept 2026) with spelling mistakes and cut-off names corrected; when you
   get an updated list, replace or extend it there.
 - **"Book Free Consultation" chooser**: every consultation button on the site
-  (any link to the consultation email, or anything marked `data-consult`)
+  (any link to the consultation email, or anything marked `data-consult`;
+  add `data-consult-dept="Visa"` to open it on one department)
   opens a "Who would you like to talk to?" dialog listing our staff in the
   same order as the Team page, with department filter buttons (and a "Not sure
   who to pick? Start here" shortcut); choosing someone opens their WhatsApp with a ready-to-send
@@ -281,6 +282,16 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   sized one square per person in `styles.css` (`.dept-mosaic`). A new or
   renamed department needs its tile there, and the head counts fill in from
   `team-data.js`.
+- **Services page**: `services.html` shows the six steps every student goes
+  through (free consultation, language classes, documentation, verification
+  and compliance, application and offer, visa and travel), each its own department, the same for all six countries.
+  Beside each step, the people who look after it are listed by id, e.g.
+  `<ul class="svc-people" data-people="rahab canisius-yego dennis">`, and
+  their photo, name and role fill in from `js/team-data.js`, each linking to
+  `team.html#<id>`. If someone joins, leaves or changes step, edit that list.
+  The step text names people too, so change it to match. Each step's "Ask
+  about…" button carries `data-consult-dept="<department>"`, which opens the
+  consultation chooser already filtered to that department.
 - **Destination specialists**: give a team member `destinations: ['Germany']`
   in `js/team-data.js` and they lead the consultation list, tagged "Best for
   Germany", when someone books from that country's page.

@@ -993,100 +993,145 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .cta-actions > a { justify-content: center; }
 }
 
-/* ---------- services: the itinerary ----------
-   Services grouped into the three stages of the trip, each one a numbered
-   itinerary line, with a sticky index on wide screens. */
+/* ---------- services: the six steps ----------
+   The way every student goes through the company, the same for all six
+   countries: a hero with the six steps at a glance, then each step on a
+   line down the left, with what happens in it and, beside it, the people who
+   look after it (filled in from js/team-data.js by main.js) and a button
+   that opens the consultation chooser on their department. In the home
+   hero's type: Manrope for headings, labels and buttons, Source Sans 3 for
+   the text. */
 
-.svc-layout {
-  display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
-  gap: clamp(40px, calc(5vw / var(--z, 1)), 88px);
-  align-items: start;
+.svc-hero { padding: clamp(48px, calc(6vw / var(--z, 1)), 88px) 0 clamp(40px, calc(5vw / var(--z, 1)), 72px); }
+.svc-hero-inner {
+  display: grid; grid-template-columns: minmax(0, 1fr) 360px;
+  gap: clamp(40px, calc(5vw / var(--z, 1)), 80px); align-items: center;
 }
-
-.svc-rail { position: sticky; top: 112px; }
-.svc-rail-title {
-  display: flex; align-items: center; gap: 10px;
-  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brass-ink);
+.svc-hero-copy { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; font-family: 'Source Sans 3', 'Montserrat', sans-serif; }
+.svc-eyebrow { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--brass-ink); }
+.svc-hero h1 {
+  font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 800;
+  font-size: clamp(2.2rem, calc(4vw / var(--z, 1)), 3.5rem); line-height: 1.08; letter-spacing: -0.025em;
 }
-.svc-rail-title::before { content: ""; width: 24px; height: 2px; background: var(--brass-ink); }
-.svc-rail ol { list-style: none; margin: 0; padding: 0; }
-.svc-rail > ol { margin-top: 22px; display: flex; flex-direction: column; gap: 22px; }
-.svc-rail-stage-name { display: block; margin-bottom: 8px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-.svc-rail-stage ol { border-left: 2px dashed var(--border); }
-.svc-rail a {
-  display: flex; align-items: baseline; gap: 10px;
-  margin-left: -2px; padding: 6px 0 6px 16px;
-  border-left: 2px solid transparent;
-  font-size: 13.5px; font-weight: 500; line-height: 1.4; color: var(--muted);
-  transition: color 150ms ease, border-color 150ms ease;
+.svc-hero-lead { max-width: 38rem; font-size: 1.15rem; line-height: 1.65; color: var(--muted); }
+.svc-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; margin-top: 0.25rem; }
+.svc-hero-phone {
+  padding: 4px 0 3px; border-bottom: 1px solid var(--muted);
+  font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-strong);
 }
-.svc-rail a:hover { color: var(--text-strong); }
-.svc-rail a[aria-current="true"] { color: var(--text-strong); font-weight: 600; border-left-color: var(--brass); }
-.svc-rail a:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; }
-.svc-rail-num { flex-shrink: 0; min-width: 18px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.04em; color: var(--brass-ink); }
+.svc-hero-phone:hover { border-bottom-color: var(--brass); }
+.svc-hero-phone:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 4px; border-radius: 2px; }
 
-.svc-stages { display: flex; flex-direction: column; gap: clamp(56px, calc(7vw / var(--z, 1)), 96px); min-width: 0; }
-.svc-stage-head { padding-bottom: 18px; border-bottom: 2px solid var(--line-strong); }
-.svc-stage-num { display: block; margin-bottom: 8px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brass-ink); }
-.svc-stage-head h2 { font-size: clamp(34px, calc(3.2vw / var(--z, 1)), 46px); }
-.svc-stage-head p { margin-top: 8px; font-size: 15px; line-height: 1.6; color: var(--muted); }
+/* the six steps at a glance, each a link down to its step */
+.svc-glance { padding: 26px 28px 14px; border: 1px solid var(--border-soft); border-radius: var(--radius); background: var(--paper); }
+.svc-glance-title { margin-bottom: 8px; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--muted); }
+.svc-glance ol { margin: 0; padding: 0; list-style: none; }
+.svc-glance li + li { border-top: 1px dashed var(--border); }
+.svc-glance a { display: flex; align-items: center; gap: 14px; padding: 12px 0; color: var(--text-strong); }
+.svc-glance a:hover .svc-glance-name { text-decoration: underline; text-decoration-color: var(--brass); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.svc-glance a:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; border-radius: 6px; }
+.svc-glance-num, .svc-step-dot {
+  display: grid; place-items: center; flex-shrink: 0; border-radius: 50%;
+  background: var(--ink); color: #FFFFFF;
+  font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 800; line-height: 1;
+}
+.svc-glance-num { width: 32px; height: 32px; font-size: 0.9rem; }
+.svc-glance-name { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; line-height: 1.3; }
+.svc-glance-note { display: block; font-family: 'Source Sans 3', 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 400; color: var(--muted); }
+:root[data-theme="dark"] .svc-glance-num,
+:root[data-theme="dark"] .svc-step-dot { background: var(--brass); color: var(--ink); }
 
-.svc-list { list-style: none; margin: 0; padding: 0; }
-.svc-row {
+/* the steps: a line down the left joining the numbered dots */
+.svc-steps-section { padding: 8px 0 clamp(64px, calc(7vw / var(--z, 1)), 104px); }
+.svc-steps { margin: 0; padding: 0; list-style: none; }
+.svc-step {
+  --dot: 56px; --pad: 52px;
   position: relative;
-  display: grid;
-  grid-template-columns: 84px minmax(0, 1fr) minmax(200px, 250px);
-  column-gap: clamp(20px, calc(3vw / var(--z, 1)), 44px);
-  padding: 32px 0 34px;
-  border-bottom: 2px dashed var(--border-soft);
-  scroll-margin-top: 110px;
+  display: grid; grid-template-columns: var(--dot) minmax(0, 1fr) 300px;
+  column-gap: clamp(24px, calc(3.4vw / var(--z, 1)), 56px);
+  padding: var(--pad) 0;
+  border-top: 1px solid var(--border-soft);
 }
-.svc-row:last-child { border-bottom: 0; padding-bottom: 0; }
-.svc-row::before {
-  content: ""; position: absolute; left: -18px; top: 34px; width: 3px; height: 56px;
-  border-radius: 2px; background: var(--brass);
-  transform: scaleY(0); transform-origin: top; transition: transform 200ms ease;
+.svc-step::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: calc(var(--dot) / 2 - 1px); width: 2px;
+  background: var(--border);
 }
-.svc-row:hover::before,
-.svc-row:target::before { transform: scaleY(1); }
-.svc-num {
-  font-family: 'Bebas Neue', sans-serif; font-size: 68px; line-height: 0.85; letter-spacing: 0.02em;
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--outline-num);
-  transition: -webkit-text-stroke-color 200ms ease;
+.svc-step:first-child::before { top: var(--pad); }
+.svc-step:last-child::before { bottom: auto; height: calc(var(--pad) + var(--dot) / 2); }
+.svc-step-dot {
+  position: relative; z-index: 1; width: var(--dot); height: var(--dot);
+  box-shadow: 0 0 0 8px var(--bg); /* a gap in the line round each dot */
+  font-size: 1.35rem;
 }
-.svc-row:hover .svc-num,
-.svc-row:target .svc-num { -webkit-text-stroke-color: var(--brass-ink); }
-.svc-main h3 {
-  margin: 0 0 12px;
-  font-family: 'Bebas Neue', sans-serif; font-size: 30px; font-weight: 400; line-height: 1.05; letter-spacing: 0.03em; text-transform: uppercase; color: var(--text-strong);
-}
-.svc-tag {
-  display: inline-block; margin-left: 8px; padding: 3px 9px; vertical-align: 5px;
-  border-radius: 6px; background: var(--gold-tint);
-  font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--brass-ink);
-}
-.svc-main p { font-size: 15px; line-height: 1.7; color: var(--muted); max-width: 54ch; }
-.svc-includes-label { display: block; margin-bottom: 8px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-.svc-includes ul { list-style: none; margin: 0; padding: 0; }
-.svc-includes li { position: relative; padding: 9px 0 9px 18px; border-top: 1px dashed var(--border); font-size: 13.5px; line-height: 1.45; color: var(--text); }
-.svc-includes li::before { content: ""; position: absolute; left: 0; top: 18px; width: 8px; height: 2px; background: var(--brass); }
+/* step 2 is only for students who still need their scores: a dashed dot */
+.svc-step.is-optional .svc-step-dot { background: var(--bg); border: 2px dashed var(--text-strong); color: var(--text-strong); }
 
-@media (max-width: 1023.98px), (max-width: 1080px) and (pointer: coarse), (max-width: 1080px) and (pointer: none) {
-  .svc-layout { grid-template-columns: minmax(0, 1fr); }
-  .svc-rail { display: none; }
+.svc-step-main { min-width: 0; font-family: 'Source Sans 3', 'Montserrat', sans-serif; }
+.svc-step-kicker { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--brass-ink); }
+.svc-step h2 {
+  margin: 6px 0 16px;
+  font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 800;
+  font-size: clamp(1.7rem, calc(2.4vw / var(--z, 1)), 2.3rem); line-height: 1.15; letter-spacing: -0.02em;
 }
-@media (max-width: 760px) {
-  .svc-row { grid-template-columns: 50px minmax(0, 1fr); column-gap: 14px; row-gap: 18px; padding: 26px 0 28px; }
-  .svc-row::before { display: none; }
-  .svc-num { font-size: 46px; }
-  .svc-main h3 { font-size: 25px; }
-  .svc-main p { font-size: 14.5px; }
-  .svc-includes { grid-column: 2; }
+.svc-step-lead { max-width: 42rem; font-size: 1.1rem; line-height: 1.65; color: var(--text-prose); }
+.svc-step-note { max-width: 42rem; margin-top: 18px; font-size: 1.02rem; line-height: 1.6; color: var(--muted); }
+
+.svc-points { max-width: 42rem; margin: 20px 0 0; padding: 0; list-style: none; }
+.svc-points li { position: relative; padding: 9px 0 9px 22px; border-top: 1px dashed var(--border); font-size: 1.02rem; line-height: 1.5; color: var(--text); }
+.svc-points li::before { content: ""; position: absolute; left: 2px; top: 1.05em; width: 8px; height: 8px; border-radius: 50%; background: var(--brass); }
+
+.svc-formats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 42rem; margin: 22px 0 0; padding: 0; list-style: none; }
+.svc-format { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); font-size: 1rem; line-height: 1.45; color: var(--muted); }
+.svc-format svg { flex-shrink: 0; margin-top: 1px; color: var(--brass-ink); }
+.svc-format strong { display: block; margin-bottom: 2px; font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 700; color: var(--text-strong); }
+
+.svc-parts { max-width: 42rem; margin: 0; padding: 0; list-style: none; }
+.svc-parts li { padding: 18px 0; border-top: 1px dashed var(--border); }
+.svc-parts li:first-child { padding-top: 0; border-top: 0; }
+.svc-parts li:last-child { padding-bottom: 0; }
+.svc-parts h3 { margin-bottom: 6px; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1.15rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+.svc-parts p { font-size: 1.05rem; line-height: 1.65; color: var(--text-prose); }
+
+/* beside each step: who looks after it, and a button to ask them */
+.svc-step-side { align-self: start; padding: 22px; border-radius: var(--radius); background: var(--paper); font-family: 'Source Sans 3', 'Montserrat', sans-serif; }
+.svc-side-title { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--muted); }
+.svc-side-text { margin: 10px 0 18px; font-size: 1.02rem; line-height: 1.55; color: var(--text); }
+.svc-side-text a { font-weight: 600; color: var(--text-strong); text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 3px; }
+.svc-people { display: flex; flex-direction: column; gap: 2px; margin: 10px -8px 16px; padding: 0; list-style: none; }
+.svc-people:empty { display: none; }
+.svc-person { display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 12px; }
+.svc-person:hover { background: var(--tint-06); }
+.svc-person:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 0; }
+.svc-person img { width: 48px; height: 48px; flex-shrink: 0; border-radius: 50%; object-fit: cover; object-position: top; background: #F0F1F3; }
+.svc-person-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.svc-person-name { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.98rem; font-weight: 700; line-height: 1.3; color: var(--text-strong); overflow-wrap: anywhere; }
+.svc-person-role { font-size: 0.92rem; line-height: 1.35; color: var(--muted); }
+.svc-ask {
+  display: flex; justify-content: center; padding: 12px 16px; border: 1.5px solid var(--line-strong); border-radius: 10px;
+  font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 700; line-height: 1.2; color: var(--text-strong);
 }
-@media (max-width: 420px) {
-  .svc-includes { grid-column: 1 / -1; }
+.svc-ask:hover { background: var(--text-strong); color: var(--bg); }
+.svc-ask:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  .svc-ask { transition: background-color 150ms ease, color 150ms ease; }
+  .svc-hero-phone { transition: border-color 150ms ease; }
+}
+
+/* below 960px: the glance under the text, and who looks after each step
+   under the step */
+@media (max-width: 959.98px) {
+  .svc-hero-inner { grid-template-columns: minmax(0, 1fr); }
+  .svc-glance { max-width: 34rem; }
+  .svc-step { grid-template-columns: var(--dot) minmax(0, 1fr); }
+  .svc-step-dot { grid-column: 1; grid-row: 1 / span 2; }
+  .svc-step-main { grid-column: 2; }
+  .svc-step-side { grid-column: 2; margin-top: 26px; max-width: 30rem; }
+}
+@media (max-width: 600px) {
+  .svc-step { --dot: 40px; --pad: 36px; column-gap: 16px; }
+  .svc-step-dot { font-size: 1.05rem; box-shadow: 0 0 0 6px var(--bg); }
+  .svc-formats { grid-template-columns: minmax(0, 1fr); }
+  .svc-hero-actions .hero-cta { flex: 1 1 100%; justify-content: center; }
 }
 
 /* ---------- home: "How it works" checklist ----------
