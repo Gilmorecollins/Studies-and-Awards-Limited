@@ -1014,6 +1014,9 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   font-size: clamp(2.2rem, calc(4vw / var(--z, 1)), 3.5rem); line-height: 1.08; letter-spacing: -0.025em;
 }
 .svc-hero-lead { max-width: 38rem; font-size: 1.15rem; line-height: 1.65; color: var(--muted); }
+.svc-hero-lead a { font-weight: 600; color: var(--text-strong); text-decoration: underline; text-decoration-color: var(--brass); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.svc-hero-lead a:hover { text-decoration-color: currentColor; }
+.svc-hero-lead a:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; border-radius: 2px; }
 .svc-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; margin-top: 0.25rem; }
 .svc-hero-phone {
   padding: 4px 0 3px; border-bottom: 1px solid var(--muted);
@@ -1042,7 +1045,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 :root[data-theme="dark"] .svc-step-dot { background: var(--brass); color: var(--ink); }
 
 /* the steps: a line down the left joining the numbered dots */
-.svc-steps-section { padding: 8px 0 clamp(64px, calc(7vw / var(--z, 1)), 104px); }
+.svc-steps-section { padding: 8px 0 clamp(16px, calc(2vw / var(--z, 1)), 32px); } /* the band below brings its own space */
 .svc-steps { margin: 0; padding: 0; list-style: none; }
 .svc-step {
   --dot: 56px; --pad: 52px;

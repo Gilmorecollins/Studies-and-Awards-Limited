@@ -125,7 +125,7 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
     meta description
   - `index.html`: a row on the departures board (the last row has
     `border-bottom:none`), both copies of the ticker, and the meta description
-  - `services.html`: a code pill in the "Available for" strip
+  - `services.html`: "our six countries" in the opening text
 - **Styling**: `site/css/styles.css`.
 - **Laptop fit (why the site looks the same size on every laptop)**: laptops
   give web pages very different window widths, because Windows and macOS
