@@ -292,6 +292,14 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   The step text names people too, so change it to match. Each step's "Ask
   about…" button carries `data-consult-dept="<department>"`, which opens the
   consultation chooser already filtered to that department.
+  The motion (`main.js`, "Services page: the motion"): as you scroll, a gold
+  line fills down the steps' line with a small document riding its tip (the
+  student's file moving between departments), and each dot it reaches turns
+  gold with a tick. Each step eases in the first time it's on screen. A
+  dashed "Skip" arc round step 2 (the step marked `is-optional`) draws in on
+  wider screens, and a step reached from a link on the page glows for a
+  moment. Visitors who ask their device for reduced motion see the finished
+  picture, with nothing moving.
 - **Destination specialists**: give a team member `destinations: ['Germany']`
   in `js/team-data.js` and they lead the consultation list, tagged "Best for
   Germany", when someone books from that country's page.

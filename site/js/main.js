@@ -2407,6 +2407,241 @@ function createCursorFollower(options) {
   });
 })();
 
+// Services page: the motion (the look is in styles.css, "services: the
+// motion"). As the visitor scrolls, a gold line fills down the steps' line
+// to a reading line 60% of the way down the window, with a small document
+// riding its tip: their file moving from one department to the next. Each
+// dot the line reaches turns gold with a tick, with one soft ring when it's
+// reached on the way down; scrolling back up undoes them. Each step eases in
+// the first time it comes on screen, a dashed arc round step 2 shows that
+// students with their results skip it, the six steps at the top appear one
+// after another, and a step reached from a link on the page glows for a
+// moment. With reduced motion it shows the finished picture (the whole line
+// gold, every dot ticked) and nothing moves; without this script the steps
+// simply show as they are.
+(function () {
+  'use strict';
+
+  var list = document.querySelector('.svc-steps');
+  if (!list) return;
+  var steps = Array.prototype.slice.call(list.querySelectorAll('.svc-step'));
+  var dots = steps.map(function (step) { return step.querySelector('.svc-step-dot'); });
+  if (steps.length < 2 || dots.indexOf(null) > -1) return;
+
+  var still = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  function reduced() { return !!(still && still.matches); }
+
+  var READING_LINE = 0.6; // of the window's height
+  var SVG = 'http://www.w3.org/2000/svg';
+  var last = steps.length - 1;
+
+  var fill = document.createElement('span');
+  fill.className = 'svc-fill';
+  fill.setAttribute('aria-hidden', 'true');
+  var file = document.createElement('span');
+  file.className = 'svc-file';
+  file.setAttribute('aria-hidden', 'true');
+  file.innerHTML = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>';
+  list.appendChild(fill);
+  list.appendChild(file);
+  list.classList.add('is-live');
+
+  // the arc round the optional step, from the dot before it into the dot after
+  var optional = -1;
+  steps.forEach(function (step, i) { if (optional < 0 && step.classList.contains('is-optional') && i > 0 && i < last) optional = i; });
+  var skip = null;
+  var arc = null;
+  var head = null;
+  var label = null;
+  if (optional > -1) {
+    skip = document.createElementNS(SVG, 'svg');
+    skip.setAttribute('class', 'svc-skip');
+    skip.setAttribute('aria-hidden', 'true');
+    arc = document.createElementNS(SVG, 'path');
+    arc.setAttribute('class', 'svc-skip-arc');
+    head = document.createElementNS(SVG, 'path');
+    label = document.createElementNS(SVG, 'text');
+    label.setAttribute('class', 'svc-skip-label');
+    label.setAttribute('text-anchor', 'end');
+    label.textContent = 'Skip';
+    skip.appendChild(arc);
+    skip.appendChild(head);
+    skip.appendChild(label);
+    list.appendChild(skip);
+  }
+
+  // where things are, in the list's own CSS pixels (the laptop fit zooms
+  // the page, and positions on screen come back zoomed)
+  var centres = [];
+  var lineX = 0;
+  var radius = 0;
+  var room = 0; // from the window's left edge to the line
+
+  function measure() {
+    var z = pageZoom();
+    var box = list.getBoundingClientRect();
+    centres = dots.map(function (dot) {
+      var r = dot.getBoundingClientRect();
+      return (r.top + r.height / 2 - box.top) / z;
+    });
+    var first = dots[0].getBoundingClientRect();
+    lineX = (first.left + first.width / 2 - box.left) / z;
+    radius = first.width / 2 / z;
+    room = (first.left + first.width / 2) / z;
+    fill.style.left = lineX + 'px';
+    fill.style.top = centres[0] + 'px';
+    file.style.left = lineX + 'px';
+    if (skip) drawSkip();
+  }
+
+  // the arc bows well out to the left of the line, as far as the window
+  // allows, with a "Skip" label beside it where there's room
+  function drawSkip() {
+    var bulge = Math.max(16, Math.min(Math.round(radius * 2.6), Math.floor(room - 8)));
+    var top = centres[optional - 1] + radius + 6;
+    var bottom = centres[optional + 1] - radius - 6;
+    var height = Math.max(0, bottom - top);
+    var width = bulge + 8;
+    var x = width - 1; // the line, at the svg's right edge
+    skip.style.left = (lineX - x) + 'px';
+    skip.style.top = top + 'px';
+    skip.setAttribute('width', width);
+    skip.setAttribute('height', height);
+    skip.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+    // control points level with the ends make a round bow whose widest
+    // point, halfway down, is `bulge` from the line
+    var cx = x - bulge * 4 / 3;
+    arc.setAttribute('d', 'M' + x + ' 0C' + cx + ' 0 ' + cx + ' ' + height + ' ' + x + ' ' + height);
+    // the arrowhead, pointing back in to the line just above the next dot
+    head.setAttribute('d', 'M' + (x - 7) + ' ' + (height - 5) + 'L' + x + ' ' + height + 'L' + (x - 7) + ' ' + (height + 5));
+    label.setAttribute('x', x - bulge - 10);
+    label.setAttribute('y', height / 2 + 5);
+    label.style.display = room - bulge > 64 ? '' : 'none';
+  }
+
+  function pulse(dot) {
+    dot.classList.remove('is-pulse');
+    void dot.offsetWidth; // restart the ring if it's still going
+    dot.classList.add('is-pulse');
+  }
+  dots.forEach(function (dot) {
+    dot.addEventListener('animationend', function (e) {
+      if (e.animationName === 'svc-pulse') dot.classList.remove('is-pulse');
+    });
+  });
+
+  var lastTip = null;
+  var ticking = false;
+
+  function update() {
+    ticking = false;
+    var z = pageZoom();
+    var finished = reduced();
+    var tip = finished ? centres[last] : (window.innerHeight * READING_LINE - list.getBoundingClientRect().top) / z;
+    var shownTip = Math.max(centres[0], Math.min(centres[last], tip));
+    fill.style.height = (shownTip - centres[0]) + 'px';
+    file.style.top = shownTip + 'px';
+    // the file shows on the way between dots, slipping into each one it passes
+    var inDot = centres.some(function (c) { return Math.abs(shownTip - c) < radius + 8; });
+    file.classList.toggle('is-shown', !finished && !inDot && tip > centres[0] && tip < centres[last]);
+    var goingDown = lastTip !== null && tip > lastTip;
+    steps.forEach(function (step, i) {
+      var done = tip >= centres[i] - 0.5;
+      if (done === step.classList.contains('is-done')) return;
+      step.classList.toggle('is-done', done);
+      if (done && goingDown && !finished) pulse(dots[i]);
+    });
+    lastTip = tip;
+  }
+
+  function later() {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+  }
+
+  measure();
+  update();
+  window.addEventListener('scroll', later, { passive: true });
+  window.addEventListener('resize', function () { measure(); later(); });
+  // the steps change height as fonts and photos arrive
+  if (window.ResizeObserver) new ResizeObserver(function () { measure(); later(); }).observe(list);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); later(); });
+  if (still) {
+    var onChange = function () { measure(); update(); if (skip && reduced()) skip.classList.add('is-drawn'); };
+    if (still.addEventListener) still.addEventListener('change', onChange);
+    else if (still.addListener) still.addListener(onChange);
+  }
+
+  // each step eases in the first time it comes on screen; the arc draws as
+  // the optional step comes into view
+  if (window.IntersectionObserver && !reduced()) {
+    steps.forEach(function (step) {
+      step.classList.add('is-waiting');
+      Array.prototype.forEach.call(step.querySelectorAll('.svc-people li'), function (li, i) {
+        li.style.setProperty('--i', String(Math.min(i, 6)));
+      });
+    });
+    var seen = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var step = entry.target;
+        seen.unobserve(step);
+        step.classList.remove('is-waiting');
+        step.classList.add('is-in');
+        if (skip && step === steps[optional]) skip.classList.add('is-drawn');
+      });
+    }, { rootMargin: '0px 0px -12% 0px' });
+    steps.forEach(function (step) { seen.observe(step); });
+  } else if (skip) {
+    skip.classList.add('is-drawn');
+  }
+
+  // the six steps at the top appear one after another
+  var glance = document.querySelector('.svc-glance');
+  if (glance && !reduced()) {
+    Array.prototype.forEach.call(glance.querySelectorAll('li'), function (li, i) {
+      li.style.setProperty('--i', String(i));
+    });
+    glance.classList.add('is-in');
+  }
+
+  // a step reached from a link on the page (the glance, "Skip to step 3")
+  // glows for a moment once the page has finished gliding to it
+  function arrive(step) {
+    var y = null;
+    var calm = 0;
+    var waited = 0;
+    function check() {
+      var now = window.pageYOffset;
+      calm = now === y ? calm + 1 : 0;
+      y = now;
+      if ((calm < 6 && waited++ < 120)) { window.requestAnimationFrame(check); return; }
+      step.classList.remove('is-arrived');
+      void step.offsetWidth;
+      step.classList.add('is-arrived');
+      pulse(step.querySelector('.svc-step-dot'));
+    }
+    window.requestAnimationFrame(check);
+  }
+  steps.forEach(function (step) {
+    step.addEventListener('animationend', function (e) {
+      if (e.animationName === 'svc-arrive') step.classList.remove('is-arrived');
+    });
+  });
+  function stepFor(hash) {
+    var id = '';
+    try { id = decodeURIComponent(String(hash || '').slice(1)); } catch (e) { return null; }
+    var target = id && document.getElementById(id);
+    return target && steps.indexOf(target) > -1 ? target : null;
+  }
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    var step = link && stepFor(link.getAttribute('href'));
+    if (step && !reduced()) arrive(step);
+  });
+  var linked = stepFor(window.location.hash);
+  if (linked && !reduced()) arrive(linked);
+})();
+
 // Whether the office is open, worked out in Kenya time (UTC+3 all year)
 // whatever the visitor's own time zone: the "Open now" badge by the hours in
 // the footer, and the little door sign (OPEN / CLOSING / CLOSED) on Find Us.
