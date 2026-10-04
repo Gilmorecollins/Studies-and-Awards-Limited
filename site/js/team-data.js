@@ -137,12 +137,12 @@ window.TEAM_MEMBERS = [
     name: 'Ian',
     role: 'GTE Preparation and Assessments',
     department: 'Application Team',
-    helpsWith: 'Preparing for the GTE part of your application, and its assessments.',
+    helpsWith: 'Meeting the conditions on your offer letter, and the documents a school asks for before approving you.',
     whatsapp: '+254719648200',
-    shortBio: 'Ian works in the Application Team at Studies and Awards Limited, preparing students for GTE requirements and assessments.',
+    shortBio: 'Ian works in the Application Team at Studies and Awards Limited, making sure students meet their school’s GTE requirements and the conditions on their offer.',
     fullBio: [
-      'Ian works in the Application Team at Studies and Awards Limited, looking after GTE (Genuine Temporary Entrant) preparation and assessments.',
-      'Ian helps students get ready for this part of their application, so it goes out complete and well prepared.'
+      'Ian works in the Application Team at Studies and Awards Limited, looking after GTE preparation and assessments: the documents a school needs before it approves a student.',
+      'Once a student has an offer, Ian makes sure every condition on it is met, works with the GSR team when the school asks for a statement of purpose, and sends everything back to the school.'
     ],
     photo: 'assets/team/ian.jpg',
     thumb: 'assets/team/thumbs/ian.jpg',

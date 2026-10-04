@@ -699,27 +699,25 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .globe-flag:hover .globe-flag-name, .globe-flag:focus-visible .globe-flag-name { opacity: 1; transform: translate(-50%, 0); }
 :root[data-theme="dark"] .globe-flag-name { background: var(--brass); color: var(--ink); }
 
-/* The text beside the globe: where we are, the headline, what we do, the
-   two actions, then three steps. Its own type (Manrope for the headline,
-   button, link and step labels; Source Sans 3 for the text) and colours: in
-   dark mode the design's navy, lines and greys, in light mode the site's
-   light colours. Gold only on the button, the headline's underline, the pin
-   and the step numbers. */
+/* The text beside the globe: where we are, the headline, what we do and the
+   two actions (the steps themselves are in "How it works" just below). Its
+   own type (Manrope for the headline, button and link; Source Sans 3 for the
+   text) and colours: in dark mode the design's navy and greys, in light mode
+   the site's light colours. Gold only on the button, the headline's
+   underline and the pin. */
 .hero-globe {
   --hg-text: var(--text-strong);
   --hg-muted: var(--muted);
-  --hg-line: var(--border);
-  --hg-gold: var(--brass-ink); /* the pin and the step numbers: a gold that reads on the page */
+  --hg-gold: var(--brass-ink); /* the pin: a gold that reads on the page */
 }
 :root[data-theme="dark"] .hero-globe {
   --hg-text: #EEF1F7;
   --hg-muted: #A6AFC4;
-  --hg-line: #26304F;
   --hg-gold: #FFC20E;
   background: #0C1226;
 }
-/* the text on the left and the globe on the right, then the steps across
-   both; once they stack: the text, the steps, then the globe */
+/* the text on the left and the globe on the right; once they stack, the
+   text, then the globe */
 .hero-globe-copy { grid-column: 1; grid-row: 1; }
 .hero-globe-art { grid-column: 2; grid-row: 1; }
 .hero-globe-copy { order: -1; display: flex; flex-direction: column; gap: 1.75rem; min-width: 0; font-family: 'Source Sans 3', 'Montserrat', sans-serif; }
@@ -756,25 +754,10 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .hero-cta svg { transition: transform 150ms ease; }
   .hero-link { transition: border-color 150ms ease; }
 }
-/* how it works, in three steps: a strip across the foot of the hero, three
-   across on screens 560px and wider */
-.hero-steps {
-  grid-column: 1 / -1; grid-row: 2; order: -1;
-  display: grid; gap: 1.25rem; margin: 0; padding: 1.75rem 0 0; border-top: 1px solid var(--hg-line); list-style: none;
-  font-family: 'Source Sans 3', 'Montserrat', sans-serif;
-}
-.hero-steps li { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.hero-step-num { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; color: var(--hg-gold); }
-.hero-step-title { margin: 0; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; color: var(--hg-text); }
-.hero-step-text { margin: 0; font-size: 0.95rem; line-height: 1.5; color: var(--hg-muted); }
-@media (min-width: 560px) {
-  .hero-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
-}
-
 /* below 960px: the text first, the globe under it and smaller */
 @media (max-width: 959.98px) {
   .hero-globe-inner { --globe: min(56vw, 360px); grid-template-columns: minmax(0, 1fr); gap: 48px; padding-top: 40px; padding-bottom: 56px; }
-  .hero-globe-copy, .hero-globe-art, .hero-steps { grid-column: auto; grid-row: auto; }
+  .hero-globe-copy, .hero-globe-art { grid-column: auto; grid-row: auto; }
 }
 @media (max-width: 480px) {
   .globe-flag img { width: 38px; height: 25px; }
@@ -1067,8 +1050,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   box-shadow: 0 0 0 8px var(--bg); /* a gap in the line round each dot */
   font-size: 1.35rem;
 }
-/* step 2 is only for students who still need their scores: a dashed dot */
-.svc-step.is-optional .svc-step-dot { background: var(--bg); border: 2px dashed var(--text-strong); color: var(--text-strong); }
 
 .svc-step-main { position: relative; isolation: isolate; min-width: 0; font-family: 'Source Sans 3', 'Montserrat', sans-serif; }
 .svc-skip-link {
@@ -1096,9 +1077,10 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .svc-format strong { display: block; margin-bottom: 2px; font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 700; color: var(--text-strong); }
 
 .svc-parts { max-width: 42rem; margin: 0; padding: 0; list-style: none; }
-.svc-parts li { padding: 18px 0; border-top: 1px dashed var(--border); }
-.svc-parts li:first-child { padding-top: 0; border-top: 0; }
-.svc-parts li:last-child { padding-bottom: 0; }
+.svc-parts > li { padding: 18px 0; border-top: 1px dashed var(--border); }
+.svc-parts > li:first-child { padding-top: 0; border-top: 0; }
+.svc-parts > li:last-child { padding-bottom: 0; }
+.svc-parts .svc-points { margin-top: 14px; }
 .svc-parts h3 { margin-bottom: 6px; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1.15rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
 .svc-parts p { font-size: 1.05rem; line-height: 1.65; color: var(--text-prose); }
 
@@ -1132,8 +1114,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    line as you scroll, with a small document riding its tip that slips into
    each dot it passes; a reached dot turns gold with a tick (.is-done) and
    gives one soft ring (.is-pulse) when reached on the way down. Each step
-   eases in the first time it's on screen, a dashed arc shows that students
-   with their results skip step 2, the six steps at the top appear one after
+   eases in the first time it's on screen, a dashed arc shows the one way
+   round step 2 (IELTS already sat elsewhere), the six steps at the top appear one after
    another, and a step reached from a link glows for a moment. With reduced
    motion main.js shows the finished picture (all gold) and nothing moves. */
 .svc-step-dot > * { grid-area: 1 / 1; }
@@ -1159,13 +1141,13 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 .svc-file.is-shown { opacity: 1; transform: none; }
 
-/* the way round step 2: a dashed arc from step 1 into step 3, drawn
-   downwards when step 2 comes on screen */
-.svc-skip { position: absolute; overflow: visible; pointer-events: none; color: var(--brass-ink); clip-path: inset(0 -120px 100% -120px); }
-.svc-skip.is-drawn { clip-path: inset(0 -120px -20px -120px); }
+/* the way round step 2, for students who have already sat IELTS elsewhere:
+   a quiet dashed arc from step 1 into step 3, beside the link that says so,
+   drawn downwards when step 2 comes on screen */
+.svc-skip { position: absolute; overflow: visible; pointer-events: none; color: var(--brass-ink); opacity: 0.7; clip-path: inset(0 -20px 100% -20px); }
+.svc-skip.is-drawn { clip-path: inset(0 -20px -20px -20px); }
 .svc-skip path { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .svc-skip .svc-skip-arc { stroke-dasharray: 3 6; }
-.svc-skip-label { fill: currentColor; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 14px; font-weight: 700; }
 
 /* each step eases in: the text, then who looks after it, then each person */
 .svc-step.is-waiting .svc-step-main,
@@ -1208,15 +1190,16 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .svc-step { --dot: 40px; --pad: 36px; column-gap: 16px; }
   .svc-step-dot { font-size: 1.05rem; box-shadow: 0 0 0 6px var(--bg); }
   .svc-file { width: 24px; height: 24px; margin: -12px 0 0 -12px; }
-  .svc-skip { display: none; } /* no room beside the line: the "Skip to step 3" link says it */
+  .svc-skip { display: none; } /* no room beside the line: the "Go straight to step 3" link says it */
   .svc-file svg { width: 13px; height: 13px; }
   .svc-formats { grid-template-columns: minmax(0, 1fr); }
   .svc-hero-actions .hero-cta { flex: 1 1 100%; justify-content: center; }
 }
 
 /* ---------- home: "How it works" checklist ----------
-   Navy band with the five steps as a study-abroad checklist card, the
-   first two already ticked off, set at a slight tilt. */
+   Navy band with the six steps (the same as the Services page, in short)
+   as a study-abroad checklist card, the first two already ticked off, set
+   at a slight tilt. */
 
 .how { position: relative; overflow: hidden; background: var(--ink); color: #FFFFFF; }
 .how-deco { position: absolute; right: -160px; bottom: -220px; width: 560px; height: 560px; border-radius: 50%; background: rgba(255,184,0,0.08); pointer-events: none; }
@@ -1235,6 +1218,16 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   text-wrap: balance; color: #FFFFFF;
 }
 .how-intro p { font-size: 1.1rem; line-height: 1.65; color: var(--on-dark-muted); }
+.how-more {
+  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: -4px;
+  font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; color: var(--brass);
+}
+.how-more:hover { text-decoration: underline; text-underline-offset: 4px; }
+.how-more:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; border-radius: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .how-more svg { transition: transform 150ms ease; }
+  .how-more:hover svg { transform: translateX(3px); }
+}
 .how-actions { display: flex; align-items: center; gap: 18px 24px; flex-wrap: wrap; margin-top: 8px; }
 .how .btn { font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 700; }
 .how-phone { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 600; color: #FFFFFF; text-decoration: none; }
@@ -1250,7 +1243,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .how-card-route { display: flex; align-items: center; gap: 10px; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 26px; line-height: 1; color: var(--text-strong); white-space: nowrap; }
 .how-card-route svg { color: var(--brass-ink); }
 .how-list { margin: 0; padding: 6px 36px 14px; list-style: none; }
-.how-item { display: grid; grid-template-columns: 32px minmax(0, 1fr) 40px; gap: 20px; align-items: start; padding: 22px 0; border-bottom: 1.5px dashed var(--tint-16); }
+.how-item { display: grid; grid-template-columns: 32px minmax(0, 1fr) 40px; gap: 20px; align-items: start; padding: 18px 0; border-bottom: 1.5px dashed var(--tint-16); }
 .how-item:last-child { border-bottom: none; }
 .how-box {
   width: 30px; height: 30px; box-sizing: border-box; border-radius: 7px;
@@ -1263,6 +1256,51 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .how-item-body p { font-family: 'Source Sans 3', 'Montserrat', sans-serif; font-size: 1rem; line-height: 1.55; color: var(--muted); }
 .how-num { justify-self: end; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; color: var(--brass-ink); }
 
+/* ---- "How it works": the motion (main.js adds the classes and the track) ----
+   As the visitor scrolls, the boxes tick one after another (each tick draws
+   itself, with one soft ring on the way down; scrolling back up unticks
+   them), and a plane flies along a track from EDL towards ABROAD, landing
+   when all six are ticked. The first time the section comes into view the
+   text eases in and the card lands at its slight tilt, its rows following one
+   after another. With reduced motion nothing of this runs and the card shows
+   as it is in the page: the first two steps ticked. */
+.how-box { position: relative; }
+.how-card.is-live .how-box svg { opacity: 0; }
+.how-card.is-live .how-box path { stroke-dasharray: 24; stroke-dashoffset: 24; }
+.how-card.is-live .how-box.is-ticked svg { opacity: 1; }
+.how-card.is-live .how-box.is-ticked path { stroke-dashoffset: 0; }
+.how-box::after { content: ""; position: absolute; inset: -2px; border-radius: 9px; pointer-events: none; }
+.how-box.is-pulse::after { animation: how-pulse 800ms ease-out; }
+@keyframes how-pulse {
+  from { box-shadow: 0 0 0 0 rgba(255, 184, 0, 0.6); }
+  to { box-shadow: 0 0 0 12px rgba(255, 184, 0, 0); }
+}
+
+/* the route in the card's head: EDL, a track with the plane, ABROAD */
+.how-card.is-live .how-card-route > svg { display: none; }
+.how-track { position: relative; display: block; width: 76px; height: 2px; margin: 0 6px; border-radius: 2px; background: var(--tint-18); }
+.how-track-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: inherit; background: var(--brass); }
+.how-plane { position: absolute; top: 50%; left: 0; width: 18px; height: 18px; margin: -9px 0 0 -9px; color: var(--brass-ink); }
+.how-plane svg { display: block; width: 100%; height: 100%; transform: rotate(90deg); }
+
+/* the first view: the text eases in, the card lands, its rows follow */
+.how.is-waiting .how-intro > *,
+.how.is-waiting .how-card,
+.how.is-waiting .how-item { opacity: 0; }
+.how.is-in .how-intro > * { animation: how-rise 650ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--i, 0) * 80ms); }
+.how.is-in .how-card { animation: how-land 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 150ms backwards; }
+.how.is-in .how-item { animation: how-rise 550ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(450ms + var(--i, 0) * 80ms); }
+@keyframes how-rise { from { opacity: 0; transform: translateY(16px); } }
+@keyframes how-land { from { opacity: 0; transform: translateY(48px) rotate(-4deg); } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .how-box { transition: background-color 250ms ease, border-color 250ms ease; }
+  .how-card.is-live .how-box svg { transition: opacity 150ms ease; }
+  .how-card.is-live .how-box path { transition: stroke-dashoffset 350ms ease 80ms; }
+  .how-track-fill { transition: width 500ms cubic-bezier(0.3, 0.7, 0.3, 1); }
+  .how-plane { transition: left 500ms cubic-bezier(0.3, 0.7, 0.3, 1); }
+}
+
 @media (max-width: 1000px) {
   .how-inner { grid-template-columns: minmax(0, 1fr); padding-top: 64px; padding-bottom: 72px; gap: 44px; }
   .how-intro { max-width: 560px; }
@@ -1274,6 +1312,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .how-card { transform: rotate(-0.6deg); }
   .how-card-head { padding: 16px 20px; }
   .how-card-route { font-size: 22px; gap: 6px; }
+  .how-track { width: 52px; margin: 0 4px; }
   .how-list { padding: 2px 20px 8px; }
   .how-item { grid-template-columns: 28px minmax(0, 1fr) 24px; gap: 14px; padding: 18px 0; }
   .how-box { width: 28px; height: 28px; }
@@ -1283,6 +1322,13 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 @media (max-width: 420px) {
   .how-actions .btn { width: 100%; justify-content: center; }
+}
+/* small phones: the route with its plane gets its own line under the label,
+   the track stretching across the card */
+@media (max-width: 480px) {
+  .how-card.is-live .how-card-head { flex-wrap: wrap; row-gap: 10px; }
+  .how-card.is-live .how-card-route { width: 100%; }
+  .how-card.is-live .how-track { flex: 1; width: auto; margin: 0 8px; }
 }
 
 /* ---------- home: destinations (three picks + "+3" card) ---------- */
