@@ -177,7 +177,7 @@ ${THEME_SCRIPT}
 
 const brand = (href, big) => `<a class="p-brand${big ? ' p-brand-lg' : ''}" href="${href}">
       <span class="p-brand-mark"><img src="../assets/logo-mark.png" alt="" width="120" height="80"></span>
-      <span class="p-brand-text"><span class="p-brand-name">Studies &amp; Awards</span><span class="p-brand-sub">Student portal</span></span>
+      <span class="p-brand-text"><span class="p-brand-name">Studies &amp; Awards Limited</span><span class="p-brand-sub">Student portal</span></span>
     </a>`;
 
 const counsellorCard = (eyebrow = 'Your counsellor') => `<section class="p-card p-counsellor" aria-label="Your counsellor">

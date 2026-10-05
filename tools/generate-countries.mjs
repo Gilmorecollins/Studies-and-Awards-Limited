@@ -457,7 +457,7 @@ ${firstSlideCss}</head>
       <span class="brand-mark" aria-hidden="true">
         <img src="assets/logo-mark.png" alt="" width="120" height="80">
       </span>
-      <span class="brand-name">Studies &amp; Awards</span>
+      <span class="brand-name">Studies &amp; Awards Limited</span>
     </a>
     <nav class="primary-nav" id="primary-nav" aria-label="Primary">
       <a href="destinations.html" class="nav-link" aria-current="page">Destinations</a>
@@ -579,7 +579,7 @@ ${otherPills}
           <span class="brand-mark" aria-hidden="true">
           <img src="assets/logo-mark.png" alt="" width="120" height="80">
         </span>
-          <span class="brand-name">Studies &amp; Awards</span>
+          <span class="brand-name">Studies &amp; Awards Limited</span>
         </div>
         <p class="footer-blurb">Personalised guidance from your first visit until you arrive and start life abroad.</p>
       </div>
