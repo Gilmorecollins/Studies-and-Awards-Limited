@@ -84,13 +84,15 @@ function withSeoBlock(html, file) {
 
 const PLACEHOLDER_SLOTS = 3;
 
-// "How we help you get there": the same five steps on every destination page.
+// "How we help you get there": the same six steps on every destination page,
+// as on services.html (keep the two in step).
 const HELP_STEPS = [
-  'Counselling to shortlist the right course and university',
-  'IELTS/PTE preparation to meet the English requirement',
-  'Application &amp; admissions support through to your offer',
-  'Visa application guidance, step by step',
-  'Discounted student airfare when you&rsquo;re ready to fly',
+  'A free consultation, at our office in Eldoret or online, to choose your course and school',
+  'IELTS, PTE or German classes, in class or online',
+  'Documentation: the documents you need, certified and clearly scanned',
+  'Verification of every document with whoever issued it',
+  'Your application, offer and confirmation of enrolment',
+  'Your student visa, then a discounted student flight',
 ];
 
 const countries = [
@@ -100,14 +102,15 @@ const countries = [
     code: 'SYD',
     welcome: 'The Land Down Under',
     tagline: 'World-class universities and a relaxed, multicultural lifestyle. We guide you from application to arrival.',
+    facts: { intakes: 'February/March and July', language: 'IELTS, PTE or another approved English test', visa: 'Student visa (subclass 500)' },
     why: [
       ['World-ranked universities', 'A wide range of internationally recognised degree programs across every discipline.'],
-      ['Post-study work pathways', 'Many graduates are eligible to stay on and gain local work experience after their studies.'],
+      ['Practical, hands-on courses', 'Many courses combine classroom learning with practical, hands-on training.'],
       ['Multicultural cities', 'Welcoming, diverse communities with a high standard of living.'],
       ['English-taught programs', 'No language barrier for Kenyan students entering the classroom.'],
     ],
     areas: ['Business & Management', 'Engineering', 'Health Sciences', 'Information Technology', 'Hospitality & Tourism'],
-    visa: 'Studying in Australia generally requires a student visa, proof of enrolment, evidence of financial capacity, overseas student health cover, and an accepted English test score such as IELTS or PTE.',
+    visa: 'You apply for a Student visa (subclass 500) once your education provider issues your Confirmation of Enrolment (CoE). You must also meet the Genuine Student requirement, hold Overseas Student Health Cover (OSHC) for your whole stay, show you can pay for your tuition and living costs, and give an accepted English test result such as IELTS or PTE.',
     visaChanges: 'visa subclass, fees and financial thresholds',
     visaAuthority: 'the Australian government',
     gallery: ['Melbourne', 'Brisbane', 'Hobart', 'Perth'],
@@ -129,15 +132,16 @@ const countries = [
     name: 'United Kingdom',
     code: 'LHR',
     welcome: 'Home of Timeless Tradition',
-    tagline: 'World-renowned universities and a rich academic tradition, with a route to work after you graduate.',
+    tagline: 'World-renowned universities and a rich academic tradition, with degrees that often take less time than elsewhere.',
+    facts: { intakes: 'Mainly September, some courses in January', language: 'IELTS or PTE (the UKVI version for some courses)', visa: 'Student visa' },
     why: [
       ['World-renowned universities', 'Home to some of the world\'s oldest and most respected universities, offering globally recognised degrees.'],
-      ['Graduate visa route', 'Eligible graduates can apply for a post-study Graduate visa to live and work in the UK after completing their degree.'],
+      ['A wide choice of courses', 'Thousands of courses across universities and colleges, from foundation programmes to master\'s degrees.'],
       ['Shorter degree programs', 'Many undergraduate degrees run three years and taught master\'s degrees just one, reducing overall time and cost.'],
       ['Rich academic tradition', 'Multicultural cities with centuries of academic history and a huge range of course specialisations.'],
     ],
     areas: ['Business & Management', 'Law', 'Engineering', 'Health Sciences', 'Computer Science'],
-    visa: 'Studying in the UK generally requires a Student visa, an offer from a licensed student sponsor, proof of financial means to cover tuition and living costs, and an accepted English test score.',
+    visa: 'You apply for a Student visa once your university, a licensed student sponsor, gives you a Confirmation of Acceptance for Studies (CAS). You must show you can pay your course fees and living costs and prove your English, usually at level B2 for a degree. Applicants who live in Kenya also need a tuberculosis (TB) test certificate from an approved clinic.',
     visaChanges: 'visa fees, financial-evidence thresholds and the Immigration Health Surcharge',
     visaAuthority: 'UK Visas and Immigration',
     partners: [
@@ -160,14 +164,15 @@ const countries = [
     code: 'FRA',
     welcome: 'The Heart of Europe',
     tagline: 'Tuition-friendly public universities. Our German Language Training gets you ready to apply.',
+    facts: { intakes: 'Winter semester (September/October) and summer semester (March/April)', language: 'German (TestDaF or DSH) for German-taught courses; IELTS or TOEFL for English-taught ones', visa: 'National student visa' },
     why: [
       ['Low or no tuition fees', 'Most public universities charge little to no tuition for degree programs.'],
       ['Strength in engineering & research', 'A long-standing international reputation in technical and scientific fields.'],
-      ['Post-study job search', 'Graduates can generally apply for an extended residence permit to search for work.'],
-      ['Central European location', 'Easy access to travel, internships, and industry across the continent.'],
+      ['Courses taught in English', 'Alongside German-taught degrees, many master\'s programmes are taught in English.'],
+      ['Central European location', 'Easy access to travel, exchanges and research across the continent.'],
     ],
     areas: ['Engineering', 'Computer Science', 'Natural Sciences', 'Business Administration', 'Architecture'],
-    visa: 'A German national (long-stay) student visa generally requires university admission, proof of financial resources (often via a blocked account), health insurance, and, for many programs, a German language certificate, which is what our German Language Training prepares you for.',
+    visa: 'With a letter of admission from a German university you apply for a national (long-stay) student visa. You need proof that you can pay your living costs, usually through a blocked account, health insurance, and proof of the language your course is taught in: for German-taught courses usually B2 level or above (TestDaF or DSH), which is what our German Language Training prepares you for.',
     visaChanges: 'visa fees and blocked-account thresholds',
     visaAuthority: 'German authorities',
     partners: [
@@ -189,15 +194,16 @@ const countries = [
     name: 'Canada',
     code: 'YYZ',
     welcome: 'The Great White North',
-    tagline: 'Welcoming pathways to study and, for many graduates, to stay on and work.',
+    tagline: 'Respected colleges and universities in a safe, welcoming, multicultural country.',
+    facts: { intakes: 'Mainly September and January, some courses in May', language: 'IELTS, TOEFL, PTE or CAEL, as your school requires', visa: 'Study permit' },
     why: [
       ['Globally respected degrees', 'Recognised qualifications across every field of study.'],
-      ['Post-Graduation Work Permit', 'Many international graduates are eligible to work in Canada after their studies.'],
+      ['Colleges and universities', 'Choose between career-focused college diplomas and university degrees.'],
       ['Multicultural, high quality of life', 'Welcoming cities that regularly rank among the most liveable in the world.'],
-      ['A pathway toward residence', 'Study and work experience can open routes toward permanent residence for eligible graduates.'],
+      ['Research and innovation', 'Universities known for research across science, technology and health.'],
     ],
     areas: ['Business & Management', 'Engineering & Technology', 'Health Sciences', 'Hospitality', 'Information Technology'],
-    visa: 'A Canadian study permit generally requires a letter of acceptance from a designated learning institution, proof of financial support, and a medical exam where applicable.',
+    visa: 'You apply for a study permit with a letter of acceptance from a designated learning institution (DLI) and, for most students, a provincial or territorial attestation letter (PAL). You also need proof that you can pay your tuition and living costs, and a medical exam where required.',
     visaChanges: 'study permit fees and financial-proof thresholds',
     visaAuthority: 'Immigration, Refugees and Citizenship Canada',
     partners: [
@@ -217,15 +223,16 @@ const countries = [
     name: 'Ireland',
     code: 'DUB',
     welcome: 'The Emerald Isle',
-    tagline: 'EU-recognised degrees with strong post-study work opportunities in a welcoming, English-speaking country.',
+    tagline: 'EU-recognised degrees in a welcoming, English-speaking country.',
+    facts: { intakes: 'Mainly September, some courses in January', language: 'IELTS, PTE, TOEFL or Duolingo', visa: 'Study visa (long-stay D), then Stamp 2' },
     why: [
       ['EU-recognised degrees', 'Qualifications respected across Europe and internationally.'],
-      ['A hub for global employers', 'Home to the European base of many major technology and pharmaceutical companies.'],
-      ['Graduate work pathways', 'Eligible graduates can apply to stay on and gain work experience after their studies.'],
+      ['Strength in technology and science', 'Courses that draw on Ireland\'s strengths in technology, pharmaceuticals and research.'],
+      ['Rich history and culture', 'Centuries of heritage, music and storytelling to explore while you study.'],
       ['English-speaking campus life', 'A welcoming student culture with no language barrier.'],
     ],
     areas: ['Information Technology', 'Pharmaceutical Sciences', 'Business', 'Engineering', 'Data Science'],
-    visa: 'Non-EEA students on courses longer than three months generally need an Irish study visa (Type D), a letter of acceptance, evidence of tuition payment, proof of financial resources, and private medical insurance.',
+    visa: 'Your course must be on Ireland\'s list of eligible programmes. You apply for a long-stay (D) study visa with your letter of acceptance, proof that your fees are paid, proof of funds and private medical insurance, then register for your Stamp 2 student permission after you arrive.',
     visaChanges: 'visa fees and financial-evidence thresholds',
     visaAuthority: 'Irish immigration authorities',
     partners: [
@@ -243,15 +250,16 @@ const countries = [
     name: 'New Zealand',
     code: 'AKL',
     welcome: 'Land of the Long White Cloud',
-    tagline: 'High-quality education in a safe, welcoming country, with a route to work after you graduate.',
+    tagline: 'High-quality, practical education in a safe, welcoming country.',
+    facts: { intakes: 'February and July', language: 'IELTS, PTE or another approved English test', visa: 'Fee Paying Student Visa' },
     why: [
       ['Quality-assured education', 'A national quality framework and a government code of practice set the standard for how providers look after international students.'],
-      ['Post-study work options', 'Eligible graduates can apply for a post-study work visa to gain local work experience after their studies.'],
+      ['Practical, hands-on learning', 'Courses that build practical skills, research ability and independent thinking.'],
       ['Safe, welcoming communities', 'Regularly ranked among the most peaceful countries in the world.'],
       ['English-taught programs', 'No language barrier for Kenyan students entering the classroom.'],
     ],
     areas: ['Agriculture & Horticulture', 'Tourism & Hospitality', 'Engineering', 'Health Sciences', 'Information Technology'],
-    visa: 'Studying in New Zealand for more than three months generally requires a student visa, an offer of place from an approved education provider, evidence of funds for tuition and living costs, health and character checks, and an accepted English test score where the provider asks for one.',
+    visa: 'You apply for a Fee Paying Student Visa with an offer of place from an approved education provider, proof that you can pay your tuition fees and living costs, and insurance your provider accepts. You may also be asked for health checks and, for longer stays, police certificates.',
     visaChanges: 'visa fees and financial-evidence thresholds',
     visaAuthority: 'Immigration New Zealand',
     partners: [
@@ -528,7 +536,7 @@ ${whyItems}
     <div class="container dest-split dest-split-rev">
       <div class="dest-help-body">
         <span class="dest-eyebrow">HOW WE HELP YOU GET THERE</span>
-        <h2 id="help-heading">From your first visit to your first lecture</h2>
+        <h2 id="help-heading">From your first meeting with us to your first lecture</h2>
         <ol class="dest-help-list">
 ${helpSteps}
         </ol>
@@ -589,7 +597,7 @@ ${otherPills}
         </span>
           <span class="brand-name">Studies &amp; Awards Limited</span>
         </div>
-        <p class="footer-blurb">Personalised guidance from your first visit until you arrive and start life abroad.</p>
+        <p class="footer-blurb">Personalised guidance from your first meeting with us until you arrive and start your studies abroad.</p>
       </div>
       <nav aria-label="Quick links">
         <div class="footer-heading">QUICK LINKS</div>
@@ -701,6 +709,97 @@ ${rows}
 `;
 }
 
+// ---- the Destinations page's key facts ----------------------------------------
+// destinations.html is written by hand, but each card's facts (intakes, language
+// test, student visa and partner institutions) and the "Compare at a
+// glance" table come from the `facts` of each country above and from the
+// partner data, written between marked comments: <!-- facts:<slug>:start -->
+// ... <!-- facts:<slug>:end --> inside each card, and <!-- compare:start -->
+// ... <!-- compare:end --> after the cards. Edit the facts here, not there.
+
+// the partner institutions a country's page lists (only cities with a slide,
+// as in partnersData), or null
+function partnerCount(c) {
+  const cities = partnerData[c.name] ?? {};
+  const names = new Set();
+  let shown = 0;
+  for (const p of c.partners) {
+    if (!cities[p.city]?.length) continue;
+    shown++;
+    for (const inst of cities[p.city]) names.add(inst.name);
+  }
+  return names.size ? { institutions: names.size, cities: shown } : null;
+}
+const partnerLine = s => `${s.institutions} partner institution${s.institutions === 1 ? '' : 's'} across ${s.cities} ${s.cities === 1 ? 'city' : 'cities'}`;
+
+function cardFacts(c) {
+  const p = partnerCount(c);
+  const fact = (label, value) => `              <span class="dest-fact"><span class="dest-fact-label">${label}</span><span class="dest-fact-value">${esc(value)}</span></span>`;
+  return [
+    `            <!-- facts:${c.slug}:start, written by tools/generate-countries.mjs; edit the script, not this block -->`,
+    '            <span class="dest-card-facts">',
+    fact('Intakes', c.facts.intakes),
+    fact('Language test', c.facts.language),
+    fact('Visa', c.facts.visa),
+    '            </span>',
+    ...(p ? [`            <span class="dest-card-partners">${partnerLine(p)}</span>`] : []),
+    `            <!-- facts:${c.slug}:end -->`,
+  ].join('\n');
+}
+
+function compareTable() {
+  const rows = countries.map(c => {
+    const p = partnerCount(c);
+    return [
+      '            <tr>',
+      `              <th scope="row"><a href="${c.slug}.html"><img src="assets/flags/${c.slug}.svg" alt="" width="30" height="20">${esc(c.name)}</a></th>`,
+      `              <td data-label="Intakes">${esc(c.facts.intakes)}</td>`,
+      `              <td data-label="Language test">${esc(c.facts.language)}</td>`,
+      `              <td data-label="Visa">${esc(c.facts.visa)}</td>`,
+      `              <td data-label="Partner institutions">${p ? `${p.institutions} across ${p.cities} ${p.cities === 1 ? 'city' : 'cities'}` : 'Ask us'}</td>`,
+      '            </tr>',
+    ].join('\n');
+  }).join('\n');
+  return `  <!-- compare:start, written by tools/generate-countries.mjs; edit the script, not this block -->
+  <section class="dest-compare" aria-labelledby="compare-heading">
+    <div class="container">
+      <div class="dest-compare-head">
+        <h2 id="compare-heading">Compare at a glance</h2>
+        <p>The basics for each country. Rules and requirements change, so we confirm the details for your course at your free consultation.</p>
+      </div>
+      <div class="dest-compare-scroll">
+        <table class="dest-compare-table">
+          <thead>
+            <tr>
+              <th scope="col">Destination</th>
+              <th scope="col">Intakes</th>
+              <th scope="col">Language test</th>
+              <th scope="col">Visa</th>
+              <th scope="col">Partner institutions</th>
+            </tr>
+          </thead>
+          <tbody>
+${rows}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <!-- compare:end -->`;
+}
+
+function withDestinationFacts(html) {
+  let out = html;
+  for (const c of countries) {
+    const block = new RegExp(`[ \\t]*<!-- facts:${c.slug}:start[\\s\\S]*?<!-- facts:${c.slug}:end -->`);
+    if (!block.test(out)) throw new Error(`destinations.html: no <!-- facts:${c.slug}:start --> ... <!-- facts:${c.slug}:end --> in its card`);
+    out = out.replace(block, () => cardFacts(c));
+  }
+  const compare = /[ \t]*<!-- compare:start[\s\S]*?<!-- compare:end -->/;
+  if (!compare.test(out)) throw new Error('destinations.html: no <!-- compare:start --> ... <!-- compare:end -->');
+  return out.replace(compare, () => compareTable());
+}
+
 // Everything this script owns, as [path relative to site/, content].
 const outputs = [
   ...countries.map(c => [`${c.slug}.html`, page(c)]),
@@ -709,7 +808,10 @@ const outputs = [
     return data ? [[`js/partners-${c.slug}.js`, data]] : [];
   }),
   ['js/destinations-data.js', destinationsData()],
-  ...HAND_PAGES.map(f => [f, withSeoBlock(readFileSync(join(siteDir, f), 'utf8'), f)]),
+  ...HAND_PAGES.map(f => {
+    const html = readFileSync(join(siteDir, f), 'utf8');
+    return [f, withSeoBlock(f === 'destinations.html' ? withDestinationFacts(html) : html, f)];
+  }),
 ];
 
 // Heads-up: partner data for a city that has no slide (no photo yet) isn't shown anywhere.

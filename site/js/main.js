@@ -2610,8 +2610,11 @@ function createCursorFollower(options) {
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var SVG = 'http://www.w3.org/2000/svg';
-  var DRAW_MS = 900;
-  var GAP_MS = 220;
+  // each route takes DRAW_MS to draw, and the next starts when it is part way
+  // out (OVERLAP of the way, plus GAP_MS): all six are out in under 3 seconds
+  var DRAW_MS = 750;
+  var OVERLAP = 0.4;
+  var GAP_MS = 40;
   var FLIGHT_MS = 2600;
 
   // the Destinations page's text eases in, one line after another
@@ -2659,7 +2662,7 @@ function createCursorFollower(options) {
       void pin.offsetWidth;
       pin.style.transition = '';
     }
-    return { code: code, line: line, path: path, len: len, reveal: reveal, mask: mask, pin: pin, delay: 300 + i * (DRAW_MS * 0.55 + GAP_MS) };
+    return { code: code, line: line, path: path, len: len, reveal: reveal, mask: mask, pin: pin, delay: 300 + i * (DRAW_MS * OVERLAP + GAP_MS) };
   });
   var allDrawn = routes.length ? routes[routes.length - 1].delay + DRAW_MS : 0;
 

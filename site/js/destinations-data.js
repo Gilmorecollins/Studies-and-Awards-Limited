@@ -20,7 +20,7 @@ window.DESTINATIONS = [
     name: 'United Kingdom',
     code: 'LHR',
     welcome: 'Home of Timeless Tradition',
-    tagline: 'World-renowned universities and a rich academic tradition, with a route to work after you graduate.'
+    tagline: 'World-renowned universities and a rich academic tradition, with degrees that often take less time than elsewhere.'
   },
   {
     slug: 'germany',
@@ -34,20 +34,20 @@ window.DESTINATIONS = [
     name: 'Canada',
     code: 'YYZ',
     welcome: 'The Great White North',
-    tagline: 'Welcoming pathways to study and, for many graduates, to stay on and work.'
+    tagline: 'Respected colleges and universities in a safe, welcoming, multicultural country.'
   },
   {
     slug: 'ireland',
     name: 'Ireland',
     code: 'DUB',
     welcome: 'The Emerald Isle',
-    tagline: 'EU-recognised degrees with strong post-study work opportunities in a welcoming, English-speaking country.'
+    tagline: 'EU-recognised degrees in a welcoming, English-speaking country.'
   },
   {
     slug: 'new-zealand',
     name: 'New Zealand',
     code: 'AKL',
     welcome: 'Land of the Long White Cloud',
-    tagline: 'High-quality education in a safe, welcoming country, with a route to work after you graduate.'
+    tagline: 'High-quality, practical education in a safe, welcoming country.'
   }
 ];
