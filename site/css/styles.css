@@ -543,15 +543,48 @@ p { margin: 0; }
 .footer-brand-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .footer-brand-row .brand-name { color: #FFFFFF; font-size: 19px; }
 .footer-blurb { font-size: 14px; color: var(--on-dark-muted); line-height: 1.7; margin: 0 0 20px; max-width: 260px; }
+/* the social links: each network's own logo (from Bootstrap Icons, MIT),
+   white on the navy. On hover or keyboard focus the circle fills with that
+   network's colour, rising from the bottom, and the logo pops a little. The
+   first time the footer comes into view they pop in one after another, each
+   flashing its colour as it lands (main.js adds .is-in; not with reduced
+   motion). */
 .social-link {
-  width: 34px; height: 34px;
+  position: relative; overflow: hidden; isolation: isolate;
+  width: 38px; height: 38px;
   border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.25);
   display: flex; align-items: center; justify-content: center;
-  transition: background-color 150ms ease, border-color 150ms ease;
+  color: #FFFFFF;
+  transition: border-color 250ms ease;
 }
-.social-link:hover { background: var(--brass); border-color: var(--brass); }
-.social-link:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.footer-bottom .social-link,
+.footer-bottom .social-link:hover { color: #FFFFFF; }
+.social-link::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--brand);
+  transform: translateY(101%);
+}
+.social-link:hover,
+.social-link:focus-visible { border-color: transparent; }
+.social-link:hover::before,
+.social-link:focus-visible::before { transform: none; }
+.social-link:hover svg,
+.social-link:focus-visible svg { transform: scale(1.15); }
+.social-link:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
+.social-facebook { --brand: #0866FF; }
+.social-instagram { --brand: radial-gradient(circle at 30% 107%, #FDF497 0%, #FDF497 5%, #FD5949 45%, #D6249F 60%, #285AEB 90%); }
+.social-linkedin { --brand: #0A66C2; }
+.social-youtube { --brand: #FF0000; }
+.footer-bottom-social.is-waiting .social-link { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .social-link::before { transition: transform 280ms cubic-bezier(0.3, 0.7, 0.3, 1); }
+  .social-link svg { transition: transform 280ms cubic-bezier(0.3, 1.6, 0.5, 1); }
+  .footer-bottom-social.is-in .social-link { animation: social-pop 550ms cubic-bezier(0.3, 1.5, 0.5, 1) backwards; animation-delay: calc(var(--i, 0) * 110ms); }
+  .footer-bottom-social.is-in .social-link::before { animation: social-flash 900ms ease-in-out; animation-delay: calc(150ms + var(--i, 0) * 110ms); }
+}
+@keyframes social-pop { from { opacity: 0; transform: translateY(10px) scale(0.6); } }
+@keyframes social-flash { 0%, 100% { transform: translateY(101%); } 35%, 60% { transform: none; } }
 .footer-heading {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
   font-size: 12.5px;

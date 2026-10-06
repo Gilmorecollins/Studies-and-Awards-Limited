@@ -51,6 +51,29 @@
 
 })();
 
+// Footer: the social links pop in one after another the first time the
+// footer comes into view, each flashing its network's colour as it lands
+// (styles.css, "the social links"). Not with reduced motion.
+(function () {
+  'use strict';
+
+  var row = document.querySelector('.footer-bottom-social');
+  if (!row || !window.IntersectionObserver) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  Array.prototype.forEach.call(row.querySelectorAll('.social-link'), function (link, i) {
+    link.style.setProperty('--i', String(i));
+  });
+  row.classList.add('is-waiting');
+  var seen = new IntersectionObserver(function (entries) {
+    if (!entries[entries.length - 1].isIntersecting) return;
+    seen.disconnect();
+    row.classList.remove('is-waiting');
+    row.classList.add('is-in');
+  }, { rootMargin: '0px 0px -8% 0px' });
+  seen.observe(row);
+})();
+
 // "Portal login": one button (in the header, and in the footer's bottom row)
 // opening a small menu with the student portal, the staff portal and the
 // admin portal (the testimonials admin page). It
