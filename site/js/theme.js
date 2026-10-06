@@ -1,16 +1,16 @@
 // Theme switch: the sun and moon button in the header, on the main site and in
 // the student portal. The page's theme is already set before it's drawn, by
 // the small script in each page's <head> (data-theme on <html>). This keeps
-// the button in step, saves the visitor's choice on this device, and follows
-// the device's own light or dark setting for anyone who hasn't chosen.
-// Choosing the same theme as the device's setting forgets the choice, so the
-// page goes back to following the device.
+// the button in step and saves the visitor's choice on this device. The site
+// starts in the light theme for everyone, whatever their device's own light
+// or dark setting; dark mode shows only for a visitor who switches to it.
+// Switching back to light forgets the choice, as light is where everyone
+// starts.
 (function () {
   'use strict';
 
   var root = document.documentElement;
   var buttons = document.querySelectorAll('.theme-toggle');
-  var device = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
   // The choice is saved on the device (localStorage). Some places won't let a
   // page save anything (a preview, a browser set to block site data), so it
@@ -35,7 +35,7 @@
     try { if (theme) localStorage.setItem('theme', theme); else localStorage.removeItem('theme'); } catch (e) { /* storage blocked: the tab still carries it */ }
     setTabTheme(theme);
   }
-  function deviceTheme() { return device && device.matches ? 'dark' : 'light'; }
+  function startTheme() { return 'light'; }
   function current() { return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
 
   function syncButtons() {
@@ -57,27 +57,23 @@
     });
   }
 
-  if (!root.hasAttribute('data-theme')) root.setAttribute('data-theme', saved() || deviceTheme());
+  if (!root.hasAttribute('data-theme')) root.setAttribute('data-theme', saved() || startTheme());
   syncButtons();
 
   Array.prototype.forEach.call(buttons, function (button) {
     button.addEventListener('click', function () {
       var next = current() === 'dark' ? 'light' : 'dark';
-      save(next === deviceTheme() ? null : next);
+      save(next === startTheme() ? null : next);
       apply(next);
     });
   });
 
-  // the device switches between light and dark (by hand, or at sunset)
-  var onDeviceChange = function () { if (!saved()) apply(deviceTheme()); };
-  if (device && device.addEventListener) device.addEventListener('change', onDeviceChange);
-  else if (device && device.addListener) device.addListener(onDeviceChange);
 
   // a choice made in another tab of the site
   window.addEventListener('storage', function (event) {
     if (event.key !== 'theme' && event.key !== null) return;
     setTabTheme(event.newValue === 'light' || event.newValue === 'dark' ? event.newValue : null);
-    apply(saved() || deviceTheme());
+    apply(saved() || startTheme());
   });
 
   // Back and Forward bring a page back exactly as it was left (the browser's
@@ -85,7 +81,7 @@
   // again. So a page left in dark mode came back dark even after the visitor
   // had switched to light on the next page. Check the saved choice again.
   window.addEventListener('pageshow', function (event) {
-    if (event.persisted) apply(saved() || deviceTheme());
+    if (event.persisted) apply(saved() || startTheme());
   });
 })();
 

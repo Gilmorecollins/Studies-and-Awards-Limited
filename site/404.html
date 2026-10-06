@@ -14,7 +14,7 @@
 <link rel="preload" href="/assets/fonts/oswald.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/styles.css">
 <!-- dark mode, before the page is drawn (the same script generate-countries.mjs writes into the other pages) -->
-<script>(function(){var t,m=/(?:^|;)sa-theme=(light|dark)(?:;|$)/.exec(window.name||'');try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'&&m)t=m[1];if(t!=='light'&&t!=='dark')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t)})()</script>
+<script>(function(){var t,m=/(?:^|;)sa-theme=(light|dark)(?:;|$)/.exec(window.name||'');try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'&&m)t=m[1];if(t!=='light'&&t!=='dark')t='light';document.documentElement.setAttribute('data-theme',t)})()</script>
 </head>
 <body>
 
@@ -55,7 +55,7 @@
 
   <section class="page-hero nf-hero" aria-labelledby="page-heading">
     <div class="container">
-      <span class="hero-kicker"><span class="hero-kicker-rule" aria-hidden="true"></span>ERROR 404</span>
+      <span class="hero-kicker">ERROR 404</span>
       <h1 id="page-heading">We can&rsquo;t find that page.</h1>
       <p>The link may be out of date, or the address may have a typo. These are the pages people look for most.</p>
       <div class="nf-links">

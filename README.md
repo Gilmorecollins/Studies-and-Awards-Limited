@@ -142,13 +142,12 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   1024px and 1400px needs the extra real-width condition shown there. The
   student portal has its own stylesheet (`css/portal.css`) and is not scaled.
 - **Colours and dark mode**: every page, the student portal included, comes
-  in a light and a dark theme. Visitors get their device's own setting (a
-  phone or laptop set to dark shows the dark site) until they switch it
-  themselves (the pull cord on laptops and desktops, the sun and moon button
-  in the header on phones, tablets and the portal), which is saved on their
-  device for the whole site. Choosing the same as their device forgets the
-  choice again, so the
-  page goes back to following the device. Where the browser won't let a page
+  in a light and a dark theme. Every visitor starts on the light theme,
+  whatever their phone or laptop is set to, and sees dark mode only after
+  switching to it themselves (the pull cord on laptops and desktops, the sun
+  and moon button in the header on phones, tablets and the portal). That
+  choice is saved on their device for the whole site; switching back to
+  light forgets it again. Where the browser won't let a page
   save anything (a preview, or a browser set to block site data), the choice
   still carries from page to page in that tab (it rides in the tab's
   `window.name`). How it fits together:
@@ -170,8 +169,8 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
     navy is white or `var(--on-dark-muted)`. A new colour for the page needs a
     theme variable with a dark value in that block.
   - **Choosing the theme before the page is drawn.** A one-line script in each
-    page's `<head>` sets `data-theme` on `<html>`, so nobody sees the light
-    page flash first. It is `THEME_SCRIPT` in `tools/theme-markup.mjs`, which
+    page's `<head>` sets `data-theme` on `<html>` (the saved choice, or
+    light), so someone who chose dark never sees the light page flash first. It is `THEME_SCRIPT` in `tools/theme-markup.mjs`, which
     both generators write into their pages; `404.html` has a hand copy.
     Without JavaScript the site shows the light theme.
   - **The switch.** Its markup is `themeToggle()` in `tools/theme-markup.mjs`
@@ -316,9 +315,9 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
 - **The site's look (every page)**: keep to the same pieces when adding a
   page or section. A gold Oswald label over a Bebas heading (`.eyebrow` and
   `h2`; the intro beside it with `.section-split-head`), Montserrat text.
-  The label above a page's title is `.hero-kicker` (the same label after a
-  short gold rule), and every page title is one size, `--page-title` at the
-  top of `styles.css`. The gold `.btn .btn-primary` is the one main action;
+  The label above a page's title is `.hero-kicker` (the same gold label),
+  and every page title is one size, `--page-title` at the top of
+  `styles.css`. The gold `.btn .btn-primary` is the one main action;
   `.btn .btn-outline` the second; `.board-link` (`.board-link-on-dark` on
   navy) every other link. Cards share the destination cards' corners
   (`--radius`), border and shadow. The one alternate band colour is the

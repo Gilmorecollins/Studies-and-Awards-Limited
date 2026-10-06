@@ -484,7 +484,7 @@ ${cityScroller}
 
   <section class="dest-intro" aria-labelledby="hero-heading">
     <div class="container">
-      <span class="hero-kicker"><span class="hero-kicker-rule" aria-hidden="true"></span>STUDY DESTINATION &middot; ${c.code}</span>
+      <span class="hero-kicker">STUDY DESTINATION &middot; ${c.code}</span>
       <h1 id="hero-heading">Study in ${c.name}</h1>
       <p>${c.tagline}</p>
       <div class="dest-intro-actions">

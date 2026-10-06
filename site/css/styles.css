@@ -624,9 +624,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   height: calc(100% - var(--under-header));
   overflow: visible;
 }
-/* the label above a page's title: the site's gold Oswald label, after a short gold rule */
+/* the label above a page's title: the site's gold Oswald label */
 .hero-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
-.hero-kicker-rule { width: 28px; height: 2px; background: var(--brass-ink); flex-shrink: 0; }
 
 /* ---------- home hero: the globe ----------
    A globe on the right (the text is on the left), its dotted world map (with the routes from Eldoret)
@@ -837,7 +836,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 .route-hero-copy { display: flex; flex-direction: column; gap: 18px; padding-top: 24px; }
 .route-hero .hero-kicker { margin: 0; color: var(--brass); }
-.route-hero .hero-kicker-rule { background: var(--brass); }
 .route-hero h1 { margin: 0; font-size: var(--page-title); line-height: 0.95; letter-spacing: 0.01em; color: #FFFFFF; }
 .route-hero-copy > p { font-size: 16.5px; line-height: 1.65; color: var(--on-dark-muted); }
 .route-hero-copy > .route-hero-origin { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #FFFFFF; }
@@ -1778,7 +1776,6 @@ a.about-pin:hover { color: var(--brass); }
 .lift-hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(40px, calc(5vw / var(--z, 1)), 72px); align-items: center; }
 .lift-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; max-width: 560px; }
 .lift-hero .hero-kicker { margin: 0; color: var(--brass); }
-.lift-hero .hero-kicker-rule { background: var(--brass); }
 .lift-hero h1 { margin: 0; font-size: var(--page-title); line-height: 0.95; letter-spacing: 0.01em; color: #FFFFFF; }
 .lift-lead { font-size: 18px; line-height: 1.6; color: var(--on-dark-muted); }
 /* the floors' texts are laid over each other (the others hidden), so the block is
