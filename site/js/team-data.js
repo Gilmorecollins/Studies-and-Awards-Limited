@@ -352,15 +352,15 @@ window.TEAM_MEMBERS = [
   },
   {
     id: 'miki',
-    name: 'Miki',
-    role: 'Receptionist',
+    name: 'Mike',
+    role: 'Client Relations',
     department: 'Customer Experience',
     helpsWith: 'Your first point of contact at our office, who will point you to the right person.',
     whatsapp: '+254143505796',
     startHere: true,
-    shortBio: 'Miki is at the reception at Studies and Awards Limited, the first person students and visitors meet when they get in touch.',
+    shortBio: 'Mike is in Client Relations at Studies and Awards Limited, the first person students and visitors meet when they get in touch.',
     fullBio: [
-      'Miki works at the reception at Studies and Awards Limited in Eldoret, and is the first point of contact for students and visitors who walk in or reach out.',
+      'Mike works in Client Relations at Studies and Awards Limited in Eldoret, and is the first point of contact for students and visitors who walk in or reach out.',
       'He finds out what each person needs and directs them to the right member of the team, so nobody is left wondering who to ask.'
     ],
     photo: 'assets/team/miki.jpg',
