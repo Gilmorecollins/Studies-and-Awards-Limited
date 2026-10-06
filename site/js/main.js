@@ -2018,6 +2018,105 @@ function createCursorFollower(options) {
   seen.observe(tags[0].parentNode);
 })();
 
+// Home page: "Where you can study" as a departures board (the look is in
+// styles.css). The first time the cards come on screen they rise in one
+// after another, each airport code clicks through letters before settling
+// like a split-flap board, and the "+3" counts up. Pointing at a card flips
+// its code again. Nothing moves with reduced motion.
+(function () {
+  'use strict';
+
+  var grid = document.querySelector('.dest-pick-grid');
+  if (!grid || !window.IntersectionObserver) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var TICK_MS = 55;
+
+  // split a code into one span per letter
+  function prepare(el) {
+    var word = el.textContent.trim();
+    el.textContent = '';
+    var spans = word.split('').map(function (ch) {
+      var span = document.createElement('span');
+      span.className = 'flap';
+      span.textContent = ch;
+      el.appendChild(span);
+      return span;
+    });
+    return { word: word, spans: spans, timer: null };
+  }
+
+  // each letter clicks through a few random letters, the next one a beat later
+  function flip(code) {
+    if (code.timer) return;
+    var ticks = 0;
+    var last = 6 + code.spans.length * 3;
+    // each letter keeps its settled width while it flips (measured now, so
+    // the font has loaded and the size matches the screen)
+    var z = pageZoom();
+    code.spans.forEach(function (span) { span.style.width = span.getBoundingClientRect().width / z + 'px'; });
+    code.spans.forEach(function (span) { span.classList.add('is-flipping'); });
+    code.timer = window.setInterval(function () {
+      ticks++;
+      code.spans.forEach(function (span, i) {
+        if (ticks >= 6 + i * 3) {
+          span.textContent = code.word.charAt(i);
+          span.classList.remove('is-flipping');
+        } else {
+          span.textContent = LETTERS.charAt(Math.floor(Math.random() * LETTERS.length));
+        }
+      });
+      if (ticks >= last) {
+        window.clearInterval(code.timer);
+        code.timer = null;
+        code.spans.forEach(function (span) { span.style.width = ''; });
+      }
+    }, TICK_MS);
+  }
+
+  var items = Array.prototype.slice.call(grid.children);
+  var cards = items.map(function (item, i) {
+    item.style.setProperty('--i', String(i));
+    var els = item.querySelectorAll('.dest-card-code, .dest-pick-more-code');
+    return { item: item, codes: Array.prototype.map.call(els, prepare) };
+  });
+  var more = grid.querySelector('.dest-pick-more-count');
+
+  grid.classList.add('is-waiting');
+  var seen = new IntersectionObserver(function (entries) {
+    if (!entries[0].isIntersecting) return;
+    seen.disconnect();
+    grid.classList.remove('is-waiting');
+    grid.classList.add('is-in');
+    // each card's codes flip as it lands
+    cards.forEach(function (card, i) {
+      window.setTimeout(function () {
+        card.codes.forEach(function (code, j) { window.setTimeout(function () { flip(code); }, j * 120); });
+      }, 350 + i * 110);
+    });
+    if (more) {
+      var n = parseInt(more.textContent.replace(/\D/g, ''), 10) || 0;
+      var shown = 0;
+      more.textContent = '+0';
+      var count = window.setInterval(function () {
+        shown++;
+        more.textContent = '+' + shown;
+        if (shown >= n) window.clearInterval(count);
+      }, 260);
+    }
+  }, { rootMargin: '0px 0px -15% 0px' });
+  seen.observe(grid);
+
+  // pointing at a card flips its code again
+  cards.forEach(function (card) {
+    card.item.addEventListener('mouseenter', function () {
+      if (!grid.classList.contains('is-in')) return;
+      card.codes.forEach(function (code) { flip(code); });
+    });
+  });
+})();
+
 // About page: the counsellor count in the hero, and each department's
 // headcount in the "Inside Studies & Awards" mosaic, both from
 // js/team-data.js so the numbers never drift from the real team. (The tile

@@ -322,6 +322,12 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   run white, navy ("How it works"), white, cream ("Why choose us"), white.
   "Book a free consultation" appears in the header, the hero and the
   closing band only.
+- **"Where you can study" (home page)**: the motion is in `main.js`
+  ("departures board") and `styles.css`. The cards rise in one after another
+  the first time they come on screen, each airport code clicks through
+  letters like a split-flap board before settling, and the "+3" counts up.
+  Pointing at a card flips its code again. The codes are read from the
+  cards, so changing a card's code in `index.html` is all it takes.
 - **Destination specialists**: give a team member `destinations: ['Germany']`
   in `js/team-data.js` and they lead the consultation list, tagged "Best for
   Germany", when someone books from that country's page.

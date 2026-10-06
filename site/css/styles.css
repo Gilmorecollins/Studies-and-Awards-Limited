@@ -1382,6 +1382,24 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .dest-pick-more:hover { transform: none; }
 }
 
+/* ---- "Where you can study": the motion (main.js adds the classes) ----
+   Like a departures board: the first time the cards come on screen they rise
+   in one after another, then each airport code (and LHR, DUB, AKL on the
+   "+3" card) clicks through letters before settling, like a split-flap
+   board, and the "+3" counts up. Pointing at a card flips its code again and
+   lets its flag drift a little. With reduced motion none of this runs. */
+.dest-pick-grid.is-waiting > * { opacity: 0; }
+.dest-pick-grid.is-in > * { animation: dest-pick-rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--i, 0) * 110ms); }
+@keyframes dest-pick-rise { from { opacity: 0; transform: translateY(32px); } }
+/* each letter keeps its own width while it flips, so the code doesn't wobble */
+.flap { display: inline-block; text-align: center; }
+.flap.is-flipping { animation: flap-tick 90ms steps(2) infinite; }
+@keyframes flap-tick { 50% { transform: scaleY(0.82); } }
+@media (prefers-reduced-motion: no-preference) {
+  .dest-pick-grid .dest-card-flag { transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .dest-pick-grid .dest-card:hover .dest-card-flag { transform: scale(1.08) translateX(-3%); }
+}
+
 /* ---------- home: "why choose us", values on hanging luggage tags ----------
    The text on the left; on the right a navy rail with three luggage tags
    hanging from it on strings of different lengths (--string), each a little
