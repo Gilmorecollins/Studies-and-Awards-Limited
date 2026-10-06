@@ -280,10 +280,12 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   department, in the order its people first appear in the file, so keep each
   department's people together. Choosing a person there opens their bio. The
   same names drive the chooser's filter buttons and the About page's "Inside
-  Studies & Awards" mosaic, where each department has a tile in `about.html`
-  sized one square per person in `styles.css` (`.dept-mosaic`). A new or
-  renamed department needs its tile there, and the head counts fill in from
-  `team-data.js`.
+  Studies & Awards" index: one line per department in `about.html` (a
+  `.dept-row` with `data-dept` and a sentence on what it does), in the order
+  shown there. Its dots (one per person), the head count and the people in
+  the panel beside it (photo, name and role, each linking to the Team page)
+  fill in from `team-data.js`. A new or renamed department needs its line
+  there.
 - **Services page**: `services.html` shows the six steps every student goes
   through (free consultation, language classes, documentation, verification
   and compliance, application and offer, visa and travel), each its own department, the same for all six countries.

@@ -2122,11 +2122,13 @@ function createCursorFollower(options) {
   }
 })();
 
-// About page: the counsellor count in the hero, and each department's
-// headcount in the "Inside Studies & Awards" mosaic, both from
-// js/team-data.js so the numbers never drift from the real team. (The tile
-// sizes, one square per person, are laid out in styles.css: a department
-// that grows or shrinks needs its grid area changed there too.)
+// About page: the counsellor count in the hero, and the departments index,
+// both from js/team-data.js so the numbers and names never drift from the
+// real team. Each department's line gets a dot per person; pointing at a
+// line (or focusing or tapping it) shows that department in the panel
+// beside the list: how many people, what it does (the line's own
+// description in about.html) and who you'll meet, each linking to their
+// card on the Team page. On narrow screens the panel opens under the line.
 (function () {
   'use strict';
 
@@ -2136,16 +2138,96 @@ function createCursorFollower(options) {
   var countEl = document.getElementById('about-team-count');
   if (countEl) countEl.textContent = members.length;
 
-  var counts = {};
+  var index = document.querySelector('.dept-index');
+  var panel = document.getElementById('dept-detail');
+  if (!index || !panel) return;
+
+  var people = {};
   members.forEach(function (m) {
-    counts[m.department] = (counts[m.department] || 0) + 1;
+    (people[m.department] = people[m.department] || []).push(m);
   });
 
-  Array.prototype.forEach.call(document.querySelectorAll('.dept-tile[data-dept]'), function (tile) {
-    var n = counts[tile.getAttribute('data-dept')];
-    var el = tile.querySelector('.dept-tile-count');
-    if (n && el) el.textContent = n + (n === 1 ? ' person' : ' people');
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text;
+    return node;
+  }
+  function howMany(n) { return n + (n === 1 ? ' person' : ' people'); }
+
+  var rows = Array.prototype.slice.call(index.querySelectorAll('.dept-row'));
+  rows.forEach(function (row) {
+    var list = people[row.getAttribute('data-dept')] || [];
+    var dots = row.querySelector('.dept-row-dots');
+    list.forEach(function () { dots.appendChild(el('span')); });
+    // the dots are for the eye; the count is said with the name
+    row.querySelector('.dept-row-btn').appendChild(el('span', 'sr-only', ', ' + howMany(list.length)));
   });
+
+  var narrow = window.matchMedia ? window.matchMedia('(max-width: 900px)') : null;
+  var current = null;
+
+  function show(row) {
+    if (row === current) return;
+    current = row;
+    var name = row.querySelector('.dept-row-name').textContent;
+    var list = people[row.getAttribute('data-dept')] || [];
+    rows.forEach(function (r) { r.querySelector('.dept-row-btn').setAttribute('aria-pressed', r === row ? 'true' : 'false'); });
+
+    panel.textContent = '';
+    panel.appendChild(el('p', 'dept-detail-count', howMany(list.length)));
+    panel.appendChild(el('h3', 'dept-detail-name', name));
+    panel.appendChild(el('p', 'dept-detail-what', row.querySelector('.dept-row-desc').textContent));
+    if (list.length) {
+      panel.appendChild(el('p', 'dept-detail-label', 'Who you will meet'));
+      var ul = el('ul', 'dept-people');
+      list.forEach(function (m) {
+        var li = el('li');
+        var a = el('a', 'dept-person');
+        a.href = 'team.html#' + encodeURIComponent(m.id);
+        var img = el('img');
+        img.src = window.teamPortrait ? window.teamPortrait(m, 'thumb') : m.thumb;
+        img.alt = '';
+        img.width = 44;
+        img.height = 44;
+        img.loading = 'lazy';
+        var text = el('span');
+        text.appendChild(el('span', 'dept-person-name', m.name));
+        text.appendChild(el('span', 'dept-person-role', m.role));
+        a.appendChild(img);
+        a.appendChild(text);
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      panel.appendChild(ul);
+    }
+    place();
+    panel.classList.remove('is-changing');
+    void panel.offsetWidth;
+    panel.classList.add('is-changing');
+  }
+
+  // beside the list on wide screens, under the chosen line on narrow ones
+  function place() {
+    if (narrow && narrow.matches && current) current.appendChild(panel);
+    else if (panel.parentNode !== index) index.appendChild(panel);
+  }
+  if (narrow) {
+    if (narrow.addEventListener) narrow.addEventListener('change', place);
+    else if (narrow.addListener) narrow.addListener(place);
+  }
+
+  rows.forEach(function (row) {
+    var btn = row.querySelector('.dept-row-btn');
+    btn.addEventListener('click', function () { show(row); });
+    btn.addEventListener('focus', function () { show(row); });
+    // pointing shows it too, on screens with a mouse (on a phone the tap does)
+    row.addEventListener('mouseenter', function () { if (!narrow || !narrow.matches) show(row); });
+  });
+
+  index.classList.add('is-live');
+  panel.hidden = false;
+  if (rows.length) show(rows[0]);
 })();
 
 // Find Us page: the lift. Pressing M1 on the lift's panel opens the doors onto

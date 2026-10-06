@@ -1581,10 +1581,11 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .faq-item summary:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
 
 /* ---------- about page ----------
-   A long read: a big left-aligned headline, the clickable route map (hover,
-   focus or tap a country to light up its route from Eldoret), mission and
-   vision, values, the department card and a navy call to action. Every
-   section sits in the same 1040px reading column. */
+   Big type and an index: the headline with the facts under it, the route
+   list beside the map (hover, focus or tap a country to light up its route
+   from Eldoret), mission, vision and the values on the cream band, then
+   every department as an index with a dot per person; pointing at one
+   shows who works there (main.js builds it from js/team-data.js). */
 
 .about-label {
   display: block;
@@ -1597,198 +1598,173 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   color: var(--brass-ink);
 }
 
-.page-hero .about-facts { margin-top: 26px; }
-.about-facts { display: flex; flex-wrap: wrap; align-items: baseline; row-gap: 10px; margin: 0; padding: 0; list-style: none; }
-.about-facts li { display: flex; align-items: baseline; gap: 6px; font-size: 14px; color: var(--muted); }
-.about-facts li + li::before { content: '/'; padding: 0 18px; color: var(--tint-30); }
-.about-facts strong { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: 30px; line-height: 1; color: var(--text-strong); }
+/* the headline: the label with where we are beside it, a hairline under
+   them, the title, then the facts and a line about us on a hairline */
+.about-hero { padding-bottom: clamp(48px, calc(5vw / var(--z, 1)), 72px); }
+.about-hero-top {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  margin-bottom: clamp(28px, calc(3vw / var(--z, 1)), 40px); padding-bottom: 18px; border-bottom: 1px solid var(--border);
+}
+.about-hero-top .hero-kicker { margin: 0; }
+.about-hero-meta { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--muted); }
+.page-hero.about-hero h1 { max-width: 900px; margin-bottom: clamp(32px, calc(3.4vw / var(--z, 1)), 48px); }
+.about-hero-foot {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 24px 48px; align-items: end;
+  padding-top: 24px; border-top: 1px solid var(--border);
+}
+.about-hero-foot p { font-size: 16px; line-height: 1.7; color: var(--text-prose); }
+.about-facts { display: grid; grid-template-columns: repeat(4, minmax(0, max-content)); gap: 16px clamp(28px, calc(4vw / var(--z, 1)), 56px); margin: 0; padding: 0; list-style: none; }
+.about-facts li { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
+.about-facts strong { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: clamp(40px, calc(3.75vw / var(--z, 1)), 54px); line-height: 1; letter-spacing: 0.01em; text-transform: uppercase; color: var(--text-strong); }
+@media (max-width: 1023.98px) {
+  .about-hero-foot { grid-template-columns: minmax(0, 1fr); }
+}
 @media (max-width: 640px) {
-  .about-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; }
-  .about-facts li { flex-direction: column; gap: 2px; font-size: 13px; }
-  .about-facts li + li::before { content: none; }
+  .about-hero-meta { display: none; }
+  .about-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-/* the route map: the list drives the map, and the map's code tags drive it too */
-.about-routes { background: var(--ink); overflow: hidden; }
-.about-routes-inner {
-  display: grid;
-  grid-template-columns: auto minmax(0, 740px);
-  justify-content: space-between;
-  gap: 24px;
-  padding: 56px 0 44px;
-}
-.about-routes-list { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; }
-.about-routes-eyebrow { color: var(--brass); }
-.about-routes-title { margin: 8px 0 14px; font-size: clamp(34px, calc(3vw / var(--z, 1)), 42px); line-height: 1; color: #FFFFFF; }
-.about-routes-list ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+/* the routes: the list drives the map, and the map's code tags drive it too */
+.about-routes { padding: clamp(24px, calc(3vw / var(--z, 1)), 40px) 0 clamp(64px, calc(7vw / var(--z, 1)), 100px); }
+.about-routes-inner { display: grid; grid-template-columns: minmax(0, 520px) minmax(0, 1fr); gap: clamp(32px, calc(4.2vw / var(--z, 1)), 60px); align-items: start; }
+.about-routes-list { display: flex; flex-direction: column; }
+.about-routes-list .eyebrow { color: var(--brass-ink); }
+.about-routes-list h2 { margin: 12px 0 22px; }
+.about-routes-list ul { margin: 0; padding: 0; list-style: none; border-bottom: 1px solid var(--border); }
 .about-route {
-  display: flex; align-items: baseline; gap: 10px;
-  padding: 2px 0;
-  border: none; background: none; cursor: pointer; text-align: left;
-  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 34px; line-height: 1; letter-spacing: 0.01em;
-  color: #FFFFFF;
-  transition: color 0.3s ease;
+  display: grid; grid-template-columns: 90px minmax(0, 1fr) auto; gap: 20px; align-items: baseline;
+  padding: 16px 12px; border-top: 1px solid var(--border);
+  color: var(--text-strong);
+  transition: background-color 0.2s ease;
 }
-.about-route-code { color: var(--brass); transition: color 0.3s ease; }
-.about-route:hover { color: #FFFFFF; }
+.about-route-code { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
+.about-route-name { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: clamp(32px, calc(2.8vw / var(--z, 1)), 40px); line-height: 1; letter-spacing: 0.01em; }
 /* the arrow says the country opens its page: shown on hover, and after a
    first tap on phones (a second tap then opens it) */
-.about-route { position: relative; display: inline-flex; }
-.about-route-go {
-  position: absolute; left: 100%; top: 50%; margin: -10px 0 0 8px;
-  color: var(--brass); opacity: 0; transform: translateX(-6px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-.about-route:hover .about-route-go, .about-route.is-active .about-route-go, .about-route:focus-visible .about-route-go { opacity: 1; transform: translateX(0); }
-a.about-pin:hover { color: var(--brass); }
-.about-route:focus-visible, .about-pin:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
-.about-routes-hint { margin-top: 18px; font-size: 13px; color: var(--on-dark-faint); transition: opacity 0.3s ease; }
+.about-route-go { align-self: center; opacity: 0; transform: translateX(-6px); transition: opacity 0.2s ease, transform 0.2s ease; }
+.about-route:hover, .about-route.is-active { background: var(--gold-tint); }
+.about-route:hover .about-route-go, .about-route.is-active .about-route-go, .about-route:focus-visible .about-route-go { opacity: 1; transform: none; }
+.about-route:focus-visible { outline: 2px solid var(--line-strong); outline-offset: -2px; }
+.about-routes-hint { margin-top: 18px; font-size: 13px; color: var(--muted); transition: opacity 0.3s ease; }
 .about-hint-tap { display: none; }
 @media (hover: none) {
   .about-hint-hover { display: none; }
   .about-hint-tap { display: inline; }
 }
 
-.about-routes-map { position: relative; container-type: inline-size; margin: -66px 0 -64px; }
+.about-routes-map { position: relative; container-type: inline-size; margin-top: 60px; }
 .about-routes-map img { display: block; width: 100%; height: auto; }
+.about-routes-map .about-map-dark { display: none; }
+:root[data-theme="dark"] .about-routes-map .about-map-light { display: none; }
+:root[data-theme="dark"] .about-routes-map .about-map-dark { display: block; }
+/* on the white page the routes are navy (gold on the Destinations page's navy) */
+.about-routes .map-line path:not(.map-line-hit) { stroke: var(--text-strong); }
+.about-routes .map-line-end { fill: var(--text-strong); }
+.about-origin {
+  position: absolute; transform: translate(-130%, -10%);
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: clamp(14px, 2.8cqw, 20px); line-height: 1; color: var(--text-strong);
+}
 
 .about-pin {
   position: absolute; z-index: 1;
-  padding: 4px 9px 3px;
-  border: 1.5px solid var(--brass); border-radius: 8px;
-  background: var(--ink); color: var(--brass);
-  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 17px; line-height: 1; letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: opacity 0.35s ease, background-color 0.2s ease, color 0.2s ease;
+  padding: 3px 8px 2px; border-radius: 6px;
+  background: var(--surface); box-shadow: 0 2px 8px var(--shadow-12); color: var(--text-strong);
+  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; font-weight: 500; line-height: 1.3; letter-spacing: 0.1em;
+  transition: opacity 0.3s ease, background-color 0.2s ease, color 0.2s ease;
 }
+.about-pin:hover { background: var(--brass); color: var(--ink); }
+.about-pin:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; }
 .about-pin-below { transform: translate(-50%, 12px); }
 .about-pin-above { transform: translate(-50%, calc(-100% - 13px)); }
 .about-pin-above-far { transform: translate(-50%, calc(-100% - 23px)); }
 .about-pin-left { transform: translate(calc(-100% - 12px), -50%); }
 .about-pin-right { transform: translate(12px, -50%); }
 /* the European tags crowd each other on a small map; the list still works */
-@container (max-width: 520px) {
+@container (max-width: 480px) {
   .about-pin { display: none; }
 }
 
 /* one route picked: the rest fade back (the lines themselves are in the
    shared .map-line rules with the destinations map) */
-[data-route-active] .about-route { color: rgba(255,255,255,0.3); }
-[data-route-active] .about-route-code { color: rgba(255,184,0,0.3); }
-[data-route-active] .about-pin { opacity: 0.35; }
+[data-route-active] .about-pin { opacity: 0.3; }
 [data-route-active] .about-routes-hint { opacity: 0; }
-[data-route-active] .about-route.is-active { color: #FFFFFF; }
-[data-route-active] .about-route.is-active .about-route-code { color: var(--brass); }
 [data-route-active] .about-pin.is-active { opacity: 1; background: var(--brass); color: var(--ink); }
 
-@media (max-width: 860px) {
-  .about-routes-inner { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 48px 0 20px; }
-  .about-routes-list ul { display: grid; grid-template-columns: repeat(2, max-content); gap: 8px 32px; }
-  /* the top of the map is open sea: tuck it up under the list */
-  .about-routes-map { margin: -7% -8px -24px; }
+@media (max-width: 1023.98px) {
+  .about-routes-inner { grid-template-columns: minmax(0, 1fr); }
+  .about-routes-map { margin-top: 0; }
 }
 @media (max-width: 480px) {
-  .about-route { font-size: 26px; gap: 8px; }
-  .about-routes-list ul { grid-template-columns: repeat(2, minmax(0, max-content)); gap: 6px 22px; }
-}
-@media (max-width: 374px) {
-  .about-route { font-size: 22px; gap: 6px; }
-  .about-routes-list ul { column-gap: 16px; }
+  .about-route { grid-template-columns: 52px minmax(0, 1fr) auto; gap: 12px; padding: 14px 8px; }
+  .about-route-name { font-size: 28px; }
 }
 
-/* mission and vision */
-.about-statement { padding: clamp(64px, calc(7.6vw / var(--z, 1)), 110px) 0 clamp(56px, calc(7vw / var(--z, 1)), 100px); }
-.about-statement-row { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; }
-.about-statement-row + .about-statement-row { margin-top: 80px; }
-.about-mission p { font-size: clamp(24px, calc(2.64vw / var(--z, 1)), 38px); font-weight: 700; line-height: 1.32; color: var(--text-strong); text-wrap: pretty; }
-.about-vision p { font-size: clamp(16px, calc(1.32vw / var(--z, 1)), 19px); line-height: 1.75; color: var(--text-prose); }
-@media (max-width: 860px) {
-  .about-statement-row { grid-template-columns: minmax(0, 1fr); gap: 14px; }
-  .about-statement-row + .about-statement-row { margin-top: 48px; }
-}
-
-/* values */
-.about-values { padding-bottom: clamp(64px, calc(7vw / var(--z, 1)), 100px); }
+/* mission, vision and values on the cream band: a label beside each */
+.about-statement { padding: clamp(64px, calc(6.7vw / var(--z, 1)), 96px) 0; background: var(--hero-cream); }
+.about-statement-row { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px; padding-top: 22px; border-top: 1px solid var(--border); }
+.about-statement-row:first-of-type { border-top: 2px solid var(--line-strong); }
+.about-statement-row + .about-statement-row { margin-top: 50px; }
+.about-mission p { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: clamp(40px, calc(4.4vw / var(--z, 1)), 64px); line-height: 0.98; letter-spacing: 0.01em; color: var(--text-strong); text-wrap: pretty; }
+.about-vision p { max-width: 760px; font-size: 18px; line-height: 1.75; color: var(--text-prose); }
 /* the values hang on luggage tags, as on the home page (the look is the
    home page's .why-tag; main.js swings them in) */
-.about-values-rack { max-width: 860px; margin: 0 auto; }
+.about-values-rack { max-width: 860px; padding-top: 0; }
+@media (max-width: 860px) {
+  .about-statement-row { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .about-statement-row + .about-statement-row { margin-top: 40px; }
+  .about-vision p { font-size: 16px; }
+}
 
-.about-inside { background: var(--hero-cream); padding: clamp(64px, calc(6.7vw / var(--z, 1)), 96px) 0; }
-.about-inside-head { display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 24px clamp(40px, calc(5.6vw / var(--z, 1)), 80px); align-items: end; margin-bottom: 44px; }
-.about-inside-title { display: flex; flex-direction: column; gap: 14px; }
+/* the departments: an index, one line each with a dotted leader and a dot
+   per person; the one pointed at (or tapped) is shown beside it with what
+   it does and who you'll meet. Without JavaScript each line shows what it
+   does under its name. */
+.about-inside { padding: clamp(64px, calc(6.7vw / var(--z, 1)), 96px) 0; }
 .about-inside-text { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
-.about-inside-text p { font-size: 17px; line-height: 1.7; color: var(--muted); }
+.about-inside-text p { font-size: 16px; line-height: 1.7; color: var(--muted); }
+.dept-index { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: clamp(32px, calc(4.8vw / var(--z, 1)), 70px); align-items: start; padding-top: 22px; border-top: 2px solid var(--line-strong); }
+.dept-list { margin: 0; padding: 0; list-style: none; }
+.dept-row-btn {
+  display: flex; align-items: center; gap: 14px; width: 100%;
+  padding: 12px 10px; border: 0; border-radius: 8px;
+  background: transparent; color: var(--text-strong); text-align: left; cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.dept-row-name { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: clamp(26px, calc(2.1vw / var(--z, 1)), 30px); line-height: 1; letter-spacing: 0.01em; white-space: nowrap; }
+.dept-row-leader { flex-grow: 1; min-width: 16px; border-bottom: 2px dotted var(--tint-30); transform: translateY(6px); }
+.dept-row-dots { display: flex; gap: 5px; }
+.dept-row-dots span { width: 14px; height: 14px; border-radius: 50%; background: var(--brass); }
+.dept-row-btn:hover { background: var(--gold-tint); }
+.dept-row-btn[aria-pressed="true"] { background: var(--text-strong); color: var(--bg); }
+.dept-row-btn[aria-pressed="true"] .dept-row-leader { border-bottom-color: transparent; }
+.dept-row-btn:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; }
+.dept-row-desc { margin: 0 10px 8px; font-size: 14.5px; line-height: 1.55; color: var(--muted); }
+.dept-index.is-live .dept-row-desc { display: none; }
 
-.dept-mosaic {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  grid-template-rows: repeat(3, 200px);
-  grid-template-areas: 'dr pa ap ap ap do' 'co co vi vi gs ac' 'ad ad ad la la cx';
-  gap: 8px;
-  margin: 0; padding: 0; list-style: none;
+.dept-detail { position: sticky; top: 120px; display: flex; flex-direction: column; gap: 14px; padding: 28px; border-radius: var(--radius); background: var(--hero-cream); border: 1px solid var(--border-soft); }
+.dept-detail-count { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
+.dept-detail-name { margin: 0; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: clamp(40px, calc(3.9vw / var(--z, 1)), 56px); line-height: 0.95; color: var(--text-strong); }
+.dept-detail-what { font-size: 17px; font-weight: 600; line-height: 1.5; color: var(--text-strong); }
+.dept-detail-label { margin-top: 6px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
+.dept-people { margin: 0; padding: 0; list-style: none; }
+.dept-person { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px dashed var(--tint-18); color: var(--text-strong); }
+.dept-person:hover .dept-person-name { text-decoration: underline; text-decoration-color: var(--brass); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.dept-person:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; border-radius: 6px; }
+.dept-person img { width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; object-fit: cover; object-position: top; background: var(--paper); }
+.dept-person-name { display: block; font-size: 15px; font-weight: 700; }
+.dept-person-role { display: block; font-size: 13px; color: var(--muted); }
+.dept-note { margin-top: 24px; padding-top: 16px; border-top: 1px dashed var(--tint-18); font-size: 13px; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) {
+  .dept-detail.is-changing > * { animation: dept-detail-in 320ms ease both; }
+  @keyframes dept-detail-in { from { opacity: 0; transform: translateY(6px); } }
 }
-.dept-tile-dr { grid-area: dr; } .dept-tile-pa { grid-area: pa; } .dept-tile-ap { grid-area: ap; }
-.dept-tile-do { grid-area: do; } .dept-tile-co { grid-area: co; } .dept-tile-vi { grid-area: vi; }
-.dept-tile-gs { grid-area: gs; } .dept-tile-ac { grid-area: ac; } .dept-tile-ad { grid-area: ad; }
-.dept-tile-la { grid-area: la; } .dept-tile-cx { grid-area: cx; }
-.dept-tile {
-  --tile-bg: var(--surface); --tile-fg: var(--text-strong); --tile-accent: var(--brass-ink);
-  display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
-  min-width: 0; padding: 20px; overflow: hidden;
-  border: 1px solid var(--border-soft); border-radius: var(--radius);
-  background: var(--tile-bg); color: var(--tile-fg);
-  cursor: default;
-  transition: box-shadow 200ms ease, transform 200ms ease;
-}
-.dept-tile-dr { --tile-bg: var(--ink); --tile-fg: #FFFFFF; --tile-accent: var(--brass); }
-.dept-tile-ap { --tile-bg: var(--brass); --tile-fg: var(--ink); --tile-accent: var(--ink); }
-.dept-tile-ad { --tile-bg: #00307F; --tile-fg: #FFFFFF; --tile-accent: var(--brass); }
-.dept-tile:hover, .dept-tile:focus-visible { box-shadow: 0 12px 28px var(--shadow-12); transform: translateY(-2px); }
-.dept-tile:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
-.dept-tile-name { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: 22px; line-height: 1; letter-spacing: 0.01em; color: var(--tile-fg); }
-.dept-tile-big .dept-tile-name { font-size: 34px; }
-/* one-person tiles are narrow: a little less padding leaves room for the description */
-.dept-mosaic .dept-tile:not(.dept-tile-big) { padding: 16px; }
-.dept-mosaic .dept-tile:not(.dept-tile-big) .dept-tile-name { font-size: 21px; letter-spacing: 0; }
-/* the headcount and the description share one spot at the foot of the tile */
-.dept-tile-foot { display: grid; align-items: end; }
-.dept-tile-foot > p { grid-area: 1 / 1; transition: opacity 200ms ease; }
-.dept-tile-count { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tile-accent); }
-.dept-tile-desc { font-size: 12.5px; line-height: 1.4; color: var(--tile-fg); opacity: 0; }
-.dept-tile:hover .dept-tile-count, .dept-tile:focus .dept-tile-count { opacity: 0; }
-.dept-tile:hover .dept-tile-desc, .dept-tile:focus .dept-tile-desc { opacity: 1; }
-.dept-mosaic-note { margin-top: 20px; font-size: 13px; color: var(--muted); }
-
-@media (max-width: 1023.98px), (max-width: 1100px) and (pointer: coarse), (max-width: 1100px) and (pointer: none) {
-  .about-inside-head { grid-template-columns: minmax(0, 1fr); align-items: start; }
-  .about-inside-text p { max-width: 560px; }
-}
-/* narrower screens: the same eighteen squares, three across */
-@media (max-width: 999px) {
-  .dept-mosaic {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: repeat(6, 170px);
-    grid-template-areas: 'dr pa do' 'ap ap ap' 'co co gs' 'vi vi ac' 'ad ad ad' 'la la cx';
-  }
-}
-/* phones: every description is shown, so the tiles size to their text */
-@media (max-width: 640px) {
-  .dept-mosaic {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: none;
-    grid-template-areas: 'dr pa' 'ap ap' 'do gs' 'co co' 'vi vi' 'ac cx' 'ad ad' 'la la';
-  }
-  .dept-tile { padding: 16px; gap: 14px; }
-  .dept-tile:hover, .dept-tile:focus-visible { transform: none; }
-  .dept-tile-big .dept-tile-name { font-size: 28px; }
-  .dept-tile-foot { gap: 6px; }
-  .dept-tile-foot > p { grid-area: auto; }
-  .dept-tile-desc, .dept-tile:hover .dept-tile-desc, .dept-tile:focus .dept-tile-desc { opacity: 1; order: -1; }
-  .dept-tile:hover .dept-tile-count, .dept-tile:focus .dept-tile-count { opacity: 1; }
-  .dept-mosaic-note { display: none; }
-}
-@media (max-width: 374px) {
-  .dept-mosaic .dept-tile:not(.dept-tile-big) .dept-tile-name { font-size: 19px; }
+/* narrower screens: the index on its own, the chosen department opening
+   under its line (main.js moves the panel there) */
+@media (max-width: 900px) {
+  .dept-index { grid-template-columns: minmax(0, 1fr); }
+  .dept-detail { position: static; margin: 4px 0 14px; padding: 22px; }
+  .dept-row-name { white-space: normal; }
+  .dept-note { display: none; }
 }
 
 /* ---------- find us page ----------
