@@ -1463,18 +1463,18 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .dest-pick-grid .dest-card:hover .dest-card-flag, .route-cards .dest-card:hover .dest-card-flag { transform: scale(1.08) translateX(-3%); }
 }
 
-/* ---------- home: "why choose us", values on hanging luggage tags ----------
-   The text on the left; on the right a navy rail with three luggage tags
-   hanging from it on strings of different lengths (--string), each a little
-   crooked (--tilt). Pointing at a tag straightens it, with a small spring.
-   The first time the rail comes on screen the tags swing gently and settle
-   (main.js adds .is-swinging). Phones: the tags hang one under another, each
-   tied to the one above. */
+/* ---------- home: "why choose us", values on luggage tags ----------
+   The text on the left; on the right three luggage tags (gold, navy and
+   white), each pinned up by a string and a gold pin, a little crooked
+   (--tilt). Pointing at a tag swings it straight and lifts it, with a small
+   spring. The first time they come on screen the tags swing gently and
+   settle (main.js adds .is-swinging). The About page's values use the same
+   tags. Phones: one under another. */
 .why {
   padding: clamp(64px, calc(8vw / var(--z, 1)), 112px) 0 clamp(56px, calc(7vw / var(--z, 1)), 96px);
   background: var(--hero-cream);
 }
-.why-inner { display: grid; grid-template-columns: 430px minmax(0, 1fr); gap: 50px; align-items: start; }
+.why-inner { display: grid; grid-template-columns: 430px minmax(0, 1fr); gap: 70px; align-items: center; }
 .why-copy { display: flex; flex-direction: column; gap: 20px; }
 .why-copy .eyebrow { color: var(--brass-ink); margin-bottom: -8px; }
 .why-copy h2 { font-size: clamp(44px, calc(4.2vw / var(--z, 1)), 60px); line-height: 0.95; }
@@ -1489,32 +1489,50 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .why-mission p { font-size: 16px; font-weight: 500; font-style: italic; line-height: 1.65; color: var(--text-strong); }
 .why-more { align-self: flex-start; margin-top: 4px; }
 
-.why-rack { position: relative; padding-top: 20px; }
-.why-rail { display: block; height: 10px; margin: 0 10px; border-radius: 5px; background: var(--text-strong); }
-.why-tags { display: flex; justify-content: space-around; align-items: flex-start; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.why-rack { position: relative; }
+.why-tags { display: flex; justify-content: center; align-items: flex-start; gap: 22px; margin: 0; padding: 70px 0 0; list-style: none; }
 .why-tag {
-  --tilt: 0deg; --string: 40px;
+  --tilt: 0deg;
   --t: calc(var(--tilt) * var(--tilt-k, 1));
-  display: flex; flex-direction: column; align-items: center; flex: 0 1 210px; min-width: 0;
-  transform-origin: 50% 0; transform: rotate(var(--t));
+  --tag-bg: var(--surface); --tag-ink: var(--text-strong); --tag-kicker: var(--muted); --tag-text: var(--muted); --tag-bc: var(--text-strong);
+  position: relative; flex: 0 1 210px; width: 210px; min-width: 0;
+  /* it hangs from its pin, 60px above the tag */
+  transform-origin: 50% -60px; transform: rotate(var(--t));
 }
-.why-tag::before { content: ""; width: 2px; height: var(--string); background: var(--text-strong); }
-.why-tag-card { width: 100%; border-radius: var(--radius); background: var(--surface); box-shadow: 0 22px 44px var(--shadow-14); overflow: hidden; }
-.why-tag-head { display: flex; align-items: center; justify-content: space-between; height: 66px; padding: 0 22px; background: var(--brass); color: var(--ink); }
-.why-tag-head svg { flex-shrink: 0; }
-/* the eyelet: a hole punched through the tag, showing the page behind */
-.why-tag-hole { width: 18px; height: 18px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 3px rgba(0, 27, 94, 0.25); }
-.why-tag-body { display: flex; flex-direction: column; gap: 8px; padding: 20px 22px 24px; border-top: 2px dashed var(--tint-30); }
-.why-tag-kicker { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11.5px; font-weight: 500; letter-spacing: 0.16em; color: var(--brass-ink); }
-.why-tag h3 { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: 26px; line-height: 1.02; letter-spacing: 0.01em; }
-.why-tag p { font-size: 14px; line-height: 1.55; color: var(--muted); }
+.why-tag-gold { --tag-bg: var(--brass); --tag-ink: var(--ink); --tag-kicker: #3D3000; --tag-text: #3D3000; --tag-bc: var(--ink); }
+.why-tag-navy { --tag-bg: var(--ink); --tag-ink: #FFFFFF; --tag-kicker: var(--on-dark-muted); --tag-text: var(--on-dark-muted); --tag-bc: #FFFFFF; }
+.why-tag-string { position: absolute; left: 50%; top: -60px; width: 0; height: 80px; border-left: 2px solid var(--tint-30); }
+.why-tag-pin {
+  position: absolute; left: 50%; top: -70px; z-index: 3; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #FFE08A 0%, var(--brass) 45%, #8A6600 100%); box-shadow: 0 3px 6px var(--shadow-18);
+}
+.why-tag-pin::after { content: ""; position: absolute; left: 6px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: rgba(0, 0, 0, 0.18); }
+/* the eyelet the string goes through */
+.why-tag-hole { position: absolute; left: 50%; top: 14px; z-index: 2; width: 26px; height: 26px; box-sizing: border-box; margin-left: -13px; border-radius: 50%; border: 2px solid var(--tint-30); }
+/* the tag's shape is cut from the card; the shadow sits on its wrapper, as a
+   clip-path would otherwise cut the shadow off too */
+.why-tag-shape { filter: drop-shadow(0 18px 24px var(--shadow-14)); }
+.why-tag-card {
+  display: flex; flex-direction: column; gap: 14px; min-height: 470px; box-sizing: border-box; padding: 62px 20px 22px;
+  background: var(--tag-bg); color: var(--tag-ink);
+  clip-path: polygon(24% 0, 76% 0, 100% 9%, 100% 100%, 0 100%, 0 9%);
+}
+.why-tag-white .why-tag-card { box-shadow: inset 0 0 0 1px var(--border); }
+.why-tag-kicker { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; letter-spacing: 0.16em; color: var(--tag-kicker); }
+.why-tag-icon { flex-shrink: 0; }
+.why-tag h3 { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: 30px; line-height: 1; letter-spacing: 0.01em; color: var(--tag-ink); }
+.why-tag p { font-size: 13px; line-height: 1.6; color: var(--tag-text); }
+.why-tag-barcode {
+  display: block; height: 34px; margin-top: auto; opacity: 0.7;
+  background: repeating-linear-gradient(90deg, var(--tag-bc) 0 2px, transparent 2px 5px, var(--tag-bc) 5px 6px, transparent 6px 10px, var(--tag-bc) 10px 13px, transparent 13px 15px);
+}
 
 @media (prefers-reduced-motion: no-preference) {
-  .why-tag { transition: transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1); }
-  /* pointing at a tag straightens it (mouse and trackpad only, so a tap on
-     a phone doesn't leave one stuck straight) */
+  .why-tag { transition: transform 0.6s cubic-bezier(0.3, 1.5, 0.5, 1); }
+  /* pointing at a tag swings it straight and lifts it (mouse and trackpad
+     only, so a tap on a phone doesn't leave one stuck straight) */
   @media (hover: hover) and (pointer: fine) {
-    .why-tag:hover { transform: rotate(0deg); }
+    .why-tag:hover { transform: rotate(0deg) translateY(-12px); }
   }
   /* a gentle swing that settles at the tag's own tilt, the first time it's seen */
   .why-tag.is-swinging { animation: why-swing 1.8s cubic-bezier(0.37, 0, 0.63, 1) both; animation-delay: calc(var(--i, 0) * 120ms); }
@@ -1527,23 +1545,23 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   }
 }
 
-/* laptops and tablets: the text above, the tags below across the width */
+/* laptops and tablets: the text above, the tags below */
 @media (max-width: 1180px) {
-  .why-inner { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .why-inner { grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
   .why-copy { max-width: 640px; }
-  .why-rack { max-width: 760px; }
 }
-/* phones: no room for three across, so the tags hang one under another,
-   each tied by its string to the bottom of the one above */
+/* phones: no room for three across, so the tags go one under another, each
+   on its own pin */
 @media (max-width: 640px) {
   .why-copy h2 { font-size: 44px; }
   .why-title { font-size: 22px; }
-  .why-rack { display: flex; flex-direction: column; align-items: center; }
-  .why-rail { align-self: stretch; }
-  .why-tags { flex-direction: column; align-items: center; gap: 0; }
-  .why-tag { flex: none; width: min(260px, 100%); --tilt-k: 0.5; } /* less crooked, so each string meets the tag above */
-  .why-tag::before { height: 28px; }
-  .why-tag:first-child::before { height: 36px; }
+  .why-tags { flex-direction: column; align-items: center; gap: 96px; padding-top: 80px; padding-bottom: 20px; }
+  .why-tag { flex: none; width: min(260px, 100%); --tilt-k: 0.6; }
+  .why-tag-card { min-height: 0; }
+  .why-tag-barcode { margin-top: 12px; }
+}
+@media (max-width: 1180px) and (min-width: 641px) {
+  .why-tags { gap: 18px; }
 }
 
 /* ---------- destination pages: editorial sections ----------
@@ -1791,7 +1809,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .about-vision p { max-width: 760px; font-size: 18px; line-height: 1.75; color: var(--text-prose); }
 /* the values hang on luggage tags, as on the home page (the look is the
    home page's .why-tag; main.js swings them in) */
-.about-values-rack { max-width: 860px; padding-top: 0; }
+.about-values-rack { max-width: 860px; }
+.about-values-rack .why-tags { padding-top: 70px; }
 @media (max-width: 860px) {
   .about-statement-row { grid-template-columns: minmax(0, 1fr); gap: 14px; }
   .about-statement-row + .about-statement-row { margin-top: 40px; }
