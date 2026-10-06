@@ -313,14 +313,20 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   another and a plane flies along the EDL → ABROAD route in the card's head.
   With reduced motion the card shows as written in `index.html`, with the
   first two boxes ticked.
-- **Home page look**: every section uses the same pieces, so keep to them
-  when adding one: a gold Oswald label over a Bebas heading (`.eyebrow` and
-  `h2`; the intro beside it with `.section-split-head`), Montserrat text,
-  the gold `.btn .btn-primary` for the one main action, and `.board-link`
-  (`.board-link-on-dark` on navy) for every other link. Cards share the
-  destination cards' corners (`--radius`), border and shadow. Backgrounds
-  run white, navy ("How it works"), white, cream ("Why choose us"), white.
-  "Book a free consultation" appears in the header, the hero and the
+- **The site's look (every page)**: keep to the same pieces when adding a
+  page or section. A gold Oswald label over a Bebas heading (`.eyebrow` and
+  `h2`; the intro beside it with `.section-split-head`), Montserrat text.
+  The label above a page's title is `.hero-kicker` (the same label after a
+  short gold rule), and every page title is one size, `--page-title` at the
+  top of `styles.css`. The gold `.btn .btn-primary` is the one main action;
+  `.btn .btn-outline` the second; `.board-link` (`.board-link-on-dark` on
+  navy) every other link. Cards share the destination cards' corners
+  (`--radius`), border and shadow. The one alternate band colour is the
+  warm cream `--hero-cream` (no light grey bands). The values (Access &
+  Affordability, Continuous Improvement, Fraud-Free Application &
+  Verification) are the hanging luggage tags on both the home page and
+  About; change them in both `index.html` and `about.html`. On the home
+  page "Book a free consultation" appears in the header, the hero and the
   closing band only.
 - **"Where you can study" (home page)**: the motion is in `main.js`
   ("departures board") and `styles.css`. The cards rise in one after another

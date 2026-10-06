@@ -11,9 +11,6 @@
 @font-face { font-family: 'Montserrat'; font-style: italic; font-weight: 400 700; font-display: swap; src: url('../assets/fonts/montserrat-italic.woff2') format('woff2'); }
 @font-face { font-family: 'Bebas Neue'; font-style: normal; font-weight: 400; font-display: swap; src: url('../assets/fonts/bebas-neue.woff2') format('woff2'); }
 @font-face { font-family: 'Oswald'; font-style: normal; font-weight: 400 600; font-display: swap; src: url('../assets/fonts/oswald.woff2') format('woff2'); }
-/* the home page hero's text: Manrope for the headline and buttons, Source Sans 3 for the text (both SIL Open Font Licence) */
-@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 600 800; font-display: swap; src: url('../assets/fonts/manrope.woff2') format('woff2'); }
-@font-face { font-family: 'Source Sans 3'; font-style: normal; font-weight: 400 600; font-display: swap; src: url('../assets/fonts/source-sans-3.woff2') format('woff2'); }
 
 :root {
   /* Two kinds of colour. Brand colours, and any colour written out as a value
@@ -50,7 +47,7 @@
   --outline-mark: rgba(0, 27, 94, 0.08);  /* hollow watermark letters */
   --progress: #001B5E;         /* the team slider's progress line */
   --hero-circle: #DCE6F7;      /* the soft circles behind the home page hero */
-  --hero-cream: #FFFCF2;       /* the warm white the home page hero fades to */
+  --hero-cream: #FFFCF2;       /* the warm white of every alternate band (and the home hero's fade) */
   --cursor: #141414;           /* the circle that follows the mouse */
   --cord: rgba(0, 27, 94, 0.5); /* the pull cord at the right end of the page */
   --soft: #ECEFF5;             /* the soft raised panels of the home page testimonials */
@@ -88,7 +85,9 @@
 
   --radius: 18px;              /* cards, panels, photos and dialogs */
   --radius-sm: 3px;
-  --container: 1200px;         /* the one content width every page lines up to */
+  --container: 1200px;
+  /* the big title at the top of every page (the home page and inner pages alike) */
+  --page-title: clamp(46px, calc(5.6vw / var(--z, 1)), 84px);         /* the one content width every page lines up to */
 }
 
 /* Dark mode: the same theme colours, dark. Set by the small script in each
@@ -625,7 +624,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   height: calc(100% - var(--under-header));
   overflow: visible;
 }
-.hero-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2.2px; color: var(--brass-ink); }
+/* the label above a page's title: the site's gold Oswald label, after a short gold rule */
+.hero-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
 .hero-kicker-rule { width: 28px; height: 2px; background: var(--brass-ink); flex-shrink: 0; }
 
 /* ---------- home hero: the globe ----------
@@ -722,7 +722,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .hero-loc { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--hg-gold); }
 .hero-loc svg { flex-shrink: 0; }
 .hero-globe h1 {
-  margin: 0; font-size: clamp(52px, calc(5.6vw / var(--z, 1)), 84px); line-height: 0.95; letter-spacing: 0.01em;
+  margin: 0; font-size: var(--page-title); line-height: 0.95; letter-spacing: 0.01em;
   text-wrap: balance; color: var(--hg-text);
 }
 /* a soft gold band behind the lower part of the words, carried onto each line */
@@ -731,27 +731,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .hero-globe-lead strong { font-weight: 600; color: var(--hg-text); }
 .hero-globe-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; }
 :root[data-theme="dark"] .hero-globe .board-link { color: var(--hg-text); }
-.hero-cta {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 1rem 1.4rem; border-radius: 10px;
-  background: #FFC20E; color: #1A1400;
-  font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; line-height: 1.2;
-}
-.hero-cta svg { flex-shrink: 0; }
-.hero-cta:hover { background: #F5B800; }
-.hero-cta:hover svg { transform: translateX(3px); }
-.hero-cta:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
-.hero-link {
-  padding: 4px 0 3px; border-bottom: 1px solid var(--hg-muted);
-  font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 600; color: var(--hg-text);
-}
-.hero-link:hover { border-bottom-color: #FFC20E; }
-.hero-link:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 4px; border-radius: 2px; }
-@media (prefers-reduced-motion: no-preference) {
-  .hero-cta { transition: background-color 150ms ease; }
-  .hero-cta svg { transition: transform 150ms ease; }
-  .hero-link { transition: border-color 150ms ease; }
-}
 /* below 960px: the text first, the globe under it and smaller */
 @media (max-width: 959.98px) {
   .hero-globe-inner { --globe: min(56vw, 360px); grid-template-columns: minmax(0, 1fr); gap: 48px; padding-top: 40px; padding-bottom: 56px; }
@@ -759,7 +738,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 @media (max-width: 480px) {
   .globe-flag img { width: 38px; height: 25px; }
-  .hero-cta, .hero-globe-actions .btn { flex: 1 1 100%; justify-content: center; }
+  .hero-globe-actions .btn { flex: 1 1 100%; justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .globe-map { animation: none; }
@@ -769,7 +748,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 /* inner-page hero: kicker, a big left-aligned headline and a lead line */
 .page-hero { padding: clamp(56px, calc(7.6vw / var(--z, 1)), 110px) 0 64px; }
 .page-hero .hero-kicker { margin-bottom: 26px; }
-.page-hero h1 { max-width: 1100px; margin: 0 0 26px; font-size: clamp(46px, calc(8.6vw / var(--z, 1)), 124px); line-height: 0.9; letter-spacing: 0; color: var(--text-strong); }
+.page-hero h1 { max-width: 1000px; margin: 0 0 26px; font-size: var(--page-title); line-height: 0.95; letter-spacing: 0.01em; text-wrap: balance; color: var(--text-strong); }
 .page-hero p { max-width: 760px; font-size: clamp(17px, calc(1.46vw / var(--z, 1)), 21px); line-height: 1.6; color: var(--text-prose); }
 
 /* ---------- sections ---------- */
@@ -859,7 +838,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .route-hero-copy { display: flex; flex-direction: column; gap: 18px; padding-top: 24px; }
 .route-hero .hero-kicker { margin: 0; color: var(--brass); }
 .route-hero .hero-kicker-rule { background: var(--brass); }
-.route-hero h1 { margin: 0; font-size: clamp(44px, calc(5.3vw / var(--z, 1)), 76px); line-height: 1; letter-spacing: 0.015em; color: #FFFFFF; }
+.route-hero h1 { margin: 0; font-size: var(--page-title); line-height: 0.95; letter-spacing: 0.01em; color: #FFFFFF; }
 .route-hero-copy > p { font-size: 16.5px; line-height: 1.65; color: var(--on-dark-muted); }
 .route-hero-copy > .route-hero-origin { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #FFFFFF; }
 .route-hero-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--brass); flex-shrink: 0; }
@@ -955,7 +934,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 @media (max-width: 768px) {
   .route-hero-inner, .route-cards-wrap { padding-left: 20px; padding-right: 20px; }
-  .route-hero h1 { font-size: 40px; }
   .route-cards-wrap { padding-bottom: 56px; }
   .route-cards { gap: 16px; }
   .dest-card-banner { height: 104px; }
@@ -998,36 +976,27 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    countries: a hero with the six steps at a glance, then each step on a
    line down the left, with what happens in it and, beside it, the people who
    look after it (filled in from js/team-data.js by main.js) and a button
-   that opens the consultation chooser on their department. In the home
-   hero's type: Manrope for headings, labels and buttons, Source Sans 3 for
-   the text. */
+   that opens the consultation chooser on their department. In the site's
+   type, like the home page: gold Oswald labels, Bebas headings and
+   Montserrat text, with the site's own buttons. */
 
 .svc-hero { padding: clamp(48px, calc(6vw / var(--z, 1)), 88px) 0 clamp(40px, calc(5vw / var(--z, 1)), 72px); }
 .svc-hero-inner {
   display: grid; grid-template-columns: minmax(0, 1fr) 360px;
   gap: clamp(40px, calc(5vw / var(--z, 1)), 80px); align-items: center;
 }
-.svc-hero-copy { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; font-family: 'Source Sans 3', 'Montserrat', sans-serif; }
-.svc-eyebrow { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--brass-ink); }
-.svc-hero h1 {
-  font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 800;
-  font-size: clamp(2.2rem, calc(4vw / var(--z, 1)), 3.5rem); line-height: 1.08; letter-spacing: -0.025em;
-}
-.svc-hero-lead { max-width: 38rem; font-size: 1.15rem; line-height: 1.65; color: var(--muted); }
+.svc-hero-copy { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+.svc-eyebrow { margin: 0 0 -0.5rem; }
+.svc-hero h1 { font-size: var(--page-title); line-height: 0.95; letter-spacing: 0.01em; text-wrap: balance; }
+.svc-hero-lead { max-width: 38rem; font-size: 17px; line-height: 1.7; color: var(--muted); }
 .svc-hero-lead a { font-weight: 600; color: var(--text-strong); text-decoration: underline; text-decoration-color: var(--brass); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 .svc-hero-lead a:hover { text-decoration-color: currentColor; }
 .svc-hero-lead a:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; border-radius: 2px; }
 .svc-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; margin-top: 0.25rem; }
-.svc-hero-phone {
-  padding: 4px 0 3px; border-bottom: 1px solid var(--muted);
-  font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-strong);
-}
-.svc-hero-phone:hover { border-bottom-color: var(--brass); }
-.svc-hero-phone:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 4px; border-radius: 2px; }
 
 /* the six steps at a glance, each a link down to its step */
 .svc-glance { padding: 26px 28px 14px; border: 1px solid var(--border-soft); border-radius: var(--radius); background: var(--paper); }
-.svc-glance-title { margin-bottom: 8px; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--muted); }
+.svc-glance-title { margin-bottom: 8px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
 .svc-glance ol { margin: 0; padding: 0; list-style: none; }
 .svc-glance li + li { border-top: 1px dashed var(--border); }
 .svc-glance a { display: flex; align-items: center; gap: 14px; padding: 12px 0; color: var(--text-strong); }
@@ -1036,11 +1005,11 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .svc-glance-num, .svc-step-dot {
   display: grid; place-items: center; flex-shrink: 0; border-radius: 50%;
   background: var(--ink); color: #FFFFFF;
-  font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 800; line-height: 1;
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; line-height: 1;
 }
-.svc-glance-num { width: 32px; height: 32px; font-size: 0.9rem; }
-.svc-glance-name { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; line-height: 1.3; }
-.svc-glance-note { display: block; font-family: 'Source Sans 3', 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 400; color: var(--muted); }
+.svc-glance-num { width: 32px; height: 32px; font-size: 17px; }
+.svc-glance-name { font-size: 15px; font-weight: 700; line-height: 1.3; }
+.svc-glance-note { display: block; font-size: 13.5px; font-weight: 400; color: var(--muted); }
 :root[data-theme="dark"] .svc-glance-num { background: var(--brass); color: var(--ink); }
 /* in dark mode a step's dot is a lighter navy, so the gold of a reached step stands out */
 :root[data-theme="dark"] .svc-step-dot { background: #22336B; }
@@ -1065,46 +1034,42 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .svc-step-dot {
   position: relative; z-index: 1; width: var(--dot); height: var(--dot);
   box-shadow: 0 0 0 8px var(--bg); /* a gap in the line round each dot */
-  font-size: 1.35rem;
+  font-size: 26px;
 }
 
-.svc-step-main { position: relative; isolation: isolate; min-width: 0; font-family: 'Source Sans 3', 'Montserrat', sans-serif; }
+.svc-step-main { position: relative; isolation: isolate; min-width: 0; }
 .svc-skip-link {
   display: inline-flex; align-items: center; gap: 6px; margin-top: 16px;
-  font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--brass-ink);
+  font-size: 14.5px; font-weight: 700; color: var(--brass-ink);
 }
 .svc-skip-link:hover { text-decoration: underline; text-underline-offset: 3px; }
 .svc-skip-link:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; border-radius: 2px; }
-.svc-step-kicker { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--brass-ink); }
-.svc-step h2 {
-  margin: 6px 0 16px;
-  font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 800;
-  font-size: clamp(1.7rem, calc(2.4vw / var(--z, 1)), 2.3rem); line-height: 1.15; letter-spacing: -0.02em;
-}
-.svc-step-lead { max-width: 42rem; font-size: 1.1rem; line-height: 1.65; color: var(--text-prose); }
-.svc-step-note { max-width: 42rem; margin-top: 18px; font-size: 1.02rem; line-height: 1.6; color: var(--muted); }
+.svc-step-kicker { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
+.svc-step h2 { margin: 8px 0 16px; font-size: clamp(36px, calc(3vw / var(--z, 1)), 44px); line-height: 1; }
+.svc-step-lead { max-width: 42rem; font-size: 16px; line-height: 1.7; color: var(--text-prose); }
+.svc-step-note { max-width: 42rem; margin-top: 18px; font-size: 15px; line-height: 1.65; color: var(--muted); }
 
 .svc-points { max-width: 42rem; margin: 20px 0 0; padding: 0; list-style: none; }
-.svc-points li { position: relative; padding: 9px 0 9px 22px; border-top: 1px dashed var(--border); font-size: 1.02rem; line-height: 1.5; color: var(--text); }
+.svc-points li { position: relative; padding: 9px 0 9px 22px; border-top: 1px dashed var(--border); font-size: 15px; line-height: 1.55; color: var(--text); }
 .svc-points li::before { content: ""; position: absolute; left: 2px; top: 1.05em; width: 8px; height: 8px; border-radius: 50%; background: var(--brass); }
 
 .svc-formats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 42rem; margin: 22px 0 0; padding: 0; list-style: none; }
-.svc-format { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); font-size: 1rem; line-height: 1.45; color: var(--muted); }
+.svc-format { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); font-size: 14.5px; line-height: 1.45; color: var(--muted); }
 .svc-format svg { flex-shrink: 0; margin-top: 1px; color: var(--brass-ink); }
-.svc-format strong { display: block; margin-bottom: 2px; font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 700; color: var(--text-strong); }
+.svc-format strong { display: block; margin-bottom: 2px; font-weight: 700; color: var(--text-strong); }
 
 .svc-parts { max-width: 42rem; margin: 0; padding: 0; list-style: none; }
 .svc-parts > li { padding: 18px 0; border-top: 1px dashed var(--border); }
 .svc-parts > li:first-child { padding-top: 0; border-top: 0; }
 .svc-parts > li:last-child { padding-bottom: 0; }
 .svc-parts .svc-points { margin-top: 14px; }
-.svc-parts h3 { margin-bottom: 6px; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1.15rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
-.svc-parts p { font-size: 1.05rem; line-height: 1.65; color: var(--text-prose); }
+.svc-parts h3 { margin-bottom: 6px; font-size: 17px; font-weight: 700; line-height: 1.3; }
+.svc-parts p { font-size: 15.5px; line-height: 1.7; color: var(--text-prose); }
 
 /* beside each step: who looks after it, and a button to ask them */
-.svc-step-side { align-self: start; padding: 22px; border-radius: var(--radius); background: var(--paper); font-family: 'Source Sans 3', 'Montserrat', sans-serif; }
-.svc-side-title { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--muted); }
-.svc-side-text { margin: 10px 0 18px; font-size: 1.02rem; line-height: 1.55; color: var(--text); }
+.svc-step-side { align-self: start; padding: 22px; border-radius: var(--radius); background: var(--paper); }
+.svc-side-title { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
+.svc-side-text { margin: 10px 0 18px; font-size: 15px; line-height: 1.6; color: var(--text); }
 .svc-side-text a { font-weight: 600; color: var(--text-strong); text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 3px; }
 .svc-people { display: flex; flex-direction: column; gap: 2px; margin: 10px -8px 16px; padding: 0; list-style: none; }
 .svc-people:empty { display: none; }
@@ -1113,18 +1078,10 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .svc-person:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 0; }
 .svc-person img { width: 48px; height: 48px; flex-shrink: 0; border-radius: 50%; object-fit: cover; object-position: top; background: #F0F1F3; }
 .svc-person-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.svc-person-name { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.98rem; font-weight: 700; line-height: 1.3; color: var(--text-strong); overflow-wrap: anywhere; }
-.svc-person-role { font-size: 0.92rem; line-height: 1.35; color: var(--muted); }
-.svc-ask {
-  display: flex; justify-content: center; padding: 12px 16px; border: 1.5px solid var(--line-strong); border-radius: 10px;
-  font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 700; line-height: 1.2; color: var(--text-strong);
-}
-.svc-ask:hover { background: var(--text-strong); color: var(--bg); }
-.svc-ask:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
-@media (prefers-reduced-motion: no-preference) {
-  .svc-ask { transition: background-color 150ms ease, color 150ms ease; }
-  .svc-hero-phone { transition: border-color 150ms ease; }
-}
+.svc-person-name { font-size: 14.5px; font-weight: 700; line-height: 1.3; color: var(--text-strong); overflow-wrap: anywhere; }
+.svc-person-role { font-size: 13.5px; line-height: 1.35; color: var(--muted); }
+/* "Ask about…": the site's outline button, across the box */
+.svc-ask { display: flex; width: 100%; padding: 12px 18px; font-size: 14.5px; }
 
 /* ---- services: the motion (main.js adds the classes and the moving parts) ----
    Your file travelling through the office: a gold line fills down the steps'
@@ -1233,7 +1190,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .svc-file svg { width: 13px; height: 13px; }
   .svc-plane { width: 22px; height: 22px; margin: -11px 0 0 -11px; }
   .svc-formats { grid-template-columns: minmax(0, 1fr); }
-  .svc-hero-actions .hero-cta { flex: 1 1 100%; justify-content: center; }
+  .svc-hero-actions .btn { flex: 1 1 100%; justify-content: center; }
 }
 
 /* ---------- home: "How it works" checklist ----------
@@ -1491,7 +1448,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .dest-intro { padding: clamp(56px, calc(7vw / var(--z, 1)), 96px) 0 clamp(40px, calc(5vw / var(--z, 1)), 72px); background: var(--bg); text-align: center; }
 .dest-intro .container { display: flex; flex-direction: column; align-items: center; gap: 18px; }
 .dest-intro .hero-kicker { margin: 0; justify-content: center; }
-.dest-intro h1 { margin: 0; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: clamp(56px, calc(7.2vw / var(--z, 1)), 104px); line-height: 0.95; letter-spacing: 0.01em; color: var(--text-strong); }
+.dest-intro h1 { margin: 0; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: var(--page-title); line-height: 0.95; letter-spacing: 0.01em; color: var(--text-strong); }
 .dest-intro p { max-width: 640px; font-size: clamp(16px, calc(1.35vw / var(--z, 1)), 19px); line-height: 1.65; color: var(--muted); }
 .dest-intro-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 6px; }
 
@@ -1516,7 +1473,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .dest-why-item p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
 
 /* how we help: steps + study areas, and a photo with the visa card over it */
-.dest-help { padding: clamp(56px, calc(6vw / var(--z, 1)), 88px) 0; background: var(--paper); }
+.dest-help { padding: clamp(56px, calc(6vw / var(--z, 1)), 88px) 0; background: var(--hero-cream); }
 .dest-help-body { display: flex; flex-direction: column; gap: 22px; }
 .dest-help-list { margin: 0; padding: 0; list-style: none; }
 .dest-help-list li { display: flex; align-items: flex-start; gap: 14px; padding: 10px 0; font-size: 15px; line-height: 1.6; color: var(--text-prose); }
@@ -1638,7 +1595,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   padding: 56px 0 44px;
 }
 .about-routes-list { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; }
-.about-routes-kicker { margin: 0 0 8px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: var(--on-dark-muted); }
+.about-routes-eyebrow { color: var(--brass); }
+.about-routes-title { margin: 8px 0 14px; font-size: clamp(34px, calc(3vw / var(--z, 1)), 42px); line-height: 1; color: #FFFFFF; }
 .about-routes-list ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .about-route {
   display: flex; align-items: baseline; gap: 10px;
@@ -1728,24 +1686,11 @@ a.about-pin:hover { color: var(--brass); }
 
 /* values */
 .about-values { padding-bottom: clamp(64px, calc(7vw / var(--z, 1)), 100px); }
-.about-values-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-bottom: 20px; border-bottom: 2px solid var(--line-strong); }
-.about-values-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
-.about-value { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 36px 36px 8px; }
-.about-value:first-child { padding-left: 0; }
-.about-value + .about-value { border-left: 1px solid var(--border); }
-.about-value-icon { display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 16px; background: var(--ink); color: var(--brass); box-shadow: 0 10px 22px var(--shadow-16); }
-.about-value h3 { font-size: 21px; line-height: 1.3; }
-.about-value p { font-size: 16px; line-height: 1.65; color: var(--muted); }
-@media (max-width: 860px) {
-  .about-values-grid { grid-template-columns: minmax(0, 1fr); }
-  .about-value, .about-value:first-child { padding: 28px 0; }
-  .about-value + .about-value { border-left: none; border-top: 1px solid var(--border); }
-}
+/* the values hang on luggage tags, as on the home page (the look is the
+   home page's .why-tag; main.js swings them in) */
+.about-values-rack { max-width: 860px; margin: 0 auto; }
 
-/* inside Studies & Awards: a mosaic with one square per person, so each
-   department's tile is as big as its team. Hovering (or focusing, or tapping)
-   a tile swaps its headcount for what that department does for you. */
-.about-inside { background: var(--paper); padding: clamp(64px, calc(6.7vw / var(--z, 1)), 96px) 0; }
+.about-inside { background: var(--hero-cream); padding: clamp(64px, calc(6.7vw / var(--z, 1)), 96px) 0; }
 .about-inside-head { display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 24px clamp(40px, calc(5.6vw / var(--z, 1)), 80px); align-items: end; margin-bottom: 44px; }
 .about-inside-title { display: flex; flex-direction: column; gap: 14px; }
 .about-inside-text { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
@@ -1834,7 +1779,7 @@ a.about-pin:hover { color: var(--brass); }
 .lift-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; max-width: 560px; }
 .lift-hero .hero-kicker { margin: 0; color: var(--brass); }
 .lift-hero .hero-kicker-rule { background: var(--brass); }
-.lift-hero h1 { margin: 0; font-size: clamp(56px, calc(6.7vw / var(--z, 1)), 96px); line-height: 0.9; letter-spacing: 0; color: #FFFFFF; }
+.lift-hero h1 { margin: 0; font-size: var(--page-title); line-height: 0.95; letter-spacing: 0.01em; color: #FFFFFF; }
 .lift-lead { font-size: 18px; line-height: 1.6; color: var(--on-dark-muted); }
 /* the floors' texts are laid over each other (the others hidden), so the block is
    always as tall as the longest one and nothing below it jumps when the floor changes */
@@ -1918,7 +1863,7 @@ a.about-pin:hover { color: var(--brass); }
 [data-floor="M1"] .lift-door-r { transform: translateX(100%); }
 
 /* photos and map */
-.loc-before { background: var(--paper); padding: clamp(56px, calc(7vw / var(--z, 1)), 100px) 0; }
+.loc-before { background: var(--hero-cream); padding: clamp(56px, calc(7vw / var(--z, 1)), 100px) 0; }
 .loc-before-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px 40px; margin-bottom: 36px; }
 .loc-before-head .eyebrow { display: block; margin-bottom: 10px; color: var(--brass-ink); }
 .loc-before-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 16px; height: 560px; }
