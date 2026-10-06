@@ -12,11 +12,28 @@
   var buttons = document.querySelectorAll('.theme-toggle');
   var device = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
+  // The choice is saved on the device (localStorage). Some places won't let a
+  // page save anything (a preview, a browser set to block site data), so it
+  // is also kept in the tab's window.name, which lasts while the visitor moves
+  // from page to page in that tab. The saved choice wins when there is one.
+  var MARK = /(^|;)sa-theme=(light|dark)(?=;|$)/;
+  function tabTheme() {
+    var m = MARK.exec(window.name || '');
+    return m ? m[2] : null;
+  }
+  function setTabTheme(theme) {
+    var name = (window.name || '').replace(MARK, '').replace(/^;+|;+$/g, '');
+    if (theme) name = name ? name + ';sa-theme=' + theme : 'sa-theme=' + theme;
+    try { window.name = name; } catch (e) { /* not allowed here */ }
+  }
   function saved() {
-    try { var t = localStorage.getItem('theme'); return t === 'light' || t === 'dark' ? t : null; } catch (e) { return null; }
+    var t = null;
+    try { t = localStorage.getItem('theme'); } catch (e) { /* storage blocked */ }
+    return t === 'light' || t === 'dark' ? t : tabTheme();
   }
   function save(theme) {
-    try { if (theme) localStorage.setItem('theme', theme); else localStorage.removeItem('theme'); } catch (e) { /* private window: this visit only */ }
+    try { if (theme) localStorage.setItem('theme', theme); else localStorage.removeItem('theme'); } catch (e) { /* storage blocked: the tab still carries it */ }
+    setTabTheme(theme);
   }
   function deviceTheme() { return device && device.matches ? 'dark' : 'light'; }
   function current() { return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
@@ -58,7 +75,9 @@
 
   // a choice made in another tab of the site
   window.addEventListener('storage', function (event) {
-    if (event.key === 'theme' || event.key === null) apply(saved() || deviceTheme());
+    if (event.key !== 'theme' && event.key !== null) return;
+    setTabTheme(event.newValue === 'light' || event.newValue === 'dark' ? event.newValue : null);
+    apply(saved() || deviceTheme());
   });
 
   // Back and Forward bring a page back exactly as it was left (the browser's

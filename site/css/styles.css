@@ -1114,7 +1114,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    Your file travelling through the office: a gold line fills down the steps'
    line as you scroll, with a small document riding its tip that slips into
    each dot it passes; a reached dot turns gold with a tick (.is-done) and
-   gives one soft ring (.is-pulse) when reached on the way down. Each step
+   gives one soft ring (.is-pulse) when reached on the way down; after the
+   last dot it carries on as a flight path with a plane. Each step
    eases in the first time it's on screen, a dashed arc shows the one way
    round step 2 (IELTS already sat elsewhere), the six steps at the top appear one after
    another, and a step reached from a link glows for a moment. With reduced
@@ -1141,6 +1142,25 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   opacity: 0; transform: scale(0.5); pointer-events: none;
 }
 .svc-file.is-shown { opacity: 1; transform: none; }
+
+/* after the last dot the line becomes a flight path (main.js draws it): grey
+   dashes for the route ahead, gold dashes for the part flown, and a plane on
+   the tip. The last step gets a little more room at the bottom for the turn,
+   and its plain line stops at its dot. */
+.svc-steps.is-live .svc-step:last-of-type { padding-bottom: calc(var(--pad) + 36px); }
+.svc-steps.is-live .svc-step:last-of-type::before { bottom: auto; height: calc(var(--pad) + var(--dot) / 2); }
+.svc-flight { position: absolute; top: 0; left: 0; overflow: visible; pointer-events: none; }
+.svc-flight path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.svc-flight-track { stroke: var(--border); stroke-width: 2; stroke-dasharray: 2 8; }
+.svc-flight-flown { stroke: var(--brass); stroke-width: 2.5; stroke-dasharray: 2 8; }
+.svc-flight-reveal { stroke: #FFFFFF; stroke-width: 12; stroke-linecap: butt; }
+.svc-plane {
+  position: absolute; top: 0; left: 0; z-index: 2; width: 26px; height: 26px; margin: -13px 0 0 -13px;
+  color: var(--brass-ink); opacity: 0; pointer-events: none;
+  filter: drop-shadow(0 0 3px var(--bg)) drop-shadow(0 0 3px var(--bg));
+}
+.svc-plane svg { display: block; width: 100%; height: 100%; }
+.svc-plane.is-shown { opacity: 1; }
 
 /* the way round step 2, for students who have already sat IELTS elsewhere:
    a quiet dashed arc from step 1 into step 3, beside the link that says so,
@@ -1172,6 +1192,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .svc-step-dot { transition: background-color 300ms ease, border-color 300ms ease, color 300ms ease; }
   .svc-dot-num, .svc-dot-tick { transition: opacity 250ms ease, transform 300ms cubic-bezier(0.3, 1.5, 0.5, 1); }
   .svc-file { transition: opacity 200ms ease, transform 250ms ease; }
+  .svc-plane { transition: opacity 200ms ease; }
   .svc-skip { transition: clip-path 1100ms cubic-bezier(0.45, 0, 0.2, 1) 250ms; }
   .svc-person img { transition: transform 200ms ease, box-shadow 200ms ease; }
   .svc-person:hover img { transform: translateY(-2px) scale(1.04); box-shadow: 0 6px 14px var(--shadow-18); }
@@ -1193,6 +1214,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .svc-file { width: 24px; height: 24px; margin: -12px 0 0 -12px; }
   .svc-skip { display: none; } /* no room beside the line: the "Go straight to step 3" link says it */
   .svc-file svg { width: 13px; height: 13px; }
+  .svc-plane { width: 22px; height: 22px; margin: -11px 0 0 -11px; }
   .svc-formats { grid-template-columns: minmax(0, 1fr); }
   .svc-hero-actions .hero-cta { flex: 1 1 100%; justify-content: center; }
 }

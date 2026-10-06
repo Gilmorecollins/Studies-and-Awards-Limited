@@ -148,7 +148,10 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   in the header on phones, tablets and the portal), which is saved on their
   device for the whole site. Choosing the same as their device forgets the
   choice again, so the
-  page goes back to following the device. How it fits together:
+  page goes back to following the device. Where the browser won't let a page
+  save anything (a preview, or a browser set to block site data), the choice
+  still carries from page to page in that tab (it rides in the tab's
+  `window.name`). How it fits together:
   - **Colours.** `styles.css` (and `portal.css`, the same way) has two kinds.
     *Theme colours* are the variables at the top of the file (`--bg`,
     `--paper`, `--surface`, `--text-strong`, `--text`, `--muted`, `--border`,
@@ -295,7 +298,10 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   The motion (`main.js`, "Services page: the motion"): as you scroll, a gold
   line fills down the steps' line with a small document riding its tip (the
   student's file moving between departments), and each dot it reaches turns
-  gold with a tick. Each step eases in the first time it's on screen. A quiet
+  gold with a tick. After the last step (visa and travel) the line becomes a
+  dashed flight path: it runs down beside that step, turns along the bottom
+  and climbs away to the right, with a small plane on its tip that lands at
+  the end of the route. Each step eases in the first time it's on screen. A quiet
   dashed arc round step 2 (the step marked `has-shortcut`) draws in on wider
   screens. It is the way round language classes for students who have already
   sat IELTS elsewhere; language classes are otherwise part of every student's
@@ -364,6 +370,6 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
     on your own copy of the site (opened as a file, or on localhost) or with
     `?testimonialsPreview` in the address, each tagged "Sample: preview
     only". Visitors on the live site never see them.
-- **Publishing**: the live version is published as a Claude Artifact, not
-  auto-deployed from this repo. Republish from `site/index.html` after
-  making changes.
+- **Publishing**: Vercel (project `test-studies-and-awards-limited`) serves
+  `site/` and publishes the live site automatically from `main`. A Claude
+  Artifact preview of the site is kept for review.

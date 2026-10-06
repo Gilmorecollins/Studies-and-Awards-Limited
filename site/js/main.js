@@ -2412,7 +2412,9 @@ function createCursorFollower(options) {
 // to a reading line 60% of the way down the window, with a small document
 // riding its tip: their file moving from one department to the next. Each
 // dot the line reaches turns gold with a tick, with one soft ring when it's
-// reached on the way down; scrolling back up undoes them. Each step eases in
+// reached on the way down; scrolling back up undoes them. After the last dot
+// the line carries on as a dashed flight path with a plane on its tip, which
+// turns along the bottom and takes off to the right. Each step eases in
 // the first time it comes on screen, a dashed arc round step 2 shows the way
 // round it for students who have already sat IELTS elsewhere, the six steps at the top appear one
 // after another, and a step reached from a link on the page glows for a
@@ -2466,6 +2468,33 @@ function createCursorFollower(options) {
     list.appendChild(skip);
   }
 
+  // after the last dot the line becomes a flight path: a dashed route down
+  // beside the last step that turns and takes off to the right, with a plane
+  // riding its tip. The grey dashes are the route still to fly; the gold
+  // dashes over them are revealed as far as the plane has got.
+  var flight = document.createElementNS(SVG, 'svg');
+  flight.setAttribute('class', 'svc-flight');
+  flight.setAttribute('aria-hidden', 'true');
+  var flightId = 'svc-flight-mask';
+  flight.innerHTML = '<defs><mask id="' + flightId + '" maskUnits="userSpaceOnUse"><path class="svc-flight-reveal"/></mask></defs>' +
+    '<path class="svc-flight-track"/><path class="svc-flight-flown" mask="url(#' + flightId + ')"/>';
+  var flightPaths = Array.prototype.slice.call(flight.querySelectorAll('path'));
+  var reveal = flightPaths[0];
+  var track = flightPaths[1];
+  var flown = flightPaths[2];
+  list.appendChild(flight);
+  var plane = document.createElement('span');
+  plane.className = 'svc-plane';
+  plane.setAttribute('aria-hidden', 'true');
+  plane.innerHTML = '<svg viewBox="-0.5 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>';
+  list.appendChild(plane);
+  var flightStart = 0;  // where the route leaves the last dot (list y)
+  var flightBend = 0;   // where it starts to turn
+  var flightLength = 0; // its whole length
+  var bendLength = 0;   // its length down to the turn
+  var flightLeft = 0;   // the svg's position in the list
+  var flightTop = 0;
+
   // where things are, in the list's own CSS pixels (the laptop fit zooms
   // the page, and positions on screen come back zoomed)
   var centres = [];
@@ -2488,6 +2517,79 @@ function createCursorFollower(options) {
     fill.style.top = centres[0] + 'px';
     file.style.left = lineX + 'px';
     if (skip) drawSkip();
+    drawFlight(z, box);
+  }
+
+  // down from the last dot to near the bottom of the list, a round turn, a
+  // run along the bottom, then a climb to the right edge. The climb is only
+  // as steep as the room above it allows (on narrow screens who looks after
+  // the step sits just above the route).
+  function drawFlight(z, box) {
+    var lastStep = steps[last];
+    var width = box.width / z;
+    var height = box.height / z;
+    var x0 = lineX;
+    var y0 = centres[last] + radius + 10;
+    var yb = height - Math.max(22, parseFloat(window.getComputedStyle(lastStep).paddingBottom) * 0.45);
+    var turn = Math.max(0, Math.min(56, (width - x0) / 6, yb - y0));
+    var xe = width - 6;
+    var climbFrom = Math.max(x0 + turn + 40, xe - Math.min(320, (xe - x0) * 0.42));
+    // the lowest thing standing above the climb
+    var roof = y0;
+    Array.prototype.forEach.call(lastStep.querySelectorAll('.svc-step-main > *, .svc-step-side'), function (el) {
+      var r = el.getBoundingClientRect();
+      var left = (r.left - box.left) / z;
+      var right = (r.right - box.left) / z;
+      if (r.height && right > climbFrom && left < xe) roof = Math.max(roof, (r.bottom - box.top) / z);
+    });
+    var rise = Math.max(0, Math.min(84, yb - roof - 26));
+    flightLeft = 0;
+    flightTop = 0;
+    flight.setAttribute('width', width);
+    flight.setAttribute('height', height);
+    flight.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+    var d = 'M' + x0 + ' ' + y0 + 'V' + (yb - turn) +
+      'Q' + x0 + ' ' + yb + ' ' + (x0 + turn) + ' ' + yb +
+      'H' + climbFrom +
+      'C' + (climbFrom + (xe - climbFrom) * 0.55) + ' ' + yb + ' ' + (xe - (xe - climbFrom) * 0.25) + ' ' + (yb - rise * 0.55) + ' ' + xe + ' ' + (yb - rise);
+    track.setAttribute('d', d);
+    flown.setAttribute('d', d);
+    reveal.setAttribute('d', d);
+    flightStart = y0;
+    flightBend = yb - turn;
+    flightLength = track.getTotalLength();
+    bendLength = flightBend - flightStart;
+    reveal.style.strokeDasharray = flightLength + ' ' + flightLength;
+  }
+
+  // how far along the route the plane is, from where the reading line is:
+  // down the straight it keeps level with the reading line, like the gold
+  // line above; from the turn on, it flies the rest of the way over the next
+  // quarter of a window of scrolling, so it lands while the route is still in
+  // view (sooner where the page ends sooner)
+  function flightDistance(tip) {
+    if (tip <= flightStart) return 0;
+    if (tip <= flightBend) return tip - flightStart;
+    var z = pageZoom();
+    var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    var tipAtBottom = (window.innerHeight * READING_LINE - list.getBoundingClientRect().top) / z +
+      (maxScroll - window.pageYOffset) / z;
+    var finish = Math.min(flightBend + window.innerHeight * 0.25 / z, tipAtBottom - 30);
+    if (finish <= flightBend) return flightLength;
+    var t = Math.min(1, (tip - flightBend) / (finish - flightBend));
+    return bendLength + (flightLength - bendLength) * t;
+  }
+
+  function drawPlane(tip, finished) {
+    var dist = finished ? flightLength : flightDistance(tip);
+    reveal.style.strokeDashoffset = String(flightLength - dist);
+    if (dist <= 0) { plane.classList.remove('is-shown'); return; }
+    var at = track.getPointAtLength(dist);
+    var ahead = track.getPointAtLength(Math.min(flightLength, dist + 1));
+    var behind = track.getPointAtLength(Math.max(0, dist - 1));
+    var angle = Math.atan2(ahead.y - behind.y, ahead.x - behind.x) * 180 / Math.PI + 90;
+    plane.style.transform = 'translate(' + (flightLeft + at.x) + 'px, ' + (flightTop + at.y) + 'px) rotate(' + angle.toFixed(1) + 'deg)';
+    plane.classList.add('is-shown');
   }
 
   // the arc bows out to the left of the line, as far as the window allows
@@ -2543,6 +2645,7 @@ function createCursorFollower(options) {
       step.classList.toggle('is-done', done);
       if (done && goingDown && !finished) pulse(dots[i]);
     });
+    drawPlane(tip, finished);
     lastTip = tip;
   }
 

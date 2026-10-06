@@ -5,9 +5,11 @@
 
 // Runs in <head> before the page is drawn, so nobody sees the light page flash
 // first: the visitor's own choice from the sun and moon switch (saved on their
-// device) wins, otherwise their device's light or dark setting. 404.html
-// (which no generator writes) carries a hand copy of this line.
-export const THEME_SCRIPT = "<script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t)})()</script>";
+// device, or, where the browser won't let the page save it, carried from page
+// to page in the tab's window.name) wins, otherwise their device's light or
+// dark setting. 404.html (which no generator writes) carries a hand copy of
+// this line.
+export const THEME_SCRIPT = "<script>(function(){var t,m=/(?:^|;)sa-theme=(light|dark)(?:;|$)/.exec(window.name||'');try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'&&m)t=m[1];if(t!=='light'&&t!=='dark')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t)})()</script>";
 
 // The sun and moon switch. `indent` is the indentation of the line it starts
 // on, so it lines up with the markup around it. The hand-maintained pages
