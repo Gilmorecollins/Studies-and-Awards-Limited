@@ -336,7 +336,10 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   and again, and disappears as soon as they stop. The six cards rise in with split-flap airport codes,
   as on the home page. It's in `main.js` ("Destinations page: the map as a
   departures screen") and `styles.css` ("destinations: the motion"). Nothing
-  moves for visitors who ask their device for reduced motion.
+  moves for visitors who ask their device for reduced motion. The About
+  page's map has the same motion (the same code), starting when the map
+  scrolls into view: routes drawing out from Eldoret, the tags appearing,
+  the pulse, and a navy plane while a country is pointed at.
 - **"Where you can study" (home page)**: the motion is in `main.js`
   ("departures board") and `styles.css`. The cards rise in one after another
   the first time they come on screen, each airport code clicks through

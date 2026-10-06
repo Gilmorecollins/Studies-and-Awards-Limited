@@ -881,12 +881,15 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 @keyframes route-land-halo { 0% { transform: scale(0); } 50% { transform: scale(2.2); fill-opacity: 0.35; } 100% { transform: scale(1); } }
 .route-pin.is-waiting { opacity: 0; transform: translateY(6px); }
 .route-pin { transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.route-map.is-live .map-origin-1 { transform-box: fill-box; transform-origin: center; animation: route-origin-pulse 2.8s ease-out infinite; }
+.route-map.is-live .map-origin-1, .about-routes-map.is-live .map-origin-1 { transform-box: fill-box; transform-origin: center; animation: route-origin-pulse 2.8s ease-out infinite; }
 @keyframes route-origin-pulse { 0% { transform: scale(0.5); fill-opacity: 0.4; } 100% { transform: scale(1.9); fill-opacity: 0; } }
 .route-plane { fill: #FFFFFF; opacity: 0; transition: opacity 150ms ease; pointer-events: none; }
 .route-plane.is-flying { opacity: 1; }
+/* the About page: tags fade in (they're placed with transforms), a navy plane on the white page */
+.about-pin.is-waiting { opacity: 0; }
+.about-routes .route-plane { fill: var(--text-strong); }
 @media (prefers-reduced-motion: reduce) {
-  .route-map.is-live .map-origin-1 { animation: none; }
+  .route-map.is-live .map-origin-1, .about-routes-map.is-live .map-origin-1 { animation: none; }
 }
 [data-route-active] .route-pin { opacity: 0.35; }
 [data-route-active] .route-pin.is-active { opacity: 1; }

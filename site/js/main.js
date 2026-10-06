@@ -2511,34 +2511,38 @@ function createCursorFollower(options) {
   });
 })();
 
-// Destinations page: the map as a departures screen (the look is in
-// styles.css, "destinations: the motion"). As the page opens the text eases
-// in, the six routes draw out from Eldoret one after another and each
-// country's label appears as its route lands, while Eldoret gives off a slow
-// pulse. While the visitor points at a route, card or label, a small plane
+// The route maps as a departures screen, on the Destinations page and the
+// About page (the look is in styles.css, "destinations: the motion"). When
+// the map comes on screen the six routes draw out from Eldoret one after
+// another and each country's label appears as its route lands, while
+// Eldoret gives off a slow pulse (and on the Destinations page the text
+// beside it eases in). While the visitor points at a route, card or label, a small plane
 // flies that route from Eldoret, again and again, and it disappears as soon
 // as they stop. With reduced motion none of this runs and the map shows as
 // it is.
 (function () {
   'use strict';
 
-  var map = document.querySelector('.route-map');
-  var svg = map && map.querySelector('.map-lines');
-  if (!svg) return;
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var SVG = 'http://www.w3.org/2000/svg';
-  var scope = map.closest('[data-route-scope]') || document.body;
-  var copy = document.querySelector('.route-hero-copy');
   var DRAW_MS = 900;
   var GAP_MS = 220;
   var FLIGHT_MS = 2600;
 
-  // the text eases in, one line after another
+  // the Destinations page's text eases in, one line after another
+  var copy = document.querySelector('.route-hero-copy');
   if (copy) {
     Array.prototype.forEach.call(copy.children, function (el, i) { el.style.setProperty('--i', String(i)); });
     copy.classList.add('is-in');
   }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.route-map, .about-routes-map'), live);
+
+  function live(map, mapIndex) {
+  var svg = map.querySelector('.map-lines');
+  if (!svg) return;
+  var scope = map.closest('[data-route-scope]') || document.body;
 
   map.classList.add('is-live');
   var defs = document.createElementNS(SVG, 'defs');
@@ -2550,7 +2554,7 @@ function createCursorFollower(options) {
     var len = path.getTotalLength();
     // the dashed route shows through a solid stroke that grows along it
     var mask = document.createElementNS(SVG, 'mask');
-    mask.id = 'route-draw-' + code;
+    mask.id = 'route-draw-' + mapIndex + '-' + code;
     mask.setAttribute('maskUnits', 'userSpaceOnUse');
     mask.setAttribute('x', '0'); mask.setAttribute('y', '0');
     mask.setAttribute('width', '720'); mask.setAttribute('height', '432');
@@ -2563,7 +2567,7 @@ function createCursorFollower(options) {
     defs.appendChild(mask);
     path.setAttribute('mask', 'url(#' + mask.id + ')');
     line.classList.add('is-waiting');
-    var pin = map.querySelector('.route-pin[data-route="' + code + '"]');
+    var pin = map.querySelector('.route-pin[data-route="' + code + '"], .about-pin[data-route="' + code + '"]');
     if (pin) {
       // hide it at once (no fade out), so it only ever fades in
       pin.style.transition = 'none';
@@ -2571,10 +2575,13 @@ function createCursorFollower(options) {
       void pin.offsetWidth;
       pin.style.transition = '';
     }
-    return { code: code, line: line, path: path, len: len, reveal: reveal, mask: mask, pin: pin, delay: 500 + i * (DRAW_MS * 0.55 + GAP_MS) };
+    return { code: code, line: line, path: path, len: len, reveal: reveal, mask: mask, pin: pin, delay: 300 + i * (DRAW_MS * 0.55 + GAP_MS) };
   });
+  var allDrawn = routes.length ? routes[routes.length - 1].delay + DRAW_MS : 0;
 
-  // each route draws out from Eldoret; as it lands its end and label appear
+  // each route draws out from Eldoret once the map is on screen; as it lands
+  // its end and label appear
+  function draw() {
   routes.forEach(function (r) {
     window.setTimeout(function () {
       r.reveal.style.transition = 'stroke-dashoffset ' + DRAW_MS + 'ms cubic-bezier(0.45, 0, 0.25, 1)';
@@ -2589,7 +2596,18 @@ function createCursorFollower(options) {
       }, DRAW_MS - 80);
     }, r.delay);
   });
-  var allDrawn = routes.length ? routes[routes.length - 1].delay + DRAW_MS : 0;
+  window.setTimeout(function () { ready = true; follow(); }, allDrawn);
+  }
+  if (window.IntersectionObserver) {
+    var seen = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
+      seen.disconnect();
+      draw();
+    }, { rootMargin: '0px 0px -20% 0px' });
+    seen.observe(map);
+  } else {
+    draw();
+  }
 
   // the plane: it points up in its own drawing, centred on 0,0
   var plane = document.createElementNS(SVG, 'g');
@@ -2653,7 +2671,7 @@ function createCursorFollower(options) {
   if (window.MutationObserver) {
     new MutationObserver(follow).observe(scope, { attributes: true, attributeFilter: ['data-route-active'] });
   }
-  window.setTimeout(function () { ready = true; follow(); }, allDrawn);
+  }
 })();
 
 // Services page: the people who look after each step. Each list names them by
