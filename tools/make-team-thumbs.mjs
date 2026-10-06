@@ -12,8 +12,8 @@ import { Jimp, ResizeStrategy } from 'jimp';
 //
 // Why not just shrink the big photo in the browser? The full portraits are
 // 960x1200 and 4:5, so squeezing one into a small square crops the top of the
-// head off and leaves the face tiny. These are framed on purpose — the eyes sit
-// at the same height on every card, with room above the hair — and made at 240px
+// head off and leaves the face tiny. These are framed on purpose, the eyes sit
+// at the same height on every card, with room above the hair, and made at 240px
 // so they stay sharp on high-density phone screens (shown at ~96px).
 //
 // The framing numbers are pixel positions in each 960x1200 team photo:
@@ -68,7 +68,7 @@ let written = 0;
 const skipped = [];
 for (const [id, f] of Object.entries(framing)) {
   const src = join(teamDir, `${id}.jpg`);
-  if (!existsSync(src)) { console.error(`missing ${id}.jpg — skipped`); skipped.push(id); continue; }
+  if (!existsSync(src)) { console.error(`missing ${id}.jpg, skipped`); skipped.push(id); continue; }
   const img = await Jimp.read(src);
   const { width, height } = img.bitmap;
 

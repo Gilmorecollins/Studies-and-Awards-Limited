@@ -453,7 +453,7 @@
         if (file.size > 5 * 1024 * 1024) { toast('That file is over 5MB. Try a smaller scan or photo.'); input.value = ''; return; }
         row.classList.add('is-picked');
         var name = $('.p-doc-file', row);
-        name.textContent = file.name + ' (selected for this preview — the file is not stored)';
+        name.textContent = file.name + ' (selected for this preview; the file is not stored)';
         name.hidden = false;
         $('.p-doc-picked', row).hidden = false;
         $('.p-doc-btn-text', row).textContent = 'Replace';
@@ -470,7 +470,7 @@
       var f = form.elements;
       // An explicit "Apply" on a course always wins, even when an earlier
       // draft already filled preference 1. Guarding on an empty preference
-      // meant the second Apply was silently ignored — the student saw the
+      // meant the second Apply was silently ignored, the student saw the
       // previous course and a button that appeared to do nothing.
       if (f.pref1_course) {
         f.pref1_course.value = applyCourse.name;

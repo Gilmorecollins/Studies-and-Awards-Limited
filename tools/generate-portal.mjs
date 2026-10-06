@@ -40,7 +40,7 @@ const team = (() => {
 })();
 const counsellorMember = team.find(m => m.portalCounsellor) || team.find(m => m.startHere) || team[0];
 if (!counsellorMember) {
-  throw new Error('generate-portal: site/js/team-data.js must define at least one member — the portal needs a counsellor.');
+  throw new Error('generate-portal: site/js/team-data.js must define at least one member, the portal needs a counsellor.');
 }
 const waDigits = String(counsellorMember.whatsapp || '').replace(/\D/g, '');
 const counsellorPhoto = counsellorMember.thumb || counsellorMember.photo || '';
@@ -445,7 +445,7 @@ const SECTIONS = [
                   ${field('passport_issued', 'Date of issue', { type: 'date' })}
                   ${field('passport_expires', 'Expiry date', { type: 'date' })}
                   ${skip('passport_none', 'I don&rsquo;t have a passport yet')}
-                  <p class="p-hint p-span-2 p-hint-box">No passport yet? Tick the box above &mdash; that completes this section &mdash; and ask your counsellor; we&rsquo;ll guide you through applying for one.</p>`],
+                  <p class="p-hint p-span-2 p-hint-box">No passport yet? Tick the box above (that completes this section) and ask your counsellor; we&rsquo;ll guide you through applying for one.</p>`],
   ['permanent_address', 'Permanent address', addressFields('perm')],
   ['nationality_info', 'Nationality', `${field('birth_country', 'Country of birth', { options: COUNTRIES })}
                   ${field('birth_place', 'Place of birth')}

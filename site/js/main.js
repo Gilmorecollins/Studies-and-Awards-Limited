@@ -51,7 +51,7 @@
 
 })();
 
-// Footer newsletter box — no backend on this site, so "subscribing" opens
+// Footer newsletter box, no backend on this site, so "subscribing" opens
 // the visitor's own mail client with the address pre-filled, same as every
 // other call-to-action on the site.
 (function () {
@@ -122,7 +122,7 @@
   var timer = null;
   var playing = false;
 
-  // Lazy-load each background image only once, right before it's needed —
+  // Lazy-load each background image only once, right before it's needed,
   // avoids fetching every city photo (potentially 9+ full-screen images) on load.
   // Phones and portrait tablets get the 3:4 crop (data-src-portrait): they only
   // ever see the middle of the wide photo, and the crop is far lighter.
@@ -161,7 +161,7 @@
 
     // The outgoing image is mid-way through its slow Ken Burns zoom. Simply
     // removing .is-active kills that animation instantly, snapping the scale
-    // back to its 1.08 starting point right as the crossfade begins — freeze
+    // back to its 1.08 starting point right as the crossfade begins, freeze
     // it at its current computed scale instead so the fade-out stays smooth.
     if (prevIndex > -1 && images[prevIndex]) {
       var outgoing = images[prevIndex];
@@ -217,7 +217,7 @@
 
   setActive(0);
 
-  // Respect reduced-motion: never auto-advance content for those users —
+  // Respect reduced-motion: never auto-advance content for those users,
   // the slideshow becomes fully manual (dots / pause-play button still work).
   if (!reduceMotion) {
     play();
@@ -294,9 +294,9 @@
   };
 })();
 
-// Team section: horizontal member slider — the leftmost card is always the
+// Team section: horizontal member slider, the leftmost card is always the
 // active (full-colour) member, everything after it sits in halftone until
-// it slides into place — plus the "view more" bio modal.
+// it slides into place, plus the "view more" bio modal.
 (function () {
   'use strict';
 
@@ -421,7 +421,7 @@
   }
 
   // Fades a set of text elements out, swaps their content, then fades them
-  // back in — used for the name/role/bio crossfade on every slide change.
+  // back in, used for the name/role/bio crossfade on every slide change.
   function crossfadeText(els, texts, silent) {
     if (silent) {
       els.forEach(function (el, i) { el.textContent = texts[i]; });
@@ -892,7 +892,7 @@ function createCursorFollower(options) {
   }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
 
-  // Session storage can throw (private mode, blocked site data) — the card
+  // Session storage can throw (private mode, blocked site data), the card
   // must render and work either way, so every access is guarded.
   function readDismissed() {
     try { return window.sessionStorage.getItem(DISMISS_KEY) === '1'; } catch (e) { return false; }
@@ -1017,7 +1017,7 @@ function createCursorFollower(options) {
   });
 
   // Coming back via the browser's back button can restore this page from the
-  // back/forward cache exactly as we left it — mid-flight. Put it back on the
+  // back/forward cache exactly as we left it, mid-flight. Put it back on the
   // runway.
   window.addEventListener('pageshow', function (event) {
     if (!event.persisted) return;
@@ -1041,9 +1041,9 @@ function createCursorFollower(options) {
 // Destination pages: the "View partners & courses" dialog. A city panel's button
 // opens a searchable list of that city's partner institutions and the courses
 // each offers, read from js/partners-<country>.js (generated from
-// tools/data/partner-institutions.json). Behaves like the team bio modal —
+// tools/data/partner-institutions.json). Behaves like the team bio modal,
 // Escape / overlay click / close button, focus trap, body scroll lock, focus
-// returned to the button — and pauses the city slideshow while it's open.
+// returned to the button, and pauses the city slideshow while it's open.
 (function () {
   'use strict';
 
@@ -1201,7 +1201,7 @@ function createCursorFollower(options) {
     applyFilter();
     bodyEl.scrollTop = 0;
 
-    // the slideshow would keep rotating behind the dialog — pause it, resume on close
+    // the slideshow would keep rotating behind the dialog, pause it, resume on close
     if (playToggle && scroller.classList.contains('is-playing')) { playToggle.click(); pausedSlideshow = true; }
 
     window.clearTimeout(hideTimer);
@@ -1233,7 +1233,7 @@ function createCursorFollower(options) {
 })();
 
 // Site-wide "Book Free Consultation": instead of opening an email, the button
-// opens a chooser of our staff (from js/team-data.js) — pick who to talk to and
+// opens a chooser of our staff (from js/team-data.js), pick who to talk to and
 // go straight to their WhatsApp with a message ready to send. People are listed
 // in the same order as the Team page, can be narrowed by department, and a
 // person flagged `startHere` is offered first for visitors who aren't sure.
@@ -1242,7 +1242,7 @@ function createCursorFollower(options) {
 // existing buttons work without being edited), plus anything marked
 // data-consult; data-consult-dept opens it on one department. Progressive enhancement: until at least one person has a
 // `whatsapp` number in team-data.js, it steps aside and the buttons keep opening
-// an email, exactly as before — and the email link stays the fallback for
+// an email, exactly as before, and the email link stays the fallback for
 // new-tab clicks and for visitors without JavaScript.
 (function () {
   'use strict';
@@ -1554,7 +1554,7 @@ function createCursorFollower(options) {
     body.appendChild(grid);
     startTag = grid.querySelector('.is-start .consult-start-tag');
 
-    // department filters — only worth showing when there's a real choice to narrow
+    // department filters, only worth showing when there's a real choice to narrow
     var departments = departmentsOf(list);
     var counts = {};
     list.forEach(function (p) { counts[p.m.department] = (counts[p.m.department] || 0) + 1; });

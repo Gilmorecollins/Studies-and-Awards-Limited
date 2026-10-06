@@ -43,10 +43,10 @@
 // These are public web pages: use numbers people are happy to have published
 // (a work WhatsApp / business line is safer than a personal one).
 //
-// Bios are drafted from each person's role only — no invented specifics
+// Bios are drafted from each person's role only, no invented specifics
 // (no made-up years of experience, schools, etc.). Swap in real detail
 // whenever you have it. Last names and real linkedin URLs are still
-// missing for most people — fill those in when ready.
+// missing for most people, fill those in when ready.
 // The order the department filter buttons appear in the consultation chooser
 // (front-line first). It sets only the filter buttons, not the order of people.
 window.CONSULT_DEPARTMENTS = [

@@ -43,7 +43,7 @@ for (const rel of [...wanted].sort()) {
   const kind = rel.includes('/thumbs/') ? 'thumbs' : rel.includes('/portrait/') ? 'portrait' : 'editorial';
   const { width, quality, aspect } = SIZES[kind];
   const src = out.replace(`/${kind}/`, '/');
-  if (!existsSync(src)) { console.error(`missing source photo for ${rel} — skipped`); continue; }
+  if (!existsSync(src)) { console.error(`missing source photo for ${rel}, skipped`); continue; }
   if (!all && existsSync(out) && statSync(out).mtimeMs >= statSync(src).mtimeMs) continue;
   mkdirSync(dirname(out), { recursive: true });
   const img = await Jimp.read(src);
