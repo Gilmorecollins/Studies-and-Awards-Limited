@@ -2913,7 +2913,9 @@ function createCursorFollower(options) {
   // The plane glides towards where the scrolling says it should be rather
   // than jumping there, so it flies smoothly however unevenly the page
   // scrolls (a mouse wheel moves the page in steps).
+  var planeFinished = false;
   function drawPlane(tip, finished) {
+    planeFinished = finished;
     planeGoal = finished ? flightLength : flightDistance(tip);
     if (finished || planeAt < 0) { planeAt = planeGoal; placePlane(); return; }
     if (!planeMoving) { planeMoving = true; window.requestAnimationFrame(glide); }
@@ -2930,13 +2932,19 @@ function createCursorFollower(options) {
   function placePlane() {
     var dist = planeAt;
     reveal.style.strokeDashoffset = String(flightLength - dist);
-    if (dist <= 0) { plane.classList.remove('is-shown'); return; }
+    if (dist <= 0) { plane.classList.remove('is-shown'); plane.style.opacity = ''; return; }
     var at = track.getPointAtLength(dist);
     var ahead = track.getPointAtLength(Math.min(flightLength, dist + 2));
     var behind = track.getPointAtLength(Math.max(0, dist - 2));
     var angle = Math.atan2(ahead.y - behind.y, ahead.x - behind.x) * 180 / Math.PI + 90;
     plane.style.transform = 'translate3d(' + at.x.toFixed(2) + 'px, ' + at.y.toFixed(2) + 'px, 0) rotate(' + angle.toFixed(1) + 'deg)';
     plane.classList.add('is-shown');
+    // over the last stretch of the climb the plane fades away, as if flying
+    // off; scrolling back up brings it back (the finished picture, with
+    // reduced motion, keeps it parked at the end)
+    var fadeLen = Math.min(160, flightLength * 0.18);
+    var left = flightLength - dist;
+    plane.style.opacity = planeFinished || left >= fadeLen ? '' : String(Math.max(0, left / fadeLen).toFixed(3));
   }
 
   // the arc bows out to the left of the line, as far as the window allows

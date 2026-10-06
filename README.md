@@ -301,8 +301,9 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   student's file moving between departments), and each dot it reaches turns
   gold with a tick. After the last step (visa and travel) the line becomes a
   dashed flight path: it runs down beside that step, turns along the bottom
-  and climbs away to the right, with a small plane on its tip that lands at
-  the end of the route. Each step eases in the first time it's on screen. A quiet
+  and climbs away to the right, with a small plane on its tip that fades
+  away as it reaches the end of the route (and fades back in when you
+  scroll back up). Each step eases in the first time it's on screen. A quiet
   dashed arc round step 2 (the step marked `has-shortcut`) draws in on wider
   screens. It is the way round language classes for students who have already
   sat IELTS elsewhere; language classes are otherwise part of every student's
