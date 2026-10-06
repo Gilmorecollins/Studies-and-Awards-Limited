@@ -863,6 +863,31 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 [data-route-active] .map-line.is-active path { stroke-width: 2.6; }
 .route-map-labels { position: absolute; inset: 0; pointer-events: none; }
 .route-pin { position: absolute; display: flex; flex-direction: column; align-items: flex-start; pointer-events: auto; transition: opacity 0.35s ease; }
+
+/* ---- destinations: the motion (main.js adds the classes and the plane) ----
+   As the page opens the text eases in, the routes draw out from Eldoret one
+   after another (a solid stroke growing in a mask over each dashed route),
+   each end and label popping in as its route lands; Eldoret pulses gently;
+   then a small plane flies the routes in turn. With reduced motion none of
+   this runs. */
+.route-hero-copy.is-in > * { animation: route-rise 800ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--i, 0) * 110ms); }
+@keyframes route-rise { from { opacity: 0; transform: translateY(22px); } }
+.route-draw { fill: none; stroke: #FFFFFF; stroke-width: 10; stroke-linecap: round; }
+.map-line.is-waiting .map-line-halo, .map-line.is-waiting .map-line-end { opacity: 0; }
+.map-line-halo, .map-line-end { transform-box: fill-box; transform-origin: center; }
+.map-line.is-landed .map-line-halo { animation: route-land-halo 900ms ease-out; }
+.map-line.is-landed .map-line-end { animation: route-land 450ms cubic-bezier(0.3, 1.6, 0.5, 1); }
+@keyframes route-land { from { transform: scale(0); } }
+@keyframes route-land-halo { 0% { transform: scale(0); } 50% { transform: scale(2.2); fill-opacity: 0.35; } 100% { transform: scale(1); } }
+.route-pin.is-waiting { opacity: 0; transform: translateY(6px); }
+.route-pin { transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.route-map.is-live .map-origin-1 { transform-box: fill-box; transform-origin: center; animation: route-origin-pulse 2.8s ease-out infinite; }
+@keyframes route-origin-pulse { 0% { transform: scale(0.5); fill-opacity: 0.4; } 100% { transform: scale(1.9); fill-opacity: 0; } }
+.route-plane { fill: #FFFFFF; opacity: 0; transition: opacity 400ms ease; pointer-events: none; }
+.route-plane.is-flying { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .route-map.is-live .map-origin-1 { animation: none; }
+}
 [data-route-active] .route-pin { opacity: 0.35; }
 [data-route-active] .route-pin.is-active { opacity: 1; }
 [data-route-active] .route-pin.is-active .route-pin-code { color: var(--brass); }
@@ -1343,16 +1368,16 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    "+3" card) clicks through letters before settling, like a split-flap
    board, and the "+3" counts up. Pointing at a card flips its code again and
    lets its flag drift a little. With reduced motion none of this runs. */
-.dest-pick-grid.is-waiting > * { opacity: 0; }
-.dest-pick-grid.is-in > * { animation: dest-pick-rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--i, 0) * 110ms); }
+.dest-pick-grid.is-waiting > *, .route-cards.is-waiting > * { opacity: 0; }
+.dest-pick-grid.is-in > *, .route-cards.is-in > * { animation: dest-pick-rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--i, 0) * 110ms); }
 @keyframes dest-pick-rise { from { opacity: 0; transform: translateY(32px); } }
 /* each letter keeps its own width while it flips, so the code doesn't wobble */
 .flap { display: inline-block; text-align: center; }
 .flap.is-flipping { animation: flap-tick 90ms steps(2) infinite; }
 @keyframes flap-tick { 50% { transform: scaleY(0.82); } }
 @media (prefers-reduced-motion: no-preference) {
-  .dest-pick-grid .dest-card-flag { transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
-  .dest-pick-grid .dest-card:hover .dest-card-flag { transform: scale(1.08) translateX(-3%); }
+  .dest-pick-grid .dest-card-flag, .route-cards .dest-card-flag { transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .dest-pick-grid .dest-card:hover .dest-card-flag, .route-cards .dest-card:hover .dest-card-flag { transform: scale(1.08) translateX(-3%); }
 }
 
 /* ---------- home: "why choose us", values on hanging luggage tags ----------
