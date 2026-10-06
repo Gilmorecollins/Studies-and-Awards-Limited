@@ -3380,10 +3380,19 @@ function createCursorFollower(options) {
     var s = status();
     Array.prototype.forEach.call(badges, function (badge) {
       if (!s) { badge.hidden = true; return; }
+      var changed = badge.hidden || badge.getAttribute('data-state') !== s.state;
       badge.textContent = s.text;
       badge.classList.toggle('is-open', s.state !== 'closed');
       badge.classList.toggle('is-soon', s.state === 'soon');
+      badge.setAttribute('data-state', s.state);
       badge.hidden = false;
+      // the words ease in when the badge first shows, or changes (styles.css)
+      if (changed) {
+        badge.classList.remove('is-changed');
+        // eslint-disable-next-line no-unused-expressions
+        badge.offsetWidth;
+        badge.classList.add('is-changed');
+      }
     });
     if (sign) {
       var plate = sign.querySelector('.door-sign-plate');

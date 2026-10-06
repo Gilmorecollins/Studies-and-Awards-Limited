@@ -3673,13 +3673,28 @@ html.is-leaving body { opacity: 0; transition: opacity 220ms ease; }
   font-size: 12.5px; font-weight: 600; color: #FFFFFF;
 }
 .open-status[hidden] { display: none; }
+/* the dot pulsates: it swells and shrinks with its glow, like a heartbeat,
+   at a pace that matches the state: open (green) steady, closing soon (gold,
+   the last hour) quicker, closed (red) slow and calm. The words ease in when
+   the badge appears or changes. Still with reduced motion. */
+.open-status { --dot: 229, 72, 77; --pulse: 2.6s; }
+.open-status.is-open { --dot: 61, 214, 140; --pulse: 1.6s; }
+.open-status.is-soon { --dot: 255, 184, 0; --pulse: 0.9s; }
 .open-status::before {
   content: ""; flex-shrink: 0;
   width: 8px; height: 8px; margin-top: 0.35em; border-radius: 50%;
-  background: #E5484D;
-  box-shadow: 0 0 0 3px rgba(229,72,77,0.22);
+  background: rgb(var(--dot));
+  box-shadow: 0 0 0 3px rgba(var(--dot), 0.22);
 }
-.open-status.is-open::before { background: #3DD68C; box-shadow: 0 0 0 3px rgba(61,214,140,0.22); }
+@media (prefers-reduced-motion: no-preference) {
+  .open-status::before { animation: open-status-pulse var(--pulse) ease-in-out infinite; }
+  .open-status.is-changed { animation: open-status-in 500ms ease-out; }
+}
+@keyframes open-status-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 3px rgba(var(--dot), 0.22); }
+  50% { transform: scale(1.3); box-shadow: 0 0 0 5px rgba(var(--dot), 0.12), 0 0 10px 2px rgba(var(--dot), 0.45); }
+}
+@keyframes open-status-in { from { opacity: 0; transform: translateY(4px); } }
 
 /* ---------- 404 page ---------- */
 
@@ -3736,4 +3751,3 @@ html.is-leaving body { opacity: 0; transition: opacity 220ms ease; }
   .loc-actions { width: 100%; }
   .loc-action { flex: 1 1 0; justify-content: center; padding: 12px 10px; font-size: 14px; }
 }
-.open-status.is-soon::before { background: var(--brass); box-shadow: 0 0 0 3px rgba(255,184,0,0.22); }
