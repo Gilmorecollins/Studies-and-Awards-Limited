@@ -1149,17 +1149,18 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    and its plain line stops at its dot. */
 .svc-steps.is-live .svc-step:last-of-type { padding-bottom: calc(var(--pad) + 36px); }
 .svc-steps.is-live .svc-step:last-of-type::before { bottom: auto; height: calc(var(--pad) + var(--dot) / 2); }
-.svc-flight { position: absolute; top: 0; left: 0; overflow: visible; pointer-events: none; }
+.svc-flight { position: absolute; overflow: visible; pointer-events: none; }
 .svc-flight path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .svc-flight-track { stroke: var(--border); stroke-width: 2; stroke-dasharray: 2 8; }
 .svc-flight-flown { stroke: var(--brass); stroke-width: 2.5; stroke-dasharray: 2 8; }
 .svc-flight-reveal { stroke: #FFFFFF; stroke-width: 12; stroke-linecap: butt; }
 .svc-plane {
   position: absolute; top: 0; left: 0; z-index: 2; width: 26px; height: 26px; margin: -13px 0 0 -13px;
-  color: var(--brass-ink); opacity: 0; pointer-events: none;
-  filter: drop-shadow(0 0 3px var(--bg)) drop-shadow(0 0 3px var(--bg));
+  color: var(--brass-ink); opacity: 0; pointer-events: none; will-change: transform;
 }
-.svc-plane svg { display: block; width: 100%; height: 100%; }
+.svc-plane svg { display: block; width: 100%; height: 100%; overflow: visible; }
+/* a thin outline in the page colour lifts it off the dashes under it */
+.svc-plane path { stroke: var(--bg); stroke-width: 2.5; stroke-linejoin: round; paint-order: stroke; }
 .svc-plane.is-shown { opacity: 1; }
 
 /* the way round step 2, for students who have already sat IELTS elsewhere:

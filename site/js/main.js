@@ -2494,6 +2494,10 @@ function createCursorFollower(options) {
   var bendLength = 0;   // its length down to the turn
   var flightLeft = 0;   // the svg's position in the list
   var flightTop = 0;
+  var flightFinish = 0; // where the reading line is when the plane lands
+  var planeAt = -1;     // how far along the plane is drawn
+  var planeGoal = 0;    // how far along it's heading
+  var planeMoving = false;
 
   // where things are, in the list's own CSS pixels (the laptop fit zooms
   // the page, and positions on screen come back zoomed)
@@ -2543,11 +2547,23 @@ function createCursorFollower(options) {
       if (r.height && right > climbFrom && left < xe) roof = Math.max(roof, (r.bottom - box.top) / z);
     });
     var rise = Math.max(0, Math.min(84, yb - roof - 26));
-    flightLeft = 0;
-    flightTop = 0;
-    flight.setAttribute('width', width);
-    flight.setAttribute('height', height);
-    flight.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+    // the svg covers only the route (a small picture repaints quickly as the
+    // gold creeps along it)
+    var pad = 16;
+    flightLeft = x0 - pad;
+    flightTop = y0 - pad;
+    var w = xe - flightLeft + pad;
+    var h = yb - flightTop + pad;
+    flight.style.left = flightLeft + 'px';
+    flight.style.top = flightTop + 'px';
+    flight.setAttribute('width', w);
+    flight.setAttribute('height', h);
+    flight.setAttribute('viewBox', flightLeft + ' ' + flightTop + ' ' + w + ' ' + h);
+    var mask = flight.querySelector('mask');
+    mask.setAttribute('x', flightLeft);
+    mask.setAttribute('y', flightTop);
+    mask.setAttribute('width', w);
+    mask.setAttribute('height', h);
     var d = 'M' + x0 + ' ' + y0 + 'V' + (yb - turn) +
       'Q' + x0 + ' ' + yb + ' ' + (x0 + turn) + ' ' + yb +
       'H' + climbFrom +
@@ -2560,35 +2576,53 @@ function createCursorFollower(options) {
     flightLength = track.getTotalLength();
     bendLength = flightBend - flightStart;
     reveal.style.strokeDasharray = flightLength + ' ' + flightLength;
+    // where the reading line is with the page scrolled to the very bottom,
+    // worked out here so scrolling never has to measure the page
+    var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    var tipAtBottom = (window.innerHeight * READING_LINE - box.top - window.pageYOffset + maxScroll) / z;
+    flightFinish = Math.min(flightBend + window.innerHeight * 0.35 / z, tipAtBottom - 30);
+    planeAt = -1; // redraw from scratch
   }
 
   // how far along the route the plane is, from where the reading line is:
   // down the straight it keeps level with the reading line, like the gold
   // line above; from the turn on, it flies the rest of the way over the next
-  // quarter of a window of scrolling, so it lands while the route is still in
+  // third of a window of scrolling, so it lands while the route is still in
   // view (sooner where the page ends sooner)
   function flightDistance(tip) {
     if (tip <= flightStart) return 0;
     if (tip <= flightBend) return tip - flightStart;
-    var z = pageZoom();
-    var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    var tipAtBottom = (window.innerHeight * READING_LINE - list.getBoundingClientRect().top) / z +
-      (maxScroll - window.pageYOffset) / z;
-    var finish = Math.min(flightBend + window.innerHeight * 0.25 / z, tipAtBottom - 30);
-    if (finish <= flightBend) return flightLength;
-    var t = Math.min(1, (tip - flightBend) / (finish - flightBend));
+    if (flightFinish <= flightBend) return flightLength;
+    var t = Math.min(1, (tip - flightBend) / (flightFinish - flightBend));
     return bendLength + (flightLength - bendLength) * t;
   }
 
+  // The plane glides towards where the scrolling says it should be rather
+  // than jumping there, so it flies smoothly however unevenly the page
+  // scrolls (a mouse wheel moves the page in steps).
   function drawPlane(tip, finished) {
-    var dist = finished ? flightLength : flightDistance(tip);
+    planeGoal = finished ? flightLength : flightDistance(tip);
+    if (finished || planeAt < 0) { planeAt = planeGoal; placePlane(); return; }
+    if (!planeMoving) { planeMoving = true; window.requestAnimationFrame(glide); }
+  }
+  function glide() {
+    var gap = planeGoal - planeAt;
+    // ease in on it, but never faster than 40px a frame
+    var step = Math.max(-40, Math.min(40, gap * 0.15));
+    planeAt = Math.abs(gap) < 0.5 ? planeGoal : planeAt + step;
+    placePlane();
+    if (planeAt !== planeGoal) window.requestAnimationFrame(glide);
+    else planeMoving = false;
+  }
+  function placePlane() {
+    var dist = planeAt;
     reveal.style.strokeDashoffset = String(flightLength - dist);
     if (dist <= 0) { plane.classList.remove('is-shown'); return; }
     var at = track.getPointAtLength(dist);
-    var ahead = track.getPointAtLength(Math.min(flightLength, dist + 1));
-    var behind = track.getPointAtLength(Math.max(0, dist - 1));
+    var ahead = track.getPointAtLength(Math.min(flightLength, dist + 2));
+    var behind = track.getPointAtLength(Math.max(0, dist - 2));
     var angle = Math.atan2(ahead.y - behind.y, ahead.x - behind.x) * 180 / Math.PI + 90;
-    plane.style.transform = 'translate(' + (flightLeft + at.x) + 'px, ' + (flightTop + at.y) + 'px) rotate(' + angle.toFixed(1) + 'deg)';
+    plane.style.transform = 'translate3d(' + at.x.toFixed(2) + 'px, ' + at.y.toFixed(2) + 'px, 0) rotate(' + angle.toFixed(1) + 'deg)';
     plane.classList.add('is-shown');
   }
 
