@@ -915,11 +915,21 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   display: grid; grid-template-columns: minmax(0, 440fr) minmax(0, 720fr); gap: 40px; align-items: start;
 }
 .route-hero-copy { display: flex; flex-direction: column; gap: 18px; padding-top: 24px; }
-.route-hero .hero-kicker { margin: 0; color: var(--brass); }
-.route-hero h1 { margin: 0; font-size: var(--page-title); line-height: 0.95; letter-spacing: 0.01em; color: #FFFFFF; }
+/* in the home hero's type: Manrope for the headline, sentence case */
+.route-hero-eyebrow { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--brass); }
+.route-hero h1 {
+  margin: 0; font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 800;
+  font-size: clamp(2.2rem, calc(3.4vw / var(--z, 1)), 3.15rem); line-height: 1.08; letter-spacing: -0.025em;
+  text-wrap: balance; color: #FFFFFF;
+}
+/* on the navy the highlighted words are simply gold (a gold band turns muddy here) */
+.route-hero .hero-mark { background: none; color: var(--brass); }
 .route-hero-copy > p { font-size: 16.5px; line-height: 1.65; color: var(--on-dark-muted); }
-.route-hero-copy > .route-hero-origin { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #FFFFFF; }
-.route-hero-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--brass); flex-shrink: 0; }
+.route-hero-copy > p a { font-weight: 600; color: #FFFFFF; text-decoration: underline; text-decoration-color: var(--brass); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.route-hero-copy > p a:hover { color: var(--brass); }
+.route-hero-copy > p a:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 2px; border-radius: 2px; }
+.route-hero-copy > .route-hero-origin { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.55; color: #FFFFFF; }
+.route-hero-dot { width: 10px; height: 10px; margin-top: 0.38em; border-radius: 50%; background: var(--brass); flex-shrink: 0; }
 
 .route-map { position: relative; container-type: inline-size; }
 .route-map img { display: block; width: 100%; height: auto; }
@@ -987,7 +997,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 
 .route-cards-wrap {
   position: relative; z-index: 1;
-  max-width: 1200px; margin: -282px auto 0; padding: 0 clamp(24px, calc(4.5vw / var(--z, 1)), 72px) 88px; box-sizing: content-box;
+  max-width: 1200px; margin: -282px auto 0; padding: 0 clamp(24px, calc(4.5vw / var(--z, 1)), 72px) 56px; box-sizing: content-box;
 }
 .route-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 .route-cards > li { display: flex; }
@@ -1026,6 +1036,48 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 /* dark mode: a navy circle disappears into the dark card, so it turns gold */
 :root[data-theme="dark"] .dest-card-arrow { background: var(--brass); color: var(--ink); }
 
+/* the Destinations page's cards: the name in Manrope, then the key facts
+   (intakes, language test, work after study) and the partner count, all
+   written in by tools/generate-countries.mjs */
+.route-cards .dest-card-name { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1.6rem; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
+.route-cards .dest-card-tag { min-height: 3.1em; }
+.dest-card-facts { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; padding-top: 14px; border-top: 1px dashed var(--border); }
+.dest-fact { display: grid; grid-template-columns: 9.6em minmax(0, 1fr); gap: 10px; font-size: 13.5px; line-height: 1.4; }
+.dest-fact-label { font-weight: 600; color: var(--muted); }
+.dest-fact-value { font-weight: 600; color: var(--text-strong); }
+.dest-card-partners {
+  align-self: flex-start; margin-top: 4px; padding: 4px 10px; border-radius: 999px;
+  background: var(--gold-tint); font-size: 12.5px; font-weight: 700; color: var(--brass-ink);
+}
+
+/* "Compare at a glance": the same facts side by side; on phones each country
+   becomes its own small card, the labels written in beside each value */
+.dest-compare { padding: 8px 0 clamp(24px, calc(3vw / var(--z, 1)), 40px); }
+.dest-compare-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 32px; margin-bottom: 20px; }
+.dest-compare-head h2 { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: clamp(1.6rem, calc(2.4vw / var(--z, 1)), 2.2rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
+.dest-compare-head p { max-width: 34rem; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+.dest-compare-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.dest-compare-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 14.5px; }
+.dest-compare-table th, .dest-compare-table td { padding: 14px 18px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border-soft); }
+.dest-compare-table tbody tr:last-child > * { border-bottom: 0; }
+.dest-compare-table thead th { background: var(--paper); font-size: 12.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.dest-compare-table tbody th a { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text-strong); white-space: nowrap; }
+.dest-compare-table tbody th a:hover { color: var(--brass-ink); }
+.dest-compare-table tbody th a:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; border-radius: 2px; }
+.dest-compare-table tbody th img { width: 30px; height: 20px; border-radius: 3px; object-fit: cover; box-shadow: 0 0 0 1px var(--shadow-08); }
+.dest-compare-table td { color: var(--text); }
+.dest-compare-table tbody tr:hover > * { background: var(--tint-06); }
+@media (max-width: 760px) {
+  .dest-compare-scroll { overflow: visible; border: 0; background: none; }
+  .dest-compare-table, .dest-compare-table tbody { display: block; min-width: 0; }
+  .dest-compare-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .dest-compare-table tr { display: block; margin-bottom: 12px; padding: 6px 0; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
+  .dest-compare-table tbody th, .dest-compare-table td { display: block; padding: 8px 16px; border: 0; }
+  .dest-compare-table td { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 10px; font-size: 14px; }
+  .dest-compare-table td::before { content: attr(data-label); font-weight: 600; color: var(--muted); }
+  .dest-compare-table tbody tr:hover > * { background: none; }
+}
+
 @media (max-width: 1023.98px), (max-width: 1240px) and (pointer: coarse), (max-width: 1240px) and (pointer: none) {
   .route-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -1040,7 +1092,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 @media (max-width: 768px) {
   .route-hero-inner, .route-cards-wrap { padding-left: 20px; padding-right: 20px; }
-  .route-cards-wrap { padding-bottom: 56px; }
+  .route-cards-wrap { padding-bottom: 40px; }
   .route-cards { gap: 16px; }
   .dest-card-banner { height: 104px; }
   .dest-card-code { font-size: 48px; }

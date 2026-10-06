@@ -120,8 +120,25 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   to the pages the generator doesn't own:
   - footer "Destinations" links: `index.html`, `about.html`, `services.html`,
     `team.html`, `destinations.html`
-  - `destinations.html`: a new card, the "N destinations" headline and the
-    meta description
+  - `destinations.html`: a new card (with an empty
+    `<!-- facts:<slug>:start -->` / `<!-- facts:<slug>:end -->` pair after its
+    tagline, which the generator fills in), the "Six countries" headline and
+    the meta description. Give the country its `facts` (intakes, language,
+    visa) in `generate-countries.mjs` too.
+- **Destination facts**: each country's intakes, language test and student
+  visa are its `facts` in `countries` in `tools/generate-countries.mjs`. They
+  were checked against each government's own pages (October 2026); the visa
+  rules change, so recheck them, and each country's `visa` paragraph, from
+  time to time. The site describes study only: the company does study
+  programmes, not work or migration ones, so keep post-study work, work
+  permits and residence out of the copy. The
+  generator writes them, with the partner-institution count from
+  `data/partner-institutions.json` (the cities shown on that country's page),
+  into each card on `destinations.html` and into its "Compare at a glance"
+  table, between the marked comments. Change them there and regenerate; edits
+  made between the markers by hand are overwritten (and `--check` flags them).
+  A country with no partner data shows no count on its card and "Ask us" in
+  the table.
   - `index.html`: a row on the departures board (the last row has
     `border-bottom:none`), both copies of the ticker, and the meta description
   - `services.html`: "our six countries" in the opening text
