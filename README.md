@@ -351,8 +351,11 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   (`--radius`), border and shadow. The one alternate band colour is the
   warm cream `--hero-cream` (no light grey bands). The values (Access &
   Affordability, Continuous Improvement, Fraud-Free Application &
-  Verification) are the hanging luggage tags on both the home page and
-  About; change them in both `index.html` and `about.html`. On the home
+  Verification) are three luggage tags (gold, navy and white), each pinned
+  up with a string and a gold pin, on both the home page and About; change
+  them in both `index.html` and `about.html`. Pointing at a tag swings it
+  straight and lifts it, and they swing and settle the first time they come
+  on screen (`main.js`, `.why-tag` in `styles.css`). On the home
   page "Book a free consultation" appears in the header, the hero and the
   closing band only.
 - **Destinations page motion**: as the page opens the text eases in, the six
