@@ -29,8 +29,8 @@ site/              The actual website. Open site/index.html in a browser,
                     The Supabase project's address and publishable key,
                     for the home page testimonials and the admin page.
   admin/index.html  The testimonials admin page (sign in, then add, edit,
-                    reorder, show or hide, delete). Not linked from the
-                    site. With js/admin.js, css/admin.css and
+                    reorder, show or hide, delete). Linked from the
+                    "Portal login" menu. With js/admin.js, css/admin.css and
                     js/vendor/supabase.js (a pinned copy of supabase-js).
   js/destinations-data.js
                     GENERATED. Destination registry (name, airport code,
@@ -271,10 +271,11 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   `<country>/portrait/`, which phones and portrait tablets load instead of the
   full 1920px photo. `node tools/make-editorial-photos.mjs` makes them.
 - **Portal login**: one "Portal login" button in the header (and in the
-  footer's bottom row) opens a small menu with the two real portals: the
-  student portal (`https://student.studiesandawardsltd.com/login`) and the
-  staff portal (`https://student.studiesandawardsltd.com/staff-login`). In
-  the phone menu both are listed under a "Portal login" heading. The menu is
+  footer's bottom row) opens a small menu: the student portal
+  (`https://student.studiesandawardsltd.com/login`), the staff portal
+  (`https://student.studiesandawardsltd.com/staff-login`) and the admin
+  portal, the testimonials admin page (`admin/index.html`; `/admin/index.html` on
+  `404.html`). In the phone menu all three are listed under a "Portal login" heading. The menu is
   written into every page's header and footer by hand and in the template in
   `tools/generate-countries.mjs`, so a new address means changing it in all
   of them (search for `nav-portal`). Its behaviour is in `main.js`, its look
@@ -375,9 +376,9 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   two or more have. The "WHAT PEOPLE SAY" line above the heading is in
   `index.html`; a figure such as "500+ happy students" can go there once you
   have a real count.
-- **Adding and changing testimonials (the admin page)**: go to
-  `admin/index.html` on the site (e.g. `https://<your site>/admin/`) and sign
-  in. There you can add a testimonial (name, who they are, their words, more
+- **Adding and changing testimonials (the admin page)**: choose "Portal
+  login", then "Admin portal" on any page (it is `admin/index.html`,
+  e.g. `https://<your site>/admin/`), and sign in. There you can add a testimonial (name, who they are, their words, more
   of their story, a rating, a photo), see a preview of the card as you type,
   edit it, change the order, show it on the website or hide it, and delete it.
   Changes appear on the home page straight away, with no editing of files or

@@ -340,9 +340,9 @@ p { margin: 0; }
 .nav-link:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 4px; }
 .nav-link.muted { color: var(--muted); }
 
-/* "Portal login": one button for both portals, opening a small menu with the
-   student portal and the staff portal (main.js). In the header it drops down
-   under the button; in the phone menu it shows as a heading with the two
+/* "Portal login": one button for the portals, opening a small menu with the
+   student portal, the staff portal and the admin portal (main.js). In the header it drops down
+   under the button; in the phone menu it shows as a heading with the
    choices under it; in the footer's bottom row it opens upwards. */
 .nav-portal { position: relative; }
 .nav-portal-btn {
@@ -2694,7 +2694,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .nav-link { padding: 14px 4px; border-bottom: 1px solid var(--border-soft); }
   .nav-link::after { display: none; }
   .nav-link[aria-current="page"] { color: var(--brass-ink); font-weight: 600; }
-  /* "Portal login" in the phone menu: a heading with both portals under it */
+  /* "Portal login" in the phone menu: a heading with the choices under it */
   .primary-nav .nav-portal { padding: 14px 4px 6px; border-bottom: 1px solid var(--border-soft); }
   .primary-nav .nav-portal-btn { display: none; }
   .primary-nav .nav-portal-label { display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }

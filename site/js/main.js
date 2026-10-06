@@ -52,10 +52,11 @@
 })();
 
 // "Portal login": one button (in the header, and in the footer's bottom row)
-// opening a small menu with the student portal and the staff portal. It
+// opening a small menu with the student portal, the staff portal and the
+// admin portal (the testimonials admin page). It
 // closes on a click elsewhere, on Escape (which puts the focus back on the
 // button) and when the focus moves out of it; the arrow keys move between the
-// two choices. In the phone menu the button is hidden and both portals are
+// choices. In the phone menu the button is hidden and all three are
 // listed under a heading instead (styles.css).
 (function () {
   'use strict';
