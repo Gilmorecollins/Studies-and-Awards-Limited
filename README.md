@@ -329,9 +329,9 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   closing band only.
 - **Destinations page motion**: as the page opens the text eases in, the six
   routes draw out from Eldoret one after another (each label appears as its
-  route lands), Eldoret pulses gently, and then a small plane flies the
-  routes in turn; while a visitor points at a route, card or label, the
-  plane flies that one. The six cards rise in with split-flap airport codes,
+  route lands) and Eldoret pulses gently. While a visitor points at a
+  route, card or label, a small plane flies that route from Eldoret, again
+  and again, and disappears as soon as they stop. The six cards rise in with split-flap airport codes,
   as on the home page. It's in `main.js` ("Destinations page: the map as a
   departures screen") and `styles.css` ("destinations: the motion"). Nothing
   moves for visitors who ask their device for reduced motion.

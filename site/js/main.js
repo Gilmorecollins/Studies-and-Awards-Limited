@@ -2433,10 +2433,10 @@ function createCursorFollower(options) {
 // styles.css, "destinations: the motion"). As the page opens the text eases
 // in, the six routes draw out from Eldoret one after another and each
 // country's label appears as its route lands, while Eldoret gives off a slow
-// pulse. Then a small plane flies the routes in turn, every few seconds; while
-// the visitor points at a route, card or label, it flies that route. It
-// rests while the map is off screen or the tab is hidden. With reduced motion
-// none of this runs and the map shows as it is.
+// pulse. While the visitor points at a route, card or label, a small plane
+// flies that route from Eldoret, again and again, and it disappears as soon
+// as they stop. With reduced motion none of this runs and the map shows as
+// it is.
 (function () {
   'use strict';
 
@@ -2451,7 +2451,6 @@ function createCursorFollower(options) {
   var DRAW_MS = 900;
   var GAP_MS = 220;
   var FLIGHT_MS = 2600;
-  var REST_MS = 2200;
 
   // the text eases in, one line after another
   if (copy) {
@@ -2516,47 +2515,63 @@ function createCursorFollower(options) {
   plane.innerHTML = '<path transform="translate(-9 -9) scale(0.75)" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>';
   svg.appendChild(plane);
 
-  var visible = true;
-  if (window.IntersectionObserver) {
-    new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }).observe(map);
-  }
-  var next = 0;
+  // It flies only while a route is shown (the visitor pointing at a route,
+  // its card or its label): from Eldoret to that country, again and again,
+  // and it disappears the moment the route is no longer shown.
+  var flight = null; // { route, start, frame, rest }
 
-  function pickRoute() {
-    var active = scope.getAttribute('data-route-active');
-    if (active) {
-      for (var i = 0; i < routes.length; i++) if (routes[i].code === active) return routes[i];
-    }
-    var r = routes[next % routes.length];
-    next++;
-    return r;
+  function routeFor(code) {
+    for (var i = 0; i < routes.length; i++) if (routes[i].code === code) return routes[i];
+    return null;
   }
 
-  function fly() {
-    if (!visible || document.hidden) { window.setTimeout(fly, 1000); return; }
-    var r = pickRoute();
-    var start = null;
+  function stop() {
+    if (!flight) return;
+    window.cancelAnimationFrame(flight.frame);
+    window.clearTimeout(flight.rest);
+    flight = null;
+    plane.classList.remove('is-flying');
+  }
+
+  function take(r) {
+    stop();
+    flight = { route: r, start: null, frame: 0, rest: 0 };
     plane.classList.add('is-flying');
-    function frame(now) {
-      if (start === null) start = now;
-      var t = Math.min(1, (now - start) / FLIGHT_MS);
-      // ease in and out, like a take-off and a landing
-      var e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-      var d = e * r.len;
-      var p = r.path.getPointAtLength(d);
-      var a = r.path.getPointAtLength(Math.max(0, d - 1));
-      var b = r.path.getPointAtLength(Math.min(r.len, d + 1));
-      var angle = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI + 90;
-      // a little bigger mid-flight, as if climbing
-      var scale = 0.8 + 0.35 * Math.sin(Math.PI * t);
-      plane.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ') rotate(' + angle.toFixed(1) + ') scale(' + scale.toFixed(3) + ')');
-      if (t < 1) { window.requestAnimationFrame(frame); return; }
-      plane.classList.remove('is-flying');
-      window.setTimeout(fly, REST_MS);
-    }
-    window.requestAnimationFrame(frame);
+    flight.frame = window.requestAnimationFrame(frame);
   }
-  window.setTimeout(fly, allDrawn + 400);
+
+  function frame(now) {
+    if (!flight) return;
+    var r = flight.route;
+    if (flight.start === null) flight.start = now;
+    var t = Math.min(1, (now - flight.start) / FLIGHT_MS);
+    // ease in and out, like a take-off and a landing
+    var e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    var d = e * r.len;
+    var p = r.path.getPointAtLength(d);
+    var a = r.path.getPointAtLength(Math.max(0, d - 1));
+    var b = r.path.getPointAtLength(Math.min(r.len, d + 1));
+    var angle = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI + 90;
+    // a little bigger mid-flight, as if climbing
+    var scale = 0.8 + 0.35 * Math.sin(Math.PI * t);
+    plane.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ') rotate(' + angle.toFixed(1) + ') scale(' + scale.toFixed(3) + ')');
+    if (t < 1) { flight.frame = window.requestAnimationFrame(frame); return; }
+    // landed: a short pause, then the same route again while it's still shown
+    flight.rest = window.setTimeout(function () { if (flight) take(flight.route); }, 700);
+  }
+
+  // follow the shown route (data-route-active on the page, set by the route map)
+  var ready = false;
+  function follow() {
+    if (!ready) return;
+    var r = routeFor(scope.getAttribute('data-route-active'));
+    if (!r) { stop(); return; }
+    if (!flight || flight.route !== r) take(r);
+  }
+  if (window.MutationObserver) {
+    new MutationObserver(follow).observe(scope, { attributes: true, attributeFilter: ['data-route-active'] });
+  }
+  window.setTimeout(function () { ready = true; follow(); }, allDrawn);
 })();
 
 // Services page: the people who look after each step. Each list names them by
