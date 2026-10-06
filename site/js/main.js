@@ -1994,64 +1994,28 @@ function createCursorFollower(options) {
   });
 })();
 
-// Home page: "Why fly with us" pass. Clicking "Book a free consultation" flies
-// the plane from EDL to UNI first, then replays the click so the consultation
-// chooser (or the email fallback) handles it as usual. When the chooser
-// closes, the plane turns round and flies back to EDL for next time.
+// Home page: "Why fly with us" luggage tags. The first time the rail comes on
+// screen, the tags swing gently and settle at their own tilt (the swing is
+// .is-swinging in styles.css). Nothing moves with reduced motion.
 (function () {
   'use strict';
 
-  var pass = document.querySelector('.promise-pass');
-  var go = pass && pass.querySelector('.promise-pass-go');
-  if (!go) return;
+  var tags = Array.prototype.slice.call(document.querySelectorAll('.why-tag'));
+  if (!tags.length || !window.IntersectionObserver) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  var FLIGHT_MS = 600;
-  var TURN_MS = 150;
-  var NO_CHOOSER_RETURN_MS = 1500;
-  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var replaying = false;
-  var busy = false;
-
-  function flyBack() {
-    pass.classList.add('is-returning');
-    window.setTimeout(function () {
-      pass.classList.remove('is-flown');
-      window.setTimeout(function () {
-        pass.classList.remove('is-returning');
-        busy = false;
-      }, FLIGHT_MS);
-    }, TURN_MS);
-  }
-
-  function returnWhenClosed() {
-    var overlay = document.getElementById('consult-overlay');
-    if (!overlay || overlay.hidden || !window.MutationObserver) {
-      window.setTimeout(flyBack, NO_CHOOSER_RETURN_MS);
-      return;
-    }
-    var observer = new MutationObserver(function () {
-      if (overlay.classList.contains('is-open')) return;
-      observer.disconnect();
-      flyBack();
+  tags.forEach(function (tag, i) {
+    tag.style.setProperty('--i', String(i));
+    tag.addEventListener('animationend', function (e) {
+      if (e.animationName === 'why-swing') tag.classList.remove('is-swinging');
     });
-    observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
-  }
-
-  go.addEventListener('click', function (event) {
-    if (replaying || reduceMotion) return;
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    event.stopPropagation();
-    if (busy) return;
-    busy = true;
-    pass.classList.add('is-flown');
-    window.setTimeout(function () {
-      replaying = true;
-      go.click();
-      replaying = false;
-      returnWhenClosed();
-    }, FLIGHT_MS);
   });
+  var seen = new IntersectionObserver(function (entries) {
+    if (!entries.some(function (entry) { return entry.isIntersecting; })) return;
+    seen.disconnect();
+    tags.forEach(function (tag) { tag.classList.add('is-swinging'); });
+  }, { rootMargin: '0px 0px -15% 0px' });
+  seen.observe(tags[0].parentNode);
 })();
 
 // About page: the counsellor count in the hero, and each department's

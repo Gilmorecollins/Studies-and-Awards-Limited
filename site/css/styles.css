@@ -51,7 +51,6 @@
   --progress: #001B5E;         /* the team slider's progress line */
   --hero-circle: #DCE6F7;      /* the soft circles behind the home page hero */
   --hero-cream: #FFFCF2;       /* the warm white the home page hero fades to */
-  --pass-glow: #DCE6F7;        /* the glow under the "Why choose" pass */
   --cursor: #141414;           /* the circle that follows the mouse */
   --cord: rgba(0, 27, 94, 0.5); /* the pull cord at the right end of the page */
   --soft: #ECEFF5;             /* the soft raised panels of the home page testimonials */
@@ -117,7 +116,6 @@
   --progress: #FFB800;
   --hero-circle: #15245A;
   --hero-cream: #101A36;
-  --pass-glow: #1C3A8A;
   --cursor: #F1F4FA;
   --cord: rgba(241, 244, 250, 0.55);
   --soft: #0E162E;
@@ -1399,214 +1397,95 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .dest-pick-more:hover { transform: none; }
 }
 
-/* ---------- home: "why choose us" boarding pass ---------- */
+/* ---------- home: "why choose us", values on hanging luggage tags ----------
+   The text on the left; on the right a navy rail with three luggage tags
+   hanging from it on strings of different lengths (--string), each a little
+   crooked (--tilt). Pointing at a tag straightens it, with a small spring.
+   The first time the rail comes on screen the tags swing gently and settle
+   (main.js adds .is-swinging). Phones: the tags hang one under another, each
+   tied to the one above. */
+.why {
+  padding: clamp(64px, calc(6.25vw / var(--z, 1)), 90px) 0 clamp(64px, calc(7vw / var(--z, 1)), 100px);
+  background: linear-gradient(180deg, var(--bg) 0%, var(--hero-cream) 100%);
+}
+.why-inner { display: grid; grid-template-columns: 430px minmax(0, 1fr); gap: 50px; align-items: start; }
+.why-copy { display: flex; flex-direction: column; gap: 20px; }
+.why-copy .eyebrow { color: var(--brass-ink); margin-bottom: -8px; }
+.why-copy h2 { font-size: clamp(44px, calc(4.2vw / var(--z, 1)), 60px); line-height: 0.95; }
+.why-title { font-size: 26px; font-weight: 700; line-height: 1.25; color: var(--text-strong); text-wrap: balance; }
+.why-lead { font-size: 16px; line-height: 1.75; color: var(--text-prose); }
+.why-mission { display: flex; flex-direction: column; gap: 10px; padding: 18px 0; border-top: 1.5px dashed var(--tint-18); border-bottom: 1.5px dashed var(--tint-18); }
+.why-mission-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11.5px; font-weight: 500; letter-spacing: 0.16em; color: var(--brass-ink);
+}
+.why-mission-label svg { flex-shrink: 0; color: var(--brass); }
+.why-mission p { font-size: 16px; font-weight: 500; font-style: italic; line-height: 1.65; color: var(--text-strong); }
+.why-go {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; margin-top: 4px;
+  padding: 15px 24px; border-radius: 999px; background: var(--text-strong); color: var(--bg);
+  font-size: 15px; font-weight: 700; line-height: 1.2;
+}
+.why-go svg { flex-shrink: 0; }
+.why-go:hover { background: var(--brass); color: var(--ink); }
+.why-go:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
 
-.promise-pass {
-  --pp-notch: 14px;
-  position: relative;
-  isolation: isolate;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
-  overflow: hidden;
-  color: var(--text-strong);
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: 0 24px 50px var(--shadow-14);
+.why-rack { position: relative; padding-top: 20px; }
+.why-rail { display: block; height: 10px; margin: 0 10px; border-radius: 5px; background: var(--text-strong); }
+.why-tags { display: flex; justify-content: space-around; align-items: flex-start; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.why-tag {
+  --tilt: 0deg; --string: 40px;
+  --t: calc(var(--tilt) * var(--tilt-k, 1));
+  display: flex; flex-direction: column; align-items: center; flex: 0 1 210px; min-width: 0;
+  transform-origin: 50% 0; transform: rotate(var(--t));
 }
-.promise-pass::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  width: 360px; height: 360px; left: -120px; bottom: -220px;
-  border-radius: 50%;
-  background: var(--pass-glow);
-  opacity: 0.55;
-  filter: blur(70px);
-  pointer-events: none;
-}
+.why-tag::before { content: ""; width: 2px; height: var(--string); background: var(--text-strong); }
+.why-tag-card { width: 100%; border-radius: 20px; background: var(--surface); box-shadow: 0 22px 44px var(--shadow-14); overflow: hidden; }
+.why-tag-head { display: flex; align-items: center; justify-content: space-between; height: 66px; padding: 0 22px; background: var(--brass); color: var(--ink); }
+.why-tag-head svg { flex-shrink: 0; }
+/* the eyelet: a hole punched through the tag, showing the page behind */
+.why-tag-hole { width: 18px; height: 18px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 3px rgba(0, 27, 94, 0.25); }
+.why-tag-body { display: flex; flex-direction: column; gap: 8px; padding: 20px 22px 24px; border-top: 2px dashed var(--tint-30); }
+.why-tag-kicker { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11.5px; font-weight: 500; letter-spacing: 0.16em; color: var(--brass-ink); }
+.why-tag h3 { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: 26px; line-height: 1.02; letter-spacing: 0.01em; }
+.why-tag p { font-size: 14px; line-height: 1.55; color: var(--muted); }
 
-.promise-pass-mark {
-  position: absolute;
-  z-index: -1;
-  right: 340px;
-  bottom: -0.22em;
-  font-family: 'Bebas Neue', 'Montserrat', sans-serif;
-  font-size: clamp(170px, calc(16vw / var(--z, 1)), 230px);
-  line-height: 0.8;
-  letter-spacing: 0.02em;
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--outline-mark);
-  pointer-events: none;
-  user-select: none;
-}
-
-.promise-pass-main {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
-  min-width: 0;
-  padding: clamp(28px, calc(4vw / var(--z, 1)), 52px);
-}
-.promise-pass-eyebrow { color: var(--brass-ink); }
-.promise-pass-title { color: var(--text-strong); font-size: clamp(24px, calc(2.6vw / var(--z, 1)), 32px); line-height: 1.2; }
-.promise-pass-lead { color: var(--muted); font-size: 15px; line-height: 1.7; }
-.promise-pass-tagline { padding-top: 4px; font-size: 15px; font-weight: 600; line-height: 1.6; color: var(--text-strong); }
-.promise-pass-tagline-kicker {
-  display: block; margin-bottom: 4px;
-  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink);
-}
-
-/* route: EDL - - - - plane - - - - UNI */
-.promise-pass-route {
-  width: 100%;
-  max-width: 540px;
-  margin-top: 10px;
-  padding-top: 18px;
-  border-top: 2px dashed var(--border);
-  display: grid;
-  grid-template-columns: auto minmax(72px, 1fr) auto;
-  align-items: center;
-  column-gap: 12px;
-  row-gap: 6px;
-}
-/* the codes sit either side of the path; their place names run underneath,
-   so the path starts right after "EDL" rather than after the longer label */
-.promise-pass-stop { display: contents; }
-.promise-pass-stop .promise-pass-stop-code { grid-row: 1; grid-column: 1; }
-.promise-pass-stop .promise-pass-stop-name { grid-row: 2; grid-column: 1 / 3; justify-self: start; }
-.promise-pass-stop.is-to .promise-pass-stop-code { grid-column: 3; }
-.promise-pass-stop.is-to .promise-pass-stop-name { grid-column: 2 / 4; justify-self: end; text-align: right; }
-.promise-pass-track { grid-row: 1; grid-column: 2; }
-.promise-pass-stop-code {
-  font-family: 'Bebas Neue', 'Montserrat', sans-serif;
-  font-size: clamp(34px, calc(4vw / var(--z, 1)), 44px);
-  line-height: 1;
-  letter-spacing: 0.04em;
-  color: var(--text-strong);
-}
-.promise-pass-stop.is-to .promise-pass-stop-code { color: var(--brass-ink); }
-.promise-pass-stop-name {
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.promise-pass-track { position: relative; height: 24px; }
-.promise-pass-track::before {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; top: 50%;
-  margin-top: -1px;
-  border-top: 2px dashed var(--tint-30);
-}
-.promise-pass-trail {
-  position: absolute;
-  left: 0; right: 0; top: 50%;
-  height: 2px;
-  margin-top: -1px;
-  background: var(--brass);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 550ms cubic-bezier(0.65, 0, 0.35, 1);
-}
-.promise-pass-plane {
-  position: absolute;
-  left: 0; top: 50%;
-  display: flex;
-  width: 17px; height: 24px;
-  margin-top: -12px;
-  align-items: center;
-  justify-content: center;
-  color: var(--brass);
-  transition: left 550ms cubic-bezier(0.65, 0, 0.35, 1), transform 550ms cubic-bezier(0.65, 0, 0.35, 1);
-}
-.promise-pass-plane-icon { display: block; flex-shrink: 0; transform: rotate(90deg); }
-.promise-pass-plane-icon { transition: transform 150ms ease; }
-.promise-pass.is-returning .promise-pass-plane-icon { transform: rotate(-90deg); }
-.promise-pass.is-flown .promise-pass-plane { left: 100%; transform: translateX(-100%); }
-.promise-pass.is-flown .promise-pass-trail { transform: scaleX(1); }
-.promise-pass.is-flown .promise-pass-stop.is-to .promise-pass-stop-code { animation: promise-pass-land 400ms ease-out 400ms both; }
-@keyframes promise-pass-land {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.12); }
-  100% { transform: scale(1); }
-}
-
-/* the tear-off stub */
-.promise-pass-stub {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: clamp(24px, calc(3vw / var(--z, 1)), 40px);
-  background:
-    repeating-linear-gradient(to bottom, rgba(0,27,94,0.4) 0 7px, transparent 7px 15px) left top / 2px 100% no-repeat,
-    var(--brass);
-}
-.promise-pass-stub::before,
-.promise-pass-stub::after {
-  content: "";
-  position: absolute;
-  left: calc(var(--pp-notch) * -1 + 1px);
-  width: calc(var(--pp-notch) * 2);
-  height: calc(var(--pp-notch) * 2);
-  border-radius: 50%;
-  background: var(--bg);
-}
-.promise-pass-stub::before { top: calc(var(--pp-notch) * -1); }
-.promise-pass-stub::after { bottom: calc(var(--pp-notch) * -1); }
-.promise-pass-stub-label {
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #4A3A00;
-}
-.promise-pass-stub-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1.8px; color: var(--ink); margin-top: -6px; }
-.promise-pass-value { display: flex; gap: 12px; align-items: flex-start; font-size: 12.5px; line-height: 1.5; color: #3B3000; }
-.promise-pass-value strong { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 17px; letter-spacing: 0.3px; color: var(--ink); margin-bottom: 2px; }
-.promise-pass-value-icon { width: 34px; height: 34px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #FFFFFF; border-radius: 50%; color: var(--ink); }
-.promise-pass-go { width: 100%; margin-top: 4px; padding: 15px 20px; text-align: center; line-height: 1.3; background: var(--ink); color: #FFFFFF; }
-.promise-pass-go:hover { background: #0A2A7A; box-shadow: 0 6px 16px rgba(0,27,94,0.3); }
-.promise-pass-go svg { flex-shrink: 0; transition: transform 150ms ease; }
-.promise-pass-go:hover svg { transform: translateX(3px); }
-.promise-pass-barcode {
-  height: 28px;
-  margin-top: auto;
-  opacity: 0.85;
-  background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 4px, var(--ink) 4px 5px, transparent 5px 9px, var(--ink) 9px 12px, transparent 12px 14px, var(--ink) 14px 15px, transparent 15px 19px);
-}
-
-/* below ~1360px the bottom-right watermark would run into the route codes */
-@media (max-width: 1088px), (max-width: 1360px) and (pointer: coarse), (max-width: 1360px) and (pointer: none) {
-  .promise-pass-mark { bottom: auto; top: 6px; font-size: 130px; }
-}
-/* narrower still, the watermark would sit behind the heading and text */
-@media (max-width: 960px) {
-  .promise-pass-mark { display: none; }
-}
-@media (max-width: 560px) {
-  .promise-pass-stop-name { font-size: 10px; letter-spacing: 0.08em; }
-}
-@media (max-width: 900px) {
-  .promise-pass { grid-template-columns: minmax(0, 1fr); }
-  .promise-pass-mark { right: 12px; }
-  .promise-pass-stub {
-    padding-left: clamp(28px, calc(4vw / var(--z, 1)), 52px);
-    padding-right: clamp(28px, calc(4vw / var(--z, 1)), 52px);
-    background:
-      repeating-linear-gradient(to right, rgba(0,27,94,0.4) 0 7px, transparent 7px 15px) left top / 100% 2px no-repeat,
-      var(--brass);
+@media (prefers-reduced-motion: no-preference) {
+  .why-go { transition: background-color 150ms ease, color 150ms ease; }
+  .why-tag { transition: transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1); }
+  /* pointing at a tag straightens it (mouse and trackpad only, so a tap on
+     a phone doesn't leave one stuck straight) */
+  @media (hover: hover) and (pointer: fine) {
+    .why-tag:hover { transform: rotate(0deg); }
   }
-  .promise-pass-stub::before,
-  .promise-pass-stub::after { top: calc(var(--pp-notch) * -1 + 1px); bottom: auto; }
-  .promise-pass-stub::before { left: calc(var(--pp-notch) * -1); }
-  .promise-pass-stub::after { left: auto; right: calc(var(--pp-notch) * -1); }
+  /* a gentle swing that settles at the tag's own tilt, the first time it's seen */
+  .why-tag.is-swinging { animation: why-swing 1.8s cubic-bezier(0.37, 0, 0.63, 1) both; animation-delay: calc(var(--i, 0) * 120ms); }
+  @keyframes why-swing {
+    0% { transform: rotate(calc(var(--t) - 9deg)); }
+    28% { transform: rotate(calc(var(--t) + 6deg)); }
+    52% { transform: rotate(calc(var(--t) - 3deg)); }
+    74% { transform: rotate(calc(var(--t) + 1.2deg)); }
+    100% { transform: rotate(var(--t)); }
+  }
+}
+
+/* laptops and tablets: the text above, the tags below across the width */
+@media (max-width: 1180px) {
+  .why-inner { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .why-copy { max-width: 640px; }
+  .why-rack { max-width: 760px; }
+}
+/* phones: no room for three across, so the tags hang one under another,
+   each tied by its string to the bottom of the one above */
+@media (max-width: 640px) {
+  .why-copy h2 { font-size: 44px; }
+  .why-title { font-size: 22px; }
+  .why-rack { display: flex; flex-direction: column; align-items: center; }
+  .why-rail { align-self: stretch; }
+  .why-tags { flex-direction: column; align-items: center; gap: 0; }
+  .why-tag { flex: none; width: min(260px, 100%); --tilt-k: 0.5; } /* less crooked, so each string meets the tag above */
+  .why-tag::before { height: 28px; }
+  .why-tag:first-child::before { height: 36px; }
 }
 
 /* ---------- destination pages: editorial sections ----------
