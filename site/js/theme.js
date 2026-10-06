@@ -1,5 +1,4 @@
-// Theme switch: the sun and moon button in the header, on the main site and in
-// the student portal. The page's theme is already set before it's drawn, by
+// Theme switch: the sun and moon button in the header. The page's theme is already set before it's drawn, by
 // the small script in each page's <head> (data-theme on <html>). This keeps
 // the button in step and saves the visitor's choice on this device. The site
 // starts in the light theme for everyone, whatever their device's own light

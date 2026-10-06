@@ -48,7 +48,14 @@
       <a href="about.html" class="nav-link">About Us</a>
       <a href="team.html" class="nav-link">Team</a>
       <a href="location.html" class="nav-link">Find Us</a>
-      <a href="portal/index.html" class="nav-link muted">Student Portal</a>
+      <div class="nav-portal">
+        <button type="button" class="nav-link muted nav-portal-btn" aria-expanded="false" aria-controls="portal-menu">Portal login<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <span class="nav-portal-label">Portal login</span>
+        <div class="nav-portal-menu" id="portal-menu">
+          <a href="https://student.studiesandawardsltd.com/login" class="nav-portal-item"><span class="nav-portal-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.92a1 1 0 0 0-.02-1.84L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg></span><span class="nav-portal-text"><strong>Student portal</strong><span>Sign in to your student account</span></span></a>
+          <a href="https://student.studiesandawardsltd.com/staff-login" class="nav-portal-item"><span class="nav-portal-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="nav-portal-text"><strong>Staff portal</strong><span>For Studies &amp; Awards staff</span></span></a>
+        </div>
+      </div>
       <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request" class="btn btn-primary nav-cta-mobile">Book Free Consultation</a>
     </nav>
     <div class="header-cta">
@@ -368,8 +375,6 @@
           <a href="team.html">Our Team</a>
           <a href="location.html">Find Us</a>
           <a href="https://www.magistersacco.org/">Financial Support</a>
-          <a href="portal/index.html">Student Portal</a>
-          <a href="https://student.studiesandawardsltd.com/staff-login">Staff Portal</a>
         </div>
       </nav>
       <nav aria-label="Destinations">
@@ -415,7 +420,13 @@
       </div>
     </div>
     <div class="container footer-bottom">
-      <a class="footer-bottom-legal" href="portal/index.html">Student Portal Login</a>
+      <div class="nav-portal nav-portal-foot footer-bottom-legal">
+        <button type="button" class="nav-portal-btn" aria-expanded="false" aria-controls="portal-menu-foot">Portal login<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="nav-portal-menu" id="portal-menu-foot">
+          <a href="https://student.studiesandawardsltd.com/login" class="nav-portal-item"><span class="nav-portal-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.92a1 1 0 0 0-.02-1.84L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg></span><span class="nav-portal-text"><strong>Student portal</strong><span>Sign in to your student account</span></span></a>
+          <a href="https://student.studiesandawardsltd.com/staff-login" class="nav-portal-item"><span class="nav-portal-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="nav-portal-text"><strong>Staff portal</strong><span>For Studies &amp; Awards staff</span></span></a>
+        </div>
+      </div>
       <span class="footer-bottom-copyright">
         <span>&copy; <span id="current-year">2026</span> Studies and Awards Limited. All rights reserved.</span>
         <span class="footer-bottom-note">Certified Data Controller</span>

@@ -51,6 +51,66 @@
 
 })();
 
+// "Portal login": one button (in the header, and in the footer's bottom row)
+// opening a small menu with the student portal and the staff portal. It
+// closes on a click elsewhere, on Escape (which puts the focus back on the
+// button) and when the focus moves out of it; the arrow keys move between the
+// two choices. In the phone menu the button is hidden and both portals are
+// listed under a heading instead (styles.css).
+(function () {
+  'use strict';
+
+  var menus = Array.prototype.slice.call(document.querySelectorAll('.nav-portal'));
+  if (!menus.length) return;
+
+  function parts(wrap) {
+    return { btn: wrap.querySelector('.nav-portal-btn'), items: Array.prototype.slice.call(wrap.querySelectorAll('.nav-portal-item')) };
+  }
+  function close(wrap, focusButton) {
+    if (!wrap.classList.contains('is-open')) return;
+    wrap.classList.remove('is-open');
+    var btn = parts(wrap).btn;
+    btn.setAttribute('aria-expanded', 'false');
+    if (focusButton) btn.focus();
+  }
+  function open(wrap) {
+    menus.forEach(function (other) { if (other !== wrap) close(other); });
+    wrap.classList.add('is-open');
+    parts(wrap).btn.setAttribute('aria-expanded', 'true');
+  }
+
+  menus.forEach(function (wrap) {
+    var p = parts(wrap);
+    if (!p.btn || !p.items.length) return;
+    p.btn.addEventListener('click', function () {
+      if (wrap.classList.contains('is-open')) close(wrap);
+      else open(wrap);
+    });
+    wrap.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && wrap.classList.contains('is-open')) {
+        e.stopPropagation();
+        close(wrap, true);
+        return;
+      }
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+      var at = p.items.indexOf(document.activeElement);
+      if (at < 0 && document.activeElement !== p.btn) return;
+      e.preventDefault();
+      if (!wrap.classList.contains('is-open')) open(wrap);
+      var next = at < 0 ? (e.key === 'ArrowDown' ? 0 : p.items.length - 1)
+        : (at + (e.key === 'ArrowDown' ? 1 : -1) + p.items.length) % p.items.length;
+      p.items[next].focus();
+    });
+    wrap.addEventListener('focusout', function (e) {
+      if (!e.relatedTarget || !wrap.contains(e.relatedTarget)) close(wrap);
+    });
+  });
+
+  document.addEventListener('click', function (e) {
+    menus.forEach(function (wrap) { if (!wrap.contains(e.target)) close(wrap); });
+  });
+})();
+
 // Footer newsletter box, no backend on this site, so "subscribing" opens
 // the visitor's own mail client with the address pre-filled, same as every
 // other call-to-action on the site.

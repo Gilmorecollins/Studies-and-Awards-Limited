@@ -1,7 +1,7 @@
-// Dark mode markup shared by generate-countries.mjs and generate-portal.mjs, so
-// every page chooses its theme the same way. The switch's behaviour is in
-// site/js/theme.js; the colours are the theme colours in styles.css and
-// portal.css (see "Colours and dark mode" in the README).
+// Dark mode markup used by generate-countries.mjs (the hand-maintained pages
+// carry the same, written in by hand), so every page chooses its theme the
+// same way. The switch's behaviour is in site/js/theme.js; the colours are the
+// theme colours in styles.css (see "Colours and dark mode" in the README).
 
 // Runs in <head> before the page is drawn, so nobody sees the light page flash
 // first: the visitor's own choice from the sun and moon switch (saved on their

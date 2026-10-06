@@ -340,6 +340,53 @@ p { margin: 0; }
 .nav-link:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 4px; }
 .nav-link.muted { color: var(--muted); }
 
+/* "Portal login": one button for both portals, opening a small menu with the
+   student portal and the staff portal (main.js). In the header it drops down
+   under the button; in the phone menu it shows as a heading with the two
+   choices under it; in the footer's bottom row it opens upwards. */
+.nav-portal { position: relative; }
+.nav-portal-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: none; border: 0; cursor: pointer; font-family: inherit;
+}
+.nav-portal-btn svg { flex-shrink: 0; transition: transform 150ms ease; }
+.nav-portal.is-open .nav-portal-btn svg { transform: rotate(180deg); }
+.nav-portal-label { display: none; }
+.nav-portal-menu {
+  display: none;
+  position: absolute; top: calc(100% + 14px); right: -12px; z-index: 60;
+  width: 300px; padding: 8px;
+  border: 1px solid var(--border); border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 18px 40px var(--shadow-18);
+}
+.nav-portal.is-open .nav-portal-menu { display: block; animation: nav-portal-in 160ms ease-out; }
+@keyframes nav-portal-in { from { opacity: 0; transform: translateY(-6px); } }
+.nav-portal-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; color: var(--text-strong); }
+.nav-portal-item:hover { background: var(--tint-06); }
+.nav-portal-item:focus-visible { outline: 2px solid var(--line-strong); outline-offset: -2px; }
+.nav-portal-icon { display: grid; place-items: center; flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; background: var(--gold-tint); color: var(--brass-ink); }
+.nav-portal-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.nav-portal-text strong { font-size: 14.5px; font-weight: 700; line-height: 1.3; }
+.nav-portal-text span { font-size: 13px; line-height: 1.4; color: var(--muted); }
+/* in the footer's bottom row, on the navy card */
+.nav-portal-foot .nav-portal-btn { padding: 0; font-size: inherit; color: var(--on-dark-faint); transition: color 150ms ease; }
+.nav-portal-foot .nav-portal-btn:hover,
+.nav-portal-foot.is-open .nav-portal-btn { color: #FFFFFF; }
+.nav-portal-foot .nav-portal-btn:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; border-radius: 2px; }
+.nav-portal-foot .nav-portal-menu { top: auto; bottom: calc(100% + 12px); left: -8px; right: auto; text-align: left; }
+/* the menu is a light card: not the footer's pale link colours */
+.footer-bottom .nav-portal-item,
+.footer-bottom .nav-portal-item:hover { color: var(--text-strong); }
+.nav-portal-foot .nav-portal-btn svg { transform: rotate(180deg); }
+.nav-portal-foot.is-open .nav-portal-btn svg { transform: none; }
+@keyframes nav-portal-up { from { opacity: 0; transform: translateY(6px); } }
+.nav-portal-foot.is-open .nav-portal-menu { animation-name: nav-portal-up; }
+@media (prefers-reduced-motion: reduce) {
+  .nav-portal.is-open .nav-portal-menu { animation: none; }
+  .nav-portal-btn svg { transition: none; }
+}
+
 .header-cta { display: flex; align-items: center; gap: 14px; }
 .header-cta .btn { padding: 12px 22px; font-size: 14px; }
 
@@ -2647,6 +2694,11 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .nav-link { padding: 14px 4px; border-bottom: 1px solid var(--border-soft); }
   .nav-link::after { display: none; }
   .nav-link[aria-current="page"] { color: var(--brass-ink); font-weight: 600; }
+  /* "Portal login" in the phone menu: a heading with both portals under it */
+  .primary-nav .nav-portal { padding: 14px 4px 6px; border-bottom: 1px solid var(--border-soft); }
+  .primary-nav .nav-portal-btn { display: none; }
+  .primary-nav .nav-portal-label { display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .primary-nav .nav-portal-menu { display: block; position: static; width: auto; margin: 6px -12px 0; padding: 0; border: 0; box-shadow: none; background: none; animation: none; }
 
   .header-cta > a { display: none; }
   .nav-toggle { display: flex; }
@@ -2696,6 +2748,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 14px; }
   .footer-bottom-legal, .footer-bottom-copyright, .footer-bottom-social { justify-self: center; }
+  .nav-portal-foot .nav-portal-menu { left: 50%; margin-left: -150px; }
 
   .team-slider { padding: 40px 0 56px; }
   .team-slider-head { flex-direction: column; align-items: flex-start; gap: 16px; }

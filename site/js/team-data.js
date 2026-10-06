@@ -1,6 +1,6 @@
 // Team data, used by the Team page AND by the site-wide "Book Free Consultation"
 // chooser. Shape (TeamMember):
-//   { id, name, role, department, helpsWith, whatsapp, destinations?, startHere?, portalCounsellor?, shortBio, fullBio: string[], photo, thumb, card, linkedin? }
+//   { id, name, role, department, helpsWith, whatsapp, destinations?, startHere?, shortBio, fullBio: string[], photo, thumb, card, linkedin? }
 // photo should be a 4:5 portrait (e.g. 960x1200) for the best crop in the slider.
 // thumb is the small square head-and-shoulders portrait (assets/team/thumbs/<id>.jpg,
 // used in the Team page's department sections) and card the 5:4 portrait on the
@@ -29,10 +29,6 @@
 //   - startHere: true on ONE person to offer them first: their card leads the
 //     list with a "Not sure? Start here" tag, for visitors who don't know who to
 //     ask. Remove it and everyone is shown in the order below.
-//   - portalCounsellor: true on ONE person: the counsellor shown throughout the
-//     student portal (tools/generate-portal.mjs). It is separate from startHere
-//     because the person who greets visitors is not always the one who guides an
-//     application. Without it the portal uses the startHere person.
 //   - photo, thumb, card: leave them '' until a person's photo arrives; a plain
 //     silhouette is shown in the meantime. Then add the photo, add their row in
 //     tools/make-team-thumbs.mjs and run it.
@@ -156,7 +152,6 @@ window.TEAM_MEMBERS = [
     department: 'Documentation',
     helpsWith: 'Preparing and organising the documents your application needs.',
     whatsapp: '+254792376637',
-    portalCounsellor: true,
     shortBio: 'Rahab looks after Documentation at Studies and Awards Limited, helping students get their documents ready for their applications.',
     fullBio: [
       'Rahab Cherono looks after Documentation at Studies and Awards Limited, helping students prepare and organise the documents their applications need.',
