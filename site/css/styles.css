@@ -699,11 +699,10 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 :root[data-theme="dark"] .globe-flag-name { background: var(--brass); color: var(--ink); }
 
 /* The text beside the globe: where we are, the headline, what we do and the
-   two actions (the steps themselves are in "How it works" just below). Its
-   own type (Manrope for the headline, button and link; Source Sans 3 for the
-   text) and colours: in dark mode the design's navy and greys, in light mode
-   the site's light colours. Gold only on the button, the headline's
-   underline and the pin. */
+   two actions (the steps themselves are in "How it works" just below). The
+   site's own type, like every section below it: a gold Oswald label, a Bebas
+   headline, Montserrat text, the gold button and the underlined link. In
+   dark mode the design's navy and greys. */
 .hero-globe {
   --hg-text: var(--text-strong);
   --hg-muted: var(--muted);
@@ -719,19 +718,19 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    text, then the globe */
 .hero-globe-copy { grid-column: 1; grid-row: 1; }
 .hero-globe-art { grid-column: 2; grid-row: 1; }
-.hero-globe-copy { order: -1; display: flex; flex-direction: column; gap: 1.75rem; min-width: 0; font-family: 'Source Sans 3', 'Montserrat', sans-serif; }
-.hero-loc { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 1rem; font-weight: 500; color: var(--hg-muted); }
-.hero-loc svg { flex-shrink: 0; color: var(--hg-gold); }
+.hero-globe-copy { order: -1; display: flex; flex-direction: column; gap: 1.6rem; min-width: 0; }
+.hero-loc { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--hg-gold); }
+.hero-loc svg { flex-shrink: 0; }
 .hero-globe h1 {
-  margin: 0; font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 800;
-  font-size: clamp(2.1rem, calc(3.6vw / var(--z, 1)), 3.35rem); line-height: 1.08; letter-spacing: -0.025em;
+  margin: 0; font-size: clamp(52px, calc(5.6vw / var(--z, 1)), 84px); line-height: 0.95; letter-spacing: 0.01em;
   text-wrap: balance; color: var(--hg-text);
 }
 /* a soft gold band behind the lower part of the words, carried onto each line */
 .hero-mark { background: linear-gradient(transparent 62%, rgba(255, 194, 14, 0.32) 62%); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-.hero-globe-lead { margin: 0; max-width: 37rem; font-size: 1.1rem; line-height: 1.65; color: var(--hg-muted); }
+.hero-globe-lead { margin: 0; max-width: 37rem; font-size: 17px; line-height: 1.7; color: var(--hg-muted); }
 .hero-globe-lead strong { font-weight: 600; color: var(--hg-text); }
 .hero-globe-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; }
+:root[data-theme="dark"] .hero-globe .board-link { color: var(--hg-text); }
 .hero-cta {
   display: inline-flex; align-items: center; gap: 10px;
   padding: 1rem 1.4rem; border-radius: 10px;
@@ -760,7 +759,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 @media (max-width: 480px) {
   .globe-flag img { width: 38px; height: 25px; }
-  .hero-cta { flex: 1 1 100%; justify-content: center; }
+  .hero-cta, .hero-globe-actions .btn { flex: 1 1 100%; justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .globe-map { animation: none; }
@@ -782,6 +781,21 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .section-head h2 { margin-bottom: 14px; }
 .section-head p { font-size: 16px; color: var(--muted); line-height: 1.6; }
 .section-dark { background: var(--ink); }
+
+/* a section heading on the left (gold label and Bebas heading) with its
+   intro on the right, lined up along the bottom; the home page uses it for
+   every section below the hero so they all start the same way */
+.section-split-head {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+  gap: 24px 80px; align-items: end;
+  margin-bottom: clamp(32px, calc(3.4vw / var(--z, 1)), 48px);
+}
+.section-split-head .eyebrow { display: block; margin-bottom: 12px; color: var(--brass-ink); }
+.section-split-head h2 { margin: 0; }
+.section-split-head p { margin: 0; font-size: 17px; line-height: 1.65; color: var(--muted); }
+@media (max-width: 900px) {
+  .section-split-head { grid-template-columns: minmax(0, 1fr); }
+}
 .section-paper { background: var(--paper); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 
 /* ---------- cards / grids ---------- */
@@ -816,6 +830,10 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .board-link svg { flex-shrink: 0; transition: transform 150ms ease; }
 .board-link:hover svg { transform: translateX(3px); }
 .board-link:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
+/* on navy: white text, the gold line under it */
+.board-link-on-dark { color: #FFFFFF; }
+.board-link-on-dark:hover { border-bottom-color: #FFFFFF; }
+.board-link-on-dark:focus-visible { outline-color: #FFFFFF; }
 
 .bullet { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; color: var(--muted); line-height: 1.5; }
 .bullet svg { flex-shrink: 0; margin-top: 1px; color: var(--brass-ink); }
@@ -958,7 +976,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   padding: 36px 44px; border-radius: var(--radius);
   background: var(--ink); color: #FFFFFF;
 }
-.cta-band h2 { margin-bottom: 6px; font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 700; line-height: 1.25; letter-spacing: 0; color: #FFFFFF; }
+.cta-band h2 { margin-bottom: 8px; font-size: clamp(34px, calc(3vw / var(--z, 1)), 42px); line-height: 1; color: #FFFFFF; }
 .cta-band p { font-size: 15px; color: var(--on-dark-muted); }
 .cta-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; }
 .cta-phone {
@@ -970,7 +988,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .cta-band a:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
 @media (max-width: 768px) {
   .cta-panel { padding: 28px 22px; }
-  .cta-band h2 { font-size: 22px; }
+  .cta-band h2 { font-size: 32px; }
   .cta-actions { width: 100%; flex-direction: column; align-items: stretch; }
   .cta-actions > a { justify-content: center; }
 }
@@ -1227,41 +1245,22 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .how-deco { position: absolute; right: -160px; bottom: -220px; width: 560px; height: 560px; border-radius: 50%; background: rgba(255,184,0,0.08); pointer-events: none; }
 .how-inner {
   position: relative; max-width: 1200px; margin: 0 auto; box-sizing: content-box;
-  padding: 88px clamp(24px, calc(4.5vw / var(--z, 1)), 72px);
-  display: grid; grid-template-columns: minmax(0, 440fr) minmax(0, 672fr); gap: clamp(40px, calc(6vw / var(--z, 1)), 88px); align-items: center;
+  padding: clamp(72px, calc(7.5vw / var(--z, 1)), 104px) clamp(24px, calc(4.5vw / var(--z, 1)), 72px);
+  display: grid; grid-template-columns: minmax(0, 440fr) minmax(0, 672fr); gap: clamp(40px, calc(6vw / var(--z, 1)), 88px); align-items: start;
 }
-/* the hero's type: Manrope for the heading, labels and buttons, Source Sans 3
-   for the text, sentence case throughout (the airport codes keep Bebas) */
-.how-intro { display: flex; flex-direction: column; gap: 20px; font-family: 'Source Sans 3', 'Montserrat', sans-serif; }
-.how-eyebrow { font-size: 1rem; font-weight: 500; color: var(--on-dark-muted); }
-.how-intro h2 {
-  margin: 0; font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 800;
-  font-size: clamp(2rem, calc(3.3vw / var(--z, 1)), 3rem); line-height: 1.1; letter-spacing: -0.025em;
-  text-wrap: balance; color: #FFFFFF;
-}
-.how-intro p { font-size: 1.1rem; line-height: 1.65; color: var(--on-dark-muted); }
-.how-more {
-  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: -4px;
-  font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; color: var(--brass);
-}
-.how-more:hover { text-decoration: underline; text-underline-offset: 4px; }
-.how-more:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; border-radius: 2px; }
-@media (prefers-reduced-motion: no-preference) {
-  .how-more svg { transition: transform 150ms ease; }
-  .how-more:hover svg { transform: translateX(3px); }
-}
-.how-actions { display: flex; align-items: center; gap: 18px 24px; flex-wrap: wrap; margin-top: 8px; }
-.how .btn { font-family: 'Manrope', 'Montserrat', sans-serif; font-weight: 700; }
-.how-phone { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1rem; font-weight: 600; color: #FFFFFF; text-decoration: none; }
-.how-phone:hover { color: var(--brass); }
-.how-actions a:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
+/* the site's type, as in every section: a gold label, a Bebas heading and
+   Montserrat text. The text stays in view beside the card as it scrolls by. */
+.how-intro { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; position: sticky; top: 120px; }
+.how-eyebrow { color: var(--brass); margin-bottom: -6px; }
+.how-intro h2 { margin: 0; color: #FFFFFF; }
+.how-intro p { font-size: 17px; line-height: 1.7; color: var(--on-dark-muted); }
 
-.how-card { background: var(--surface); border-radius: var(--radius); box-shadow: 0 30px 60px rgba(0,0,0,0.3); transform: rotate(-1deg); overflow: hidden; }
+.how-card { background: var(--surface); border-radius: var(--radius); box-shadow: 0 24px 50px rgba(0,0,0,0.3); transform: rotate(-1deg); overflow: hidden; }
 .how-card-head {
   padding: 22px 36px; background: var(--paper); border-bottom: 1px solid var(--tint-10);
   display: flex; justify-content: space-between; align-items: center; gap: 16px;
 }
-.how-card-label { font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--text-strong); }
+.how-card-label { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
 .how-card-route { display: flex; align-items: center; gap: 10px; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 26px; line-height: 1; color: var(--text-strong); white-space: nowrap; }
 .how-card-route svg { color: var(--brass-ink); }
 .how-list { margin: 0; padding: 6px 36px 14px; list-style: none; }
@@ -1274,9 +1273,9 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 .how-box.is-ticked { background: var(--brass); border-color: var(--brass); }
 .how-item-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.how-item-body h3 { margin: 0; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 1.15rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; color: var(--text-strong); }
-.how-item-body p { font-family: 'Source Sans 3', 'Montserrat', sans-serif; font-size: 1rem; line-height: 1.55; color: var(--muted); }
-.how-num { justify-self: end; font-family: 'Manrope', 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; color: var(--brass-ink); }
+.how-item-body h3 { margin: 0; font-size: 17px; font-weight: 700; line-height: 1.3; color: var(--text-strong); }
+.how-item-body p { font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+.how-num { justify-self: end; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 22px; line-height: 1; letter-spacing: 0.02em; color: var(--brass-ink); }
 
 /* ---- "How it works": the motion (main.js adds the classes and the track) ----
    As the visitor scrolls, the boxes tick one after another (each tick draws
@@ -1325,12 +1324,12 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 
 @media (max-width: 1000px) {
   .how-inner { grid-template-columns: minmax(0, 1fr); padding-top: 64px; padding-bottom: 72px; gap: 44px; }
-  .how-intro { max-width: 560px; }
+  .how-intro { max-width: 560px; position: static; }
 }
 @media (max-width: 768px) {
   .how-inner { padding: 48px 20px 56px; gap: 36px; }
   .how-intro { gap: 16px; }
-  .how-intro p { font-size: 1.05rem; }
+  .how-intro p { font-size: 16px; }
   .how-card { transform: rotate(-0.6deg); }
   .how-card-head { padding: 16px 20px; }
   .how-card-route { font-size: 22px; gap: 6px; }
@@ -1338,12 +1337,9 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .how-list { padding: 2px 20px 8px; }
   .how-item { grid-template-columns: 28px minmax(0, 1fr) 24px; gap: 14px; padding: 18px 0; }
   .how-box { width: 28px; height: 28px; }
-  .how-item-body h3 { font-size: 1.05rem; }
-  .how-item-body p { font-size: 0.97rem; }
+  .how-item-body h3 { font-size: 16px; }
+  .how-item-body p { font-size: 14px; }
   .how-deco { width: 380px; height: 380px; right: -180px; bottom: -160px; }
-}
-@media (max-width: 420px) {
-  .how-actions .btn { width: 100%; justify-content: center; }
 }
 /* small phones: the route with its plane gets its own line under the label,
    the track stretching across the card */
@@ -1355,14 +1351,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 
 /* ---------- home: destinations (three picks + "+3" card) ---------- */
 
-.dest-pick-head {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
-  gap: 24px 80px; align-items: end;
-  margin-bottom: 44px;
-}
-.dest-pick-head .eyebrow { display: block; margin-bottom: 12px; color: var(--brass-ink); }
-.dest-pick-head h2 { margin: 0; }
-.dest-pick-head p { margin: 0; font-size: 17px; line-height: 1.65; color: var(--muted); }
 
 .dest-pick-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) 230px; gap: 20px; }
 
@@ -1386,9 +1374,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 @media (max-width: 1056px), (max-width: 1320px) and (pointer: coarse), (max-width: 1320px) and (pointer: none) {
   .dest-pick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (max-width: 900px) {
-  .dest-pick-head { grid-template-columns: 1fr; margin-bottom: 32px; }
-}
 @media (max-width: 640px) {
   .dest-pick-grid { grid-template-columns: 1fr; }
 }
@@ -1405,8 +1390,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    (main.js adds .is-swinging). Phones: the tags hang one under another, each
    tied to the one above. */
 .why {
-  padding: clamp(64px, calc(6.25vw / var(--z, 1)), 90px) 0 clamp(64px, calc(7vw / var(--z, 1)), 100px);
-  background: linear-gradient(180deg, var(--bg) 0%, var(--hero-cream) 100%);
+  padding: clamp(64px, calc(8vw / var(--z, 1)), 112px) 0 clamp(56px, calc(7vw / var(--z, 1)), 96px);
+  background: var(--hero-cream);
 }
 .why-inner { display: grid; grid-template-columns: 430px minmax(0, 1fr); gap: 50px; align-items: start; }
 .why-copy { display: flex; flex-direction: column; gap: 20px; }
@@ -1421,14 +1406,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 .why-mission-label svg { flex-shrink: 0; color: var(--brass); }
 .why-mission p { font-size: 16px; font-weight: 500; font-style: italic; line-height: 1.65; color: var(--text-strong); }
-.why-go {
-  align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; margin-top: 4px;
-  padding: 15px 24px; border-radius: 999px; background: var(--text-strong); color: var(--bg);
-  font-size: 15px; font-weight: 700; line-height: 1.2;
-}
-.why-go svg { flex-shrink: 0; }
-.why-go:hover { background: var(--brass); color: var(--ink); }
-.why-go:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
+.why-more { align-self: flex-start; margin-top: 4px; }
 
 .why-rack { position: relative; padding-top: 20px; }
 .why-rail { display: block; height: 10px; margin: 0 10px; border-radius: 5px; background: var(--text-strong); }
@@ -1440,7 +1418,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   transform-origin: 50% 0; transform: rotate(var(--t));
 }
 .why-tag::before { content: ""; width: 2px; height: var(--string); background: var(--text-strong); }
-.why-tag-card { width: 100%; border-radius: 20px; background: var(--surface); box-shadow: 0 22px 44px var(--shadow-14); overflow: hidden; }
+.why-tag-card { width: 100%; border-radius: var(--radius); background: var(--surface); box-shadow: 0 22px 44px var(--shadow-14); overflow: hidden; }
 .why-tag-head { display: flex; align-items: center; justify-content: space-between; height: 66px; padding: 0 22px; background: var(--brass); color: var(--ink); }
 .why-tag-head svg { flex-shrink: 0; }
 /* the eyelet: a hole punched through the tag, showing the page behind */
@@ -1451,7 +1429,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .why-tag p { font-size: 14px; line-height: 1.55; color: var(--muted); }
 
 @media (prefers-reduced-motion: no-preference) {
-  .why-go { transition: background-color 150ms ease, color 150ms ease; }
   .why-tag { transition: transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1); }
   /* pointing at a tag straightens it (mouse and trackpad only, so a tap on
      a phone doesn't leave one stuck straight) */
@@ -1581,7 +1558,19 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 
 /* ---------- home: FAQ ---------- */
 
-.faq-wrap { max-width: 820px; margin: 0 auto; }
+/* straight after the (white) testimonials, a hairline between the two */
+.testimonials:not([hidden]) + #faq { border-top: 1px solid var(--border-soft); }
+.faq-wrap { display: grid; grid-template-columns: minmax(0, 400px) minmax(0, 1fr); gap: 32px 80px; align-items: start; }
+.faq-head { position: sticky; top: 120px; display: flex; flex-direction: column; gap: 12px; }
+.faq-head .eyebrow { color: var(--brass-ink); }
+.faq-head h2 { margin: 0 0 4px; }
+.faq-head p { font-size: 17px; line-height: 1.65; color: var(--muted); }
+.faq-head p a { font-weight: 700; white-space: nowrap; border-bottom: 2px solid var(--brass); }
+.faq-head p a:hover { border-bottom-color: var(--line-strong); }
+@media (max-width: 900px) {
+  .faq-wrap { grid-template-columns: minmax(0, 1fr); }
+  .faq-head { position: static; }
+}
 .faq-list { border-bottom: 1px solid var(--border-soft); }
 .faq-item { border-top: 1px solid var(--border-soft); scroll-margin-top: 110px; }
 .faq-item summary { list-style: none; cursor: pointer; padding: 20px 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 16.5px; font-weight: 600; color: var(--text); }
@@ -2232,21 +2221,16 @@ a.about-pin:hover { color: var(--brass); }
 .ai-soon .btn { margin-top: 22px; }
 
 /* ---------- testimonials (home page; hidden until js/testimonials-data.js has quotes to show) ----------
-   A soft raised card for each student, in a row: the cards are the same
-   colour as the section around them and stand out only by a light edge above
-   and to the left and a shadow below and to the right; the student's own
-   rating is pressed in the same way. main.js builds the cards and the dots. */
+   A card for each student, in a row, styled like the destination cards (white,
+   the same corners, border and shadow); the student's own rating sits in a
+   light grey box. main.js builds the cards and the dots. */
 
-.testimonials { background: var(--soft); }
+.testimonials { background: var(--bg); }
 /* the page gutter, so the row can run out to the screen edge (and scroll
    there) while its cards still line up with the rest of the page; and the
    box the cards-per-row rules below measure */
 .testi-wrap { --gutter: clamp(24px, calc(4.5vw / var(--z, 1)), 72px); container-type: inline-size; }
 @media (max-width: 768px) { .testi-wrap { --gutter: 20px; } } /* as .container there */
-.testi-head { max-width: 560px; margin: 0 auto clamp(32px, calc(4.5vw / var(--z, 1)), 56px); text-align: center; }
-.testi-head .eyebrow { display: block; margin-bottom: 14px; color: var(--brass-ink); }
-.testi-head h2 { margin-bottom: 16px; }
-.testi-head p { font-size: 16px; line-height: 1.6; color: var(--muted); }
 .testi-preview { max-width: 640px; margin: 0 auto 32px; }
 
 /* the row: three cards across, two on a tablet, one on a phone (below);
@@ -2288,16 +2272,17 @@ a.about-pin:hover { color: var(--brass); }
   min-width: 0;
   display: flex; flex-direction: column;
   padding: 28px 26px 30px;
-  border-radius: 28px;
-  background: var(--soft);
-  box-shadow: -9px -9px 22px var(--soft-hi), 12px 14px 30px var(--soft-lo);
+  border: 2px solid var(--tint-06);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 10px 30px var(--shadow-10);
   scroll-snap-align: start;
   transition: transform 250ms ease, box-shadow 250ms ease;
 }
 .testi-card > .testi-sample { align-self: flex-start; }
 /* a card lifts a little under the mouse */
 @media (hover: hover) {
-  .testi-card:hover { transform: translateY(-6px); box-shadow: -10px -10px 26px var(--soft-hi), 16px 22px 40px var(--soft-lo); }
+  .testi-card:hover { transform: translateY(-6px); box-shadow: 0 24px 50px var(--shadow-22); }
 }
 /* the cards rise into place one after another the first time the section
    comes into view (main.js adds the classes; --i is each card's place) */
@@ -2313,8 +2298,6 @@ a.about-pin:hover { color: var(--brass); }
   .testi-card {
     flex-basis: calc(100% - 28px);
     padding: 22px 20px 24px;
-    border-radius: 24px;
-    box-shadow: -6px -6px 16px var(--soft-hi), 8px 10px 22px var(--soft-lo);
   }
 }
 
@@ -2326,7 +2309,6 @@ a.about-pin:hover { color: var(--brass); }
   border-radius: 50%;
   overflow: hidden;
   background: linear-gradient(140deg, #0A2A7A, var(--ink));
-  box-shadow: 5px 7px 14px var(--soft-lo), -4px -4px 10px var(--soft-hi);
   /* initials, when there is no photo */
   font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 26px; line-height: 1; letter-spacing: 0.04em; color: var(--brass);
 }
@@ -2341,8 +2323,8 @@ a.about-pin:hover { color: var(--brass); }
 .testi-score-own {
   flex: 1.4 1 0; min-width: 0;
   padding: 14px 16px;
-  border-radius: 14px;
-  box-shadow: inset 5px 5px 12px var(--soft-lo), inset -5px -5px 12px var(--soft-hi);
+  border-radius: 12px;
+  background: var(--paper);
 }
 .testi-score-own:only-child { flex: 0 1 auto; }
 .testi-score-num { display: flex; align-items: center; gap: 7px; font-size: 20px; font-weight: 700; line-height: 1.2; color: var(--text-strong); }

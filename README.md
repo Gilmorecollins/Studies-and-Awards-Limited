@@ -313,11 +313,20 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   another and a plane flies along the EDL → ABROAD route in the card's head.
   With reduced motion the card shows as written in `index.html`, with the
   first two boxes ticked.
+- **Home page look**: every section uses the same pieces, so keep to them
+  when adding one: a gold Oswald label over a Bebas heading (`.eyebrow` and
+  `h2`; the intro beside it with `.section-split-head`), Montserrat text,
+  the gold `.btn .btn-primary` for the one main action, and `.board-link`
+  (`.board-link-on-dark` on navy) for every other link. Cards share the
+  destination cards' corners (`--radius`), border and shadow. Backgrounds
+  run white, navy ("How it works"), white, cream ("Why choose us"), white.
+  "Book a free consultation" appears in the header, the hero and the
+  closing band only.
 - **Destination specialists**: give a team member `destinations: ['Germany']`
   in `js/team-data.js` and they lead the consultation list, tagged "Best for
   Germany", when someone books from that country's page.
-- **Testimonials**: the home page's "Testimonials" section shows a soft
-  raised card for each student: their photo (or initials), name and who they
+- **Testimonials**: the home page's "Testimonials" section shows a card
+  for each student: their photo (or initials), name and who they
   are, their rating beside the average, and their words. The cards sit in a
   row, three across on a laptop, two on a tablet and one on a phone; when
   there are more than fit, the row scrolls sideways (swipe, trackpad, or the
