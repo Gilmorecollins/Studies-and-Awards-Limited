@@ -925,8 +925,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .route-hero-copy > p a { font-weight: 600; color: #FFFFFF; text-decoration: underline; text-decoration-color: var(--brass); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 .route-hero-copy > p a:hover { color: var(--brass); }
 .route-hero-copy > p a:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 2px; border-radius: 2px; }
-.route-hero-copy > .route-hero-origin { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.55; color: #FFFFFF; }
-.route-hero-dot { width: 10px; height: 10px; margin-top: 0.38em; border-radius: 50%; background: var(--brass); flex-shrink: 0; }
 
 .route-map { position: relative; container-type: inline-size; }
 .route-map img { display: block; width: 100%; height: auto; }
@@ -1033,17 +1031,24 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 /* dark mode: a navy circle disappears into the dark card, so it turns gold */
 :root[data-theme="dark"] .dest-card-arrow { background: var(--brass); color: var(--ink); }
 
-/* the Destinations page's cards: after the name and the line about it, the
-   key facts (intakes, language test, visa) and the partner count, all
-   written in by tools/generate-countries.mjs */
-.route-cards .dest-card-tag { min-height: 3.1em; }
-.dest-card-facts { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; padding-top: 14px; border-top: 1px dashed var(--border); }
-.dest-fact { display: grid; grid-template-columns: 9.6em minmax(0, 1fr); gap: 10px; font-size: 13.5px; line-height: 1.4; }
-.dest-fact-label { font-weight: 600; color: var(--muted); }
-.dest-fact-value { font-weight: 600; color: var(--text-strong); }
-.dest-card-partners {
-  align-self: flex-start; margin-top: 4px; padding: 4px 10px; border-radius: 999px;
-  background: var(--gold-tint); font-size: 12.5px; font-weight: 700; color: var(--brass-ink);
+/* the Destinations page's cards: the name, a line about the country, then a
+   plain table (intakes, language test, visa) and a gold box with the partner
+   count, all written in by tools/generate-countries.mjs */
+.route-cards .dest-card-body { gap: 12px; }
+.route-cards .dest-card-tag { min-height: 3.1em; font-size: 15.5px; line-height: 1.55; color: var(--text-prose); }
+.dest-card-facts { display: flex; flex-direction: column; border-top: 2px solid var(--line-strong); border-bottom: 1px solid var(--tint-10); }
+.dest-fact { display: grid; grid-template-columns: 7.2em minmax(0, 1fr); gap: 14px; padding: 13px 0; }
+.dest-fact + .dest-fact { border-top: 1px solid var(--tint-10); }
+.dest-fact-label { font-size: 14px; font-weight: 700; color: var(--brass-ink); }
+.dest-fact-value { font-size: 16px; font-weight: 400; line-height: 1.4; color: var(--text-strong); }
+.dest-card-partners { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 12px; background: var(--gold-tint); }
+.dest-partners-num { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 44px; line-height: 0.9; color: var(--text-strong); }
+.dest-partners-text { display: flex; flex-direction: column; gap: 2px; }
+.dest-partners-name { font-size: 14.5px; font-weight: 700; line-height: 1.3; color: var(--text-strong); }
+.dest-partners-where { font-size: 13.5px; font-weight: 600; line-height: 1.3; color: var(--brass-ink); }
+@media (max-width: 420px) {
+  .dest-fact { grid-template-columns: 6.2em minmax(0, 1fr); gap: 10px; }
+  .dest-fact-value { font-size: 15px; }
 }
 
 /* "Compare at a glance": the same facts side by side; on phones each country

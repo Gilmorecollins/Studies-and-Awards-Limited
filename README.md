@@ -122,9 +122,11 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
     `team.html`, `destinations.html`
   - `destinations.html`: a new card (with an empty
     `<!-- facts:<slug>:start -->` / `<!-- facts:<slug>:end -->` pair after its
-    tagline, which the generator fills in), the "Six countries" headline and
-    the meta description. Give the country its `facts` (intakes, language,
-    visa) in `generate-countries.mjs` too.
+    name, which the generator fills in with the card's line about the
+    country, its facts and the partner box), the "Six countries" headline
+    and the meta description. Give the country its `facts` (intakes,
+    language, visa) and its `cardTag` (the line under its name on the card;
+    `{cities}` becomes its city count) in `generate-countries.mjs` too.
 - **Destination facts**: each country's intakes, language test and student
   visa are its `facts` in `countries` in `tools/generate-countries.mjs`. They
   were checked against each government's own pages (October 2026); the visa
@@ -134,8 +136,9 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   permits and residence out of the copy. The
   generator writes them, with the partner-institution count from
   `data/partner-institutions.json` (the cities shown on that country's page),
-  into each card on `destinations.html` and into its "Compare at a glance"
-  table, between the marked comments. Change them there and regenerate; edits
+  into each card on `destinations.html` (the line about the country, a plain
+  table of the three facts and a gold box with the partner count) and into
+  its "Compare at a glance" table, between the marked comments. Change them there and regenerate; edits
   made between the markers by hand are overwritten (and `--check` flags them).
   A country with no partner data shows no count on its card and "Ask us" in
   the table.

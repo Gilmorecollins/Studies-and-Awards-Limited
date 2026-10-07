@@ -102,7 +102,8 @@ const countries = [
     code: 'SYD',
     welcome: 'The Land Down Under',
     tagline: 'World-class universities and a relaxed, multicultural lifestyle. We guide you from application to arrival.',
-    facts: { intakes: 'February/March and July', language: 'IELTS, PTE or another approved English test', visa: 'Student visa (subclass 500)' },
+    facts: { intakes: 'February or March, and July', language: 'IELTS, PTE or another approved English test', visa: 'Student visa (subclass 500)' },
+    cardTag: 'Universities and colleges across {cities} cities.',
     why: [
       ['World-ranked universities', 'A wide range of internationally recognised degree programs across every discipline.'],
       ['Practical, hands-on courses', 'Many courses combine classroom learning with practical, hands-on training.'],
@@ -133,7 +134,8 @@ const countries = [
     code: 'LHR',
     welcome: 'Home of Timeless Tradition',
     tagline: 'World-renowned universities and a rich academic tradition, with degrees that often take less time than elsewhere.',
-    facts: { intakes: 'Mainly September, some courses in January', language: 'IELTS or PTE (the UKVI version for some courses)', visa: 'Student visa' },
+    facts: { intakes: 'Mostly September, some courses in January', language: 'IELTS or PTE (some courses need the UKVI version)', visa: 'Student visa' },
+    cardTag: 'Universities across {cities} cities, with a long academic history.',
     why: [
       ['World-renowned universities', 'Home to some of the world\'s oldest and most respected universities, offering globally recognised degrees.'],
       ['A wide choice of courses', 'Thousands of courses across universities and colleges, from foundation programmes to master\'s degrees.'],
@@ -164,7 +166,8 @@ const countries = [
     code: 'FRA',
     welcome: 'The Heart of Europe',
     tagline: 'Tuition-friendly public universities. Our German Language Training gets you ready to apply.',
-    facts: { intakes: 'Winter semester (September/October) and summer semester (March/April)', language: 'German (TestDaF or DSH) for German-taught courses; IELTS or TOEFL for English-taught ones', visa: 'National student visa' },
+    facts: { intakes: 'September/October and March/April', language: 'TestDaF or DSH for German courses. IELTS or TOEFL for English courses.', visa: 'National student visa' },
+    cardTag: 'Public universities with low tuition. Our language training gets you ready.',
     why: [
       ['Low or no tuition fees', 'Most public universities charge little to no tuition for degree programs.'],
       ['Strength in engineering & research', 'A long-standing international reputation in technical and scientific fields.'],
@@ -195,7 +198,8 @@ const countries = [
     code: 'YYZ',
     welcome: 'The Great White North',
     tagline: 'Respected colleges and universities in a safe, welcoming, multicultural country.',
-    facts: { intakes: 'Mainly September and January, some courses in May', language: 'IELTS, TOEFL, PTE or CAEL, as your school requires', visa: 'Study permit' },
+    facts: { intakes: 'Mostly September and January, some courses in May', language: 'IELTS, TOEFL, PTE or CAEL, depending on the school', visa: 'Study permit' },
+    cardTag: 'Colleges and universities in a safe country with students from many backgrounds.',
     why: [
       ['Globally respected degrees', 'Recognised qualifications across every field of study.'],
       ['Colleges and universities', 'Choose between career-focused college diplomas and university degrees.'],
@@ -224,7 +228,8 @@ const countries = [
     code: 'DUB',
     welcome: 'The Emerald Isle',
     tagline: 'EU-recognised degrees in a welcoming, English-speaking country.',
-    facts: { intakes: 'Mainly September, some courses in January', language: 'IELTS, PTE, TOEFL or Duolingo', visa: 'Study visa (long-stay D), then Stamp 2' },
+    facts: { intakes: 'Mostly September, some courses in January', language: 'IELTS, PTE, TOEFL or Duolingo', visa: 'Study visa (long-stay D), then Stamp 2' },
+    cardTag: 'Degrees recognised across the EU. English is the main language.',
     why: [
       ['EU-recognised degrees', 'Qualifications respected across Europe and internationally.'],
       ['Strength in technology and science', 'Courses that draw on Ireland\'s strengths in technology, pharmaceuticals and research.'],
@@ -252,6 +257,7 @@ const countries = [
     welcome: 'Land of the Long White Cloud',
     tagline: 'High-quality, practical education in a safe, welcoming country.',
     facts: { intakes: 'February and July', language: 'IELTS, PTE or another approved English test', visa: 'Fee Paying Student Visa' },
+    cardTag: 'Practical courses in a safe country.',
     why: [
       ['Quality-assured education', 'A national quality framework and a government code of practice set the standard for how providers look after international students.'],
       ['Practical, hands-on learning', 'Courses that build practical skills, research ability and independent thinking.'],
@@ -710,8 +716,8 @@ ${rows}
 }
 
 // ---- the Destinations page's key facts ----------------------------------------
-// destinations.html is written by hand, but each card's facts (intakes, language
-// test, student visa and partner institutions) and the "Compare at a
+// destinations.html is written by hand, but each card's line about the country,
+// its facts (intakes, language test, student visa and partner institutions) and the "Compare at a
 // glance" table come from the `facts` of each country above and from the
 // partner data, written between marked comments: <!-- facts:<slug>:start -->
 // ... <!-- facts:<slug>:end --> inside each card, and <!-- compare:start -->
@@ -734,15 +740,29 @@ const partnerLine = s => `${s.institutions} partner institution${s.institutions 
 
 function cardFacts(c) {
   const p = partnerCount(c);
-  const fact = (label, value) => `              <span class="dest-fact"><span class="dest-fact-label">${label}</span><span class="dest-fact-value">${esc(value)}</span></span>`;
+  const tag = c.cardTag.replace('{cities}', () => {
+    if (!p) throw new Error(`${c.slug}: cardTag uses {cities} but there is no partner data`);
+    return String(p.cities);
+  });
+  const row = (label, value) => `              <span class="dest-fact"><span class="dest-fact-label">${label}</span><span class="dest-fact-value">${esc(value)}</span></span>`;
+  const partners = !p ? [] : [
+    '            <span class="dest-card-partners">',
+    `              <span class="dest-partners-num">${p.institutions}</span>`,
+    '              <span class="dest-partners-text">',
+    `                <span class="dest-partners-name">partner institution${p.institutions === 1 ? '' : 's'}</span>`,
+    `                <span class="dest-partners-where">across ${p.cities} ${p.cities === 1 ? 'city' : 'cities'}</span>`,
+    '              </span>',
+    '            </span>',
+  ];
   return [
     `            <!-- facts:${c.slug}:start, written by tools/generate-countries.mjs; edit the script, not this block -->`,
+    `            <span class="dest-card-tag">${esc(tag)}</span>`,
     '            <span class="dest-card-facts">',
-    fact('Intakes', c.facts.intakes),
-    fact('Language test', c.facts.language),
-    fact('Visa', c.facts.visa),
+    row('Intakes', c.facts.intakes),
+    row('Language test', c.facts.language),
+    row('Visa', c.facts.visa),
     '            </span>',
-    ...(p ? [`            <span class="dest-card-partners">${partnerLine(p)}</span>`] : []),
+    ...partners,
     `            <!-- facts:${c.slug}:end -->`,
   ].join('\n');
 }
