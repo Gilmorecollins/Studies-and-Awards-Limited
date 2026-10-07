@@ -829,6 +829,17 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .page-hero .hero-kicker { margin-bottom: 26px; }
 .page-hero h1 { max-width: 1000px; margin: 0 0 26px; font-size: var(--page-title); line-height: 0.95; letter-spacing: 0.01em; text-wrap: balance; color: var(--text-strong); }
 .page-hero p { max-width: 760px; font-size: clamp(17px, calc(1.46vw / var(--z, 1)), 21px); line-height: 1.6; color: var(--text-prose); }
+/* the Team page's title: the headline on the left and the line about us beside
+   it, so it takes up far less height than the title with the text under it */
+.team-hero { padding: clamp(40px, calc(4.4vw / var(--z, 1)), 64px) 0 clamp(28px, calc(3vw / var(--z, 1)), 40px); }
+.team-hero .hero-kicker { margin-bottom: 18px; }
+.team-hero-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: 24px clamp(32px, calc(4vw / var(--z, 1)), 56px); align-items: end; }
+.page-hero.team-hero h1 { max-width: none; margin: 0; }
+.team-hero-row p { max-width: 360px; padding-bottom: 6px; font-size: 16px; line-height: 1.7; color: var(--text-prose); }
+@media (max-width: 900px) {
+  .team-hero-row { grid-template-columns: minmax(0, 1fr); }
+  .team-hero-row p { max-width: 560px; padding-bottom: 0; }
+}
 
 /* ---------- sections ---------- */
 
@@ -2100,7 +2111,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 
 /* ---------- team slider ---------- */
 
-.team-slider { padding: clamp(48px, calc(7vw / var(--z, 1)), 88px) 0 clamp(56px, calc(8vw / var(--z, 1)), 96px); position: relative; }
+.team-slider { padding: clamp(32px, calc(4vw / var(--z, 1)), 56px) 0 clamp(56px, calc(8vw / var(--z, 1)), 96px); position: relative; }
 
 .cursor-follower {
   position: fixed;
@@ -2198,11 +2209,12 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .team-strip.is-snapping .team-card-photo-img,
 .team-strip.is-snapping .team-card-dots { transition: none !important; }
 
-/* the current person: name and role, bio, ask me about + join */
+/* the current person: name and role beside the bio, with what to ask them
+   about and "View more" on one line under it */
 .team-info {
-  display: grid; grid-template-columns: minmax(0, 330px) minmax(0, 1fr) minmax(0, 320px);
+  display: grid; grid-template-columns: minmax(0, 330px) minmax(0, 1fr);
   gap: clamp(28px, calc(3.5vw / var(--z, 1)), 50px); align-items: start;
-  margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--border-soft);
+  margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-soft);
 }
 .team-info-who { display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
 .team-active-name {
@@ -2213,7 +2225,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 .team-active-role { font-size: 15px; font-weight: 600; color: var(--muted); transition: opacity 280ms ease, transform 280ms ease; }
 .team-active-name.is-swapping, .team-active-role.is-swapping { opacity: 0; transform: translateY(8px); }
-.team-info-bio { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+.team-info-bio { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
 .team-bio {
   margin: 0; font-size: 15px; line-height: 1.75; color: var(--text-prose);
   min-height: 5.25em;
@@ -2227,23 +2239,16 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   cursor: pointer; transition: border-color 150ms ease;
 }
 .team-view-more:hover { border-bottom-color: var(--line-strong); }
-.team-info-ask { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
-.team-ask { display: flex; flex-direction: column; gap: 6px; }
-.team-ask-label { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-.team-ask-text { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--text-strong); min-height: 3em; transition: opacity 280ms ease, transform 280ms ease; }
-.team-join-btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 13px 24px; border: 1.5px solid var(--line-strong); border-radius: 999px;
-  font-size: 14.5px; font-weight: 600; white-space: nowrap;
-  color: var(--text-strong);
-  transition: background-color 150ms ease, color 150ms ease;
-}
-.team-join-btn:hover { background: var(--ink); color: #FFFFFF; }
+.team-bio-foot { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 28px; width: 100%; padding-top: 12px; border-top: 1px dashed var(--tint-18); }
+.team-ask { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; min-width: 0; }
+.team-ask-label { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brass-ink); }
+.team-ask-text { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.5; color: var(--text-strong); transition: opacity 280ms ease, transform 280ms ease; }
 
 /* bio modal */
 .team-modal-overlay {
   position: fixed; inset: 0; z-index: 90;
-  background: rgba(0,10,30,0.45);
+  background: rgba(0,15,45,0.55);
+  -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
   display: flex; align-items: center; justify-content: center;
   padding: 24px;
   opacity: 0;
@@ -2251,12 +2256,14 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 .team-modal-overlay.is-open { opacity: 1; }
 .team-modal-overlay[hidden] { display: none; }
+/* the same white card as the rest of the site */
 .team-modal {
   position: relative;
-  width: 100%; max-width: 480px;
+  width: 100%; max-width: 560px;
   background: var(--surface);
-  border-radius: var(--radius-sm);
-  padding: clamp(24px, calc(4vw / var(--z, 1)), 36px);
+  border-radius: var(--radius);
+  box-shadow: 0 30px 70px rgba(0,15,45,0.35);
+  padding: clamp(24px, calc(3.4vw / var(--z, 1)), 36px);
   transform: translateY(16px) scale(0.96);
   opacity: 0;
   transition: transform 260ms ease, opacity 260ms ease;
@@ -2265,34 +2272,41 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 .team-modal-overlay.is-open .team-modal { transform: translateY(0) scale(1); opacity: 1; }
 .team-modal-close {
-  position: absolute; top: 16px; right: 16px;
-  width: 32px; height: 32px;
+  position: absolute; top: 18px; right: 18px;
+  width: 34px; height: 34px;
   display: flex; align-items: center; justify-content: center;
-  background: none; border: none; cursor: pointer;
-  font-size: 22px; line-height: 1; color: var(--muted);
-  transition: color 150ms ease;
+  background: var(--paper); border: 1px solid var(--border-soft); border-radius: 50%; cursor: pointer;
+  color: var(--text-strong);
+  transition: background-color 150ms ease, color 150ms ease;
 }
-.team-modal-close:hover { color: var(--text-strong); }
-.team-modal-head { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
-.team-modal-name { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.02em; color: var(--text-strong); text-transform: uppercase; }
-.team-modal-role { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.team-modal-close:hover { background: var(--brass); color: var(--ink); }
+.team-modal-head { display: flex; align-items: center; gap: 22px; margin: 0 0 22px; padding-bottom: 22px; border-bottom: 1.5px dashed var(--tint-18); }
+.team-modal-photo { width: 112px; height: 112px; flex-shrink: 0; border-radius: 50%; object-fit: cover; object-position: 50% 8%; background: var(--paper); box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px var(--brass); }
+.team-modal-who { min-width: 0; padding-right: 40px; }
+.team-modal-dept:empty { display: none; }
+.team-modal-dept { display: block; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
+.team-modal-name { margin: 6px 0 0; font-size: clamp(38px, calc(4vw / var(--z, 1)), 48px); line-height: 0.95; letter-spacing: 0.01em; color: var(--text-strong); overflow-wrap: anywhere; }
+.team-modal-role { margin-top: 8px; font-size: 15px; font-weight: 600; color: var(--muted); }
 .team-modal-linkedin {
-  display: inline-block; margin-top: 14px;
-  font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--text-strong); border-bottom: 1px solid transparent;
+  display: inline-block; margin-top: 12px; padding-bottom: 3px;
+  border-bottom: 2px solid var(--brass);
+  font-size: 14px; font-weight: 700; color: var(--text-strong);
 }
 .team-modal-linkedin:hover { border-bottom-color: var(--line-strong); }
 /* An author `display` beats the user-agent [hidden] rule, so without this the
    link stayed visible (and focusable) even when main.js set hidden = true. */
 .team-modal-linkedin[hidden] { display: none; }
-.team-modal-photo { width: 120px; height: 120px; border-radius: var(--radius-sm); object-fit: cover; object-position: 50% 8%; flex-shrink: 0; }
-.team-modal-bio p { font-size: 14px; line-height: 1.75; color: var(--text-prose); margin-bottom: 14px; }
+.team-modal-bio p { font-size: 15.5px; line-height: 1.75; color: var(--text-prose); margin-bottom: 14px; }
 .team-modal-bio p:last-child { margin-bottom: 0; }
+@media (max-width: 480px) {
+  .team-modal-head { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .team-modal-photo { width: 96px; height: 96px; }
+  .team-modal-who { padding-right: 0; }
+}
 
 .team-strip-viewport:focus-visible,
 .team-nav-btn:focus-visible,
 .team-view-more:focus-visible,
-.team-join-btn:focus-visible,
 .team-modal-close:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
 
 /* ---------- "Check your eligibility for Australia" (the Australia page) ----------
@@ -2803,8 +2817,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .grid-3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
 
   .team-card { flex: 0 0 30%; }
-  .team-info { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .team-info-who { grid-column: 1 / -1; }
+  .team-info { grid-template-columns: minmax(0, 1fr); gap: 14px; }
 
   .footer-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 32px; }
 }
@@ -2846,10 +2859,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .team-chip { flex-shrink: 0; }
   .team-info { grid-template-columns: minmax(0, 1fr); gap: 22px; margin-top: 28px; }
   .team-bio { min-height: 0; }
-  .team-info-ask { align-items: stretch; }
-  .team-join-btn { width: 100%; }
-  .team-modal-head { flex-direction: column-reverse; }
-  .team-modal-photo { width: 96px; height: 96px; }
 }
 
 /* ---------- team page: "Our departments" ----------
@@ -2863,7 +2872,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .team-depts-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px 24px; flex-wrap: wrap; margin-bottom: 20px; }
 .team-depts-eyebrow { display: block; margin-bottom: 8px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
 .team-depts-head h2 { margin: 0; }
-.team-depts-hint { max-width: 420px; font-size: 14px; line-height: 1.5; color: var(--muted); }
 .team-depts-grid { margin: 0; padding: 0; list-style: none; columns: 3 300px; column-gap: 14px; }
 .team-dept {
   min-width: 0;

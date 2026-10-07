@@ -74,11 +74,13 @@
 
 <main id="main">
 
-  <section class="page-hero" aria-labelledby="page-heading">
+  <section class="page-hero team-hero" aria-labelledby="page-heading">
     <div class="container">
       <span class="hero-kicker">OUR TEAM</span>
-      <h1 id="page-heading">The counsellors behind your application.</h1>
-      <p>From our office in Eldoret, and online for students across Kenya, our team works with you personally from your first meeting until you arrive and start your studies abroad.</p>
+      <div class="team-hero-row">
+        <h1 id="page-heading">The counsellors behind your application.</h1>
+        <p>From our office in Eldoret, and online for students across Kenya, our team works with you personally from your first meeting until you arrive and start your studies abroad.</p>
+      </div>
     </div>
   </section>
 
@@ -112,14 +114,13 @@
         </div>
         <div class="team-info-bio">
           <p class="team-bio" id="team-bio"></p>
-          <button type="button" class="team-view-more" id="team-view-more">View more</button>
-        </div>
-        <div class="team-info-ask">
-          <div class="team-ask">
-            <span class="team-ask-label">Ask me about</span>
-            <p class="team-ask-text" id="team-ask"></p>
+          <div class="team-bio-foot">
+            <div class="team-ask">
+              <span class="team-ask-label">Ask me about</span>
+              <p class="team-ask-text" id="team-ask"></p>
+            </div>
+            <button type="button" class="team-view-more" id="team-view-more">View more</button>
           </div>
-          <a href="mailto:admissions@studiesandawardsltd.com?subject=Join%20Our%20Team" class="team-join-btn">Join our team</a>
         </div>
       </div>
 
@@ -134,7 +135,6 @@
           <span class="team-depts-eyebrow">WHO DOES WHAT</span>
           <h2 id="team-depts-heading">Our departments</h2>
         </div>
-        <p class="team-depts-hint">Every department and the people in it. Choose a person to read more about them.</p>
       </div>
       <ol class="team-depts-grid" id="team-depts"></ol>
     </div>
@@ -142,14 +142,15 @@
 
   <div class="team-modal-overlay" id="team-modal-overlay" hidden>
     <div class="team-modal" role="dialog" aria-modal="true" aria-labelledby="team-modal-name" id="team-modal" tabindex="-1">
-      <button type="button" class="team-modal-close" id="team-modal-close" aria-label="Close">&times;</button>
+      <button type="button" class="team-modal-close" id="team-modal-close" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       <div class="team-modal-head">
-        <div>
-          <div class="team-modal-name" id="team-modal-name"></div>
-          <div class="team-modal-role" id="team-modal-role"></div>
+        <img class="team-modal-photo" id="team-modal-photo" alt="">
+        <div class="team-modal-who">
+          <span class="team-modal-dept" id="team-modal-dept"></span>
+          <h2 class="team-modal-name" id="team-modal-name"></h2>
+          <p class="team-modal-role" id="team-modal-role"></p>
           <a href="#" class="team-modal-linkedin" id="team-modal-linkedin" target="_blank" rel="noopener">LinkedIn</a>
         </div>
-        <img class="team-modal-photo" id="team-modal-photo" alt="">
       </div>
       <div class="team-modal-bio" id="team-modal-bio"></div>
     </div>

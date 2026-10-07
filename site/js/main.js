@@ -723,6 +723,7 @@
   var modalClose = document.getElementById('team-modal-close');
   var modalName = document.getElementById('team-modal-name');
   var modalRole = document.getElementById('team-modal-role');
+  var modalDept = document.getElementById('team-modal-dept');
   var modalPhoto = document.getElementById('team-modal-photo');
   var modalLinkedin = document.getElementById('team-modal-linkedin');
   var modalBio = document.getElementById('team-modal-bio');
@@ -758,6 +759,8 @@
     if (!member || !member.name) member = members[activeIndex];
     modalName.textContent = member.name;
     modalRole.textContent = member.role;
+    // the department above the name, unless it only repeats the role (the Director)
+    modalDept.textContent = member.department && member.department !== member.role ? member.department : '';
     modalPhoto.src = window.teamPortrait(member, 'photo');
     modalPhoto.alt = member.name;
 
