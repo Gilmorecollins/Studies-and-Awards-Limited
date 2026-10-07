@@ -16,6 +16,10 @@
 
   var MARK = '<svg class="testi-mark" viewBox="0 0 27 19" width="34" height="24" aria-hidden="true"><path d="M1.5 12.5C1.5 7 5 3 10.5 1.5l.7 2.1C8 4.8 6 6 5.6 7.2a5.5 5.5 0 1 1-4.1 5.3z"/><path d="M15.5 12.5C15.5 7 19 3 24.5 1.5l.7 2.1C22 4.8 20 6 19.6 7.2a5.5 5.5 0 1 1-4.1 5.3z"/></svg>';
 
+  // a dotted route line between the person and their words (the same dotted
+  // route as the maps, without the plane): a dot at each end and a shallow arc
+  var PATH = '<span class="testi-path" aria-hidden="true"><i></i><svg viewBox="0 0 300 20" preserveAspectRatio="none" focusable="false"><path d="M0 12 Q150 -8 300 12" vector-effect="non-scaling-stroke"/></svg><i></i></span>';
+
   function el(tag, className, text) {
     var node = document.createElement(tag);
     if (className) node.className = className;
@@ -71,6 +75,7 @@
     person.appendChild(who);
     person.insertAdjacentHTML('beforeend', MARK);
     card.appendChild(person);
+    card.insertAdjacentHTML('beforeend', PATH);
 
     // their words
     var quote = el('blockquote', 'testi-quote');
