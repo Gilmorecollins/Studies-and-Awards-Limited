@@ -2310,6 +2310,14 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .team-modal-linkedin[hidden] { display: none; }
 .team-modal-bio p { font-size: 15.5px; line-height: 1.75; color: var(--text-prose); margin-bottom: 14px; }
 .team-modal-bio p:last-child { margin-bottom: 0; }
+.team-modal-contact { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
+.team-modal-contact-label { display: block; margin-bottom: 10px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
+.team-modal-contact-list { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.team-modal-contact-list li[hidden] { display: none; }
+.team-modal-contact-list a { display: inline-flex; align-items: center; gap: 12px; max-width: 100%; font-size: 15px; font-weight: 600; color: var(--text-strong); overflow-wrap: anywhere; }
+.team-modal-contact-list a:hover span:last-child { text-decoration: underline; text-decoration-color: var(--brass); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.team-modal-contact-list a:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; border-radius: 6px; }
+.team-modal-contact-icon { display: grid; place-items: center; flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; background: var(--hero-cream); color: var(--brass-ink); }
 @media (max-width: 480px) {
   .team-modal-head { flex-direction: column; align-items: flex-start; gap: 16px; }
   .team-modal-photo { width: 96px; height: 96px; }
@@ -2877,7 +2885,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    one on a phone, as many 300px columns as fit. */
 .team-depts { padding: 0 0 clamp(56px, calc(7vw / var(--z, 1)), 80px); }
 .team-depts-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px 24px; flex-wrap: wrap; margin-bottom: 20px; }
-.team-depts-eyebrow { display: block; margin-bottom: 8px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
 .team-depts-head h2 { margin: 0; }
 .team-depts-grid { margin: 0; padding: 0; list-style: none; columns: 3 300px; column-gap: 14px; }
 .team-dept {

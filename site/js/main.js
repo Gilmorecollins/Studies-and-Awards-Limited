@@ -750,6 +750,9 @@
   var modalPhoto = document.getElementById('team-modal-photo');
   var modalLinkedin = document.getElementById('team-modal-linkedin');
   var modalBio = document.getElementById('team-modal-bio');
+  var modalWaRow = document.getElementById('team-modal-wa-row');
+  var modalWa = document.getElementById('team-modal-wa');
+  var modalWaText = document.getElementById('team-modal-wa-text');
   var lastFocused = null;
   var hideTimer = null;
 
@@ -803,6 +806,20 @@
       p.textContent = paragraph;
       modalBio.appendChild(p);
     });
+
+    // their own WhatsApp when we have a number (the office line and email are always there)
+    var digits = String(member.whatsapp || '').replace(/\D/g, '');
+    if (digits.indexOf('00') === 0) digits = digits.slice(2);
+    else if (digits.charAt(0) === '0') digits = '254' + digits.slice(1);
+    else if (String(member.whatsapp || '').charAt(0) !== '+' && digits.length === 9) digits = '254' + digits;
+    if (digits.length >= 11 && digits.length <= 15) {
+      modalWa.href = 'https://wa.me/' + digits;
+      modalWaText.textContent = 'WhatsApp ' + String(member.name).split(' ')[0];
+      modalWaRow.hidden = false;
+    } else {
+      modalWa.removeAttribute('href');
+      modalWaRow.hidden = true;
+    }
 
     window.clearTimeout(hideTimer);
     lastFocused = trigger || document.activeElement;
