@@ -509,7 +509,7 @@ p { margin: 0; }
 
 /* ---------- footer ---------- */
 
-.site-footer { background: var(--paper); padding: clamp(20px, calc(3vw / var(--z, 1)), 40px); }
+.site-footer { background: var(--bg); padding: clamp(20px, calc(3vw / var(--z, 1)), 40px); }
 .footer-card {
   position: relative;
   overflow: hidden;
