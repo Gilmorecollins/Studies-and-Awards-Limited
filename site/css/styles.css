@@ -1178,7 +1178,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 .svc-glance-num { width: 32px; height: 32px; font-size: 17px; }
 .svc-glance-name { font-size: 15px; font-weight: 700; line-height: 1.3; }
-.svc-glance-note { display: block; font-size: 13.5px; font-weight: 400; color: var(--muted); }
 :root[data-theme="dark"] .svc-glance-num { background: var(--brass); color: var(--ink); }
 /* in dark mode a step's dot is a lighter navy, so the gold of a reached step stands out */
 :root[data-theme="dark"] .svc-step-dot { background: #22336B; }
@@ -2175,7 +2174,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    strip with the current person leftmost in colour and the rest in halftone,
    then that person's name, bio and "ask me about" in three columns. */
 .team-slider-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 26px; }
-.team-eyebrow { display: block; margin-bottom: 10px; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--brass-ink); }
 .team-heading { margin: 0; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: clamp(44px, calc(4.45vw / var(--z, 1)), 64px); line-height: 0.95; letter-spacing: 0; color: var(--text-strong); }
 .team-slider-controls { display: flex; align-items: center; gap: 24px; flex-shrink: 0; padding-bottom: 4px; }
 .team-counter { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; color: var(--muted); }
