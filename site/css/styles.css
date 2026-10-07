@@ -3822,3 +3822,13 @@ html.is-leaving body { opacity: 0; transition: opacity 220ms ease; }
   .loc-actions { width: 100%; }
   .loc-action { flex: 1 1 0; justify-content: center; padding: 12px 10px; font-size: 14px; }
 }
+
+/* ---------- blog page (coming soon) ---------- */
+.blog-hero { display: flex; align-items: center; min-height: clamp(420px, 62vh, 620px); padding: clamp(56px, calc(7vw / var(--z, 1)), 96px) 0; text-align: center; }
+.blog-hero-inner { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.blog-hero .hero-kicker { margin: 0; justify-content: center; }
+.page-hero.blog-hero h1 { margin: 0; }
+.page-hero.blog-hero .blog-hero-lead { max-width: 560px; margin: 0; color: var(--muted); }
+.blog-topics { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 6px 0 0; padding: 0; list-style: none; }
+.blog-topics li { padding: 9px 18px; border-radius: 999px; border: 2px solid var(--border); background: var(--surface); font-size: 14.5px; font-weight: 600; color: var(--text-strong); }
+.blog-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px 28px; margin-top: 10px; }
