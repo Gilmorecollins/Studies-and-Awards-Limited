@@ -47,7 +47,7 @@
   --outline-mark: rgba(0, 27, 94, 0.08);  /* hollow watermark letters */
   --progress: #001B5E;         /* the team slider's progress line */
   --hero-circle: #DCE6F7;      /* the soft circles behind the home page hero */
-  --hero-cream: #FFFCF2;       /* the warm white of every alternate band (and the home hero's fade) */
+  --hero-cream: #FFFCF2;       /* the warm white of every alternate band */
   --cursor: #141414;           /* the circle that follows the mouse */
   --cord: rgba(0, 27, 94, 0.5); /* the pull cord at the right end of the page */
   --soft: #ECEFF5;             /* the soft raised panels of the home page testimonials */
@@ -716,7 +716,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    the whole thing scales with --globe. */
 .hero-globe {
   position: relative; overflow: hidden;
-  background: linear-gradient(180deg, var(--bg) 0%, var(--bg) 55%, var(--hero-cream) 100%);
+  background: var(--bg);
 }
 .hero-globe-inner {
   /* the globe's column just fits its ring and flags, so the text gets the
