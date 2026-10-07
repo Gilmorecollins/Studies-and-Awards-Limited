@@ -2165,18 +2165,29 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .team-nav-btn:disabled { color: var(--border); cursor: default; }
 .team-nav-divider { width: 1px; height: 12px; background: var(--border); }
 
-/* department chips */
-.team-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
-.team-chip {
-  padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 999px;
-  background: var(--surface); color: var(--text-strong); cursor: pointer;
-  font-family: inherit; font-size: 13px; font-weight: 600; line-height: 1.2;
-  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+/* department tabs: one line of plain text along a fine rule, the current
+   department underlined in gold; the line scrolls sideways when it doesn't
+   fit and follows the current person (main.js) */
+.team-chips {
+  display: flex; gap: clamp(20px, calc(2.4vw / var(--z, 1)), 32px); margin-bottom: 22px;
+  overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain;
+  box-shadow: inset 0 -1px 0 var(--border);
 }
-.team-chip:hover { border-color: var(--line-strong); }
-.team-chip.is-active { background: var(--ink); border-color: var(--ink); color: #FFFFFF; }
-:root[data-theme="dark"] .team-chip.is-active { background: var(--brass); border-color: var(--brass); color: var(--ink); }
-.team-chip:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
+.team-chips::-webkit-scrollbar { display: none; }
+.team-chip {
+  position: relative; flex-shrink: 0; padding: 10px 0 13px; border: 0;
+  background: none; color: var(--muted); cursor: pointer; white-space: nowrap;
+  font-family: inherit; font-size: 14.5px; font-weight: 600; line-height: 1.2;
+  transition: color 200ms ease;
+}
+.team-chip::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; border-radius: 2px;
+  background: var(--brass); transform: scaleX(0); transform-origin: left; transition: transform 250ms ease;
+}
+.team-chip:hover { color: var(--text-strong); }
+.team-chip.is-active { color: var(--text-strong); }
+.team-chip.is-active::after { transform: scaleX(1); }
+.team-chip:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; border-radius: 4px; }
 
 /* photo strip */
 .team-strip-viewport { overflow: hidden; }
@@ -2850,13 +2861,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .team-slider { padding: 40px 0 56px; }
   .team-slider-head { flex-direction: column; align-items: flex-start; gap: 16px; }
   .team-card { flex: 0 0 62%; }
-  /* the chips become one row to swipe along (it follows the current person) */
-  .team-chips {
-    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
-    margin: 0 -20px 22px; padding: 2px 20px;
-  }
-  .team-chips::-webkit-scrollbar { display: none; }
-  .team-chip { flex-shrink: 0; }
+  /* the tabs run to the screen edge, to swipe along (it follows the current person) */
+  .team-chips { margin: 0 -20px 22px; padding: 0 20px; gap: 22px; }
   .team-info { grid-template-columns: minmax(0, 1fr); gap: 22px; margin-top: 28px; }
   .team-bio { min-height: 0; }
 }
