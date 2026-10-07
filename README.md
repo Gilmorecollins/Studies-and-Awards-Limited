@@ -280,6 +280,8 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   they will show as "not referenced" in a file audit until `SITE_URL` is set.
   After going live, paste a page's address into Facebook's Sharing Debugger to
   refresh the cached preview. `--check` covers these blocks too.
+- **Blog**: `site/blog.html` is a "coming soon" page for now, linked as "Blog" in the
+  footer of every page (not in the header). When posts exist, replace its hero with the list.
 - **Page not found**: `site/404.html` is what Vercel shows for any address that
   doesn't exist. It is served at the missing address itself (e.g. `/old/page`),
   so every link and file in it starts with `/`. It is marked `noindex`.
@@ -308,7 +310,7 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   department, in the order its people first appear in the file, so keep each
   department's people together. Choosing a person there opens their bio. The
   same names drive the chooser's filter buttons and the About page's "Inside
-  Studies & Awards" index: one line per department in `about.html` (a
+  Studies & Awards" index: one card per department in `about.html` (a
   `.dept-row` with `data-dept` and a sentence on what it does), in the order
   shown there. Its dots (one per person), the head count and the people in
   the panel beside it (photo, name and role, each linking to the Team page)

@@ -296,8 +296,10 @@ p { margin: 0; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 40px;
   height: 84px;
 }
+@media (max-width: 1023.98px) { .site-header .container { gap: 12px; } }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-mark {
   width: 44px; height: 34px;
@@ -313,12 +315,12 @@ p { margin: 0; }
   font-family: 'Bebas Neue', 'Montserrat', sans-serif;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  font-size: 22px;
+  font-size: 20px;
   white-space: nowrap; /* "Studies & Awards Limited" stays on one line */
   color: var(--text-strong);
 }
 
-.primary-nav { display: flex; align-items: center; gap: 34px; }
+.primary-nav { display: flex; align-items: center; gap: 30px; }
 .nav-link {
   position: relative;
   font-size: 14.5px;
@@ -388,7 +390,7 @@ p { margin: 0; }
 }
 
 .header-cta { display: flex; align-items: center; gap: 14px; }
-.header-cta .btn { padding: 12px 22px; font-size: 14px; }
+.header-cta .btn { padding: 12px 20px; font-size: 14px; }
 
 .nav-cta-mobile { display: none; }
 
@@ -798,8 +800,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .hero-globe-copy { grid-column: 1; grid-row: 1; }
 .hero-globe-art { grid-column: 2; grid-row: 1; }
 .hero-globe-copy { order: -1; display: flex; flex-direction: column; gap: 1.6rem; min-width: 0; }
-.hero-loc { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--hg-gold); }
-.hero-loc svg { flex-shrink: 0; }
 .hero-globe h1 {
   margin: 0; font-size: var(--page-title); line-height: 0.95; letter-spacing: 0.01em;
   text-wrap: balance; color: var(--hg-text);
@@ -832,7 +832,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 /* the Team page's title: the headline on the left and the line about us beside
    it, so it takes up far less height than the title with the text under it */
 .team-hero { padding: clamp(40px, calc(4.4vw / var(--z, 1)), 64px) 0 clamp(28px, calc(3vw / var(--z, 1)), 40px); }
-.team-hero .hero-kicker { margin-bottom: 18px; }
 .team-hero-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: 24px clamp(32px, calc(4vw / var(--z, 1)), 56px); align-items: end; }
 .page-hero.team-hero h1 { max-width: none; margin: 0; }
 .team-hero-row p { max-width: 360px; padding-bottom: 6px; font-size: 16px; line-height: 1.7; color: var(--text-prose); }
@@ -2159,23 +2158,19 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    then that person's name, bio and "ask me about" in three columns. */
 .team-slider-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 26px; }
 .team-heading { margin: 0; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-weight: 400; font-size: clamp(44px, calc(4.45vw / var(--z, 1)), 64px); line-height: 0.95; letter-spacing: 0; color: var(--text-strong); }
-.team-slider-controls { display: flex; align-items: center; gap: 24px; flex-shrink: 0; padding-bottom: 4px; }
-.team-counter { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; color: var(--muted); }
-.team-nav { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
-.team-nav-btn {
-  background: none; border: none; padding: 4px 2px; cursor: pointer;
-  font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--text-strong); transition: color 150ms ease;
-}
-.team-nav-btn:hover:not(:disabled) { color: var(--brass-ink); }
-.team-nav-btn:disabled { color: var(--border); cursor: default; }
-.team-nav-divider { width: 1px; height: 12px; background: var(--border); }
 
 /* department tabs: one line of plain text along a fine rule, the current
    department underlined in gold; the line scrolls sideways when it doesn't
    fit and follows the current person (main.js) */
+.team-tabs { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+.team-tabs-btn { display: none; flex-shrink: 0; align-items: center; justify-content: center; width: 34px; height: 34px; margin-bottom: 4px; border: 1.5px solid var(--border); border-radius: 50%; background: var(--surface); color: var(--text-strong); cursor: pointer; transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease; }
+.team-tabs.has-overflow .team-tabs-btn { display: inline-flex; }
+.team-tabs-btn:hover:not(:disabled) { border-color: var(--line-strong); background: var(--gold-tint); }
+.team-tabs-btn:disabled { color: var(--tint-30); cursor: default; }
+.team-tabs-btn:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; }
 .team-chips {
-  display: flex; gap: clamp(20px, calc(2.4vw / var(--z, 1)), 32px); margin-bottom: 22px;
+  flex: 1 1 auto; min-width: 0;
+  display: flex; gap: clamp(20px, calc(2.4vw / var(--z, 1)), 32px);
   overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain;
   box-shadow: inset 0 -1px 0 var(--border);
 }
@@ -2322,7 +2317,6 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 
 .team-strip-viewport:focus-visible,
-.team-nav-btn:focus-visible,
 .team-view-more:focus-visible,
 .team-modal-close:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
 
@@ -2867,8 +2861,9 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .team-slider { padding: 40px 0 56px; }
   .team-slider-head { flex-direction: column; align-items: flex-start; gap: 16px; }
   .team-card { flex: 0 0 62%; }
-  /* the tabs run to the screen edge, to swipe along (it follows the current person) */
-  .team-chips { margin: 0 -20px 22px; padding: 0 20px; gap: 22px; }
+  /* the tabs swipe along, with arrows at the ends (it follows the current person) */
+  .team-chips { gap: 22px; }
+  .team-tabs-btn { width: 30px; height: 30px; }
   .team-info { grid-template-columns: minmax(0, 1fr); gap: 22px; margin-top: 28px; }
   .team-bio { min-height: 0; }
 }
@@ -3796,15 +3791,6 @@ html.is-leaving body { opacity: 0; transition: opacity 220ms ease; }
 @media (max-width: 900px) { .nf-links { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .nf-links { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .nf-link { transition: none; } .nf-link:hover { transform: none; } }
-
-.faq-copy {
-  display: inline-flex; margin: -8px 0 20px; padding: 0;
-  border: 0; background: none; cursor: pointer;
-  font: inherit; font-size: 13px; font-weight: 600; color: var(--brass-ink);
-  border-bottom: 1px solid currentColor;
-}
-.faq-copy:hover { color: var(--text-strong); }
-.faq-copy:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
 
 /* Find Us: copy the address / share the location */
 .loc-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }

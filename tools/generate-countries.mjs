@@ -63,7 +63,7 @@ function seoBlock({ title, description, path, image, imageAlt }) {
 
 // The hand-maintained pages: the generator only ever rewrites the marked block
 // inside their <head>; everything else on those pages stays exactly as written.
-const HAND_PAGES = ['index.html', 'about.html', 'services.html', 'team.html', 'location.html', 'destinations.html'];
+const HAND_PAGES = ['index.html', 'about.html', 'services.html', 'team.html', 'location.html', 'destinations.html', 'blog.html'];
 
 function withSeoBlock(html, file) {
   const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1];
@@ -612,6 +612,7 @@ ${otherPills}
           <a href="about.html">About Us</a>
           <a href="services.html">Services</a>
           <a href="team.html">Our Team</a>
+          <a href="blog.html">Blog</a>
           <a href="location.html">Find Us</a>
           <a href="https://www.magistersacco.org/">Financial Support</a>
         </div>

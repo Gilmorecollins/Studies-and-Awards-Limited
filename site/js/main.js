@@ -466,6 +466,29 @@
     });
   }
 
+  // Arrows at the ends of the tabs: they show only when the tabs don't all
+  // fit, step the line along, and dim at either end.
+  var tabsEl = document.getElementById('team-tabs');
+  var tabsPrev = document.getElementById('team-chips-prev');
+  var tabsNext = document.getElementById('team-chips-next');
+  if (chipsEl && tabsEl && tabsPrev && tabsNext) {
+    var syncTabs = function () {
+      var overflow = chipsEl.scrollWidth > tabsEl.clientWidth + 1;
+      tabsEl.classList.toggle('has-overflow', overflow);
+      tabsPrev.disabled = chipsEl.scrollLeft <= 1;
+      tabsNext.disabled = chipsEl.scrollLeft >= chipsEl.scrollWidth - chipsEl.clientWidth - 1;
+    };
+    var stepTabs = function (dir) {
+      chipsEl.scrollBy({ left: dir * Math.max(120, chipsEl.clientWidth * 0.7), behavior: 'smooth' });
+    };
+    tabsPrev.addEventListener('click', function () { stepTabs(-1); });
+    tabsNext.addEventListener('click', function () { stepTabs(1); });
+    chipsEl.addEventListener('scroll', syncTabs, { passive: true });
+    window.addEventListener('resize', syncTabs);
+    syncTabs();
+    window.setTimeout(syncTabs, 400);
+  }
+
   // Clicking a photo in the strip brings that person to the front.
   cards.forEach(function (card, k) {
     card.addEventListener('click', function () { goTo(k % count); });
@@ -524,7 +547,7 @@
     var member = members[index];
 
 
-    counterEl.textContent = pad(index + 1) + ' / ' + pad(count);
+    if (counterEl) counterEl.textContent = pad(index + 1) + ' / ' + pad(count);
     crossfadeText([nameEl, roleEl, bioEl, askEl],
       [member.name, member.role, member.shortBio, member.helpsWith || ''], silent);
     chips.forEach(function (chip) {
@@ -666,8 +689,8 @@
     deptList.closest('section').hidden = false;
   }
 
-  nextBtn.addEventListener('click', next);
-  prevBtn.addEventListener('click', prev);
+  if (nextBtn) nextBtn.addEventListener('click', next);
+  if (prevBtn) prevBtn.addEventListener('click', prev);
 
   viewport.addEventListener('keydown', function (event) {
     if (event.key === 'ArrowRight') { event.preventDefault(); next(); }
@@ -3425,7 +3448,7 @@ function createCursorFollower(options) {
 
 // FAQ answers have their own addresses (index.html#faq-visa and so on): a link
 // to one opens that answer, and opening one puts its address in the address
-// bar, with a "Copy link" button beside it, so staff can send the answer itself.
+// bar, so staff can send the answer itself.
 (function () {
   'use strict';
 
@@ -3441,25 +3464,6 @@ function createCursorFollower(options) {
   }
 
   Array.prototype.forEach.call(items, function (item) {
-    var answer = item.querySelector('p');
-    var button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'faq-copy';
-    button.textContent = 'Copy link';
-    button.addEventListener('click', function () {
-      var url = window.location.href.split('#')[0] + '#' + item.id;
-      var done = function () {
-        button.textContent = 'Link copied';
-        window.setTimeout(function () { button.textContent = 'Copy link'; }, 2000);
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(done, function () { window.prompt('Copy this link:', url); });
-      } else {
-        window.prompt('Copy this link:', url);
-      }
-    });
-    (answer ? answer.parentNode : item).insertBefore(button, answer ? answer.nextSibling : null);
-
     // on the visitor's click only (the first answer starts open, and browsers
     // report that as a toggle too)
     item.querySelector('summary').addEventListener('click', function () {
