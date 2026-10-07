@@ -2223,13 +2223,21 @@ function createCursorFollower(options) {
   function howMany(n) { return n + (n === 1 ? ' person' : ' people'); }
 
   var rows = Array.prototype.slice.call(index.querySelectorAll('.dept-row'));
+  var listEl = rows[0] ? rows[0].parentNode : null;
   rows.forEach(function (row) {
     var list = people[row.getAttribute('data-dept')] || [];
-    var dots = row.querySelector('.dept-row-dots');
-    list.forEach(function () { dots.appendChild(el('span')); });
-    // the dots are for the eye; the count is said with the name
+    row.setAttribute('data-size', Math.min(list.length, 3));
+    row.querySelector('.dept-row-count').innerHTML = '<b>' + list.length + '</b><span>' + (list.length === 1 ? 'PERSON' : 'PEOPLE') + '</span>';
+    // the count is said with the name
     row.querySelector('.dept-row-btn').appendChild(el('span', 'sr-only', ', ' + howMany(list.length)));
   });
+  // the biggest teams first (the order stays as listed within a size)
+  if (listEl) {
+    rows.map(function (row, i) { return { row: row, i: i, n: Number(row.getAttribute('data-size')) }; })
+      .sort(function (a, b) { return b.n - a.n || a.i - b.i; })
+      .forEach(function (o) { listEl.appendChild(o.row); });
+    rows = Array.prototype.slice.call(listEl.querySelectorAll('.dept-row'));
+  }
 
   var narrow = window.matchMedia ? window.matchMedia('(max-width: 900px)') : null;
   var current = null;
@@ -2242,12 +2250,15 @@ function createCursorFollower(options) {
     rows.forEach(function (r) { r.querySelector('.dept-row-btn').setAttribute('aria-pressed', r === row ? 'true' : 'false'); });
 
     panel.textContent = '';
-    panel.appendChild(el('p', 'dept-detail-count', howMany(list.length)));
-    panel.appendChild(el('h3', 'dept-detail-name', name));
-    panel.appendChild(el('p', 'dept-detail-what', row.querySelector('.dept-row-desc').textContent));
+    var head = el('div', 'dept-detail-head');
+    head.appendChild(el('p', 'dept-detail-count', howMany(list.length)));
+    head.appendChild(el('h3', 'dept-detail-name', name));
+    panel.appendChild(head);
+    var body = el('div', 'dept-detail-body');
+    body.appendChild(el('p', 'dept-detail-what', row.querySelector('.dept-row-desc').textContent));
     if (list.length) {
-      panel.appendChild(el('p', 'dept-detail-label', 'Who you will meet'));
       var ul = el('ul', 'dept-people');
+      ul.setAttribute('aria-label', 'Who you will meet');
       list.forEach(function (m) {
         var li = el('li');
         var a = el('a', 'dept-person');
@@ -2255,8 +2266,8 @@ function createCursorFollower(options) {
         var img = el('img');
         img.src = window.teamPortrait ? window.teamPortrait(m, 'thumb') : m.thumb;
         img.alt = '';
-        img.width = 44;
-        img.height = 44;
+        img.width = 38;
+        img.height = 38;
         img.loading = 'lazy';
         var text = el('span');
         text.appendChild(el('span', 'dept-person-name', m.name));
@@ -2266,8 +2277,9 @@ function createCursorFollower(options) {
         li.appendChild(a);
         ul.appendChild(li);
       });
-      panel.appendChild(ul);
+      body.appendChild(ul);
     }
+    panel.appendChild(body);
     place();
     panel.classList.remove('is-changing');
     void panel.offsetWidth;
