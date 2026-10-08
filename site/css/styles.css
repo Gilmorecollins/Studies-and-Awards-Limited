@@ -50,8 +50,7 @@
   --hero-cream: #FFFCF2;       /* the warm white of every alternate band */
   --cursor: #141414;           /* the circle that follows the mouse */
   --cord: rgba(0, 27, 94, 0.5); /* the pull cord at the right end of the page */
-  --soft: #ECEFF5;             /* the soft raised panels of the home page testimonials */
-  --soft-hi: rgba(255, 255, 255, 0.9);  /* ...their light edge, above and left */
+  --soft-hi: rgba(255, 255, 255, 0.9);  /* the soft raised testimonial cards: their light edge, above and left */
   --soft-lo: rgba(0, 27, 94, 0.15);     /* ...and their shadow, below and right */
 
   /* Navy tints and shadows, as scales named by their light strength:
@@ -117,7 +116,6 @@
   --hero-cream: #101A36;
   --cursor: #F1F4FA;
   --cord: rgba(241, 244, 250, 0.55);
-  --soft: #0E162E;
   --soft-hi: rgba(255, 255, 255, 0.05);
   --soft-lo: rgba(0, 0, 0, 0.5);
   --tint-rgb: 255 255 255;
@@ -2354,11 +2352,10 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .ai-soon .btn { margin-top: 22px; }
 
 /* ---------- testimonials (home page; hidden until js/testimonials-data.js has quotes to show) ----------
-   A simple white card for each student: the person on top (a gold circle
-   with their initials or photo, their name, who they are, and a quote mark),
-   then their words. The cards are a fixed width in a row that runs on past
-   the page's right edge; the dots and pause button sit under it. main.js
-   builds the cards and the dots. */
+   A soft raised card for each student, in a row: the cards are the same
+   white as the section around them and stand out only by a light edge above
+   and to the left and a shadow below and to the right; the student's own
+   rating is pressed in the same way. main.js builds the cards and the dots. */
 
 .testimonials { background: var(--bg); }
 /* the page gutter, so the row can run out to the screen edge (and scroll
@@ -2372,7 +2369,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
    more than fit scroll sideways and stop at each card. Its padding is room
    for the cards' shadows, taken back by the negative margins. */
 .testi-row {
-  --testi-gap: 24px;
+  --testi-gap: 28px;
   position: relative;
   display: flex; gap: var(--testi-gap);
   margin: -32px calc(-1 * var(--gutter)) -48px;
@@ -2398,57 +2395,81 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 }
 .testi-row.is-past-start { --fade-l: var(--gutter); }
 .testi-row.is-before-end { --fade-r: var(--gutter); }
+/* fewer cards than fit: centred (the margins fold away once the row scrolls) */
+.testi-row > :first-child { margin-left: auto; }
+.testi-row > :last-child { margin-right: auto; }
 
 .testi-card {
-  flex: 0 0 380px;
+  flex: 0 0 calc((100% - 2 * var(--testi-gap)) / 3);
   min-width: 0;
   display: flex; flex-direction: column;
-  padding: 30px 32px 32px;
-  border: 1px solid var(--tint-10);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: 0 12px 30px var(--shadow-10);
+  padding: 28px 26px 30px;
+  border-radius: 28px;
+  background: var(--bg);
+  box-shadow: -9px -9px 22px var(--soft-hi), 12px 14px 30px var(--soft-lo);
   scroll-snap-align: start;
-  transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 350ms ease;
+  transition: transform 250ms ease, box-shadow 250ms ease;
 }
-.testi-card > .testi-sample { align-self: flex-start; margin-bottom: 14px; }
-/* a card lifts under the mouse */
+.testi-card > .testi-sample { align-self: flex-start; }
+/* a card lifts a little under the mouse */
 @media (hover: hover) {
-  .testi-card:hover { transform: translateY(-8px); box-shadow: 0 26px 48px var(--shadow-16); }
+  .testi-card:hover { transform: translateY(-6px); box-shadow: -10px -10px 26px var(--soft-hi), 16px 22px 40px var(--soft-lo); }
 }
 /* the cards rise into place one after another the first time the section
    comes into view (main.js adds the classes; --i is each card's place) */
 .testi-row.is-waiting .testi-card { opacity: 0; }
 .testi-row.is-in .testi-card { animation: testi-rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--i, 0) * 110ms); }
 @keyframes testi-rise { from { opacity: 0; transform: translateY(28px); } }
+@container (max-width: 959px) {
+  .testi-card { flex-basis: calc((100% - var(--testi-gap)) / 2); }
+}
 /* phones: one card, with the edge of the next one showing */
 @container (max-width: 559px) {
   .testi-row { --testi-gap: 16px; }
-  .testi-card { flex-basis: calc(100% - 28px); padding: 24px 22px 26px; }
+  .testi-card {
+    flex-basis: calc(100% - 28px);
+    padding: 22px 20px 24px;
+    border-radius: 24px;
+    box-shadow: -6px -6px 16px var(--soft-hi), 8px 10px 22px var(--soft-lo);
+  }
 }
 
 /* who they are */
-.testi-person { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.testi-person { display: flex; align-items: center; gap: 16px; min-width: 0; }
 .testi-avatar {
-  width: 48px; height: 48px; flex-shrink: 0;
+  width: 64px; height: 64px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   border-radius: 50%;
   overflow: hidden;
-  background: var(--brass);
+  background: linear-gradient(140deg, #0A2A7A, var(--ink));
+  box-shadow: 5px 7px 14px var(--soft-lo), -4px -4px 10px var(--soft-hi);
   /* initials, when there is no photo */
-  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 20px; line-height: 1; letter-spacing: 0.02em; color: var(--ink);
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 26px; line-height: 1; letter-spacing: 0.04em; color: var(--brass);
 }
 .testi-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.testi-who { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.testi-name { font-size: 16px; font-weight: 700; line-height: 1.3; color: var(--text-strong); overflow-wrap: anywhere; }
-.testi-detail { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
-.testi-mark { flex-shrink: 0; display: block; width: 34px; height: 24px; fill: var(--brass); }
+.testi-who { min-width: 0; }
+.testi-name { font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text-strong); overflow-wrap: anywhere; }
+.testi-detail { margin-top: 3px; font-size: 14px; line-height: 1.4; color: var(--muted); }
+
+/* the average, and their own rating pressed in beside it */
+.testi-score { display: flex; align-items: center; gap: 14px; margin-top: 24px; }
+.testi-score-avg { flex: 1 1 0; min-width: 0; padding-left: 4px; }
+.testi-score-own {
+  flex: 1.4 1 0; min-width: 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  box-shadow: inset 5px 5px 12px var(--soft-lo), inset -5px -5px 12px var(--soft-hi);
+}
+.testi-score-own:only-child { flex: 0 1 auto; }
+.testi-score-num { display: flex; align-items: center; gap: 7px; font-size: 20px; font-weight: 700; line-height: 1.2; color: var(--text-strong); }
+.testi-star { flex-shrink: 0; fill: var(--brass); }
+.testi-score-label { margin-top: 5px; font-size: 13px; line-height: 1.35; color: var(--muted); }
 
 /* their words */
-.testi-path { display: block; height: 2px; margin: 22px 0 0; background: radial-gradient(circle at 1px 1px, var(--brass) 1px, transparent 1.4px) 0 0 / 9px 2px repeat-x; }
-.testi-quote { flex: 1; margin: 14px 0 0; }
-.testi-quote-lead { font-size: 16.5px; font-weight: 600; line-height: 1.7; color: var(--text-strong); }
-.testi-quote-more { margin-top: 14px; font-size: 15px; line-height: 1.7; color: var(--muted); }
+.testi-quote { margin: 26px 0 0; }
+.testi-mark { display: block; width: 36px; height: auto; margin-bottom: 18px; fill: var(--brass); }
+.testi-quote-lead { font-size: 17px; font-weight: 700; line-height: 1.6; color: var(--text-strong); }
+.testi-quote-more { margin-top: 14px; font-size: 14.5px; line-height: 1.7; color: var(--muted); }
 
 /* the dots, when the row scrolls: short bars, the current one longer and
    gold. Each is a 40 x 32 button, so it is easy to hit on a phone. Beside

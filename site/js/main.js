@@ -1782,15 +1782,14 @@ function createCursorFollower(options) {
   });
 })();
 
-// Home page: the testimonials: a simple white card for each student, side by
-// side in a row (the cards are a fixed width, so the row runs on past the
-// page's right edge to show there's more; one card on a phone with the next
-// peeking in). When there are more than fit, the row scrolls sideways (a swipe, a trackpad, or the arrow
+// Home page: the testimonials: a card for each student, side by side in a row
+// (three across on a laptop, two on a tablet, one on a phone). When there are
+// more than fit, the row scrolls sideways (a swipe, a trackpad, or the arrow
 // keys once it has focus) and the dots below appear, one for each place it
 // can stop; the current one is longer. It also plays gently by itself, with a
 // pause button, holding whenever the visitor is reading or using it (see
 // "motion" below). The cards rise in the first time the section comes into
-// view.
+// view, and the average rating counts up.
 //
 // The testimonials come from the Supabase database (js/supabase-config.js),
 // where they are added and switched on in the admin page (admin/index.html):
@@ -1801,8 +1800,8 @@ function createCursorFollower(options) {
 // tagged as samples, so the layout can be reviewed. An incomplete entry (no
 // quote or no name) is skipped rather than shown half-empty.
 //
-// (A student's rating is still saved in the admin page but is not shown on
-// the card.)
+// A student who gave a rating gets a rating box on their card: their own
+// score, beside the average of the ratings on show once there are two or more.
 (function () {
   'use strict';
 
@@ -1959,7 +1958,7 @@ function createCursorFollower(options) {
       });
     }, { passive: true });
 
-    // ---- motion: the cards rise in, and the row plays ----
+    // ---- motion: the cards rise in, the average counts up, and the row plays ----
     // Auto-play: while the section is in view, the current dot fills up over
     // 6 seconds and the row then moves on one place, looping back to the start.
     // The fill (styles.css) is the clock, so holding the fill holds the play.
@@ -2024,8 +2023,28 @@ function createCursorFollower(options) {
       else if (still.addListener) still.addListener(syncPlay);
     }
 
+    // the average rating counts up from 0 to itself
+    function countUp() {
+      Array.prototype.forEach.call(row.querySelectorAll('.testi-score-avg .testi-score-num'), function (num) {
+        var text = num.firstChild;
+        if (!text || text.nodeType !== 3) return;
+        var target = text.nodeValue;
+        var value = parseFloat(target);
+        if (!(value > 0)) return;
+        var decimals = (target.split('.')[1] || '').length;
+        var start = null;
+        text.nodeValue = (0).toFixed(decimals);
+        window.requestAnimationFrame(function frame(now) {
+          if (start === null) start = now;
+          var k = Math.min(1, (now - start) / 1200);
+          text.nodeValue = k < 1 ? (value * (1 - Math.pow(1 - k, 3))).toFixed(decimals) : target;
+          if (k < 1) window.requestAnimationFrame(frame);
+        });
+      });
+    }
+
     // the first time the section comes into view: the cards rise in, one after
-    // another; being in view also lets it play
+    // another, and the average counts up; being in view also lets it play
     if (window.IntersectionObserver) {
       if (!reduced()) {
         row.classList.add('is-waiting');
@@ -2039,6 +2058,7 @@ function createCursorFollower(options) {
           row.classList.remove('is-waiting');
           if (!reduced()) {
             row.classList.add('is-in');
+            countUp();
           }
         }
         syncPlay();
