@@ -36,7 +36,7 @@ const framing = {
   'dennis':         { eye: 360, headTop: 160 },
   'evelyne-choge':  { eye: 396, headTop: 224 },
   'ian':            { eye: 325, headTop: 98, cardW: 860 },
-  'joy':            { eye: 384, headTop: 175, cardW: 800 },
+  'joy':            { eye: 388, headTop: 125, cardW: 800 },
   'joyner':         { eye: 384, headTop: 204 },
   'karen':          { eye: 408, headTop: 188 },
   'miki':           { eye: 408, headTop: 155 },
