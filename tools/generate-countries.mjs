@@ -444,8 +444,6 @@ ${cityDots}
     </div>
   </section>`;
 
-  const otherCountries = countries.filter(x => x.slug !== c.slug);
-  const otherPills = otherCountries.map(o => `        <a href="${o.slug}.html" class="dest-pill"><img src="assets/flags/${o.slug}.svg" alt="" width="30" height="20"><span class="dest-pill-code">${o.code}</span><span class="dest-pill-name">${o.name}</span></a>`).join('\n');
 
   return `<!doctype html>
 <html lang="en">
@@ -566,13 +564,6 @@ ${areaChips}
   </section>
 
   <section class="container section-tight next-dest-section" id="next-destination" data-current="${c.slug}" aria-label="Next destination"></section>
-
-  <section class="container dest-others" aria-labelledby="others-heading">
-    <h2 id="others-heading">Other destinations</h2>
-    <div class="dest-pills">
-${otherPills}
-    </div>
-  </section>
 
   <section class="cta-band" id="contact" aria-labelledby="cta-heading">
     <div class="container">
