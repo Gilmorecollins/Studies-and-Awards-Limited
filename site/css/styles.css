@@ -813,7 +813,9 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .hero-globe-inner { --globe: min(56vw, 360px); grid-template-columns: minmax(0, 1fr); gap: 24px; padding-top: 24px; padding-bottom: 56px; }
   .hero-globe-copy, .hero-globe-art { grid-column: auto; grid-row: auto; }
   .hero-globe-art { order: -1; }
-  .hero-globe-copy { order: 0; }
+  .hero-globe-copy { order: 0; align-items: center; text-align: center; }
+  .hero-globe-lead { margin-left: auto; margin-right: auto; }
+  .hero-globe-actions { justify-content: center; }
 }
 @media (max-width: 480px) {
   .globe-flag img { width: 38px; height: 25px; }
