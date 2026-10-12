@@ -808,10 +808,12 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .hero-globe-lead strong { font-weight: 600; color: var(--hg-text); }
 .hero-globe-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; }
 :root[data-theme="dark"] .hero-globe .board-link { color: var(--hg-text); }
-/* below 960px: the text first, the globe under it and smaller */
+/* below 960px: the globe first, smaller, with the text under it */
 @media (max-width: 959.98px) {
-  .hero-globe-inner { --globe: min(56vw, 360px); grid-template-columns: minmax(0, 1fr); gap: 48px; padding-top: 40px; padding-bottom: 56px; }
+  .hero-globe-inner { --globe: min(56vw, 360px); grid-template-columns: minmax(0, 1fr); gap: 24px; padding-top: 24px; padding-bottom: 56px; }
   .hero-globe-copy, .hero-globe-art { grid-column: auto; grid-row: auto; }
+  .hero-globe-art { order: -1; }
+  .hero-globe-copy { order: 0; }
 }
 @media (max-width: 480px) {
   .globe-flag img { width: 38px; height: 25px; }
