@@ -11,6 +11,11 @@
 // this line.
 export const THEME_SCRIPT = "<script>(function(){var t,m=/(?:^|;)sa-theme=(light|dark)(?:;|$)/.exec(window.name||'');try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'&&m)t=m[1];if(t!=='light'&&t!=='dark')t='light';document.documentElement.setAttribute('data-theme',t)})()</script>";
 
+// Hides the page until the saved language has been applied, so a visitor who picked
+// Kiswahili or Kalenjin does not see English flash up first (js/i18n.js lifts it;
+// it also lifts itself after 2.5 seconds in case that script never runs).
+export const LANG_SCRIPT = "<script>(function(){var l,m=/(?:^|;)sa-lang=(sw|kal)(?=;|$)/.exec(window.name||''),u=/[?&]lang=(sw|kal|en)(?=&|$)/.exec(location.search);try{l=localStorage.getItem('lang')}catch(e){}l=u?u[1]:(l==='sw'||l==='kal'?l:(m?m[1]:''));if(l==='sw'||l==='kal'){var d=document.documentElement;d.className+=' i18n-wait';setTimeout(function(){d.className=d.className.replace(' i18n-wait','')},2500)}})()</script>";
+
 // The sun and moon switch. `indent` is the indentation of the line it starts
 // on, so it lines up with the markup around it. The hand-maintained pages
 // carry the same button, written in by hand.

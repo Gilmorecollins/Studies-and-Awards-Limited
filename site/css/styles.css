@@ -3856,3 +3856,6 @@ html.is-leaving body { opacity: 0; transition: opacity 220ms ease; }
   .primary-nav { gap: 24px; }
   .lang-switch button { padding: 5px 8px 4px; }
 }
+
+/* hold the page back until the chosen language is on it (see LANG_SCRIPT in tools/theme-markup.mjs) */
+html.i18n-wait body { visibility: hidden; }

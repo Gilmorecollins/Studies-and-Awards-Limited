@@ -2,7 +2,7 @@ import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync } from 
 import vm from 'vm';
 import { fileURLToPath } from 'url';
 import { dirname, join, resolve } from 'path';
-import { THEME_SCRIPT, themeToggle } from './theme-markup.mjs';
+import { THEME_SCRIPT, LANG_SCRIPT, themeToggle } from './theme-markup.mjs';
 
 // Resolve paths relative to this script's location, not the caller's cwd,
 // so `node tools/generate-countries.mjs` works the same from anywhere.
@@ -37,6 +37,7 @@ function seoBlock({ title, description, path, image, imageAlt }) {
   const lines = [
     SEO_START,
     THEME_SCRIPT,
+    LANG_SCRIPT,
     `<meta name="theme-color" content="${THEME_COLOUR}">`,
     '<meta property="og:type" content="website">',
     `<meta property="og:site_name" content="${SITE_NAME}">`,

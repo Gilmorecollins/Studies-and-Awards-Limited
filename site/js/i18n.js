@@ -217,15 +217,19 @@
     noteTimer = window.setTimeout(function () { if (note.parentNode) note.parentNode.removeChild(note); }, 6000);
   }
 
+  function ready() { root.className = root.className.replace(/\s*i18n-wait/, ''); }
+
   function choose(code, remember) {
     load(code, function () {
       // nothing written yet: leave the page as it is and say so (and do not
       // remember it, so the visitor is not left on a language with no words)
       if (code !== 'en' && !hasWords(code)) {
         if (remember) comingSoon(find(code));
+        ready();
         return;
       }
       apply(code);
+      ready();
       if (remember) saveLang(code);
     });
   }
@@ -279,6 +283,7 @@
     if (fromUrl && fromUrl !== 'en') saveLangPreview(fromUrl);
     syncButtons();
     if (code !== 'en') choose(code, false);
+    else ready();
   }
 
   function saveLangPreview(code) {
