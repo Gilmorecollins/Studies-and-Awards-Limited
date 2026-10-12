@@ -3859,3 +3859,52 @@ html.is-leaving body { opacity: 0; transition: opacity 220ms ease; }
 
 /* hold the page back until the chosen language is on it (see LANG_SCRIPT in tools/theme-markup.mjs) */
 html.i18n-wait body { visibility: hidden; }
+
+/* ---------- phones: bigger touch targets, readable small print, no input zoom ---------- */
+
+/* the full-screen pieces follow the visible screen on phones, where the browser's
+   address bar makes 100vh taller than what you can see */
+@supports (height: 100dvh) {
+  .city-scroller { height: calc(100dvh / var(--z, 1)); }
+  .team-modal { max-height: calc(calc(100dvh / var(--z, 1)) - 48px); }
+}
+
+/* the slideshow can be swiped sideways (see js/main.js); up and down still scroll the page */
+.city-scroller { touch-action: pan-y; }
+
+@media (max-width: 768px) {
+  /* iPhones zoom the page in when a field under 16px is tapped */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea { font-size: 16px !important; }
+}
+
+@media (max-width: 640px) {
+  /* small print: nothing under 12px */
+  .dest-card-route, .route-origin, .city-scroller-top-label, .city-scroller-top-label strong,
+  .city-panel-info-label, .ai-check-tag, .why-mission-label, .dept-detail-count,
+  .team-ask-label, .dest-visa-title, .why-tag-kicker, .next-dest-stop-name, .next-dest-stub-label { font-size: 12px; }
+
+  /* links and buttons that were short get a 44px tap area */
+  .footer-links a { display: inline-block; padding: 8px 0; }
+  .footer-bottom a { display: inline-block; padding: 8px 4px; }
+  .board-link { min-height: 44px; }
+  /* a long translated tag wraps instead of pushing the page wider */
+  .ai-check { max-width: 100%; }
+  .ai-check-tag { flex-shrink: 1; min-width: 0; text-align: center; }
+  .footer-contact-row { padding-top: 6px; padding-bottom: 6px; }
+  .footer-bottom .nav-portal-btn { padding-top: 14px; padding-bottom: 14px; }
+  .team-view-more { display: inline-flex; align-items: center; min-height: 44px; }
+  .dest-compare-table tbody th a { min-height: 44px; }
+  .team-tabs-btn { width: 40px; height: 40px; }
+  .lang-switch button { padding: 9px 14px 8px; }
+
+  /* small round buttons and dots keep their look but catch taps over a wider area */
+  .loc-photos-play { position: relative; width: 34px; height: 34px; }
+  .city-dot::after, .loc-dot::after, .loc-photos-play::after { content: ""; position: absolute; left: 0; right: 0; top: -10px; bottom: -10px; }
+  .globe-flag::after { content: ""; position: absolute; inset: -8px; }
+}
+
+/* phones: the two link lists sit side by side so the footer is not one long column */
+@media (max-width: 640px) {
+  .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; }
+  .footer-grid > :first-child, .footer-grid > :nth-child(n+4) { grid-column: 1 / -1; }
+}

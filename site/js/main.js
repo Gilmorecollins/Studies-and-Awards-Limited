@@ -322,6 +322,23 @@
     });
   });
 
+  // swipe sideways on a touch screen to change city (up and down still scroll the page)
+  var swipeX = null, swipeY = 0;
+  scroller.addEventListener('pointerdown', function (event) {
+    if (event.pointerType === 'mouse' || event.target.closest('button, a, input')) return;
+    swipeX = event.clientX; swipeY = event.clientY;
+  });
+  scroller.addEventListener('pointerup', function (event) {
+    if (swipeX === null) return;
+    var dx = event.clientX - swipeX, dy = event.clientY - swipeY;
+    swipeX = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+      pause();
+      goTo(activeIndex + (dx < 0 ? 1 : -1));
+    }
+  });
+  scroller.addEventListener('pointercancel', function () { swipeX = null; });
+
   // Hold still while someone is using the current city: keyboard focus on its
   // buttons, or the pointer over its partner card. Otherwise the city could
   // change mid-read (and take the focused button away). Carries on afterwards
