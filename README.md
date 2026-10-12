@@ -291,6 +291,8 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   Blog and the 404 page. Kalenjin covers the same pages (as a draft).
   - Kiswahili (`i18n-sw.js`) is written and shown in the switcher. Have a Swahili
     speaker read it before launch.
+  - Kalenjin is **hidden from the language switch** for now (`reviewed: false` in `site/js/i18n.js`);
+    the files stay, and `?lang=kal` on any address still previews it. Set `reviewed: true` to show the KAL button again.
   - Kalenjin (`i18n-kal.js`) is a DRAFT, not checked by a speaker, but every line of every
     page (852) is in. It was drafted with help from open Kalenjin sources and machine
     back-translation, then rewritten in a second pass. Visa, fee and deadline wording must be

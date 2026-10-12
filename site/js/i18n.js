@@ -26,7 +26,7 @@
   var LANGS = [
     { code: 'en', label: 'EN', name: 'English', htmlLang: 'en', reviewed: true },
     { code: 'sw', label: 'SW', name: 'Kiswahili', htmlLang: 'sw', reviewed: true },
-    { code: 'kal', label: 'KAL', name: 'Kalenjin', htmlLang: 'kln', reviewed: true }
+    { code: 'kal', label: 'KAL', name: 'Kalenjin', htmlLang: 'kln', reviewed: false } // hidden from the switcher on purpose (set reviewed: true to show it again)
   ];
 
   var root = document.documentElement;
