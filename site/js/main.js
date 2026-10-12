@@ -5,6 +5,19 @@
   var nav = document.getElementById('primary-nav');
 
   if (toggle && nav) {
+    // the bar along the bottom of the phone menu: the consultation button, then the language switch
+    var actions = document.createElement('div');
+    actions.className = 'nav-actions';
+    var consult = nav.querySelector('.nav-cta-mobile');
+    if (consult) actions.appendChild(consult);
+    nav.appendChild(actions);
+    // a cross for the menu button while the menu is open (the lines icon is hidden then)
+    var lines = toggle.querySelector('svg');
+    if (lines) {
+      lines.classList.add('nav-toggle-open');
+      toggle.insertAdjacentHTML('beforeend', '<svg class="nav-toggle-close" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>');
+    }
+
     var closeNav = function () {
       nav.classList.remove('is-open');
       toggle.setAttribute('aria-expanded', 'false');

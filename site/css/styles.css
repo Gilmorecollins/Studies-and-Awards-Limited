@@ -3912,3 +3912,82 @@ html.i18n-wait body { visibility: hidden; }
   .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; }
   .footer-grid > :first-child, .footer-grid > :nth-child(n+4) { grid-column: 1 / -1; }
 }
+
+/* ==========================================================================
+   Phone menu: page tiles on grey, with a bottom action bar
+   (the menu button shows below 1180px on touch screens and below 1024px elsewhere)
+   ========================================================================== */
+.nav-toggle .nav-toggle-close { display: none; }
+.nav-actions { display: contents; }
+
+@media (max-width: 1023.98px), (max-width: 1180px) and (pointer: coarse), (max-width: 1180px) and (pointer: none) {
+  /* the header turns solid grey while the menu is open, whatever the page behind it */
+  .site-header:has(.primary-nav.is-open) { background: var(--paper); border-bottom-color: transparent; box-shadow: none; }
+  .site-header:has(.primary-nav.is-open) .brand-name,
+  .site-header:has(.primary-nav.is-open) .nav-toggle,
+  .site-header:has(.primary-nav.is-open) .theme-toggle { color: var(--text-strong); }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-open { display: none; }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-close { display: block; }
+  html:has(.primary-nav.is-open) { overflow: hidden; }
+
+  .primary-nav {
+    --menu-side: max(20px, calc((100vw - 600px) / 2));
+    top: 68px; bottom: 0;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-content: start;
+    grid-template-rows: auto auto auto auto 1fr;
+    padding: 8px var(--menu-side) 0;
+    overflow-y: auto; overscroll-behavior: contain;
+    background: var(--paper);
+    border-bottom: 0;
+    transform: none;
+  }
+
+  /* the five pages are big tiles; Destinations is the wide navy one, the page you are on is gold */
+  .primary-nav .nav-link {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 8px;
+    box-sizing: border-box; min-height: 96px; padding: 16px 18px;
+    border: 2px solid var(--border); border-radius: 18px;
+    background: var(--surface); color: var(--text-strong);
+    font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 34px; font-weight: 400; line-height: 1; letter-spacing: 0;
+    white-space: normal;
+  }
+  .primary-nav .nav-link::after {
+    content: ""; position: static; display: block; flex-shrink: 0; width: 20px; height: 20px; background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+    transition: none;
+  }
+  .primary-nav .nav-link:hover::after, .primary-nav .nav-link[aria-current="page"]::after { width: 20px; }
+  .primary-nav .nav-link[href="destinations.html"] { grid-column: 1 / -1; background: var(--ink); border-color: transparent; color: #FFFFFF; }
+  .primary-nav .nav-link[aria-current="page"] { background: var(--brass); border-color: transparent; color: #001B5E; font-weight: 400; }
+  .primary-nav .nav-link:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; }
+  .primary-nav .nav-portal-btn { display: none; }
+  :root[data-theme="dark"] .primary-nav .nav-link[href="destinations.html"] { background: #1B2C66; }
+
+  /* Portal login: a small heading, then one white card for each portal */
+  .primary-nav .nav-portal { grid-column: 1 / -1; padding: 12px 0 0; border: 0; }
+  .primary-nav .nav-portal-label { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 14px; font-weight: 400; letter-spacing: 0.16em; color: var(--brass-ink); }
+  .primary-nav .nav-portal-menu { display: flex; flex-direction: column; gap: 10px; margin: 10px 0 0; }
+  .primary-nav .nav-portal-item { gap: 0; padding: 14px 18px; border-radius: 16px; background: var(--surface); }
+  .primary-nav .nav-portal-icon { display: none; }
+  .primary-nav .nav-portal-text { gap: 3px; }
+  .primary-nav .nav-portal-text strong { font-size: 18px; color: var(--text-strong); }
+  .primary-nav .nav-portal-text span { font-size: 15px; line-height: 1.4; color: var(--muted); }
+
+  /* the bar along the bottom: the consultation button and the language switch */
+  .nav-actions {
+    grid-column: 1 / -1; grid-row: 5; align-self: end;
+    position: sticky; bottom: 0; z-index: 2; margin: 12px calc(-1 * var(--menu-side)) 0;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    padding: 16px var(--menu-side) calc(24px + env(safe-area-inset-bottom));
+    background: var(--surface); box-shadow: 0 -10px 30px rgba(0, 27, 94, 0.1);
+  }
+  :root[data-theme="dark"] .nav-actions { box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.4); }
+  .nav-actions .nav-cta-mobile { align-self: stretch; justify-content: center; margin: 0; min-height: 58px; font-size: 18px; font-weight: 700; text-align: center; }
+  @media (max-width: 360px) { .nav-actions .nav-cta-mobile { font-size: 16px; } }
+  html .site-header .nav-actions .lang-switch-menu { align-self: center; margin: 0; padding: 4px; border: 2px solid rgba(0, 27, 94, 0.25); background: transparent; }
+  html[data-theme="dark"] .site-header .nav-actions .lang-switch-menu { border-color: var(--border); }
+  html .site-header .primary-nav .nav-actions .lang-switch-menu button { min-width: 62px; height: 44px; padding: 0 14px; font-size: 17px; color: var(--text-strong); }
+  html .site-header .primary-nav .nav-actions .lang-switch-menu button[aria-pressed="true"] { background: var(--ink); color: #FFFFFF; }
+  html[data-theme="dark"] .site-header .primary-nav .nav-actions .lang-switch-menu button[aria-pressed="true"] { background: var(--brass); color: #001B5E; }
+}

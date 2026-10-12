@@ -267,7 +267,7 @@
     var a = build('lang-switch-bar');
     if (a && cta) cta.insertBefore(a, cta.firstChild);
     var b = build('lang-switch-menu');
-    if (b && nav) nav.appendChild(b);
+    if (b && nav) (nav.querySelector('.nav-actions') || nav).appendChild(b);
   }
 
   function start() {
