@@ -2418,7 +2418,10 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .testi-mark { display: block; width: 46px; height: auto; flex-shrink: 0; fill: var(--brass); }
 .testi-rating { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 20px; font-weight: 700; color: var(--text-strong); }
 .testi-stars { display: flex; gap: 4px; }
-.testi-star { width: 22px; height: 22px; flex-shrink: 0; fill: var(--brass); }
+.testimonials { --star: 22px; }
+.testi-star-wrap { position: relative; display: block; width: var(--star); height: var(--star); flex-shrink: 0; }
+.testi-star-fill { position: absolute; top: 0; left: 0; bottom: 0; width: var(--fill, 100%); overflow: hidden; }
+.testi-star { display: block; width: var(--star); height: var(--star); max-width: none; flex-shrink: 0; fill: var(--brass); }
 .testi-star.is-off { fill: var(--tint-30); }
 .testi-quote { margin: 0; }
 .testi-quote-lead { margin: 0; font-size: 21px; font-weight: 600; line-height: 1.65; color: var(--text-strong); }
@@ -2452,7 +2455,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .testi-card { padding: 28px 22px; gap: 22px; border-radius: 24px; }
   .testi-body { gap: 18px; }
   .testi-mark { width: 38px; }
-  .testi-star { width: 18px; height: 18px; }
+  .testimonials { --star: 18px; }
   .testi-rating { font-size: 18px; }
   .testi-quote-lead { font-size: 17px; line-height: 1.6; }
   .testi-quote-more { font-size: 15px; }

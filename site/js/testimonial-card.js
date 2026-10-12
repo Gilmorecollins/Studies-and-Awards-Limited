@@ -47,7 +47,7 @@
     return rated.length > 1 ? rated.reduce(function (a, b) { return a + b; }, 0) / rated.length : null;
   }
 
-  // the quote mark, and their score with five stars (to the nearest whole star)
+  // the quote mark, and their score with five stars (partly filled for a score like 4.5)
   function topRow(t) {
     var top = el('div', 'testi-top');
     top.insertAdjacentHTML('beforeend', MARK);
@@ -58,8 +58,19 @@
       rating.appendChild(el('span', 'sr-only', ' out of 5'));
       var stars = el('span', 'testi-stars');
       stars.setAttribute('aria-hidden', 'true');
-      var full = Math.round(own);
-      for (var i = 0; i < 5; i++) stars.insertAdjacentHTML('beforeend', i < full ? STAR : STAR_OFF);
+      // each star fills by how much of the score reaches it: 4.5 gives four and a half
+      for (var i = 0; i < 5; i++) {
+        var part = Math.max(0, Math.min(1, own - i));
+        var wrap = el('span', 'testi-star-wrap');
+        wrap.insertAdjacentHTML('beforeend', STAR_OFF);
+        if (part > 0) {
+          var fill = el('span', 'testi-star-fill');
+          fill.style.setProperty('--fill', (Math.round(part * 1000) / 10) + '%');
+          fill.insertAdjacentHTML('beforeend', STAR);
+          wrap.appendChild(fill);
+        }
+        stars.appendChild(wrap);
+      }
       rating.appendChild(stars);
       top.appendChild(rating);
     }
