@@ -40,7 +40,7 @@
     });
 
     document.addEventListener('click', function (event) {
-      if (nav.classList.contains('is-open') && !nav.contains(event.target) && !toggle.contains(event.target)) closeNav();
+      if (nav.classList.contains('is-open') && !nav.contains(event.target) && !toggle.contains(event.target) && !event.target.closest('.theme-toggle')) closeNav(); // the dark-mode button sits above the open menu and leaves it open
     });
 
     document.addEventListener('keydown', function (event) {
