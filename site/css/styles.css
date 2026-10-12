@@ -3932,3 +3932,137 @@ html.i18n-wait body { visibility: hidden; }
   html .site-header .primary-nav .nav-actions .lang-switch-menu button[aria-pressed="true"] { background: var(--ink); color: #FFFFFF; }
   html[data-theme="dark"] .site-header .primary-nav .nav-actions .lang-switch-menu button[aria-pressed="true"] { background: var(--brass); color: #001B5E; }
 }
+
+/* ==========================================================================
+   Phone home page (and the footer on every page): the combined mobile design
+   ========================================================================== */
+.dest-mini, .dest-mini-more, .why-dots { display: none; }
+.footer-acc-panel { display: contents; } /* folds away only on phones (below) */
+
+@media (max-width: 640px) {
+  /* ----- hero: centred, a smaller globe above ----- */
+  .hero-globe-inner { padding-top: 18px; padding-bottom: 36px; gap: 24px; }
+  .hero-globe h1 { font-size: clamp(38px, 11.8vw, 46px); line-height: 1.02; }
+  .hero-globe-lead { font-size: 16px; line-height: 1.6; }
+  .hero-globe-actions { gap: 22px; flex-direction: column; align-items: stretch; }
+  .hero-globe-actions .btn { width: 100%; flex: none; min-height: 56px; font-size: 17px; }
+  .hero-globe-actions .board-link { align-self: center; font-size: 16px; }
+
+  /* ----- how it works: an empty checklist on navy, the link under the card ----- */
+  .how-inner { display: flex; flex-direction: column; gap: 20px; padding-top: 56px; padding-bottom: 52px; }
+  .how-intro { display: contents; }
+  .how-intro > .how-eyebrow, .how-intro > h2, .how-intro > p { order: 1; margin: 0; }
+  .how-intro h2 { font-size: 44px; line-height: 1; }
+  .how-intro p { font-size: 16px; line-height: 1.6; color: #DCE6F7; }
+  .how-card { order: 2; transform: none; border-radius: 22px; }
+  .how-intro > .board-link { order: 3; align-self: flex-start; }
+  .how-list { padding: 4px 20px 8px; }
+  .how-item { grid-template-columns: 28px minmax(0, 1fr) auto; gap: 14px; }
+  .how-box, .how-box.is-ticked { width: 28px; height: 28px; border-radius: 8px; border: 2px solid rgba(0, 27, 94, 0.28); background: #FFFFFF; }
+  .how-box svg { display: none; }
+  .how-box::after { display: none; }
+  .how-item-body h3 { font-size: 17px; }
+  .how-item-body p { font-size: 15px; line-height: 1.55; color: var(--muted); }
+  .how-num { font-size: 24px; color: var(--brass-ink); }
+
+  /* ----- study in your dream country: six small tiles ----- */
+  #destinations { background: var(--paper); padding: 60px 0 56px; }
+  #destinations .section-split-head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 26px; }
+  #destinations .section-split-head h2 { font-size: 44px; line-height: 1; }
+  #destinations .section-split-head p { font-size: 16px; line-height: 1.6; }
+  .dest-pick-grid { display: none; }
+  .dest-mini { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .dest-mini-card { display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border-radius: 18px; border: 1px solid var(--border); background: var(--surface); color: var(--text-strong); }
+  .dest-mini-flag { display: block; height: 76px; border-radius: 10px; overflow: hidden; background: var(--ink); }
+  .dest-mini-flag img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .dest-mini-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 0 4px; }
+  .dest-mini-name { font-size: 15.5px; font-weight: 700; line-height: 1.25; }
+  .dest-mini-code { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 22px; line-height: 1; color: var(--brass-ink); }
+  .dest-mini-more { display: inline-flex; margin-top: 26px; }
+
+  /* ----- why choose us: a small heading above the big line, the values on a swipeable rack ----- */
+  .why { padding: 60px 0 52px; background: var(--bg); }
+  .why-inner { gap: 28px; }
+  .why-copy { gap: 28px; max-width: none; }
+  .why-copy h2 { order: 0; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; line-height: 1.3; color: var(--brass-ink); margin: 0 0 -12px; }
+  .why-title { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 44px; font-weight: 400; line-height: 1; }
+  .why-lead { font-size: 16px; line-height: 1.6; color: var(--muted); margin-top: -12px; }
+  .why-mission { padding: 20px 0; border: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); gap: 12px; }
+  .why-mission-label { font-size: 13px; }
+  .why-mission p { font-size: 17px; line-height: 1.55; }
+  .why-more { display: none; }
+  .why-tags {
+    justify-content: flex-start; align-items: flex-start; flex-direction: row; gap: 22px;
+    margin: 0 -20px; padding: 70px 24px 36px; overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; scroll-padding-inline: 24px; scrollbar-width: none;
+  }
+  .why-tags::-webkit-scrollbar { display: none; }
+  .why-tag { flex: 0 0 236px; width: 236px; scroll-snap-align: start; --tilt-k: 0.8; }
+  .why-tag-card { min-height: 290px; padding: 52px 20px 20px; gap: 12px; clip-path: polygon(14% 0, 86% 0, 100% 7%, 100% 100%, 0 100%, 0 7%); }
+  .why-tag h3 { font-size: 28px; }
+  .why-tag p { font-size: 14.5px; line-height: 1.5; }
+  .why-tag-kicker { font-size: 12px; }
+  .why-tag-barcode { margin-top: auto; opacity: 0.85; }
+  .why-dots { display: flex; gap: 8px; align-items: center; margin-top: -6px; }
+  .why-dot { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: rgba(0, 27, 94, 0.2); cursor: pointer; transition: width 0.25s ease, background-color 0.25s ease; position: relative; }
+  .why-dot::after { content: ""; position: absolute; inset: -10px -6px; }
+  .why-dot.is-active { width: 22px; background: var(--ink); }
+  :root[data-theme="dark"] .why-dot { background: rgba(255, 255, 255, 0.25); }
+  :root[data-theme="dark"] .why-dot.is-active { background: var(--brass); }
+
+  /* ----- testimonials: one plain card, the arrows and the link centred ----- */
+  #testimonials { background: var(--bg); padding: 60px 0 56px; }
+  #testimonials .testi-layout { row-gap: 26px; }
+  .testi-intro h2 { font-size: 44px; line-height: 1; }
+  .testimonials { --testi-x: 0px; --testi-y: 0px; }
+  .testi-stage { padding: 0; }
+  .testi-stack > .testi-card { transform: none; min-height: 0; border-radius: 22px; padding: 24px 22px; gap: 18px; border: 1px solid var(--border); box-shadow: 0 14px 36px rgba(0, 27, 94, 0.1); }
+  .testi-stack > .testi-card:not(.is-rank-0) { opacity: 0; pointer-events: none; }
+  .testi-rating { font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 24px; font-weight: 400; line-height: 1; }
+  .testi-stars { gap: 2px; }
+  .testi-quote-lead { font-size: 18px; line-height: 1.55; }
+  .testi-avatar { width: 48px; height: 48px; font-size: 20px; }
+  .testi-name { font-size: 16px; }
+  .testi-actions { flex-direction: column; align-items: center; justify-content: flex-start; gap: 26px; }
+  .testi-nav { justify-content: center; }
+  .testi-share { display: block; align-self: center; max-width: 280px; text-align: center; text-wrap: balance; }
+  .testi-share svg { display: inline; margin-left: 8px; vertical-align: -3px; }
+
+  /* ----- questions: grey, with no intro line ----- */
+  #faq { background: var(--paper); padding: 60px 0 56px; }
+  .faq-head p { display: none; }
+  .faq-head h2 { font-size: 44px; line-height: 1; }
+  .faq-item summary { min-height: 64px; font-size: 17px; font-weight: 600; line-height: 1.35; }
+  .faq-item p { font-size: 15.5px; line-height: 1.6; }
+
+  /* ----- call to action: a navy card ----- */
+  .cta-band { padding: 24px 0 56px; }
+  .cta-panel { border-radius: 26px; padding: 34px 24px; gap: 22px; }
+  .cta-band h2 { font-size: 40px; line-height: 1; }
+  .cta-band p { font-size: 16px; line-height: 1.6; color: #DCE6F7; }
+  .cta-actions { flex-direction: column; align-items: stretch; gap: 12px; }
+  .cta-phone { min-height: 54px; justify-content: center; font-size: 17px; font-weight: 600; }
+  .cta-actions .btn { min-height: 56px; font-size: 17px; }
+
+  /* ----- footer (every page): the link lists fold away under their headings ----- */
+  .footer-grid { display: flex; flex-direction: column; gap: 0; }
+  .footer-grid > :first-child { margin-bottom: 20px; }
+  .footer-acc { border-top: 1px solid rgba(255, 255, 255, 0.16); }
+  .footer-acc > .footer-heading {
+    display: flex; align-items: center; justify-content: space-between; min-height: 60px; margin: 0; padding: 0; cursor: pointer;
+    font-size: 11.5px; letter-spacing: 0.16em;
+  }
+  .footer-acc > .footer-heading::after { content: "+"; font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 400; letter-spacing: 0; line-height: 1; color: #FFFFFF; }
+  .footer-acc.is-open > .footer-heading::after { content: "\2212"; }
+  .footer-acc > .footer-heading:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 2px; }
+  .footer-acc-panel { display: none; padding-bottom: 22px; }
+  .footer-acc.is-open > .footer-acc-panel { display: block; }
+  .footer-grid::after { display: none; }
+  .footer-acc.footer-newsletter { margin: 0; padding: 0; }
+  .footer-newsletter-blurb { max-width: none; }
+  .footer-bottom { gap: 0; }
+  .footer-bottom-legal { width: 100%; justify-self: stretch; border-top: 1px solid rgba(255, 255, 255, 0.16); }
+  .footer-bottom-legal .nav-portal-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 60px; padding: 0; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #FFFFFF; }
+  .footer-bottom-legal .nav-portal-menu { position: static; width: auto; margin: 0 0 18px; }
+  .footer-bottom-copyright { margin-top: 20px; }
+}

@@ -877,4 +877,7 @@ window.SA_I18N.kal = {
   "Until it’s ready, our counsellors will check this with you at a free consultation.": "Kobo kokwen, konetik nyonet kotesei ak iyon eng' kirwoget ne ma kelipani.",
   "A:Previous testimonial": "Ngalek ne kobo",
   "A:Next testimonial": "Ngalek ne tai",
+  "A:Show value 1 of 3": "Ker kasit 1 eng 3",
+  "A:Show value 2 of 3": "Ker kasit 2 eng 3",
+  "A:Show value 3 of 3": "Ker kasit 3 eng 3",
 };

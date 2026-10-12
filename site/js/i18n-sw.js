@@ -899,4 +899,9 @@ window.SA_I18N.sw = {
   // testimonials
   "A:Previous testimonial": "Ushuhuda uliotangulia",
   "A:Next testimonial": "Ushuhuda unaofuata",
+
+  // home page values rack
+  "A:Show value 1 of 3": "Onyesha thamani 1 kati ya 3",
+  "A:Show value 2 of 3": "Onyesha thamani 2 kati ya 3",
+  "A:Show value 3 of 3": "Onyesha thamani 3 kati ya 3",
 };

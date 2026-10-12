@@ -3485,3 +3485,86 @@ function createCursorFollower(options) {
     });
   }
 })();
+
+
+// Phones: the footer's link lists fold away under their headings (Contact starts
+// open), and the three values on the home page get dots under their swipeable row.
+// Wider than a phone, the footer is laid out as before and the dots are not shown.
+(function () {
+  'use strict';
+
+  var phone = window.matchMedia ? window.matchMedia('(max-width: 640px)') : null;
+
+  var grid = document.querySelector('.footer-grid');
+  if (grid) {
+    var sections = [];
+    Array.prototype.forEach.call(grid.children, function (col, i) {
+      var heading = col.querySelector(':scope > .footer-heading');
+      if (!heading) return;
+      var panel = document.createElement('div');
+      panel.className = 'footer-acc-panel';
+      panel.id = 'footer-acc-' + i;
+      Array.prototype.slice.call(col.childNodes).forEach(function (node) { if (node !== heading) panel.appendChild(node); });
+      col.appendChild(panel);
+      col.classList.add('footer-acc');
+      heading.setAttribute('aria-controls', panel.id);
+      var isContact = /^contact$/i.test(heading.textContent.trim());
+      if (isContact) col.classList.add('is-open');
+      sections.push({ col: col, heading: heading });
+      function toggle() {
+        if (!phone || !phone.matches) return;
+        var open = col.classList.toggle('is-open');
+        heading.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      heading.addEventListener('click', toggle);
+      heading.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggle(); }
+      });
+    });
+    var sync = function () {
+      var on = !!(phone && phone.matches);
+      sections.forEach(function (s) {
+        if (on) {
+          s.heading.setAttribute('role', 'button');
+          s.heading.setAttribute('tabindex', '0');
+          s.heading.setAttribute('aria-expanded', s.col.classList.contains('is-open') ? 'true' : 'false');
+        } else {
+          s.heading.removeAttribute('role');
+          s.heading.removeAttribute('tabindex');
+          s.heading.removeAttribute('aria-expanded');
+        }
+      });
+    };
+    sync();
+    if (phone) { if (phone.addEventListener) phone.addEventListener('change', sync); else if (phone.addListener) phone.addListener(sync); }
+  }
+
+  var tags = document.querySelector('.why-tags');
+  if (tags && tags.children.length > 1) {
+    var rack = tags.parentNode;
+    var dotsBox = document.createElement('div');
+    dotsBox.className = 'why-dots';
+    var dots = Array.prototype.map.call(tags.children, function (tag, i) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'why-dot';
+      dot.setAttribute('aria-label', 'Show value ' + (i + 1) + ' of ' + tags.children.length);
+      dot.addEventListener('click', function () {
+        tags.scrollTo({ left: tag.offsetLeft - tags.offsetLeft - 24, behavior: 'smooth' });
+      });
+      dotsBox.appendChild(dot);
+      return dot;
+    });
+    rack.appendChild(dotsBox);
+    var update = function () {
+      var best = 0, bestGap = Infinity;
+      Array.prototype.forEach.call(tags.children, function (tag, i) {
+        var gap = Math.abs((tag.offsetLeft - tags.offsetLeft - 24) - tags.scrollLeft);
+        if (gap < bestGap) { bestGap = gap; best = i; }
+      });
+      dots.forEach(function (dot, i) { dot.classList.toggle('is-active', i === best); if (i === best) dot.setAttribute('aria-current', 'true'); else dot.removeAttribute('aria-current'); });
+    };
+    tags.addEventListener('scroll', function () { window.requestAnimationFrame(update); }, { passive: true });
+    update();
+  }
+})();
