@@ -163,10 +163,9 @@
     root.setAttribute('lang', lang ? lang.htmlLang : 'en');
     if (code !== 'en') {
       dict = (window.SA_I18N && window.SA_I18N[code]) || {};
-      ['header', 'main', 'footer'].forEach(function (s) {
-        var el = document.querySelector(s);
-        if (el) translate(el);
-      });
+      // the whole page, so pop-ups that are added straight to the body (the
+      // consultation chooser, the "coming soon" note) are translated too
+      Array.prototype.slice.call(document.body.children).forEach(translate);
       var t = dict['T:' + norm(document.title)];
       if (t) { originalTitle = document.title; document.title = t; }
       // text that other scripts add later (the testimonials, the team and so on)
@@ -179,10 +178,7 @@
             });
           });
         });
-        ['header', 'main', 'footer'].forEach(function (s) {
-          var el = document.querySelector(s);
-          if (el) observer.observe(el, { childList: true, subtree: true });
-        });
+        observer.observe(document.body, { childList: true, subtree: true });
       }
     }
     syncButtons();

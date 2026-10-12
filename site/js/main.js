@@ -1241,7 +1241,8 @@ function createCursorFollower(options) {
       name.textContent = inst.name;
       var meta = document.createElement('span');
       meta.className = 'partners-item-meta';
-      meta.innerHTML = '<span>' + (inst.courses.length ? plural(inst.courses.length, 'course', 'courses') : 'Courses on request') + '</span>' + chevron;
+      // the number sits in its own element so the word beside it can be translated
+      meta.innerHTML = '<span>' + (inst.courses.length ? '<span>' + inst.courses.length + '</span> ' + (inst.courses.length === 1 ? 'course' : 'courses') : 'Courses on request') + '</span>' + chevron;
       summary.appendChild(name);
       summary.appendChild(meta);
       details.appendChild(summary);
@@ -1304,11 +1305,25 @@ function createCursorFollower(options) {
       if (visible) shown++;
     });
     var total = data.items.length;
-    countEl.textContent = term
-      ? 'Showing ' + shown + ' of ' + plural(total, 'institution', 'institutions')
-      : plural(total, 'partner institution', 'partner institutions') + ' · select one to see its courses';
+    // written in pieces (words and numbers apart) so each can be translated
+    function num(n) { var span = document.createElement('span'); span.textContent = n; return span; }
+    function words(text) { return document.createTextNode(text); }
+    countEl.textContent = '';
+    if (term) {
+      [words('Showing '), num(shown), words(' of '), num(total), words(total === 1 ? ' institution' : ' institutions')].forEach(function (n) { countEl.appendChild(n); });
+    } else {
+      [num(total), words(total === 1 ? ' partner institution' : ' partner institutions'), words(' · select one to see its courses')].forEach(function (n) { countEl.appendChild(n); });
+    }
     data.emptyEl.hidden = shown > 0;
-    if (!shown) data.emptyEl.textContent = 'No institution or course in ' + current + ' matches “' + searchInput.value.trim() + '”. Try a shorter or different word, or ask a counsellor what’s available.';
+    if (!shown) {
+      var typed = document.createElement('span');
+      typed.setAttribute('data-no-i18n', '');
+      typed.textContent = searchInput.value.trim();
+      var place = document.createElement('span');
+      place.textContent = current;
+      data.emptyEl.textContent = '';
+      [words('No institution or course in '), place, words(' matches “'), typed, words('”. Try a shorter or different word, or ask a counsellor what’s available.')].forEach(function (n) { data.emptyEl.appendChild(n); });
+    }
   }
 
   // Elements a keyboard user can actually reach: visible, and not tucked inside a
@@ -1661,9 +1676,11 @@ function createCursorFollower(options) {
     var total = activeDept ? shown : cards.length;
     countEl.textContent = '';
     countEl.appendChild(el('span', 'consult-count-num', String(total)));
-    countEl.appendChild(el('span', 'consult-count-label', activeDept
-      ? (total === 1 ? ' person in ' : ' people in ') + activeDept
-      : ' people to talk to'));
+    var countLabel = el('span', 'consult-count-label', activeDept
+      ? (total === 1 ? ' person in ' : ' people in ')
+      : ' people to talk to');
+    if (activeDept) countLabel.appendChild(el('span', 'consult-count-dept', activeDept)); // its own element, so it can be translated
+    countEl.appendChild(countLabel);
     body.scrollTop = 0;
   }
 
@@ -1674,7 +1691,9 @@ function createCursorFollower(options) {
 
     if (topic) {
       topicEl.hidden = false;
-      topicEl.querySelector('strong').textContent = 'Studying in ' + topic;
+      var topicStrong = topicEl.querySelector('strong');
+      topicStrong.textContent = 'Studying in ';
+      topicStrong.appendChild(el('span', 'consult-topic-name', topic));
     } else {
       topicEl.hidden = true;
     }
