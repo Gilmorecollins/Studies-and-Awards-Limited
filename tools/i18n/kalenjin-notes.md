@@ -2,7 +2,7 @@
 
 This is the working guide for whoever writes the Kalenjin for the website.
 
-**Where it stands.** The site has a DRAFT of Kalenjin on it (162 of the 270 lines),
+**Where it stands.** The site has a DRAFT of Kalenjin on it (all 852 lines),
 written by Claude and **not yet checked by a Kalenjin speaker**. How it was made:
 
 1. Vocabulary from the open Kalenjin–Kiswahili corpus (below), matched word by word
@@ -20,11 +20,10 @@ written by Claude and **not yet checked by a Kalenjin speaker**. How it was made
    Wordings that failed were rewritten using step 2 and checked again. Then I read the
    live lines against the research myself and corrected or pulled back a dozen more.
 
-The other 97 lines stay in English; the sheet shows my draft for them
-(`draft_not_used`) and what the model made of it (`back_translation`). The machine
-check is rough (it is a warning signal, not proof either way), so the draft's grammar
-still needs a real speaker. Example of what it caught: my first wording for "free
-consultation" came back as "meaningless talk", so it was taken out.
+The first 162 lines went through that back-translation check. The rest were then drafted
+without a check and rewritten in a second pass. The machine check is rough (it is a warning
+signal, not proof either way), so the grammar still needs a real speaker. Example of what it
+caught: my first wording for "free consultation" came back as "meaningless talk".
 
 ## Why a person has to do this
 

@@ -95,7 +95,8 @@ if (cmd === 'template') {
   }
   const body = [
     `// ${NAMES[code]} (${code}): the site's English text -> ${NAMES[code]}, written by tools/i18n.mjs`,
-    '// from a checked spreadsheet. Edit lines here directly if you like: each line is',
+    ...(code === 'kal' ? ['// A DRAFT, NOT YET CHECKED BY A SPEAKER: see tools/i18n/kalenjin-notes.md.'] : []),
+    '// from a spreadsheet. Edit lines here directly if you like: each line is',
     '// "English text": "translation". See the top of js/i18n.js for what the keys mean.',
     'window.SA_I18N = window.SA_I18N || {};',
     `window.SA_I18N.${code} = {`,
