@@ -2076,7 +2076,7 @@ function createCursorFollower(options) {
 (function () {
   'use strict';
 
-  var grids = document.querySelectorAll('.dest-pick-grid, .route-cards');
+  var grids = document.querySelectorAll('.dest-pick-grid, .route-cards, .dest-mini');
   if (!grids.length || !window.IntersectionObserver) return;
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -2131,7 +2131,7 @@ function createCursorFollower(options) {
   var items = Array.prototype.slice.call(grid.children);
   var cards = items.map(function (item, i) {
     item.style.setProperty('--i', String(i));
-    var els = item.querySelectorAll('.dest-card-code, .dest-pick-more-code');
+    var els = item.querySelectorAll('.dest-card-code, .dest-pick-more-code, .dest-mini-code');
     return { item: item, codes: Array.prototype.map.call(els, prepare) };
   });
   var more = grid.querySelector('.dest-pick-more-count');
