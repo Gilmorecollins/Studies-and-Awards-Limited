@@ -286,16 +286,15 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   text for a translation when a visitor picks a language in the header (EN | SW), and
   remembers the choice. Each language is one file, `site/js/i18n-<code>.js`, a list of
   `"English text": "translation"` lines; text with no line stays in English, so a page
-  that has not been translated still works. Covered so far: the header, footer and
-  call-to-action on every page, and the full text of Home, Services, Find Us, About,
-  Team (page text only, not the bios) and Blog. Not yet: the six country pages and
-  Destinations, the team bios, the testimonials and anything the scripts write on the
-  page (opening-hours badge, the "Book a consultation" chooser).
+  that has not been translated still works. Kiswahili covers every page: Home,
+  Destinations, the six country pages, Services, Find Us, About, Team (with the bios),
+  Blog and the 404 page. Kalenjin covers the shared parts and the main pages' short text.
   - Kiswahili (`i18n-sw.js`) is written and shown in the switcher. Have a Swahili
     speaker read it before launch.
   - Kalenjin (`i18n-kal.js`) is a DRAFT, not checked by a speaker: 162 of the 270 lines
     are in (written from published Kalenjin and checked by translating back to Kiswahili);
-    the rest stay in English. Visa, fee and deadline wording must be exact, so a fluent
+    the rest, including the country pages, city notes, visa text and team bios, stay in
+    English until a speaker supplies them. Visa, fee and deadline wording must be exact, so a fluent
     speaker needs to go through it (`tools/i18n/kalenjin-notes.md` explains how it was
     made and why it is not enough on its own). The sheet `tools/i18n/kal-to-translate.csv`
     has every line: the English, the Kiswahili, the translation now on the site, and my

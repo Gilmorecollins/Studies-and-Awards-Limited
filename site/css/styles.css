@@ -1081,7 +1081,7 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
   .dest-compare-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .dest-compare-table tr { display: block; margin-bottom: 12px; padding: 6px 0; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
   .dest-compare-table tbody th, .dest-compare-table td { display: block; padding: 8px 16px; border: 0; }
-  .dest-compare-table td { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 10px; font-size: 14px; }
+  .dest-compare-table td { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 10px; font-size: 14px; overflow-wrap: anywhere; }
   .dest-compare-table td::before { content: attr(data-label); font-weight: 600; color: var(--muted); }
   .dest-compare-table tbody tr:hover > * { background: none; }
 }
