@@ -293,14 +293,15 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   page (opening-hours badge, the "Book a consultation" chooser).
   - Kiswahili (`i18n-sw.js`) is written and shown in the switcher. Have a Swahili
     speaker read it before launch.
-  - Kalenjin (`i18n-kal.js`) is empty on purpose: it needs a fluent speaker, and visa,
-    fee and deadline wording must be exact (the open Kalenjin data online is too small
-    and uneven to translate from reliably; see `tools/i18n/kalenjin-notes.md`).
-    `tools/i18n/kal-to-translate.csv` has every English line with the Kiswahili beside
-    it and an empty column to fill in. Once it is filled,
-    `node tools/i18n.mjs import kal tools/i18n/kal-to-translate.csv` writes the language
-    file; then set `reviewed: true` for `kal` in `site/js/i18n.js` so it shows in the
-    switcher. Until then `?lang=kal` on any page address previews it.
+  - Kalenjin (`i18n-kal.js`) is a DRAFT, not checked by a speaker: 162 of the 270 lines
+    are in (written from published Kalenjin and checked by translating back to Kiswahili);
+    the rest stay in English. Visa, fee and deadline wording must be exact, so a fluent
+    speaker needs to go through it (`tools/i18n/kalenjin-notes.md` explains how it was
+    made and why it is not enough on its own). The sheet `tools/i18n/kal-to-translate.csv`
+    has every line: the English, the Kiswahili, the translation now on the site, and my
+    draft for the lines left out. Edit it and run
+    `node tools/i18n.mjs import kal tools/i18n/kal-to-translate.csv` to update the site.
+    If the file is ever empty, tapping KAL shows a "coming soon" note instead.
   - Changing English text on a page means its translation line stops matching: edit the
     English in the language files too (or re-run the template and compare).
 - **Page not found**: `site/404.html` is what Vercel shows for any address that

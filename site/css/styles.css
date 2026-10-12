@@ -3848,3 +3848,11 @@ html.is-leaving body { opacity: 0; transition: opacity 220ms ease; }
 .site-header.header-overlay:not(.is-scrolled) .lang-switch button { color: rgba(255,255,255,0.8); }
 .site-header.header-overlay:not(.is-scrolled) .lang-switch button:hover { color: #FFFFFF; }
 .site-header.header-overlay:not(.is-scrolled) .lang-switch button[aria-pressed="true"] { background: #FFFFFF; color: var(--ink); }
+.lang-note { position: fixed; left: 50%; bottom: 24px; z-index: 80; transform: translateX(-50%); max-width: calc(100vw - 32px); padding: 12px 20px; border-radius: 999px; background: var(--ink); color: #FFFFFF; box-shadow: 0 12px 32px var(--shadow-18); font-size: 14px; font-weight: 600; line-height: 1.4; text-align: center; }
+@media (prefers-reduced-motion: no-preference) { .lang-note { animation: lang-note-in 250ms ease-out; } @keyframes lang-note-in { from { opacity: 0; transform: translate(-50%, 8px); } } }
+/* laptop windows: a little less air in the header so the switch still fits */
+@media (min-width: 1024px) and (max-width: 1180px) {
+  .site-header .container { gap: 24px; }
+  .primary-nav { gap: 24px; }
+  .lang-switch button { padding: 5px 8px 4px; }
+}

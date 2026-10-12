@@ -15,16 +15,18 @@
 //   - a label, placeholder or tooltip: "A:" + the text
 //   - the page title: "T:" + the title
 //
-// To show a language in the switcher it must be marked reviewed below: only do
-// that once a fluent speaker has checked it. A language that is not reviewed can
-// still be previewed by adding ?lang=<code> to any page address.
+// A language is listed in the switcher once it is marked reviewed below: do that
+// only when a fluent speaker has checked it. A listed language whose file has no
+// translations yet (Kalenjin, for now) does not change the page: picking it shows
+// a "coming soon" note instead. A language that is not reviewed can still be
+// previewed by adding ?lang=<code> to any page address.
 (function () {
   'use strict';
 
   var LANGS = [
     { code: 'en', label: 'EN', name: 'English', htmlLang: 'en', reviewed: true },
     { code: 'sw', label: 'SW', name: 'Kiswahili', htmlLang: 'sw', reviewed: true },
-    { code: 'kal', label: 'KAL', name: 'Kalenjin', htmlLang: 'kln', reviewed: false }
+    { code: 'kal', label: 'KAL', name: 'Kalenjin', htmlLang: 'kln', reviewed: true }
   ];
 
   var root = document.documentElement;
@@ -195,8 +197,34 @@
     document.head.appendChild(s);
   }
 
+  function hasWords(code) {
+    var d = window.SA_I18N && window.SA_I18N[code];
+    return !!d && Object.keys(d).length > 0;
+  }
+
+  // a short note for a language that has no translations yet
+  var noteTimer = null;
+  function comingSoon(lang) {
+    var old = document.querySelector('.lang-note');
+    if (old) old.parentNode.removeChild(old);
+    var note = document.createElement('div');
+    note.className = 'lang-note';
+    note.setAttribute('role', 'status');
+    note.setAttribute('data-no-i18n', '');
+    note.textContent = lang.name + ' is coming soon. Tafsiri ya ' + lang.name + ' inakuja hivi karibuni.';
+    document.body.appendChild(note);
+    window.clearTimeout(noteTimer);
+    noteTimer = window.setTimeout(function () { if (note.parentNode) note.parentNode.removeChild(note); }, 6000);
+  }
+
   function choose(code, remember) {
     load(code, function () {
+      // nothing written yet: leave the page as it is and say so (and do not
+      // remember it, so the visitor is not left on a language with no words)
+      if (code !== 'en' && !hasWords(code)) {
+        if (remember) comingSoon(find(code));
+        return;
+      }
       apply(code);
       if (remember) saveLang(code);
     });
