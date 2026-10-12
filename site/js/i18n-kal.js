@@ -875,4 +875,6 @@ window.SA_I18N.kal = {
   "”. Try a shorter or different word, or ask a counsellor what’s available.": "”. Cheng ngalek ne ng'ot anan ne alak, anan tebut konetindet ne kimiten.",
   "We’re building an online checker that compares your KCSE results with the entry requirements of Australian universities and colleges, and shows the courses you could apply for.": "Kipang oret ne online ne ketesei tiemutik ngung ab KCSE ak mwoch ab sukulisiek ab Australia, ak kerei kozi che imuch ibun.",
   "Until it’s ready, our counsellors will check this with you at a free consultation.": "Kobo kokwen, konetik nyonet kotesei ak iyon eng' kirwoget ne ma kelipani.",
+  "A:Previous testimonial": "Ngalek ne kobo",
+  "A:Next testimonial": "Ngalek ne tai",
 };

@@ -1833,14 +1833,11 @@ function createCursorFollower(options) {
   });
 })();
 
-// Home page: the testimonials: a card for each student, side by side in a row
-// (three across on a laptop, two on a tablet, one on a phone). When there are
-// more than fit, the row scrolls sideways (a swipe, a trackpad, or the arrow
-// keys once it has focus) and the dots below appear, one for each place it
-// can stop; the current one is longer. It also plays gently by itself, with a
-// pause button, holding whenever the visitor is reading or using it (see
-// "motion" below). The cards rise in the first time the section comes into
-// view, and the average rating counts up.
+// Home page: the testimonials, as a stack of stories. The student you are
+// reading is the card on top; the next two peek out behind it. The arrow
+// buttons, a click or tap on a card behind, a swipe, or the left and right
+// arrow keys (once the stack has focus) bring another one forward; the order
+// wraps round. No auto-play: it moves only when the visitor asks.
 //
 // The testimonials come from the Supabase database (js/supabase-config.js),
 // where they are added and switched on in the admin page (admin/index.html):
@@ -1850,16 +1847,17 @@ function createCursorFollower(options) {
 // in the address, where the samples in js/testimonials-data.js show instead,
 // tagged as samples, so the layout can be reviewed. An incomplete entry (no
 // quote or no name) is skipped rather than shown half-empty.
-//
-// A student who gave a rating gets a rating box on their card: their own
-// score, beside the average of the ratings on show once there are two or more.
 (function () {
   'use strict';
 
   var section = document.getElementById('testimonials');
-  var row = document.getElementById('testimonial-row');
-  var dotsBox = document.getElementById('testimonial-dots');
-  if (!section || !row || !dotsBox) return;
+  var stack = document.getElementById('testimonial-row');
+  var stage = document.getElementById('testimonial-stage');
+  var status = document.getElementById('testimonial-status');
+  var nav = document.getElementById('testimonial-nav');
+  var prevBtn = document.getElementById('testimonial-prev');
+  var nextBtn = document.getElementById('testimonial-next');
+  if (!section || !stack || !stage) return;
 
   var here = window.location;
   var ownCopy = here.protocol === 'file:' || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(here.hostname);
@@ -1924,202 +1922,75 @@ function createCursorFollower(options) {
 
   // the cards themselves are built by js/testimonial-card.js
   function render(people) {
-    var average = window.TestimonialCard.average(people);
-    var sampleCount = 0;
-    people.forEach(function (t) {
-      if (t.sample) sampleCount++;
-      row.appendChild(window.TestimonialCard.build(t, average));
+    var count = people.length;
+    var cards = people.map(function (t) {
+      var card = window.TestimonialCard.build(t);
+      stack.appendChild(card);
+      return card;
     });
-
-    if (sampleCount) {
+    if (people.some(function (t) { return t.sample; })) {
       var note = el('p', 'consult-preview testi-preview', 'Sample quotes are showing because no testimonials are switched on yet. Visitors on the live site never see samples. Add real ones on the admin page (admin/index.html).');
-      row.parentNode.insertBefore(note, row);
+      section.querySelector('.testi-layout').parentNode.insertBefore(note, section.querySelector('.testi-layout'));
     }
     section.hidden = false;
 
-    // The places the row can stop, with a dot for each: the start of every
-    // card, but never past the end of the row. So three cards on a laptop, all
-    // in view, give one place and no dots; five give three.
-    var cards = Array.prototype.slice.call(row.children);
-    var stops = [];
-    var dots = [];
-    var current = -1;
-    var still = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+    var current = 0;
 
-    function measure() {
-      var pad = parseFloat(getComputedStyle(row).paddingLeft) || 0;
-      var end = row.scrollWidth - row.clientWidth;
-      var found = [];
+    // rank 0 is the card on top, 1 and 2 peek out behind it, the rest wait
+    // out of sight; only the one on top is read out
+    function show(next, announce) {
+      current = ((next % count) + count) % count;
       cards.forEach(function (card, i) {
-        var at = Math.max(0, Math.min(Math.round(card.offsetLeft - pad), end));
-        if (!found.length || at - found[found.length - 1].at > 2) found.push({ at: at, name: people[i].name });
+        var rank = (i - current + count) % count;
+        card.style.setProperty('--r', rank);
+        card.classList.toggle('is-rank-0', rank === 0);
+        card.classList.toggle('is-rank-1', rank === 1);
+        card.classList.toggle('is-rank-2', rank === 2);
+        card.classList.toggle('is-rank-far', rank > 2);
+        if (rank === 0) card.removeAttribute('aria-hidden'); else card.setAttribute('aria-hidden', 'true');
       });
-      stops = found;
-      if (dots.length !== stops.length) {
-        dotsBox.textContent = '';
-        dots = stops.map(function (stop, i) {
-          var dot = el('button', 'testi-dot');
-          dot.type = 'button';
-          dot.addEventListener('click', function () {
-            row.scrollTo({ left: stops[i].at, behavior: still && still.matches ? 'auto' : 'smooth' });
-          });
-          dotsBox.appendChild(dot);
-          return dot;
-        });
-        current = -1;
-      }
-      stops.forEach(function (stop, i) { dots[i].setAttribute('aria-label', 'Show ' + stop.name); });
-      var scrolls = stops.length > 1;
-      dotsBox.hidden = !scrolls;
-      // the row takes Tab (to scroll with the arrow keys) only when it can scroll
-      if (scrolls) row.setAttribute('tabindex', '0');
-      else row.removeAttribute('tabindex');
-      update();
-      syncPlay();
+      if (announce && status) status.textContent = people[current].name + ', ' + (current + 1) + ' / ' + count;
+    }
+    show(0, false);
+
+    if (count < 2) {
+      if (nav) nav.hidden = true;
+      stage.removeAttribute('tabindex');
+      return;
     }
 
-    // the current dot: the place nearest to where the row is now; and which
-    // edges have cards past them, to fade (styles.css)
-    function update() {
-      var x = row.scrollLeft;
-      var end = row.scrollWidth - row.clientWidth;
-      row.classList.toggle('is-past-start', x > 2);
-      row.classList.toggle('is-before-end', x < end - 2);
-      var best = 0;
-      stops.forEach(function (stop, i) {
-        if (Math.abs(stop.at - x) < Math.abs(stops[best].at - x)) best = i;
-      });
-      if (best === current) return;
-      if (dots[current]) {
-        dots[current].classList.remove('is-active');
-        dots[current].removeAttribute('aria-current');
-      }
-      dots[best].classList.add('is-active');
-      dots[best].setAttribute('aria-current', 'true');
-      current = best;
-    }
+    if (prevBtn) prevBtn.addEventListener('click', function () { show(current - 1, true); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { show(current + 1, true); });
 
-    var ticking = false;
-    row.addEventListener('scroll', function () {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () {
-        ticking = false;
-        update();
-      });
-    }, { passive: true });
-
-    // ---- motion: the cards rise in, the average counts up, and the row plays ----
-    // Auto-play: while the section is in view, the current dot fills up over
-    // 6 seconds and the row then moves on one place, looping back to the start.
-    // The fill (styles.css) is the clock, so holding the fill holds the play.
-    // It holds while the mouse is over the cards or dots or they have the
-    // focus, stops for good once the visitor moves the row themselves (a click,
-    // drag, swipe, key, sideways wheel or dot), and the button pauses and
-    // plays it. It only plays when there are more cards than fit, and never
-    // for visitors who ask for reduced motion.
-    var playBtn = document.getElementById('testimonial-play');
-    var playing = true;
-    var hovering = false;
-    var focused = false;
-    var inView = !window.IntersectionObserver;
-    var canPlay = false;
-    var reduced = function () { return !!(still && still.matches); };
-
-    function syncPlay() {
-      canPlay = !!playBtn && stops.length > 1 && !reduced();
-      if (playBtn) {
-        playBtn.hidden = !canPlay;
-        playBtn.classList.toggle('is-stopped', !playing);
-        playBtn.setAttribute('aria-label', playing ? 'Pause the testimonials' : 'Play the testimonials');
-      }
-      dotsBox.classList.toggle('is-playing', canPlay && playing);
-      dotsBox.classList.toggle('is-held', hovering || focused || !inView);
-    }
-
-    function stopPlaying() {
-      if (!playing) return;
-      playing = false;
-      syncPlay();
-    }
-
-    dotsBox.addEventListener('animationend', function (event) {
-      if (event.animationName !== 'testi-fill' || !canPlay || !playing || !stops.length) return;
-      row.scrollTo({ left: stops[(current + 1) % stops.length].at, behavior: 'smooth' });
+    // a click or tap on a card behind brings it forward
+    stack.addEventListener('click', function (event) {
+      var card = event.target.closest('.testi-card');
+      var i = card ? cards.indexOf(card) : -1;
+      if (i > -1 && i !== current) show(i, true);
     });
-    if (playBtn) {
-      playBtn.addEventListener('click', function () {
-        playing = !playing;
-        syncPlay();
-      });
-    }
-    row.addEventListener('pointerdown', stopPlaying);
-    row.addEventListener('keydown', stopPlaying);
-    row.addEventListener('wheel', function (event) {
-      if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) stopPlaying();
-    }, { passive: true });
-    dotsBox.addEventListener('click', stopPlaying);
-    [row, dotsBox].forEach(function (area) {
-      area.addEventListener('mouseenter', function () { hovering = true; syncPlay(); });
-      area.addEventListener('mouseleave', function () { hovering = false; syncPlay(); });
-      area.addEventListener('focusin', function () { focused = true; syncPlay(); });
-      area.addEventListener('focusout', function (event) {
-        var to = event.relatedTarget;
-        focused = !!(to && (row.contains(to) || dotsBox.contains(to)));
-        syncPlay();
-      });
+
+    // left and right arrow keys, once the stack has the focus
+    stage.addEventListener('keydown', function (event) {
+      if (event.key === 'ArrowRight') { event.preventDefault(); show(current + 1, true); }
+      else if (event.key === 'ArrowLeft') { event.preventDefault(); show(current - 1, true); }
     });
-    if (still) {
-      if (still.addEventListener) still.addEventListener('change', syncPlay);
-      else if (still.addListener) still.addListener(syncPlay);
-    }
 
-    // the average rating counts up from 0 to itself
-    function countUp() {
-      Array.prototype.forEach.call(row.querySelectorAll('.testi-score-avg .testi-score-num'), function (num) {
-        var text = num.firstChild;
-        if (!text || text.nodeType !== 3) return;
-        var target = text.nodeValue;
-        var value = parseFloat(target);
-        if (!(value > 0)) return;
-        var decimals = (target.split('.')[1] || '').length;
-        var start = null;
-        text.nodeValue = (0).toFixed(decimals);
-        window.requestAnimationFrame(function frame(now) {
-          if (start === null) start = now;
-          var k = Math.min(1, (now - start) / 1200);
-          text.nodeValue = k < 1 ? (value * (1 - Math.pow(1 - k, 3))).toFixed(decimals) : target;
-          if (k < 1) window.requestAnimationFrame(frame);
-        });
-      });
-    }
-
-    // the first time the section comes into view: the cards rise in, one after
-    // another, and the average counts up; being in view also lets it play
-    if (window.IntersectionObserver) {
-      if (!reduced()) {
-        row.classList.add('is-waiting');
-        cards.forEach(function (card, i) { card.style.setProperty('--i', Math.min(i, 5)); });
-      }
-      var arrived = false;
-      new IntersectionObserver(function (entries) {
-        inView = entries[entries.length - 1].isIntersecting;
-        if (inView && !arrived) {
-          arrived = true;
-          row.classList.remove('is-waiting');
-          if (!reduced()) {
-            row.classList.add('is-in');
-            countUp();
-          }
-        }
-        syncPlay();
-      }, { threshold: 0.25 }).observe(row);
-    }
-
-    measure();
-    if (window.ResizeObserver) new ResizeObserver(measure).observe(row);
-    else window.addEventListener('resize', measure);
+    // a swipe sideways on a touch screen (up and down still scroll the page)
+    var startX = null, startY = 0;
+    stage.style.touchAction = 'pan-y';
+    stage.addEventListener('pointerdown', function (event) {
+      if (event.pointerType === 'mouse') return;
+      startX = event.clientX; startY = event.clientY;
+    });
+    stage.addEventListener('pointerup', function (event) {
+      if (startX === null) return;
+      var dx = event.clientX - startX, dy = event.clientY - startY;
+      startX = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(current + (dx < 0 ? 1 : -1), true);
+    });
+    stage.addEventListener('pointercancel', function () { startX = null; });
   }
+
 })();
 
 // "Check your eligibility for Australia" ([data-ai-checker], on the Australia

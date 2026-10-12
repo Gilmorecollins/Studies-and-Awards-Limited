@@ -895,4 +895,8 @@ window.SA_I18N.sw = {
   "”. Try a shorter or different word, or ask a counsellor what’s available.": "”. Jaribu neno fupi zaidi au tofauti, au muulize mshauri kinachopatikana.",
   "We’re building an online checker that compares your KCSE results with the entry requirements of Australian universities and colleges, and shows the courses you could apply for.": "Tunajenga kikagua cha mtandaoni kinacholinganisha matokeo yako ya KCSE na mahitaji ya kujiunga ya vyuo vikuu na vyuo vya Australia, na kuonyesha kozi unazoweza kuomba.",
   "Until it’s ready, our counsellors will check this with you at a free consultation.": "Hadi kitakapokuwa tayari, washauri wetu watakagua hili nawe kwenye ushauri wa bure.",
+
+  // testimonials
+  "A:Previous testimonial": "Ushuhuda uliotangulia",
+  "A:Next testimonial": "Ushuhuda unaofuata",
 };

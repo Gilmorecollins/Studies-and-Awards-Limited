@@ -2355,175 +2355,113 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .ai-soon p + p { margin-top: 10px; }
 .ai-soon .btn { margin-top: 22px; }
 
-/* ---------- testimonials (home page; hidden until js/testimonials-data.js has quotes to show) ----------
-   A soft raised card for each student, in a row: the cards are the same
-   white as the section around them and stand out only by a light edge above
-   and to the left and a shadow below and to the right; the student's own
-   rating is pressed in the same way. main.js builds the cards and the dots. */
+/* ---------- testimonials: a stack of stories (home page) ----------
+   The student you are reading sits on top, white; the next two peek out
+   behind it, up and to the right. An arrow button, a click on a card behind,
+   a swipe or the arrow keys brings the next one forward (main.js). Hidden
+   until there are quotes to show. */
 
-.testimonials { background: var(--bg); }
-/* the page gutter, so the row can run out to the screen edge (and scroll
-   there) while its cards still line up with the rest of the page; and the
-   box the cards-per-row rules below measure */
-.testi-wrap { --gutter: clamp(24px, calc(4.5vw / var(--z, 1)), 72px); container-type: inline-size; }
-@media (max-width: 768px) { .testi-wrap { --gutter: 20px; } } /* as .container there */
+.testimonials { --testi-2: #EDF0F6; --testi-3: #DCE6F7; --testi-x: 26px; --testi-y: -20px; }
+#testimonials { background: var(--paper); padding: clamp(56px, calc(7vw / var(--z, 1)), 100px) 0; }
+:root[data-theme="dark"] .testimonials { --testi-2: #19244A; --testi-3: #202E5C; }
 .testi-preview { max-width: 640px; margin: 0 auto 32px; }
 
-/* the row: three cards across, two on a tablet, one on a phone (below);
-   more than fit scroll sideways and stop at each card. Its padding is room
-   for the cards' shadows, taken back by the negative margins. */
-.testi-row {
-  --testi-gap: 28px;
-  position: relative;
-  display: flex; gap: var(--testi-gap);
-  margin: -32px calc(-1 * var(--gutter)) -48px;
-  padding: 32px var(--gutter) 48px;
-  list-style: none;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: var(--gutter);
-  scrollbar-width: none;
+.testi-layout {
+  display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  grid-template-areas: "intro stage" "actions stage";
+  grid-template-rows: 1fr 1fr; column-gap: clamp(40px, calc(6.2vw / var(--z, 1)), 90px); row-gap: 30px;
 }
-.testi-row::-webkit-scrollbar { display: none; }
-.testi-row:focus-visible { outline: 2px solid var(--line-strong); outline-offset: -8px; border-radius: 36px; }
-/* a card part way out of view fades out at the edge of the row rather than
-   being cut off, on whichever side there is more to see (main.js sets the
-   classes as it scrolls) */
-@property --fade-l { syntax: '<length>'; inherits: false; initial-value: 0px; }
-@property --fade-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
-.testi-row {
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent);
-  mask-image: linear-gradient(to right, transparent, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent);
-  transition: --fade-l 200ms ease, --fade-r 200ms ease;
+.testi-intro { grid-area: intro; align-self: end; display: flex; flex-direction: column; gap: 14px; }
+.testi-intro h2 { margin: 0; font-size: clamp(44px, calc(5vw / var(--z, 1)), 72px); line-height: 0.95; }
+.testi-intro p { margin: 0; font-size: 17px; line-height: 1.7; color: var(--muted); }
+.testi-actions { grid-area: actions; align-self: start; display: flex; flex-direction: column; align-items: flex-start; gap: 30px; }
+.testi-nav { display: flex; gap: 12px; }
+.testi-arrow {
+  display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; padding: 0;
+  border: 0; border-radius: 50%; background: var(--ink); color: #FFFFFF; cursor: pointer;
+  transition: transform 150ms ease, background-color 150ms ease;
 }
-.testi-row.is-past-start { --fade-l: var(--gutter); }
-.testi-row.is-before-end { --fade-r: var(--gutter); }
-/* fewer cards than fit: centred (the margins fold away once the row scrolls) */
-.testi-row > :first-child { margin-left: auto; }
-.testi-row > :last-child { margin-right: auto; }
+.testi-arrow-prev svg { transform: scaleX(-1); }
+@media (hover: hover) { .testi-arrow:hover { transform: scale(1.06); background: #0A2A7A; } }
+.testi-arrow:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
+:root[data-theme="dark"] .testi-arrow { background: var(--brass); color: #001B5E; }
+.testi-share { align-self: flex-start; }
 
+/* the stack: every card in the same grid cell, so the box is as tall as the
+   tallest card; the rank (0 on top) moves each one up and to the right, and smaller */
+.testi-stage { grid-area: stage; align-self: center; min-width: 0; padding: 50px 60px 0 0; }
+.testi-stage:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 6px; border-radius: 28px; }
+.testi-stack { display: grid; margin: 0; padding: 0; list-style: none; }
 .testi-card {
-  flex: 0 0 calc((100% - 2 * var(--testi-gap)) / 3);
-  min-width: 0;
-  display: flex; flex-direction: column;
-  padding: 28px 26px 30px;
-  border-radius: 28px;
-  background: var(--bg);
-  box-shadow: -9px -9px 22px var(--soft-hi), 12px 14px 30px var(--soft-lo);
-  scroll-snap-align: start;
-  transition: transform 250ms ease, box-shadow 250ms ease;
+  --r: 0;
+  box-sizing: border-box; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 28px;
+  padding: 44px 48px; border-radius: 28px;
+  background: var(--surface); border: 2px solid var(--border); box-shadow: 0 20px 44px rgba(0, 27, 94, 0.1);
+  text-align: left;
 }
+:root[data-theme="dark"] .testi-card { box-shadow: 0 20px 44px rgba(0, 0, 0, 0.4); }
+.testi-stack > .testi-card {
+  grid-area: 1 / 1; min-height: 400px;
+  transform: translate(calc(var(--r) * var(--testi-x)), calc(var(--r) * var(--testi-y))) scale(calc(1 - var(--r) * 0.035));
+  opacity: clamp(0, calc(3 - var(--r)), 1); z-index: calc(10 - var(--r));
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease, background-color 0.3s ease;
+}
+.testi-stack > .testi-card.is-rank-1 { background: var(--testi-2); }
+.testi-stack > .testi-card.is-rank-2, .testi-stack > .testi-card.is-rank-far { background: var(--testi-3); }
+.testi-stack > .testi-card:not(.is-rank-0) { cursor: pointer; }
+.testi-stack > .testi-card.is-rank-far { pointer-events: none; }
+.testi-stack > .testi-card:not(.is-rank-0) > * { pointer-events: none; }
 .testi-card > .testi-sample { align-self: flex-start; }
-/* a card lifts a little under the mouse */
-@media (hover: hover) {
-  .testi-card:hover { transform: translateY(-6px); box-shadow: -10px -10px 26px var(--soft-hi), 16px 22px 40px var(--soft-lo); }
-}
-/* the cards rise into place one after another the first time the section
-   comes into view (main.js adds the classes; --i is each card's place) */
-.testi-row.is-waiting .testi-card { opacity: 0; }
-.testi-row.is-in .testi-card { animation: testi-rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--i, 0) * 110ms); }
-@keyframes testi-rise { from { opacity: 0; transform: translateY(28px); } }
-@container (max-width: 959px) {
-  .testi-card { flex-basis: calc((100% - var(--testi-gap)) / 2); }
-}
-/* phones: one card, with the edge of the next one showing */
-@container (max-width: 559px) {
-  .testi-row { --testi-gap: 16px; }
-  .testi-card {
-    flex-basis: calc(100% - 28px);
-    padding: 22px 20px 24px;
-    border-radius: 24px;
-    box-shadow: -6px -6px 16px var(--soft-hi), 8px 10px 22px var(--soft-lo);
-  }
-}
 
-/* who they are */
-.testi-person { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.testi-body { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.testi-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.testi-mark { display: block; width: 46px; height: auto; flex-shrink: 0; fill: var(--brass); }
+.testi-rating { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 20px; font-weight: 700; color: var(--text-strong); }
+.testi-stars { display: flex; gap: 4px; }
+.testi-star { width: 22px; height: 22px; flex-shrink: 0; fill: var(--brass); }
+.testi-star.is-off { fill: var(--tint-30); }
+.testi-quote { margin: 0; }
+.testi-quote-lead { margin: 0; font-size: 21px; font-weight: 600; line-height: 1.65; color: var(--text-strong); }
+.testi-quote-more { margin: 14px 0 0; font-size: 16px; line-height: 1.7; color: var(--muted); }
+
+.testi-person { display: flex; align-items: center; gap: 14px; min-width: 0; }
 .testi-avatar {
-  width: 64px; height: 64px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
-  overflow: hidden;
-  background: linear-gradient(140deg, #0A2A7A, var(--ink));
-  box-shadow: 5px 7px 14px var(--soft-lo), -4px -4px 10px var(--soft-hi);
-  /* initials, when there is no photo */
-  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 26px; line-height: 1; letter-spacing: 0.04em; color: var(--brass);
+  width: 52px; height: 52px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; overflow: hidden; background: var(--ink);
+  font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 22px; line-height: 1; letter-spacing: 0.02em; color: var(--brass);
 }
+:root[data-theme="dark"] .testi-avatar { background: #1B2C66; }
 .testi-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.testi-who { min-width: 0; }
-.testi-name { font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text-strong); overflow-wrap: anywhere; }
-.testi-detail { margin-top: 3px; font-size: 14px; line-height: 1.4; color: var(--muted); }
+.testi-who { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.testi-name { margin: 0; font-size: 17px; font-weight: 700; line-height: 1.3; color: var(--text-strong); overflow-wrap: anywhere; }
+.testi-detail { margin: 0; font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-ink); }
 
-/* the average, and their own rating pressed in beside it */
-.testi-score { display: flex; align-items: center; gap: 14px; margin-top: 24px; }
-.testi-score-avg { flex: 1 1 0; min-width: 0; padding-left: 4px; }
-.testi-score-own {
-  flex: 1.4 1 0; min-width: 0;
-  padding: 14px 16px;
-  border-radius: 14px;
-  box-shadow: inset 5px 5px 12px var(--soft-lo), inset -5px -5px 12px var(--soft-hi);
-}
-.testi-score-own:only-child { flex: 0 1 auto; }
-.testi-score-num { display: flex; align-items: center; gap: 7px; font-size: 20px; font-weight: 700; line-height: 1.2; color: var(--text-strong); }
-.testi-star { flex-shrink: 0; fill: var(--brass); }
-.testi-score-label { margin-top: 5px; font-size: 13px; line-height: 1.35; color: var(--muted); }
+/* a single card (the admin page's preview) is just the card, full width */
+.testi-row { display: block; margin: 0; padding: 0; list-style: none; }
 
-/* their words */
-.testi-quote { margin: 26px 0 0; }
-.testi-mark { display: block; width: 36px; height: auto; margin-bottom: 18px; fill: var(--brass); }
-.testi-quote-lead { font-size: 17px; font-weight: 700; line-height: 1.6; color: var(--text-strong); }
-.testi-quote-more { margin-top: 14px; font-size: 14.5px; line-height: 1.7; color: var(--muted); }
+/* tablets and phones: one column (heading, then the stack, then the arrows) */
+@media (max-width: 960px) {
+  .testi-layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "intro" "stage" "actions"; grid-template-rows: auto; row-gap: 28px; }
+  .testi-intro, .testi-actions { align-self: auto; }
+  .testi-actions { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+}
+@media (max-width: 640px) {
+  .testimonials { --testi-x: 14px; --testi-y: -12px; }
+  .testi-stage { padding: 34px 28px 0 0; }
+  .testi-stack > .testi-card { min-height: 0; }
+  .testi-card { padding: 28px 22px; gap: 22px; border-radius: 24px; }
+  .testi-body { gap: 18px; }
+  .testi-mark { width: 38px; }
+  .testi-star { width: 18px; height: 18px; }
+  .testi-rating { font-size: 18px; }
+  .testi-quote-lead { font-size: 17px; line-height: 1.6; }
+  .testi-quote-more { font-size: 15px; }
+  .testi-arrow { width: 52px; height: 52px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .testi-stack > .testi-card, .testi-arrow { transition: none; }
+}
 
-/* the dots, when the row scrolls: short bars, the current one longer and
-   gold. Each is a 40 x 32 button, so it is easy to hit on a phone. Beside
-   them, the pause / play button for the auto-play. */
-.testi-controls { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 36px; }
-.testi-dots { display: flex; justify-content: center; }
-.testi-dots[hidden] { display: none; }
-.testi-dot {
-  width: 40px; height: 32px; padding: 0;
-  display: flex; align-items: center; justify-content: center;
-  border: none; border-radius: 8px;
-  background: none;
-  cursor: pointer;
-}
-.testi-dot::before {
-  content: '';
-  width: 24px; height: 5px;
-  border-radius: 3px;
-  background: var(--tint-50);
-  transition: width 250ms ease, background-color 250ms ease;
-}
-.testi-dot:hover::before { background: var(--muted); }
-.testi-dot.is-active::before { width: 36px; background: var(--brass-ink); }
-.testi-dot:focus-visible { outline: 2px solid var(--line-strong); outline-offset: -2px; }
-/* while it plays, the current dot fills up from the left until the row moves
-   on; the end of this fill is what moves it (main.js listens for it), so
-   pausing the fill pauses the auto-play, and with reduced motion (no
-   animations) it never moves by itself */
-@property --testi-fill { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
-.testi-dots.is-playing .testi-dot.is-active::before {
-  background: linear-gradient(to right, var(--brass-ink) var(--testi-fill), var(--tint-50) var(--testi-fill));
-  animation: testi-fill 6s linear forwards;
-}
-.testi-dots.is-playing.is-held .testi-dot.is-active::before { animation-play-state: paused; }
-@keyframes testi-fill { from { --testi-fill: 0%; } to { --testi-fill: 100%; } }
-.testi-play {
-  width: 32px; height: 32px; flex-shrink: 0; padding: 0;
-  display: flex; align-items: center; justify-content: center;
-  border: 1px solid var(--border); border-radius: 50%;
-  background: transparent; color: var(--text-strong);
-  cursor: pointer;
-}
-.testi-play[hidden] { display: none; }
-.testi-play:hover { background: var(--tint-06); }
-.testi-play:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 2px; }
-.testi-play-go { display: none; }
-.testi-play.is-stopped .testi-play-go { display: block; }
-.testi-play.is-stopped .testi-play-pause { display: none; }
-
-.testi-share { display: flex; width: fit-content; max-width: 100%; margin: 32px auto 0; }
 
 /* ---------- futuristic full-screen city slideshow ---------- */
 
