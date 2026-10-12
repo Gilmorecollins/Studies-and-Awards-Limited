@@ -1053,6 +1053,9 @@ function createCursorFollower(options) {
   function readDismissed() {
     try { return window.sessionStorage.getItem(DISMISS_KEY) === '1'; } catch (e) { return false; }
   }
+  // "the United Kingdom" inside a sentence
+  function withThe(name) { return name === 'United Kingdom' ? 'the United Kingdom' : name; }
+
   function writeDismissed() {
     try { window.sessionStorage.setItem(DISMISS_KEY, '1'); } catch (e) { /* ignore */ }
   }
@@ -1069,7 +1072,7 @@ function createCursorFollower(options) {
     '        <div class="next-dest-main">',
     '          <span class="eyebrow next-dest-eyebrow">' + (wrapped ? 'Full circle' : 'Next stop') + ' &middot; ' + pad(toIndex + 1) + ' / ' + pad(list.length) + '</span>',
     '          <h2 class="next-dest-title">Want to see another destination?</h2>',
-    '          <p class="next-dest-lead">Next on the route is <strong>' + esc(to.name) + '</strong>, <em>' + esc(to.welcome) + '</em>.</p>',
+    '          <p class="next-dest-lead">Next on the route is <strong>' + esc(withThe(to.name)) + '</strong>, <em>' + esc(to.welcome) + '</em>.</p>',
     '          <p class="next-dest-tagline">' + esc(to.tagline) + '</p>',
     '          <div class="next-dest-route" aria-hidden="true">',
     '            <div class="next-dest-stop"><span class="next-dest-stop-code">' + esc(from.code) + '</span><span class="next-dest-stop-name">' + esc(from.name) + '</span></div>',
@@ -1079,7 +1082,7 @@ function createCursorFollower(options) {
     '        </div>',
     '        <div class="next-dest-stub">',
     '          <span class="next-dest-stub-label" aria-hidden="true">Boarding pass</span>',
-    '          <a class="btn btn-primary next-dest-go" href="' + esc(href) + '"><span class="next-dest-go-label">Yes, take me to ' + esc(to.name) + '</span>' + arrowIcon + '</a>',
+    '          <a class="btn btn-primary next-dest-go" href="' + esc(href) + '"><span class="next-dest-go-label">Yes, take me to ' + esc(withThe(to.name)) + '</span>' + arrowIcon + '</a>',
     '          <button type="button" class="next-dest-later">Not now</button>',
     '          <span class="next-dest-barcode" aria-hidden="true"></span>',
     '        </div>',

@@ -46,7 +46,7 @@
 // The order the department filter buttons appear in the consultation chooser
 // (front-line first). It sets only the filter buttons, not the order of people.
 window.CONSULT_DEPARTMENTS = [
-  'Customer Experience',
+  'Client Relations',
   'Application Team',
   'Language Preparation',
   'Documentation',
@@ -354,7 +354,7 @@ window.TEAM_MEMBERS = [
     id: 'miki',
     name: 'Mike',
     role: 'Client Relations',
-    department: 'Customer Experience',
+    department: 'Client Relations',
     helpsWith: 'Your first point of contact at our office, who will point you to the right person.',
     whatsapp: '+254143505796',
     startHere: true,

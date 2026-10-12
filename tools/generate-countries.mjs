@@ -30,6 +30,9 @@ const THEME_COLOUR = '#001B5E';
 const SEO_START = '<!-- seo:start, written by tools/generate-countries.mjs; edit the script, not this block -->';
 const SEO_END = '<!-- seo:end -->';
 
+// "in the UK", not "in United Kingdom": the way a country is named inside a sentence
+const inCountry = c => (c.name === 'United Kingdom' ? 'the UK' : c.name);
+const theCountry = c => (c.name === 'United Kingdom' ? 'the United Kingdom' : c.name);
 
 // `title` and `description` must already be safe inside an HTML attribute.
 function seoBlock({ title, description, path, image, imageAlt }) {
@@ -106,10 +109,10 @@ const countries = [
     facts: { intakes: 'February or March, and July', language: 'IELTS, PTE or another approved English test', visa: 'Student visa (subclass 500)' },
     cardTag: 'Universities and colleges across {cities} cities.',
     why: [
-      ['World-ranked universities', 'A wide range of internationally recognised degree programs across every discipline.'],
+      ['World-ranked universities', 'A wide range of internationally recognised degree programmes across every discipline.'],
       ['Practical, hands-on courses', 'Many courses combine classroom learning with practical, hands-on training.'],
       ['Multicultural cities', 'Welcoming, diverse communities with a high standard of living.'],
-      ['English-taught programs', 'No language barrier for Kenyan students entering the classroom.'],
+      ['English-taught programmes', 'No language barrier for Kenyan students entering the classroom.'],
     ],
     areas: ['Business & Management', 'Engineering', 'Health Sciences', 'Information Technology', 'Hospitality & Tourism'],
     visa: 'You apply for a Student visa (subclass 500) once your education provider issues your Confirmation of Enrolment (CoE). You must also meet the Genuine Student requirement, hold Overseas Student Health Cover (OSHC) for your whole stay, show you can pay for your tuition and living costs, and give an accepted English test result such as IELTS or PTE.',
@@ -140,7 +143,7 @@ const countries = [
     why: [
       ['World-renowned universities', 'Home to some of the world\'s oldest and most respected universities, offering globally recognised degrees.'],
       ['A wide choice of courses', 'Thousands of courses across universities and colleges, from foundation programmes to master\'s degrees.'],
-      ['Shorter degree programs', 'Many undergraduate degrees run three years and taught master\'s degrees just one, reducing overall time and cost.'],
+      ['Shorter degree programmes', 'Many undergraduate degrees run three years and taught master\'s degrees just one, reducing overall time and cost.'],
       ['Rich academic tradition', 'Multicultural cities with centuries of academic history and a huge range of course specialisations.'],
     ],
     areas: ['Business & Management', 'Law', 'Engineering', 'Health Sciences', 'Computer Science'],
@@ -170,7 +173,7 @@ const countries = [
     facts: { intakes: 'September/October and March/April', language: 'TestDaF or DSH for German courses. IELTS or TOEFL for English courses.', visa: 'National student visa' },
     cardTag: 'Public universities with low tuition. Our language training gets you ready.',
     why: [
-      ['Low or no tuition fees', 'Most public universities charge little to no tuition for degree programs.'],
+      ['Low or no tuition fees', 'Most public universities charge little to no tuition for degree programmes.'],
       ['Strength in engineering & research', 'A long-standing international reputation in technical and scientific fields.'],
       ['Courses taught in English', 'Alongside German-taught degrees, many master\'s programmes are taught in English.'],
       ['Central European location', 'Easy access to travel, exchanges and research across the continent.'],
@@ -263,7 +266,7 @@ const countries = [
       ['Quality-assured education', 'A national quality framework and a government code of practice set the standard for how providers look after international students.'],
       ['Practical, hands-on learning', 'Courses that build practical skills, research ability and independent thinking.'],
       ['Safe, welcoming communities', 'Regularly ranked among the most peaceful countries in the world.'],
-      ['English-taught programs', 'No language barrier for Kenyan students entering the classroom.'],
+      ['English-taught programmes', 'No language barrier for Kenyan students entering the classroom.'],
     ],
     areas: ['Agriculture & Horticulture', 'Tourism & Hospitality', 'Engineering', 'Health Sciences', 'Information Technology'],
     visa: 'You apply for a Fee Paying Student Visa with an offer of place from an approved education provider, proof that you can pay your tuition fees and living costs, and insurance your provider accepts. You may also be asked for health checks and, for longer stays, police certificates.',
@@ -432,7 +435,7 @@ ${info}
   const cityScroller = `  <section class="city-scroller" id="city-scroller" data-interval="10000" aria-label="${c.name} destination showcase" aria-roledescription="carousel">
 ${cityImages}
     <div class="city-scroller-vignette"></div>
-    <div class="city-scroller-top-label">Welcome to ${c.name} <strong>&middot; ${c.welcome}</strong></div>
+    <div class="city-scroller-top-label">Welcome to ${theCountry(c)} <strong>&middot; ${c.welcome}</strong></div>
 ${cityPanels}
     <div class="city-scroller-bar" role="group" aria-label="Choose a city">
 ${cityDots}
@@ -451,7 +454,7 @@ ${cityDots}
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Study in ${c.name} | Studies and Awards Limited</title>
+<title>Study in ${inCountry(c)} | Studies and Awards Limited</title>
 <meta name="description" content="${c.tagline.replace(/"/g, '&quot;')}">
 ${seoBlock({ title: `Study in ${esc(c.name)} | ${SITE_NAME}`, description: c.tagline.replace(/"/g, '&quot;'), path: `/${c.slug}.html`, image: `assets/share/${c.slug}.jpg`, imageAlt: `Study in ${esc(c.name)}${c.partners[0] ? ', ' + c.partners[0].city : ''}` })}
 <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -506,7 +509,7 @@ ${cityScroller}
   <section class="dest-intro" aria-labelledby="hero-heading">
     <div class="container">
       <span class="hero-kicker">STUDY DESTINATION &middot; ${c.code}</span>
-      <h1 id="hero-heading">Study in ${c.name}</h1>
+      <h1 id="hero-heading">Study in ${inCountry(c)}</h1>
       <p>${c.tagline}</p>
       <div class="dest-intro-actions">
         <a href="mailto:admissions@studiesandawardsltd.com?subject=Free%20Consultation%20Request%20-%20${encodeURIComponent(c.name)}" class="btn btn-primary">Book a free consultation</a>
@@ -528,7 +531,7 @@ ${cityScroller}
         ${galleryImg(galleryPicks[2], 'dest-collage-c')}
       </div>
       <div class="dest-why-body">
-        <span class="dest-eyebrow">WHY ${c.name.toUpperCase()}</span>
+        <span class="dest-eyebrow">WHY ${inCountry(c).toUpperCase()}</span>
         <h2 id="why-heading">A destination built for ambitious students</h2>
         <ol class="dest-why-list">
 ${whyItems}
@@ -570,7 +573,7 @@ ${areaChips}
     <div class="container">
       <div class="cta-panel">
         <div>
-          <h2 id="cta-heading">Ready to study in ${c.name}?</h2>
+          <h2 id="cta-heading">Ready to study in ${inCountry(c)}?</h2>
           <p>Book a free consultation, or explore our other study destinations.</p>
         </div>
         <div class="cta-actions">
@@ -595,7 +598,7 @@ ${areaChips}
         </span>
           <span class="brand-name">Studies &amp; Awards Limited</span>
         </div>
-        <p class="footer-blurb">Personalised guidance from your first meeting with us until you arrive and start your studies abroad.</p>
+        <p class="footer-blurb">Personal guidance from your first meeting until you start your studies abroad.</p>
       </div>
       <nav aria-label="Quick links">
         <div class="footer-heading">QUICK LINKS</div>
