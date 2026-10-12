@@ -24,7 +24,7 @@ window.SA_I18N.sw = {
   "Canada": "Kanada",
   "Ireland": "Ayalandi",
   "H:Plan your studies abroad with people who <span class=\"hero-mark\">walk you through every step</span>.": "Panga masomo yako nje ya nchi na watu <span class=\"hero-mark\">wanaokuongoza kila hatua</span>.",
-  "H:We take you from choosing a course to applying, preparing for your English test and getting your visa for <strong>the UK, Canada, Australia, Germany, Ireland and New Zealand</strong>. A dedicated team in our Eldoret office handles each step, so you always know who is looking after you.": "Tunakusaidia kuanzia kuchagua kozi hadi kutuma maombi, kujiandaa kwa mtihani wako wa Kiingereza na kupata visa yako ya <strong>Uingereza, Kanada, Australia, Ujerumani, Ayalandi na New Zealand</strong>. Timu maalum katika ofisi yetu ya Eldoret hushughulikia kila hatua, ili ujue kila wakati ni nani anayekuhudumia.",
+  "H:We guide you from choosing a course to applying, your English test and your visa for <strong>the UK, Canada, Australia, Germany, Ireland and New Zealand</strong>. Each step has its own team in our Eldoret office.": "Tunakuongoza kuanzia kuchagua kozi hadi kuomba, mtihani wako wa Kiingereza na visa yako ya <strong>Uingereza, Kanada, Australia, Ujerumani, Ayalandi na New Zealand</strong>. Kila hatua ina timu yake katika ofisi yetu ya Eldoret.",
   "Book a free consultation": "Omba ushauri bila malipo",
   "Compare destinations": "Linganisha nchi",
   "YOUR JOURNEY, STEP BY STEP": "SAFARI YAKO, HATUA KWA HATUA",

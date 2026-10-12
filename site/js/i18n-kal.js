@@ -73,7 +73,7 @@ window.SA_I18N.kal = {
   "PARTNER INSTITUTIONS": "SUKULISIEK CHE KIBOISIE AK ACHEEK",
   "POPULAR STUDY AREAS": "SOMANET CHE MACHE BIIK CHECHANG'",
   "H:Plan your studies abroad with people who <span class=\"hero-mark\">walk you through every step</span>.": "Chob somanet neng'ung' eng' sang' ab emet ak biik <span class=\"hero-mark\">che indochin eng' hatua age tugul</span>.",
-  "H:We take you from choosing a course to applying, preparing for your English test and getting your visa for <strong>the UK, Canada, Australia, Germany, Ireland and New Zealand</strong>. A dedicated team in our Eldoret office handles each step, so you always know who is looking after you.": "Kitoretin kong'eten kolewen kozi agoi kosir aplikesheni, kochobgei tiemutik neng'ung' ab Kiingereza ak konyor visa neng'ung' ab <strong>Uingereza, Kanada, Australia, Ujerumani, Ayalandi ak New Zealand</strong>. Timit ne kakilewen eng' ofisit nenyo ab Eldoret koripei hatua age tugul, si inai kasarta age tugul chii ne ripin.",
+  "H:We guide you from choosing a course to applying, your English test and your visa for <strong>the UK, Canada, Australia, Germany, Ireland and New Zealand</strong>. Each step has its own team in our Eldoret office.": "Kitoretin kong'eten kolewen kozi agoi kosir aplikesheni, tiemutik neng'ung' ab Kiingereza ak visa neng'ung' ab <strong>Uingereza, Kanada, Australia, Ujerumani, Ayalandi ak New Zealand</strong>. Hatua age tugul tinye timit nenyin eng' ofisit nenyo ab Eldoret.",
   "Compare destinations": "Keer emotinwek eng' kipkaa",
   "YOUR JOURNEY, STEP BY STEP": "OREDENG'UNG', HATUA KOBO HATUA",
   "How it works": "Kou nee ne yaei",
