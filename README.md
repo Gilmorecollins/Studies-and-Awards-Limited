@@ -282,6 +282,27 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   refresh the cached preview. `--check` covers these blocks too.
 - **Blog**: `site/blog.html` is a "coming soon" page for now, linked as "Blog" in the
   footer of every page (not in the header). When posts exist, replace its hero with the list.
+- **Languages** (English, Kiswahili, Kalenjin): `site/js/i18n.js` swaps the page's
+  text for a translation when a visitor picks a language in the header (EN | SW), and
+  remembers the choice. Each language is one file, `site/js/i18n-<code>.js`, a list of
+  `"English text": "translation"` lines; text with no line stays in English, so a page
+  that has not been translated still works. Covered so far: the header, footer and
+  call-to-action on every page, and the full text of Home, Services, Find Us, About,
+  Team (page text only, not the bios) and Blog. Not yet: the six country pages and
+  Destinations, the team bios, the testimonials and anything the scripts write on the
+  page (opening-hours badge, the "Book a consultation" chooser).
+  - Kiswahili (`i18n-sw.js`) is written and shown in the switcher. Have a Swahili
+    speaker read it before launch.
+  - Kalenjin (`i18n-kal.js`) is empty on purpose: it needs a fluent speaker, and visa,
+    fee and deadline wording must be exact (the open Kalenjin data online is too small
+    and uneven to translate from reliably; see `tools/i18n/kalenjin-notes.md`).
+    `tools/i18n/kal-to-translate.csv` has every English line with the Kiswahili beside
+    it and an empty column to fill in. Once it is filled,
+    `node tools/i18n.mjs import kal tools/i18n/kal-to-translate.csv` writes the language
+    file; then set `reviewed: true` for `kal` in `site/js/i18n.js` so it shows in the
+    switcher. Until then `?lang=kal` on any page address previews it.
+  - Changing English text on a page means its translation line stops matching: edit the
+    English in the language files too (or re-run the template and compare).
 - **Page not found**: `site/404.html` is what Vercel shows for any address that
   doesn't exist. It is served at the missing address itself (e.g. `/old/page`),
   so every link and file in it starts with `/`. It is marked `noindex`.
