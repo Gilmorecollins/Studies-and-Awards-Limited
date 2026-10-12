@@ -39,9 +39,8 @@
       if (event.target.closest('a')) closeNav();
     });
 
-    document.addEventListener('click', function (event) {
-      if (nav.classList.contains('is-open') && !nav.contains(event.target) && !toggle.contains(event.target) && !event.target.closest('.theme-toggle')) closeNav(); // the dark-mode button sits above the open menu and leaves it open
-    });
+    // no tap-outside-to-close: the menu fills the screen, and what is left of the page
+    // (the logo, the dark-mode button, the menu button) should not shut it
 
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') closeNav();
