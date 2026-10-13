@@ -83,6 +83,9 @@ async function route(request, env, url) {
   if (!path.startsWith('/api/admin/')) return json({ error: 'Not found' }, 404);
   if (!email) return json({ error: 'session expired' }, 401);
   if (method !== 'GET' && !isJson(request, path)) return json({ error: 'Bad request' }, 400);
+  if (path !== '/api/admin/photo' && Number(request.headers.get('Content-Length') || 0) > 16 * 1024) {
+    return json({ error: 'That is too large.' }, 413);
+  }
 
   if (path === '/api/admin/testimonials') {
     if (method === 'GET') {
@@ -149,9 +152,17 @@ function out(row) {
 }
 
 async function saveTestimonial(env, id, body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return json({ error: 'Bad request' }, 400);
+  if (id) {
+    // a change may carry only some fields (show/hide, or a new place in the order)
+    const current = await env.DB.prepare('SELECT * FROM testimonials WHERE id = ?').bind(id).first();
+    if (!current) return json({ error: '0 rows' }, 404);
+    body = { ...out(current), ...body };
+  }
   const text = (v, max) => {
     if (v == null) return null;
-    const s = String(v).trim();
+    if (typeof v !== 'string') return undefined; // numbers, lists and objects are refused
+    const s = v.trim();
     return s ? s.slice(0, max + 1) : null;
   };
   const v = {
@@ -159,11 +170,19 @@ async function saveTestimonial(env, id, body) {
     detail: text(body.detail, 120),
     quote: text(body.quote, 400),
     story: text(body.story, 1200),
-    rating: body.rating == null || body.rating === '' ? null : Number(body.rating),
-    photo_path: body.photo_path || null,
-    published: body.published ? 1 : 0,
-    consent: body.consent ? 1 : 0
+    rating: body.rating == null || body.rating === '' ? null : body.rating,
+    photo_path: body.photo_path == null || body.photo_path === '' ? null : body.photo_path,
+    published: body.published,
+    consent: body.consent
   };
+  if ([v.name, v.detail, v.quote, v.story].includes(undefined) ||
+      (v.rating !== null && typeof v.rating !== 'number') ||
+      (v.photo_path !== null && typeof v.photo_path !== 'string') ||
+      typeof v.published !== 'boolean' || typeof v.consent !== 'boolean') {
+    return json({ error: 'Bad request' }, 400);
+  }
+  v.published = v.published ? 1 : 0;
+  v.consent = v.consent ? 1 : 0;
   if (!v.name || v.name.length > 80) return json({ error: 'Add their name (80 characters at most).' }, 400);
   if (!v.quote || v.quote.length > 400) return json({ error: 'Add their words (400 characters at most).' }, 400);
   if (v.detail && v.detail.length > 120) return json({ error: 'The line under their name is too long.' }, 400);
@@ -177,9 +196,9 @@ async function saveTestimonial(env, id, body) {
   let row;
   if (id) {
     row = await env.DB.prepare(
-      'UPDATE testimonials SET name=?, detail=?, quote=?, story=?, rating=?, photo_path=?, published=?, consent=?, ' +
+      'UPDATE testimonials SET name=?, detail=?, quote=?, story=?, rating=?, photo_path=?, published=?, consent=?, position=?, ' +
       "updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ? RETURNING *"
-    ).bind(v.name, v.detail, v.quote, v.story, v.rating, v.photo_path, v.published, v.consent, id).first();
+    ).bind(v.name, v.detail, v.quote, v.story, v.rating, v.photo_path, v.published, v.consent, Number.isInteger(body.position) ? body.position : 0, id).first();
   } else {
     const position = Number.isInteger(body.position) ? body.position : 0;
     row = await env.DB.prepare(
@@ -231,7 +250,7 @@ async function login(request, env) {
 }
 
 async function signedInEmail(request, env) {
-  const m = /(?:^|;\s*)sa_session=([^;]+)/.exec(request.headers.get('Cookie') || '');
+  const m = /(?:^|;\s*)__Host-sa_session=([^;]+)/.exec(request.headers.get('Cookie') || '');
   if (!m) return null;
   const payload = await verify(env, m[1]);
   if (!payload || payload.x < Date.now()) return null;
@@ -241,7 +260,7 @@ async function signedInEmail(request, env) {
 }
 
 function cookie(value, maxAge) {
-  return `sa_session=${value}; Path=/; Max-Age=${maxAge}; HttpOnly; Secure; SameSite=Strict`;
+  return `__Host-sa_session=${value}; Path=/; Max-Age=${maxAge}; HttpOnly; Secure; SameSite=Strict`;
 }
 
 async function setAdmin(env, email, password) {

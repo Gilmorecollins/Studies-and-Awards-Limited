@@ -456,7 +456,8 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
     site, signs everyone out of other devices when a password is changed,
     limits wrong password tries (10 per account per address, 30 per address,
     100 per account, all within 15 minutes), refuses oversized sign-in
-    requests, never lets "add an admin" overwrite an existing account, and
+    and edit requests, checks the type of every field, keeps the sign-in
+    cookie to this exact address (`__Host-` cookie), never lets "add an admin" overwrite an existing account, and
     sends the usual protective headers (`site/_headers` for the pages,
     `src/worker.js` for `/api`). Use a long, unique password for every admin:
     short or guessable ones (like "admin" / "admin@123") are the one hole no
