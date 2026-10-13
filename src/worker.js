@@ -7,7 +7,9 @@
 //   public   GET  /api/testimonials        the switched-on testimonials
 //            GET  /api/photo/<name>.jpg    a testimonial photo
 //   sign in  POST /api/login  /api/logout    GET /api/me
+//   public   POST /api/subscribe          newsletter sign-up   GET /api/config
 //   admin    GET/POST /api/admin/testimonials, PATCH/DELETE .../<id>
+//            GET /api/admin/audit, GET/DELETE /api/admin/subscribers
 //            POST /api/admin/photo, DELETE /api/admin/photo/<name>.jpg
 //            POST /api/admin/password, POST /api/admin/admins
 //
@@ -43,6 +45,18 @@ async function route(request, env, url) {
   const path = url.pathname.replace(/\/+$/, '');
   const method = request.method;
 
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+
+  // Too many requests from one address in a minute are turned away (the
+  // limits are in wrangler.jsonc). Signing in and subscribing get the strict one.
+  if (path.startsWith('/api/')) {
+    const strict = path === '/api/login' || path === '/api/subscribe';
+    const limiter = strict ? env.RATE_STRICT : env.RATE;
+    if (limiter && !(await limiter.limit({ key: ip })).success) {
+      return json({ error: 'too many requests' }, 429, { 'Retry-After': '60' });
+    }
+  }
+
   // A browser says where a request came from. Anything that changes data must
   // come from this site itself (on top of the SameSite cookie).
   if (method !== 'GET' && method !== 'HEAD') {
@@ -72,8 +86,14 @@ async function route(request, env, url) {
     });
   }
 
-  if (method === 'POST' && path === '/api/login') return login(request, env);
+  if (method === 'GET' && path === '/api/config') {
+    return json({ turnstile: await setting(env, 'turnstile_sitekey') || null }, 200, { 'Cache-Control': 'public, max-age=300' });
+  }
+  if (method === 'POST' && path === '/api/subscribe') return subscribe(request, env);
+  if (method === 'POST' && path === '/api/login') return login(request, env, ip);
   if (method === 'POST' && path === '/api/logout') {
+    const who = await signedInEmail(request, env);
+    if (who) await audit(env, who, 'sign out', '', ip);
     return json({ ok: true }, 200, { 'Set-Cookie': cookie('', 0) });
   }
 
@@ -87,19 +107,37 @@ async function route(request, env, url) {
     return json({ error: 'That is too large.' }, 413);
   }
 
+  if (method === 'GET' && path === '/api/admin/audit') {
+    const { results } = await env.DB.prepare('SELECT at, actor, action, detail, ip FROM audit_log ORDER BY id DESC LIMIT 200').all();
+    return json(results);
+  }
+  if (path === '/api/admin/subscribers') {
+    if (method === 'GET') {
+      const { results } = await env.DB.prepare('SELECT email, at FROM subscribers ORDER BY at DESC').all();
+      return json(results);
+    }
+    if (method === 'DELETE') {
+      const { email: who } = await readJson(request);
+      const row = await env.DB.prepare('DELETE FROM subscribers WHERE email = ? RETURNING email').bind(String(who || '')).first();
+      if (row) await audit(env, email, 'removed a subscriber', row.email, ip);
+      return row ? json({ ok: true }) : json({ error: '0 rows' }, 404);
+    }
+  }
+
   if (path === '/api/admin/testimonials') {
     if (method === 'GET') {
       const { results } = await env.DB.prepare('SELECT * FROM testimonials ORDER BY position, created_at').all();
       return json(results.map(out));
     }
-    if (method === 'POST') return saveTestimonial(env, null, await readJson(request));
+    if (method === 'POST') return saveTestimonial(env, null, await readJson(request), email, ip);
   }
 
   const one = path.match(/^\/api\/admin\/testimonials\/([0-9a-f-]{36})$/);
   if (one) {
-    if (method === 'PATCH') return saveTestimonial(env, one[1], await readJson(request));
+    if (method === 'PATCH') return saveTestimonial(env, one[1], await readJson(request), email, ip);
     if (method === 'DELETE') {
-      const row = await env.DB.prepare('DELETE FROM testimonials WHERE id = ? RETURNING id').bind(one[1]).first();
+      const row = await env.DB.prepare('DELETE FROM testimonials WHERE id = ? RETURNING id, name').bind(one[1]).first();
+      if (row) await audit(env, email, 'deleted a testimonial', row.name, ip);
       return row ? json({ id: row.id }) : json({ error: '0 rows' }, 404);
     }
   }
@@ -110,6 +148,7 @@ async function route(request, env, url) {
     if (bytes[0] !== 0xff || bytes[1] !== 0xd8) return json({ error: 'The photo must be a JPEG.' }, 415);
     const name = crypto.randomUUID() + '.jpg';
     await env.DB.prepare('INSERT INTO photos (path, data) VALUES (?, ?)').bind(name, bytes).run();
+    await audit(env, email, 'uploaded a photo', name, ip);
     return json({ path: name });
   }
   const photo = path.match(/^\/api\/admin\/photo\/([a-z0-9-]+\.jpg)$/);
@@ -124,6 +163,7 @@ async function route(request, env, url) {
     const row = await env.DB.prepare('SELECT salt, hash FROM admins WHERE email = ?').bind(email).first();
     if (row && (await hashPassword(password, row.salt)) === row.hash) return json({ error: 'same password' }, 400);
     await setAdmin(env, email, password);
+    await audit(env, email, 'changed their password', '', ip);
     // every other device is signed out by the change; keep this one signed in
     const fresh = await env.DB.prepare('SELECT hash FROM admins WHERE email = ?').bind(email).first();
     const token = await sign(env, { e: email, f: fresh.hash.slice(0, 16), x: Date.now() + SESSION_DAYS * 86400000 });
@@ -139,6 +179,7 @@ async function route(request, env, url) {
     const taken = await env.DB.prepare('SELECT 1 AS x FROM admins WHERE email = ?').bind(who).first();
     if (taken) return json({ error: 'That account already exists.' }, 409);
     await setAdmin(env, who, body.password);
+    await audit(env, email, 'added an admin', who, ip);
     return json({ ok: true });
   }
 
@@ -151,12 +192,14 @@ function out(row) {
   return { ...row, published: !!row.published, consent: !!row.consent };
 }
 
-async function saveTestimonial(env, id, body) {
+async function saveTestimonial(env, id, body, actor, ip) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) return json({ error: 'Bad request' }, 400);
+  let before = null;
   if (id) {
     // a change may carry only some fields (show/hide, or a new place in the order)
     const current = await env.DB.prepare('SELECT * FROM testimonials WHERE id = ?').bind(id).first();
     if (!current) return json({ error: '0 rows' }, 404);
+    before = current;
     body = { ...out(current), ...body };
   }
   const text = (v, max) => {
@@ -206,12 +249,75 @@ async function saveTestimonial(env, id, body) {
       'VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING *'
     ).bind(crypto.randomUUID(), v.name, v.detail, v.quote, v.story, v.rating, v.photo_path, position, v.published, v.consent).first();
   }
-  return row ? json(out(row)) : json({ error: '0 rows' }, 404);
+  if (!row) return json({ error: '0 rows' }, 404);
+  let what = id ? 'edited a testimonial' : 'added a testimonial';
+  if (id && before) {
+    if (!!before.published !== !!row.published) what = row.published ? 'showed a testimonial on the website' : 'hid a testimonial';
+    else if (before.position !== row.position && before.quote === row.quote && before.name === row.name) what = 'reordered testimonials';
+  }
+  await audit(env, actor, what, row.name, ip);
+  return json(out(row));
+}
+
+// ---------- newsletter sign-ups ----------
+
+async function subscribe(request, env) {
+  if (!isJson(request, '')) return json({ error: 'Bad request' }, 400);
+  if (Number(request.headers.get('Content-Length') || 0) > 2048) return json({ error: 'Bad request' }, 413);
+  const body = await readJson(request);
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  // a hidden field real visitors never fill in: bots do
+  if (body.website) return json({ ok: true });
+  const address = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+  if (address.length > 254 || !/^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>"]+$/.test(address)) {
+    return json({ error: 'Enter a valid email address.' }, 400);
+  }
+  if (!(await humanCheck(env, body.turnstile, ip))) return json({ error: 'verification failed' }, 403);
+  // an address already on the list looks exactly like a new one
+  await env.DB.prepare('INSERT OR IGNORE INTO subscribers (email, at) VALUES (?, ?)').bind(address, new Date().toISOString()).run();
+  return json({ ok: true });
+}
+
+// ---------- checks that a visitor is a person (Cloudflare Turnstile) ----------
+
+async function humanCheck(env, token, ip) {
+  const secretKey = env.TURNSTILE_SECRET || (await setting(env, 'turnstile_secret'));
+  if (!secretKey) return true; // not set up yet: nothing to check against
+  if (typeof token !== 'string' || !token || token.length > 2048) return false;
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: new URLSearchParams({ secret: secretKey, response: token, remoteip: ip })
+    });
+    return !!(await res.json()).success;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function setting(env, key) {
+  const row = await env.DB.prepare('SELECT value FROM settings WHERE key = ?').bind(key).first();
+  return row ? row.value : null;
+}
+
+// ---------- activity log ----------
+
+async function audit(env, actor, action, detail, ip) {
+  try {
+    await env.DB.batch([
+      env.DB.prepare('INSERT INTO audit_log (at, actor, action, detail, ip) VALUES (?,?,?,?,?)')
+        .bind(new Date().toISOString(), actor || null, action, detail ? String(detail).slice(0, 200) : null, ip || null),
+      // keep the last 5000 entries
+      env.DB.prepare('DELETE FROM audit_log WHERE id <= (SELECT MAX(id) FROM audit_log) - 5000')
+    ]);
+  } catch (e) {
+    console.error('audit failed', e);
+  }
 }
 
 // ---------- sign in ----------
 
-async function login(request, env) {
+async function login(request, env, ip) {
   if (!isJson(request, '')) return json({ error: 'Bad request' }, 400);
   if (Number(request.headers.get('Content-Length') || 0) > 2048) return json({ error: 'Bad request' }, 413);
   const body = await readJson(request);
@@ -224,13 +330,16 @@ async function login(request, env) {
   // admin out from somewhere else, and nobody can guess without limit:
   //   this account from this address: 10, any account from this address: 30,
   //   this account from anywhere: 100 (all within 15 minutes)
-  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  if (!(await humanCheck(env, body.turnstile, ip))) return json({ error: 'verification failed' }, 403);
   const keys = [`a:${email}|${ip}`, `i:${ip}`, `e:${email}`];
   const limits = [10, 30, 100];
   const since = new Date(Date.now() - 15 * 60 * 1000).toISOString();
   const counts = await env.DB.batch(keys.map(k =>
     env.DB.prepare('SELECT COUNT(*) AS n FROM login_failures WHERE email = ? AND at > ?').bind(k, since)));
-  if (counts.some((c, i) => c.results[0].n >= limits[i])) return json({ error: 'too many requests' }, 429);
+  if (counts.some((c, i) => c.results[0].n >= limits[i])) {
+    await audit(env, email, 'sign-in blocked (too many wrong tries)', '', ip);
+    return json({ error: 'too many requests' }, 429);
+  }
 
   const row = await env.DB.prepare('SELECT salt, hash FROM admins WHERE email = ?').bind(email).first();
   // hash even when the account doesn't exist, so timing doesn't give it away
@@ -241,9 +350,11 @@ async function login(request, env) {
       ...keys.map(k => env.DB.prepare('INSERT INTO login_failures (email, at) VALUES (?, ?)').bind(k, now)),
       env.DB.prepare('DELETE FROM login_failures WHERE at < ?').bind(since)
     ]);
+    await audit(env, email, 'wrong password', '', ip);
     return json({ error: 'invalid login credentials' }, 401);
   }
   await env.DB.prepare('DELETE FROM login_failures WHERE email = ?').bind(keys[0]).run();
+  await audit(env, email, 'signed in', '', ip);
   // the token carries a fingerprint of the password, so changing the password signs every other device out
   const token = await sign(env, { e: email, f: row.hash.slice(0, 16), x: Date.now() + SESSION_DAYS * 86400000 });
   return json({ email }, 200, { 'Set-Cookie': cookie(token, SESSION_DAYS * 86400) });

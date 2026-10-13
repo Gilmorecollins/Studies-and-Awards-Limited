@@ -15,8 +15,8 @@
 
   var $ = function (id) { return document.getElementById(id); };
 
-  if (!window.siteApi || !window.TestimonialCard) {
-    $('view-loading').textContent = 'The admin page could not start: a script is missing. Check that js/api-client.js and js/testimonial-card.js are on the site.';
+  if (!window.siteApi || !window.TestimonialCard || !window.SiteTurnstile) {
+    $('view-loading').textContent = 'The admin page could not start: a script is missing. Check that js/api-client.js, js/turnstile.js and js/testimonial-card.js are on the site.';
     return;
   }
 
@@ -70,6 +70,7 @@
   // an error from the server or the network, in plain words
   function friendly(error) {
     var msg = String((error && (error.message || error.error_description || error.msg)) || error || '');
+    if (/verification failed/i.test(msg)) return 'We couldn’t confirm you’re a person. Wait a moment, then try again.';
     if (/invalid login credentials/i.test(msg)) return 'That email and password don’t match an account.';
     if (/email not confirmed/i.test(msg)) return 'This account’s email address hasn’t been confirmed yet.';
     if (/failed to fetch|networkerror|network request failed|load failed/i.test(msg)) return 'Couldn’t reach the server. Check your internet connection and try again.';
@@ -94,6 +95,10 @@
   }
 
   // ---------- signing in and out ----------
+
+  // the "are you a person" check, shown only if Cloudflare asks for it
+  var signinCheck = null;
+  window.SiteTurnstile.mount($('signin-check')).then(function (check) { signinCheck = check; });
 
   function signedIn(session) {
     $('admin-email').textContent = session.user.email;
@@ -135,13 +140,19 @@
     setError($('signin-error'), '');
     var button = event.target.querySelector('[type="submit"]');
     button.disabled = true;
-    db.auth.signInWithPassword({ email: email, password: password })
+    (signinCheck ? signinCheck.token() : Promise.resolve(''))
+      .then(function (token) {
+        return db.auth.signInWithPassword({ email: email, password: password, turnstile: token });
+      })
       .then(function (res) {
         if (res.error) throw res.error;
         $('signin-password').value = '';
         return signedIn(res.data.session);
       })
-      .catch(function (err) { setError($('signin-error'), friendly(err)); })
+      .catch(function (err) {
+        if (signinCheck) signinCheck.reset();
+        setError($('signin-error'), friendly(err));
+      })
       .then(function () { button.disabled = false; });
   });
 
@@ -618,6 +629,85 @@
         save.disabled = false;
         save.textContent = 'Save';
       });
+  });
+
+  // ---------- activity and subscribers ----------
+
+  function when(iso) {
+    var d = new Date(iso);
+    return isNaN(d) ? iso : d.toLocaleString([], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function fillTable(table, rows, render) {
+    var body = table.tBodies[0];
+    body.textContent = '';
+    rows.forEach(function (row) { body.appendChild(render(row)); });
+  }
+
+  function cell(text, className) {
+    return el('td', className, text);
+  }
+
+  $('admin-activity-btn').addEventListener('click', function () {
+    setError($('activity-error'), '');
+    fillTable($('activity-table'), [], function () {});
+    $('activity').showModal();
+    db.audit().then(function (res) {
+      if (res.error) throw res.error;
+      fillTable($('activity-table'), res.data, function (r) {
+        var tr = el('tr');
+        var bad = /wrong password|blocked/.test(r.action);
+        tr.appendChild(cell(when(r.at), 'admin-when'));
+        tr.appendChild(cell(r.actor || ''));
+        tr.appendChild(cell(r.action + (r.detail ? ': ' + r.detail : ''), bad ? 'is-bad' : ''));
+        tr.appendChild(cell(r.ip || ''));
+        return tr;
+      });
+      if (!res.data.length) setError($('activity-error'), 'Nothing recorded yet.');
+    }).catch(function (err) { setError($('activity-error'), friendly(err)); });
+  });
+
+  var subscriberList = [];
+  function loadSubscribers() {
+    return db.subscribers().then(function (res) {
+      if (res.error) throw res.error;
+      subscriberList = res.data;
+      $('subscribers-summary').textContent = subscriberList.length === 1 ? '1 person has subscribed.' : subscriberList.length + ' people have subscribed.';
+      fillTable($('subscribers-table'), subscriberList, function (r) {
+        var tr = el('tr');
+        tr.appendChild(cell(r.email));
+        tr.appendChild(cell(when(r.at), 'admin-when'));
+        var td = el('td');
+        var remove = el('button', 'admin-link-btn', 'Remove');
+        remove.type = 'button';
+        remove.setAttribute('aria-label', 'Remove ' + r.email);
+        remove.addEventListener('click', function () {
+          remove.disabled = true;
+          db.removeSubscriber(r.email).then(function (out) {
+            if (out.error) throw out.error;
+            return loadSubscribers();
+          }).catch(function (err) { remove.disabled = false; setError($('subscribers-error'), friendly(err)); });
+        });
+        td.appendChild(remove);
+        tr.appendChild(td);
+        return tr;
+      });
+    });
+  }
+
+  $('admin-subscribers-btn').addEventListener('click', function () {
+    setError($('subscribers-error'), '');
+    $('subscribers-summary').textContent = 'Loading…';
+    fillTable($('subscribers-table'), [], function () {});
+    $('subscribers').showModal();
+    loadSubscribers().catch(function (err) { setError($('subscribers-error'), friendly(err)); });
+  });
+
+  $('subscribers-copy').addEventListener('click', function () {
+    var text = subscriberList.map(function (r) { return r.email; }).join('\n');
+    var done = function () { setError($('subscribers-error'), ''); $('subscribers-summary').textContent = 'Copied ' + subscriberList.length + ' email' + (subscriberList.length === 1 ? '' : 's') + '.'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function () { setError($('subscribers-error'), 'Couldn’t copy. Select the emails in the table instead.'); });
+    else setError($('subscribers-error'), 'Couldn’t copy. Select the emails in the table instead.');
   });
 
   // ---------- changing the password ----------

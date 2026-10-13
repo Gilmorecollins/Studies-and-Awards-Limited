@@ -10,6 +10,18 @@
     "html_handling": "auto-trailing-slash",
     "run_worker_first": ["/api/*"]
   },
+  "ratelimits": [
+    {
+      "name": "RATE",
+      "namespace_id": "1001",
+      "simple": { "limit": 120, "period": 60 }
+    },
+    {
+      "name": "RATE_STRICT",
+      "namespace_id": "1002",
+      "simple": { "limit": 10, "period": 60 }
+    }
+  ],
   "d1_databases": [
     {
       "binding": "DB",

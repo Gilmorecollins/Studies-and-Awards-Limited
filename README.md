@@ -462,7 +462,24 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
     `src/worker.js` for `/api`). Use a long, unique password for every admin:
     short or guessable ones (like "admin" / "admin@123") are the one hole no
     code can close.
-  - **Rebuilding**: `migrations/0001_init.sql` recreates the empty tables.
+  - **Activity log**: the admin page's "Activity" button lists the latest
+    200 sign-ins (right and wrong), password changes, and every change to a
+    testimonial or photo, with who did it and from which address. Wrong
+    passwords and blocked tries show in red.
+  - **"Are you a person" check**: Cloudflare Turnstile guards the admin
+    sign-in and the newsletter box. It is invisible unless Cloudflare is
+    unsure. The widget is "Studies and Awards" in the Cloudflare dashboard
+    (Turnstile); its site key and secret are stored in the `settings` table
+    (`turnstile_sitekey`, `turnstile_secret`), so nothing needs redeploying to
+    change them. When the real domain is live, add it to the widget's
+    hostnames in the Turnstile dashboard, or the check fails there.
+  - **Request limits**: `wrangler.jsonc` sets Cloudflare rate limits per
+    address and location: 120 requests a minute for `/api/*`, and 10 a minute
+    for signing in and subscribing.
+  - **Newsletter box**: the footer box on every page saves the address
+    (admin page, "Subscribers": copy all, or remove one). If the back end
+    can't be reached it falls back to opening the visitor's email app.
+  - **Rebuilding**: `migrations/0001_init.sql` and `migrations/0002_security.sql` recreate the empty tables.
     Test the back end on your computer with `npx wrangler dev`.
 - **Publishing**: Cloudflare (Worker `studiesandawards`, set up by
   `wrangler.jsonc` at the top of the repo) serves `site/` and publishes the
