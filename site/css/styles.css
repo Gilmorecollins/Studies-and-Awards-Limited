@@ -1444,6 +1444,8 @@ a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; te
 .how-item-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .how-item-body h3 { margin: 0; font-size: 17px; font-weight: 700; line-height: 1.3; color: var(--text-strong); }
 .how-item-body p { font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+/* each step's short line under its title, before the detail */
+.how-item-body .how-item-lead { margin-top: -2px; font-size: 15px; font-weight: 600; line-height: 1.45; color: var(--text-strong); }
 .how-num { justify-self: end; font-family: 'Bebas Neue', 'Montserrat', sans-serif; font-size: 22px; line-height: 1; letter-spacing: 0.02em; color: var(--brass-ink); }
 
 /* ---- "How it works": the motion (main.js adds the classes and the track) ----
