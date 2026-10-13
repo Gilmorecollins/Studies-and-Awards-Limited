@@ -109,7 +109,7 @@ async function route(request, env, url) {
 
   // everything below needs a signed-in admin
   const email = await signedInEmail(request, env);
-  if (path === '/api/me') return email ? json({ email }) : json({ error: 'session expired' }, 401);
+  if (path === '/api/me') return json({ email: email || null }); // not signed in is a normal answer, not an error
   if (!path.startsWith('/api/admin/')) return json({ error: 'Not found' }, 404);
   if (!email) return json({ error: 'session expired' }, 401);
   if (method !== 'GET' && !isJson(request, path)) return json({ error: 'Bad request' }, 400);
@@ -657,7 +657,13 @@ function isJson(request, path) {
 }
 
 async function readJson(request) {
-  try { return await request.json(); } catch (e) { return {}; }
+  try {
+    const text = await request.text();
+    if (text.length > 20000) return {}; // no JSON this site sends is anywhere near this long
+    return JSON.parse(text);
+  } catch (e) {
+    return {};
+  }
 }
 
 function safeEqual(a, b) {

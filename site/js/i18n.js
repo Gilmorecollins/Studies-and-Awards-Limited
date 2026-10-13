@@ -126,11 +126,11 @@
   }
 
   function attributes(scope) {
-    var list = scope.querySelectorAll ? scope.querySelectorAll('[placeholder],[aria-label],[title]') : [];
+    var list = scope.querySelectorAll ? scope.querySelectorAll('[placeholder],[aria-label],[title],[alt]') : [];
     var all = Array.prototype.slice.call(list);
-    if (scope.getAttribute && (scope.hasAttribute('placeholder') || scope.hasAttribute('aria-label') || scope.hasAttribute('title'))) all.unshift(scope);
+    if (scope.getAttribute && (scope.hasAttribute('placeholder') || scope.hasAttribute('aria-label') || scope.hasAttribute('title') || scope.hasAttribute('alt'))) all.unshift(scope);
     all.forEach(function (el) {
-      ['placeholder', 'aria-label', 'title'].forEach(function (a) {
+      ['placeholder', 'aria-label', 'title', 'alt'].forEach(function (a) {
         var v = el.getAttribute(a);
         var t = v && dict['A:' + norm(v)];
         if (t) { records.push({ el: el, attr: a, text: v }); el.setAttribute(a, t); }

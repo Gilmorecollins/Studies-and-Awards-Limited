@@ -85,7 +85,7 @@
     },
     getSession: function () {
       return call('GET', '/api/me').then(function (res) {
-        return { data: { session: res.error ? null : { user: { email: res.data.email } } }, error: null };
+        return { data: { session: res.error || !res.data.email ? null : { user: { email: res.data.email } } }, error: null };
       });
     },
     updateUser: function (changes) {
@@ -123,7 +123,7 @@
     storage: storage,
     from: function () { return new Query(); },
     rpc: function () { // "is this account an admin?": a valid sign-in is one
-      return call('GET', '/api/me').then(function (res) { return { data: !res.error, error: null }; });
+      return call('GET', '/api/me').then(function (res) { return { data: !res.error && !!res.data.email, error: null }; });
     },
     call: call,
     audit: function () { return call('GET', '/api/admin/audit'); },
