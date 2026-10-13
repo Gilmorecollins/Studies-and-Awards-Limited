@@ -682,12 +682,22 @@
       if (text != null) node.textContent = text;
       return node;
     };
+    // the card's title: "Visa Department", "Application Department" (in
+    // place of "Team"), except the Director, the Director's PA Team and
+    // Administration, which keep their names. Only the title here: the
+    // department names themselves (team-data.js) stay short for the filter
+    // buttons elsewhere.
+    var KEEP_NAME = ['Director', 'Director’s PA Team', 'Administration'];
+    var deptTitle = function (dept) {
+      if (!dept || KEEP_NAME.indexOf(dept) > -1) return dept;
+      return dept.replace(/ Team$/, '') + ' Department';
+    };
     depts.forEach(function (dept, i) {
       var people = byDept[dept];
       var item = add('li', 'team-dept');
       var head = add('div', 'team-dept-head');
       head.appendChild(add('span', 'team-dept-num', pad(i + 1)));
-      head.appendChild(add('h3', 'team-dept-name', dept));
+      head.appendChild(add('h3', 'team-dept-name', deptTitle(dept)));
       head.appendChild(add('span', 'team-dept-count', people.length + (people.length === 1 ? ' person' : ' people')));
       item.appendChild(head);
       var list = add('ul', 'team-dept-people');
