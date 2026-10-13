@@ -211,3 +211,8 @@
 @media (max-width: 760px) { .cms-item { padding: 12px 14px 14px; } .cms-tools .admin-field { max-width: none; } }
 .cms-actions [hidden], .cms-actions .btn[hidden] { display: none; }
 .cms-tools .admin-field input[type="search"] { min-height: 44px; }
+.cms-sw { margin: 2px 0 0; }
+.cms-sw > summary { cursor: pointer; font-size: 13px; font-weight: 700; color: var(--text-strong); padding: 4px 0; }
+.cms-sw .cms-input { margin-top: 6px; }
+.cms-hint { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); }
+.cms-partner.is-removed .cms-input { opacity: .55; text-decoration: line-through; }

@@ -18,8 +18,9 @@
 // created once and kept in the database, so there is nothing to configure.
 
 import {
-  PAGES, TEAM_FILE, STYLE_FILE, SAFE_LINK,
-  scanHtml, scanImages, scanTeam, buildRules, applyHtml, applyTeam, applyImages
+  PAGES, TEAM_FILE, DEST_FILE, STYLE_FILE, TEAM_CFG, DEST_CFG, PARTNER_COUNTRIES, SAFE_LINK,
+  scanHtml, scanImages, scanData, buildRules, applyHtml, applyData, applyImages,
+  parsePartners, mergePartners, applyPartners, buildExtras
 } from './content.js';
 
 const enc = new TextEncoder();
@@ -94,7 +95,8 @@ async function route(request, env, url) {
   }
 
   if (method === 'GET' && path.startsWith('/api/media/')) return serveMedia(env, path.slice('/api/media/'.length));
-  if (method === 'GET' && (path === '/api/site/team-data.js' || path === '/api/site/styles.css')) return serveSiteFile(request, env, url, path);
+  if (method === 'GET' && path === '/api/site/i18n-extra.js') return serveExtras(env, url.searchParams.get('lang'));
+  if (method === 'GET' && /^\/api\/site\/(team-data\.js|destinations-data\.js|styles\.css|partners-[a-z-]+\.js)$/.test(path)) return serveSiteFile(request, env, url, path);
 
   if (method === 'GET' && path === '/api/config') {
     return json({ turnstile: await setting(env, 'turnstile_sitekey') || null }, 200, { 'Cache-Control': 'public, max-age=300' });
@@ -118,7 +120,12 @@ async function route(request, env, url) {
   }
 
   if (path === '/api/admin/content/pages' && method === 'GET') {
-    return json([...PAGES, { path: 'team', label: 'Team members' }]);
+    return json([...PAGES, { path: 'team', label: 'Team members' }, { path: 'destinations-cards', label: 'Next-destination cards (on the country pages)' }]);
+  }
+  if (path === '/api/admin/partners') {
+    if (method === 'GET') return listPartners(env, url.searchParams.get('country') || '');
+    if (method === 'PUT') return savePartner(env, await readJson(request), email, ip);
+    if (method === 'DELETE') return removePartner(env, await readJson(request), email, ip);
   }
   if (path === '/api/admin/content') {
     if (method === 'GET') return listContent(env, url.searchParams.get('path') || '/');
@@ -297,8 +304,11 @@ let rulesCache = { at: 0, rules: null };
 
 async function getRules(env) {
   if (rulesCache.rules && Date.now() - rulesCache.at < 15000) return rulesCache.rules;
-  const { results } = await env.DB.prepare('SELECT scope, kind, original, value, updated_at FROM content').all();
-  rulesCache = { at: Date.now(), rules: buildRules(results) };
+  const [content, partners] = await env.DB.batch([
+    env.DB.prepare('SELECT scope, kind, original, value, sw, updated_at FROM content'),
+    env.DB.prepare('SELECT country, city, key, name, courses, removed, updated_at FROM partner_edits')
+  ]);
+  rulesCache = { at: Date.now(), rules: buildRules(content.results, partners.results) };
   return rulesCache.rules;
 }
 
@@ -327,21 +337,40 @@ async function servePublic(request, env, url) {
   return new Response(html, { status: res.status, headers });
 }
 
-// the team file and the main style file, when they carry edits
+// the team, destination and partner files and the main style file, when they carry edits
 async function serveSiteFile(request, env, url, path) {
-  const isTeam = path.endsWith('team-data.js');
-  const res = await env.ASSETS.fetch(new Request(new URL(isTeam ? TEAM_FILE : STYLE_FILE, url)));
-  const source = await res.text();
-  let out = source;
+  const name = path.slice('/api/site/'.length);
+  const source = { 'team-data.js': TEAM_FILE, 'destinations-data.js': DEST_FILE, 'styles.css': STYLE_FILE }[name]
+    || '/js/' + name;
+  const partner = /^partners-([a-z-]+)\.js$/.exec(name);
+  if (partner && !PARTNER_COUNTRIES.includes(partner[1])) return json({ error: 'Not found' }, 404);
+  const res = await env.ASSETS.fetch(new Request(new URL(source, url)));
+  const text = await res.text();
+  let out = text;
   try {
     const rules = await getRules(env);
-    out = isTeam ? applyTeam(source, rules) : applyImages(source, rules);
+    if (name === 'team-data.js') out = applyData(text, rules, TEAM_CFG);
+    else if (name === 'destinations-data.js') out = applyData(text, rules, DEST_CFG);
+    else if (name === 'styles.css') out = applyImages(text, rules);
+    else out = applyPartners(text, rules);
   } catch (e) { console.error(e); }
   return new Response(out, {
     headers: {
-      'Content-Type': isTeam ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf-8',
+      'Content-Type': name.endsWith('.css') ? 'text/css; charset=utf-8' : 'text/javascript; charset=utf-8',
       'Cache-Control': 'public, max-age=0, must-revalidate'
     }
+  });
+}
+
+// Swahili for the words edited in the admin page: added to the built-in list
+async function serveExtras(env, lang) {
+  let dict = {};
+  if (lang === 'sw') {
+    try { dict = buildExtras((await getRules(env)).rows); } catch (e) { console.error(e); }
+  }
+  const body = 'window.SA_I18N=window.SA_I18N||{};window.SA_I18N.sw=Object.assign(window.SA_I18N.sw||{},' + JSON.stringify(dict).replace(/</g, '\\u003c') + ');';
+  return new Response(lang === 'sw' ? body : '', {
+    headers: { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'public, max-age=60' }
   });
 }
 
@@ -368,25 +397,29 @@ async function assetText(env, url, path) {
 async function listContent(env, path) {
   const url = new URL('https://assets.local/');
   let items;
-  let scopes;
+  const dataPage = path === 'team' || path === 'destinations-cards';
   if (path === 'team') {
-    items = scanTeam(await assetText(env, url, TEAM_FILE));
+    items = scanData(await assetText(env, url, TEAM_FILE), TEAM_CFG);
+  } else if (path === 'destinations-cards') {
+    items = scanData(await assetText(env, url, DEST_FILE), DEST_CFG);
   } else {
     if (!PAGES.some(p => p.path === path)) return json({ error: 'Not found' }, 404);
     items = scanHtml(await assetText(env, url, path));
   }
-  const { results } = await env.DB.prepare('SELECT scope, kind, original, value FROM content WHERE kind != ?').bind('image').all();
+  const { results } = await env.DB.prepare('SELECT scope, kind, original, value, sw FROM content WHERE kind != ?').bind('image').all();
   const rows = new Map(results.map(r => [r.scope + '\0' + r.kind + '\0' + r.original, r]));
   for (const item of items) {
-    const own = path === 'team' ? item.scope : path;
-    const hit = rows.get(own + '\0' + item.kind + '\0' + item.original) || rows.get('*\0' + item.kind + '\0' + item.original);
-    item.scope = path === 'team' ? item.scope : (hit ? hit.scope : '*');
-    item.value = hit ? hit.value : null;
+    const own = dataPage ? item.scope : path;
+    const hit = rows.get(own + '\0' + item.kind + '\0' + item.original) || (dataPage ? null : rows.get('*\0' + item.kind + '\0' + item.original));
+    item.scope = dataPage ? item.scope : (hit ? hit.scope : '*');
+    item.value = hit && hit.value !== item.original ? hit.value : null;
+    item.sw = hit ? hit.sw : null;
+    item.hasRow = !!hit;
   }
   return json({ items });
 }
 
-const SCOPE = /^(\*|\/[a-z0-9-]*|team:[a-z0-9-]+)$/;
+const SCOPE = /^(\*|\/[a-z0-9-]*|team:[a-z0-9-]+|dest:[a-z0-9-]+)$/;
 const KINDS = new Set(['text', 'meta', 'alt', 'link', 'image']);
 const IMAGE_ORIGINAL = /^assets\/[^"'()\s<>\\]+\.(jpe?g|png|webp|gif|svg)$/i;
 
@@ -396,7 +429,7 @@ function checkContentKey(b) {
   if (!KINDS.has(b.kind)) return 'Bad request';
   if (typeof b.original !== 'string' || !b.original || b.original.length > 2000) return 'Bad request';
   if (b.kind === 'image' && (b.scope !== '*' || !IMAGE_ORIGINAL.test(b.original))) return 'Bad request';
-  if (b.scope.startsWith('team:') && b.kind !== 'text') return 'Bad request';
+  if ((b.scope.startsWith('team:') || b.scope.startsWith('dest:')) && b.kind !== 'text') return 'Bad request';
   return null;
 }
 
@@ -404,9 +437,15 @@ async function saveContent(env, b, actor, ip) {
   const bad = checkContentKey(b);
   if (bad) return json({ error: bad }, 400);
   if (typeof b.value !== 'string') return json({ error: 'Bad request' }, 400);
+  if (b.sw !== undefined && b.sw !== null && typeof b.sw !== 'string') return json({ error: 'Bad request' }, 400);
+  const old = await env.DB.prepare('SELECT value, sw FROM content WHERE scope=? AND kind=? AND original=?').bind(b.scope, b.kind, b.original).first();
   const value = b.value.trim();
-  if (!value || value === b.original) return resetContent(env, b, actor, ip);
-  if (value.length > 4000) return json({ error: 'That is too long.' }, 400);
+  // Swahili only goes with words and picture descriptions; left out, it stays as it was
+  const swAllowed = b.kind === 'text' || b.kind === 'alt';
+  let sw = old ? old.sw : null;
+  if (b.sw !== undefined) sw = swAllowed && b.sw ? b.sw.trim() || null : null;
+  if ((!value || value === b.original) && !sw) return resetContent(env, b, actor, ip);
+  if (value.length > 4000 || (sw && sw.length > 4000)) return json({ error: 'That is too long.' }, 400);
   if (b.kind === 'link' && (!SAFE_LINK.test(value) || /[\s"'<>]/.test(value) || value.length > 500)) {
     return json({ error: 'Use a full web address (https://…), mailto: or tel: link.' }, 400);
   }
@@ -414,15 +453,15 @@ async function saveContent(env, b, actor, ip) {
     const m = /^\/api\/media\/([0-9a-f-]{36})$/.exec(value);
     if (!m || !(await env.DB.prepare('SELECT 1 AS x FROM media WHERE id = ?').bind(m[1]).first())) return json({ error: 'Bad request' }, 400);
   }
-  const old = await env.DB.prepare('SELECT value FROM content WHERE scope=? AND kind=? AND original=?').bind(b.scope, b.kind, b.original).first();
+  const stored = value || b.original; // an unchanged English with a Swahili version keeps the original wording
   await env.DB.prepare(
-    'INSERT INTO content (scope, kind, original, value, updated_at, updated_by) VALUES (?,?,?,?,?,?) ' +
-    'ON CONFLICT(scope, kind, original) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at, updated_by = excluded.updated_by'
-  ).bind(b.scope, b.kind, b.original, value, new Date().toISOString(), actor).run();
+    'INSERT INTO content (scope, kind, original, value, sw, updated_at, updated_by) VALUES (?,?,?,?,?,?,?) ' +
+    'ON CONFLICT(scope, kind, original) DO UPDATE SET value = excluded.value, sw = excluded.sw, updated_at = excluded.updated_at, updated_by = excluded.updated_by'
+  ).bind(b.scope, b.kind, b.original, stored, sw, new Date().toISOString(), actor).run();
   if (b.kind === 'image' && old) await dropUnusedMedia(env, old.value);
   rulesCache.at = 0;
   await audit(env, actor, 'edited website ' + labelOf(b.kind), b.original.slice(0, 70), ip);
-  return json({ ok: true, value });
+  return json({ ok: true, value: stored === b.original ? null : stored, sw });
 }
 
 async function resetContent(env, b, actor, ip) {
@@ -432,7 +471,7 @@ async function resetContent(env, b, actor, ip) {
   if (row && b.kind === 'image') await dropUnusedMedia(env, row.value);
   rulesCache.at = 0;
   if (row) await audit(env, actor, 'reset website ' + labelOf(b.kind) + ' to the original', b.original.slice(0, 70), ip);
-  return json({ ok: true, value: null });
+  return json({ ok: true, value: null, sw: null });
 }
 
 function labelOf(kind) {
@@ -465,6 +504,92 @@ async function listImages(env, url) {
     .map(([path, usedOn]) => ({ path, usedOn, value: edited.get(path) || null }))
     .sort((a, b) => a.path.localeCompare(b.path));
   return json(list);
+}
+
+// ---------- partner institutions (admin) ----------
+
+async function loadPartnerData(env, country) {
+  if (!PARTNER_COUNTRIES.includes(country)) return null;
+  const text = await assetText(env, new URL('https://assets.local/'), '/js/partners-' + country + '.js');
+  return parsePartners(text);
+}
+
+async function listPartners(env, country) {
+  if (!country) return json({ countries: PARTNER_COUNTRIES });
+  const data = await loadPartnerData(env, country);
+  if (!data) return json({ error: 'Not found' }, 404);
+  const { results } = await env.DB.prepare('SELECT country, city, key, name, courses, removed FROM partner_edits WHERE country = ?').bind(country).all();
+  return json({ countries: PARTNER_COUNTRIES, cities: mergePartners(data.cities, results) });
+}
+
+function cleanCourses(list) {
+  if (!Array.isArray(list) || list.length > 300) return null;
+  const out = [];
+  for (const c of list) {
+    if (typeof c !== 'string') return null;
+    const t = c.replace(/\s+/g, ' ').trim();
+    if (t.length > 160) return null;
+    if (t && !out.includes(t)) out.push(t);
+  }
+  return out;
+}
+
+async function checkPartnerKey(env, b) {
+  if (!b || typeof b !== 'object') return null;
+  const data = await loadPartnerData(env, b.country);
+  if (!data || typeof b.city !== 'string' || !data.cities[b.city]) return null;
+  return data;
+}
+
+async function savePartner(env, b, actor, ip) {
+  const data = await checkPartnerKey(env, b);
+  if (!data) return json({ error: 'Bad request' }, 400);
+  const name = typeof b.name === 'string' ? b.name.replace(/\s+/g, ' ').trim() : '';
+  const courses = cleanCourses(b.courses);
+  if (!name || name.length > 120 || !courses) return json({ error: 'Add a name (120 characters at most) and the courses, one per line.' }, 400);
+  let key = typeof b.key === 'string' ? b.key : '';
+  const now = new Date().toISOString();
+  if (!key) key = 'n:' + crypto.randomUUID();
+  if (key.startsWith('o:')) {
+    const original = data.cities[b.city].find(i => 'o:' + i.name === key);
+    if (!original) return json({ error: 'Bad request' }, 400);
+    const same = name === original.name && JSON.stringify(courses) === JSON.stringify(original.courses);
+    if (same) {
+      await env.DB.prepare('DELETE FROM partner_edits WHERE country=? AND city=? AND key=?').bind(b.country, b.city, key).run();
+      rulesCache.at = 0;
+      return json({ ok: true, item: { key, name, courses, state: 'original' } });
+    }
+  } else if (key.startsWith('n:')) {
+    if (!/^n:[0-9a-f-]{36}$/.test(key)) return json({ error: 'Bad request' }, 400);
+  } else {
+    return json({ error: 'Bad request' }, 400);
+  }
+  await env.DB.prepare(
+    'INSERT INTO partner_edits (country, city, key, name, courses, removed, updated_at, updated_by) VALUES (?,?,?,?,?,0,?,?) ' +
+    'ON CONFLICT(country, city, key) DO UPDATE SET name = excluded.name, courses = excluded.courses, removed = 0, updated_at = excluded.updated_at, updated_by = excluded.updated_by'
+  ).bind(b.country, b.city, key, name, JSON.stringify(courses), now, actor).run();
+  rulesCache.at = 0;
+  await audit(env, actor, key.startsWith('n:') ? 'added a partner institution' : 'edited a partner institution', b.country + ', ' + b.city + ': ' + name, ip);
+  return json({ ok: true, item: { key, name, courses, state: key.startsWith('n:') ? 'added' : 'changed' } });
+}
+
+// mode "remove" hides one from the files; "reset" brings it back (or deletes one added here)
+async function removePartner(env, b, actor, ip) {
+  const data = await checkPartnerKey(env, b);
+  if (!data || typeof b.key !== 'string' || !/^(o:.+|n:[0-9a-f-]{36})$/.test(b.key)) return json({ error: 'Bad request' }, 400);
+  if (b.mode === 'remove' && b.key.startsWith('o:')) {
+    if (!data.cities[b.city].some(i => 'o:' + i.name === b.key)) return json({ error: 'Bad request' }, 400);
+    await env.DB.prepare(
+      'INSERT INTO partner_edits (country, city, key, name, courses, removed, updated_at, updated_by) VALUES (?,?,?,NULL,NULL,1,?,?) ' +
+      'ON CONFLICT(country, city, key) DO UPDATE SET removed = 1, name = NULL, courses = NULL, updated_at = excluded.updated_at, updated_by = excluded.updated_by'
+    ).bind(b.country, b.city, b.key, new Date().toISOString(), actor).run();
+    await audit(env, actor, 'removed a partner institution', b.country + ', ' + b.city + ': ' + b.key.slice(2), ip);
+  } else {
+    await env.DB.prepare('DELETE FROM partner_edits WHERE country=? AND city=? AND key=?').bind(b.country, b.city, b.key).run();
+    await audit(env, actor, 'reset a partner institution', b.country + ', ' + b.city + ': ' + b.key.slice(2, 62), ip);
+  }
+  rulesCache.at = 0;
+  return json({ ok: true });
 }
 
 // ---------- newsletter sign-ups ----------

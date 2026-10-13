@@ -66,6 +66,7 @@
     <button type="button" data-tab="view-list" aria-selected="true">Testimonials</button>
     <button type="button" data-tab="view-text" aria-selected="false">Website text</button>
     <button type="button" data-tab="view-images" aria-selected="false">Pictures</button>
+    <button type="button" data-tab="view-partners" aria-selected="false">Partner institutions</button>
   </nav>
 
   <!-- the testimonials -->
@@ -120,6 +121,25 @@
     <p class="admin-notice" id="images-notice" role="status" aria-live="polite" hidden></p>
     <p class="admin-error" id="images-error" role="alert" hidden></p>
     <div id="images-groups"></div>
+  </section>
+
+  <!-- partner institutions and their courses -->
+  <section class="admin-list-view" id="view-partners" aria-labelledby="partners-heading" hidden>
+    <div class="admin-list-head">
+      <div>
+        <h1 id="partners-heading">Partner institutions</h1>
+        <p class="admin-lead">The schools and courses shown in &ldquo;View partners &amp; courses&rdquo; on each destination page. Add a school, change its name or courses (one per line), or remove it. Changes show within a minute.</p>
+      </div>
+    </div>
+    <div class="cms-tools">
+      <div class="admin-field"><label for="partners-country">Country</label><select id="partners-country"></select></div>
+      <div class="admin-field"><label for="partners-city">City</label><select id="partners-city"></select></div>
+      <div class="admin-field"><label for="partners-search">Find</label><input type="search" id="partners-search" placeholder="A school or course" autocomplete="off"></div>
+      <button type="button" class="btn btn-primary" id="partners-add">Add a school</button>
+    </div>
+    <p class="admin-notice" id="partners-notice" role="status" aria-live="polite" hidden></p>
+    <p class="admin-error" id="partners-error" role="alert" hidden></p>
+    <div id="partners-list"></div>
   </section>
 
 </main>
@@ -269,6 +289,8 @@
 <script src="../js/api-client.js"></script>
 <script src="../js/testimonial-card.js"></script>
 <script src="../js/admin.js"></script>
+<script src="../js/i18n-sw.js"></script>
 <script src="../js/admin-content.js"></script>
+<script src="../js/admin-partners.js"></script>
 </body>
 </html>

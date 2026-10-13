@@ -13,7 +13,9 @@
 
   var KIND_LABELS = { text: 'Words', meta: 'Description', alt: 'Picture description', link: 'Link' };
   var TEAM = 'team';
-  var views = ['view-list', 'view-text', 'view-images'];
+  var DEST = 'destinations-cards';
+  function isData(path) { return path === TEAM || path === DEST; }
+  var views = ['view-list', 'view-text', 'view-images', 'view-partners'];
   var pages = [];
   var loaded = { text: false, images: false };
   var noticeTimers = {};
@@ -55,6 +57,7 @@
     });
     if (viewId === 'view-text' && !loaded.text) { loaded.text = true; loadPages(); }
     if (viewId === 'view-images' && !loaded.images) { loaded.images = true; loadImages(); }
+    document.dispatchEvent(new CustomEvent('admin:tab', { detail: viewId }));
   }
 
   Array.prototype.forEach.call($('admin-tabs').querySelectorAll('button'), function (b) {
@@ -71,6 +74,7 @@
     $('admin-tabs').hidden = true;
     $('view-text').hidden = true;
     $('view-images').hidden = true;
+    $('view-partners').hidden = true;
     $('text-groups').textContent = '';
     $('images-groups').textContent = '';
   });
@@ -100,8 +104,8 @@
     setError('text-error', '');
     $('text-groups').textContent = '';
     $('text-groups').appendChild(el('p', 'admin-loading', 'Loading…'));
-    $('text-open').hidden = path === TEAM;
-    $('text-open').href = path === TEAM ? '../team' : '..' + (path === '/' ? '/' : path);
+    $('text-open').hidden = isData(path);
+    $('text-open').href = isData(path) ? '../' : '..' + (path === '/' ? '/' : path);
     db.call('GET', '/api/admin/content?path=' + encodeURIComponent(path)).then(function (res) {
       if (res.error) throw res.error;
       current = { path: path, items: res.data.items };
@@ -151,11 +155,20 @@
     area.style.height = Math.min(area.scrollHeight + 2, 360) + 'px';
   }
 
+  // the built-in Swahili for some wording, from js/i18n-sw.js
+  function builtInSw(item) {
+    var dict = window.SA_I18N && window.SA_I18N.sw;
+    if (!dict) return '';
+    return dict[(item.kind === 'alt' ? 'A:' : '') + item.original] || '';
+  }
+
   function itemRow(item) {
-    var isTeam = current.path === TEAM;
+    var data = isData(current.path);
     var row = el('div', 'cms-item');
     var edited = item.value !== null;
-    if (edited) row.classList.add('is-edited');
+    var hasSw = item.kind === 'text' || item.kind === 'alt';
+    var swBase = hasSw ? (item.sw || builtInSw(item)) : '';
+    if (edited || item.sw) row.classList.add('is-edited');
 
     var meta = el('div', 'cms-meta');
     meta.appendChild(el('span', 'cms-kind', item.label && item.kind !== 'link' ? item.label : KIND_LABELS[item.kind]));
@@ -175,9 +188,28 @@
       field.addEventListener('input', function () { autosize(field); });
     }
 
+    // the Swahili version
+    var swField = null;
+    if (hasSw) {
+      var details = el('details', 'cms-sw');
+      details.open = !!item.sw;
+      details.appendChild(el('summary', '', item.sw ? 'Swahili version (changed)' : 'Swahili version'));
+      swField = el('textarea', 'cms-input');
+      swField.rows = 1;
+      swField.value = swBase;
+      swField.lang = 'sw';
+      swField.setAttribute('aria-label', 'Swahili: ' + item.original.slice(0, 60));
+      swField.placeholder = 'No Swahili yet: visitors see the English';
+      details.appendChild(swField);
+      details.appendChild(el('p', 'cms-hint', 'Shown when a visitor picks Swahili. If you change the English, update this too.'));
+      details.addEventListener('toggle', function () { if (details.open) autosize(swField); });
+      swField.addEventListener('input', function () { autosize(swField); });
+      row.appendChild(details);
+    }
+
     var actions = el('div', 'cms-actions');
     var only = null;
-    if (!isTeam) {
+    if (!data) {
       var label = el('label', 'cms-check');
       only = el('input');
       only.type = 'checkbox';
@@ -192,7 +224,7 @@
     save.disabled = true;
     var reset = el('button', 'btn btn-outline cms-reset', 'Reset to original');
     reset.type = 'button';
-    reset.hidden = !edited;
+    reset.hidden = !(edited || item.sw);
     var status = el('span', 'cms-status');
     status.setAttribute('role', 'status');
     actions.appendChild(save);
@@ -213,46 +245,63 @@
     row.appendChild(original);
 
     var baseline = function () { return edited ? item.value : item.original; };
+    var swChanged = function () { return !!swField && swField.value.trim() !== swBase.trim(); };
     var changed = function () {
-      var scopeChanged = only && item.value !== null && (only.checked ? current.path : '*') !== item.scope;
-      return field.value.trim() !== baseline().trim() || scopeChanged;
+      var scopeChanged = only && (item.value !== null || item.sw) && (only.checked ? current.path : '*') !== item.scope;
+      return field.value.trim() !== baseline().trim() || scopeChanged || swChanged();
     };
     var refresh = function () { save.disabled = !changed(); status.textContent = ''; };
     field.addEventListener('input', refresh);
+    if (swField) swField.addEventListener('input', refresh);
     if (only) only.addEventListener('change', refresh);
 
     function keyFor(scope) {
       return { scope: scope, kind: item.kind, original: item.original };
     }
 
+    function paint() {
+      edited = item.value !== null;
+      swBase = hasSw ? (item.sw || builtInSw(item)) : '';
+      row.classList.toggle('is-edited', edited || !!item.sw);
+      reset.hidden = !(edited || item.sw);
+      field.value = edited ? item.value : item.original;
+      if (swField) {
+        swField.value = swBase;
+        swField.closest('details').querySelector('summary').textContent = item.sw ? 'Swahili version (changed)' : 'Swahili version';
+      }
+      showOriginal();
+      var badge = meta.querySelector('.cms-badge');
+      if (edited && !badge) meta.appendChild(el('span', 'cms-badge', 'Changed'));
+      if (!edited && badge) badge.remove();
+      autosize(field);
+      if (swField) autosize(swField);
+    }
+
     save.addEventListener('click', function () {
-      var scope = isTeam ? item.scope : (only.checked ? current.path : '*');
+      var scope = data ? item.scope : (only.checked ? current.path : '*');
       var body = keyFor(scope);
       body.value = field.value;
+      var englishChanged = field.value.trim() !== baseline().trim();
+      if (swField && swChanged()) body.sw = swField.value;
+      else if (swField && !item.sw) body.sw = null; // nothing of its own to keep
       save.disabled = true;
       status.textContent = 'Saving…';
+      var hadSwBuiltIn = hasSw && !item.sw && !!builtInSw(item);
       db.call('PUT', '/api/admin/content', body).then(function (res) {
         if (res.error) throw res.error;
         var oldScope = item.scope;
-        var hadOld = item.value !== null;
+        var hadOld = item.value !== null || !!item.sw;
         item.value = res.data.value;
+        item.sw = res.data.sw;
         item.scope = scope;
-        if (item.value === null) { row.classList.remove('is-edited'); }
-        // the same words moved between "this page" and "everywhere": drop the old copy
-        if (hadOld && oldScope !== scope && item.value !== null) {
+        if (hadOld && oldScope !== scope && (item.value !== null || item.sw)) {
           return db.call('DELETE', '/api/admin/content', keyFor(oldScope));
         }
       }).then(function () {
-        edited = item.value !== null;
-        row.classList.toggle('is-edited', edited);
-        reset.hidden = !edited;
-        field.value = edited ? item.value : item.original;
-        showOriginal();
-        var badge = meta.querySelector('.cms-badge');
-        if (edited && !badge) meta.appendChild(el('span', 'cms-badge', 'Changed'));
-        if (!edited && badge) badge.remove();
-        status.textContent = 'Saved. It shows on the website within a minute.';
-        autosize(field);
+        paint();
+        status.textContent = englishChanged && hadSwBuiltIn && !item.sw
+          ? 'Saved. Swahili visitors will see the new English until you update the Swahili version.'
+          : 'Saved. It shows on the website within a minute.';
       }).catch(function (err) {
         status.textContent = friendly(err);
         save.disabled = false;
@@ -265,18 +314,12 @@
       db.call('DELETE', '/api/admin/content', keyFor(item.scope)).then(function (res) {
         if (res.error) throw res.error;
         item.value = null;
-        item.scope = '*';
-        edited = false;
-        row.classList.remove('is-edited');
-        reset.hidden = true;
-        field.value = item.original;
+        item.sw = null;
+        item.scope = data ? item.scope : '*';
         if (only) only.checked = false;
-        showOriginal();
-        var badge = meta.querySelector('.cms-badge');
-        if (badge) badge.remove();
+        paint();
         save.disabled = true;
         status.textContent = 'Back to the original.';
-        autosize(field);
       }).catch(function (err) { status.textContent = friendly(err); })
         .then(function () { reset.disabled = false; });
     });

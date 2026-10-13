@@ -28,9 +28,21 @@ export const PAGES = [
 
 // pictures and text that live in script/style files rather than in the pages
 export const TEAM_FILE = '/js/team-data.js';
+export const DEST_FILE = '/js/destinations-data.js';
 export const STYLE_FILE = '/css/styles.css';
-// the team fields that are shown to visitors as words (not ids, filters or paths)
-const TEAM_FIELDS = new Set(['name', 'role', 'helpsWith', 'whatsapp', 'shortBio', 'fullBio', 'linkedin']);
+export const PARTNER_COUNTRIES = ['australia', 'canada', 'germany', 'united-kingdom'];
+
+// For each data file: which entry a string belongs to (idKey), what to call it
+// (nameKey), and which fields are shown to visitors as words (not ids, filters
+// or paths). `prefix` starts the edit's scope, e.g. "team:tina".
+export const TEAM_CFG = {
+  prefix: 'team:', idKey: 'id', nameKey: 'name',
+  fields: new Set(['name', 'role', 'helpsWith', 'whatsapp', 'shortBio', 'fullBio', 'linkedin'])
+};
+export const DEST_CFG = {
+  prefix: 'dest:', idKey: 'slug', nameKey: 'name',
+  fields: new Set(['welcome', 'tagline'])
+};
 
 const ENTITIES = {
   amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“',
@@ -148,22 +160,21 @@ export function scanImages(source) {
   return [...found];
 }
 
-// the words in the team file: { id, name } sections, fields as labels
-export function scanTeam(js) {
+// the words in a data file: one section per entry, fields as labels
+export function scanData(js, cfg) {
   const items = [];
-  walkTeam(js, (token) => {
-    if (!token.field) return;
+  walkData(js, cfg, (token) => {
     items.push({
       kind: 'text', original: token.text, section: token.member, label: token.field,
-      scope: 'team:' + token.id
+      scope: cfg.prefix + token.id
     });
   });
   return items;
 }
 
-// Goes through the team file's quoted strings, with the field and the person
-// each one belongs to, and lets `visit` replace the ones that are editable.
-function walkTeam(js, visit, replace) {
+// Goes through a data file's quoted strings, with the field and the entry each
+// one belongs to, and lets `visit` see the editable ones, or `replace` swap them.
+function walkData(js, cfg, visit, replace) {
   const re = /\/\/[^\n]*|\/\*[\s\S]*?\*\/|([A-Za-z_]\w*)\s*:\s*|(['"])((?:\\.|(?!\2)[^\\\n])*)\2|([[\]])/g;
   let lastKey = '';
   let arrayKey = '';
@@ -182,9 +193,9 @@ function walkTeam(js, visit, replace) {
     const raw = m[3];
     const text = unescapeJs(raw);
     const key = arrayKey || lastKey;
-    if (key === 'id' && !arrayKey) { id = text; member = text; continue; }
-    if (key === 'name' && !arrayKey) member = text;
-    if (!TEAM_FIELDS.has(key)) continue;
+    if (key === cfg.idKey && !arrayKey) { id = text; member = text; continue; }
+    if (key === cfg.nameKey && !arrayKey) member = text;
+    if (!cfg.fields.has(key)) continue;
     const norm1 = norm(text);
     if (norm1.length < 2) continue;
     const token = { field: key, text: norm1, id, member: member || id, start: m.index, end: m.index + m[0].length };
@@ -211,11 +222,20 @@ function unescapeJs(s) {
 // ---------- putting the edits in ----------
 
 // rows: { scope, kind, original, value }
-export function buildRules(rows) {
-  const rules = { any: rows.length > 0, text: new Map(), meta: new Map(), alt: new Map(), link: new Map(), image: new Map(), team: new Map(), version: '0' };
+export function buildRules(rows, partnerRows = []) {
+  const rules = {
+    any: rows.length > 0 || partnerRows.length > 0,
+    text: new Map(), meta: new Map(), alt: new Map(), link: new Map(), image: new Map(),
+    data: new Map(), partners: new Map(), rows, version: '0'
+  };
+  for (const r of partnerRows) {
+    if (!rules.partners.has(r.country)) rules.partners.set(r.country, []);
+    rules.partners.get(r.country).push(r);
+    if (r.updated_at && r.updated_at > rules.version) rules.version = r.updated_at;
+  }
   for (const r of rows) {
     const key = r.scope + '\0' + r.original;
-    if (r.scope.startsWith('team:')) rules.team.set(key, r.value);
+    if (r.scope.startsWith('team:') || r.scope.startsWith('dest:')) rules.data.set(key, r.value);
     else if (r.kind === 'image') rules.image.set(r.original, r.value);
     else if (rules[r.kind]) rules[r.kind].set(key, r.value);
     if (r.updated_at && r.updated_at > rules.version) rules.version = r.updated_at;
@@ -248,10 +268,20 @@ export function applyHtml(html, page, rules) {
     });
   }
   // the page's own script and style files, when they have edits to carry
-  if (rules.team.size || rules.image.size) {
-    html = html
-      .replace(/(["'])(?:\.\.\/|\.\/|\/)?js\/team-data\.js\1/g, (m, q) => q + '/api/site/team-data.js?v=' + rules.version + q)
-      .replace(/(["'])(?:\.\.\/|\.\/|\/)?css\/styles\.css\1/g, (m, q) => q + '/api/site/styles.css?v=' + rules.version + q);
+  const v = rules.version;
+  const hasData = (prefix) => [...rules.data.keys()].some(k => k.startsWith(prefix));
+  if (hasData('team:') || rules.image.size) {
+    html = html.replace(/(["'])(?:\.\.\/|\.\/|\/)?js\/team-data\.js\1/g, (m, q) => q + '/api/site/team-data.js?v=' + v + q);
+  }
+  if (hasData('dest:') || rules.image.size) {
+    html = html.replace(/(["'])(?:\.\.\/|\.\/|\/)?js\/destinations-data\.js\1/g, (m, q) => q + '/api/site/destinations-data.js?v=' + v + q);
+  }
+  if (rules.image.size) {
+    html = html.replace(/(["'])(?:\.\.\/|\.\/|\/)?css\/styles\.css\1/g, (m, q) => q + '/api/site/styles.css?v=' + v + q);
+  }
+  if (rules.partners.size) {
+    html = html.replace(/(["'])(?:\.\.\/|\.\/|\/)?js\/partners-([a-z-]+)\.js\1/g,
+      (m, q, c) => rules.partners.has(c) ? q + '/api/site/partners-' + c + '.js?v=' + v + q : m);
   }
   return applyImages(html, rules);
 }
@@ -261,10 +291,70 @@ export function applyImages(source, rules) {
   return source.replace(IMAGE_PATH, (m, path) => rules.image.get(path) || m);
 }
 
-export function applyTeam(js, rules) {
-  if (!rules.team.size) return applyImages(js, rules);
-  const edited = walkTeam(js, null, (token) => rules.team.get('team:' + token.id + '\0' + token.text));
+export function applyData(js, rules, cfg) {
+  if (!rules.data.size) return applyImages(js, rules);
+  const edited = walkData(js, cfg, null, (token) => rules.data.get(cfg.prefix + token.id + '\0' + token.text));
   return applyImages(edited, rules);
+}
+
+// ---------- partner institutions (the "View partners & courses" lists) ----------
+
+// js is a generated file: window.PARTNERS["australia"] = { "Sydney": [ {name, courses[]} ] }
+export function parsePartners(js) {
+  const m = /window\.PARTNERS\["([a-z-]+)"\]\s*=\s*(\{[\s\S]*\})\s*;?\s*$/.exec(js);
+  if (!m) return null;
+  return { country: m[1], cities: JSON.parse(m[2]) };
+}
+
+// The institutions of every city with the edits on top. Each has a `key`
+// (o:<name in the files>, or n:<id> for one added here) and a `state`.
+export function mergePartners(cities, edits) {
+  const byKey = new Map(edits.map(e => [e.city + '\0' + e.key, e]));
+  const out = {};
+  for (const [city, list] of Object.entries(cities)) {
+    out[city] = [];
+    for (const inst of list) {
+      const key = 'o:' + inst.name;
+      const e = byKey.get(city + '\0' + key);
+      byKey.delete(city + '\0' + key);
+      if (!e) { out[city].push({ key, name: inst.name, courses: inst.courses, state: 'original' }); continue; }
+      if (e.removed) { out[city].push({ key, name: inst.name, courses: inst.courses, state: 'removed' }); continue; }
+      out[city].push({ key, name: e.name || inst.name, courses: e.courses ? JSON.parse(e.courses) : inst.courses, state: 'changed', original: inst.name });
+    }
+  }
+  for (const e of byKey.values()) {
+    if (!out[e.city] || e.removed) continue;
+    out[e.city].push({ key: e.key, name: e.name, courses: e.courses ? JSON.parse(e.courses) : [], state: 'added' });
+  }
+  return out;
+}
+
+// the file as visitors get it
+export function applyPartners(js, rules) {
+  const data = parsePartners(js);
+  if (!data) return js;
+  const edits = rules.partners.get(data.country);
+  if (!edits || !edits.length) return js;
+  const merged = mergePartners(data.cities, edits);
+  const cities = {};
+  for (const [city, list] of Object.entries(merged)) {
+    cities[city] = list.filter(i => i.state !== 'removed').map(i => ({ name: i.name, courses: i.courses }));
+  }
+  return 'window.PARTNERS = window.PARTNERS || {};\nwindow.PARTNERS[' + JSON.stringify(data.country) + '] = ' + JSON.stringify(cities) + ';\n';
+}
+
+// ---------- Swahili for edited words ----------
+
+// The extra lines for js/i18n-sw.js: each edit that comes with a Swahili
+// version, looked up by the English as it now reads.
+export function buildExtras(rows) {
+  const dict = {};
+  for (const r of rows) {
+    if (!r.sw || r.kind === 'image' || r.kind === 'link' || r.kind === 'meta') continue;
+    const english = norm(r.value || r.original);
+    dict[(r.kind === 'alt' ? 'A:' : '') + english] = r.sw;
+  }
+  return dict;
 }
 
 export { SAFE_LINK };

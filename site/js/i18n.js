@@ -188,9 +188,20 @@
     if (code === 'en' || (window.SA_I18N && window.SA_I18N[code])) { done(); return; }
     var s = document.createElement('script');
     s.src = base + 'i18n-' + code + '.js';
-    s.onload = done;
+    s.onload = function () { loadExtras(code, done); };
     s.onerror = done;
     document.head.appendChild(s);
+  }
+
+  // Swahili for words edited in the admin page comes from the back end, on top of
+  // the built-in list. Without a back end (a copy opened as a file) it is skipped.
+  function loadExtras(code, done) {
+    if (code !== 'sw' || window.location.protocol === 'file:') { done(); return; }
+    var x = document.createElement('script');
+    x.src = '/api/site/i18n-extra.js?lang=sw';
+    x.onload = done;
+    x.onerror = done;
+    document.head.appendChild(x);
   }
 
   function hasWords(code) {

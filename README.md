@@ -478,9 +478,22 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
     All text is escaped, and links must be https, mailto or tel. Because an
     edit is matched to the original wording, if you change that wording in the
     files an old edit stops applying and the new original shows; reset it from
-    the admin page to tidy up. Not editable here yet: words that scripts build
-    (partner institutions, destination cards, course lists), and anything in
-    the Swahili version (edited words show in English).
+    the admin page to tidy up. Not editable here: wording that lives inside
+    `js/main.js` (pop-up and button text).
+  - **Swahili for edited words**: each text in the "Website text" tab has a
+    "Swahili version" box, pre-filled with the built-in translation when there
+    is one. A Swahili version saved there is added to the built-in list on the
+    fly (`/api/site/i18n-extra.js`, loaded by `js/i18n.js`), keyed by the
+    English as it now reads. If you change the English and leave the Swahili
+    alone, Swahili visitors see the new English until you update it. Edits to
+    links and search descriptions are English only.
+  - **Partner institutions tab**: add, rename, change the courses of
+    (one per line) or remove the schools in "View partners & courses" for
+    Australia, Canada, Germany and the United Kingdom (table `partner_edits`;
+    the generated `js/partners-<country>.js` files stay untouched, and the
+    changed list is served from `/api/site/partners-<country>.js`). "Reset to
+    original" and "Bring it back" undo changes. The "Next-destination cards"
+    entry in the page list edits each country's welcome line and tagline.
   - **Activity log**: the admin page's "Activity" button lists the latest
     200 sign-ins (right and wrong), password changes, and every change to a
     testimonial or photo, with who did it and from which address. Wrong
@@ -498,7 +511,7 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   - **Newsletter box**: the footer box on every page saves the address
     (admin page, "Subscribers": copy all, or remove one). If the back end
     can't be reached it falls back to opening the visitor's email app.
-  - **Rebuilding**: `migrations/0001_init.sql` `migrations/0002_security.sql` and `migrations/0003_content.sql` recreate the empty tables.
+  - **Rebuilding**: `migrations/0001_init.sql` `migrations/0002_security.sql` and `migrations/0003_content.sql` and `migrations/0004_partners_swahili.sql` recreate the empty tables.
     Test the back end on your computer with `npx wrangler dev`.
 - **Publishing**: Cloudflare (Worker `studiesandawards`, set up by
   `wrangler.jsonc` at the top of the repo) serves `site/` and publishes the
