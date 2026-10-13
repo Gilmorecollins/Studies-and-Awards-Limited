@@ -604,29 +604,72 @@ p { margin: 0; }
 .footer-contact-link { color: var(--brass); opacity: 1; font-weight: 600; }
 a.footer-contact-row:hover .footer-contact-link { text-decoration: underline; text-underline-offset: 3px; }
 .footer-newsletter-blurb { font-size: 13.5px; color: var(--on-dark-muted); line-height: 1.6; margin: 0 0 16px; max-width: 220px; }
-.footer-subscribe {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  max-width: 280px;
+/* ---------- the WhatsApp channel ----------
+   The company's WhatsApp channel, in every page's footer and in the home
+   page's "Never miss an intake" band: a green Subscribe button (on a phone it
+   opens WhatsApp on the channel: Follow for someone new, the channel itself
+   for a follower) and, on screens with a mouse, the channel's QR code to scan
+   with a phone (assets/whatsapp-channel-qr.svg, made by
+   tools/make-whatsapp-qr.mjs) with the WhatsApp logo in its middle. A phone
+   can't scan its own screen, so touch screens show only the button. */
+.wa-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 0 20px; border-radius: 999px;
+  background: #25D366; color: var(--ink);
+  font-size: 14px; font-weight: 700; line-height: 1; white-space: nowrap;
 }
-.footer-subscribe input {
-  width: 100%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 999px;
-  outline: none;
-  padding: 11px 18px;
-  font-size: 13px;
-  font-family: inherit;
-  color: #FFFFFF;
+.wa-btn:hover { background: #1EBE5A; color: var(--ink); }
+.wa-btn:focus-visible { outline: 2px solid var(--line-strong); outline-offset: 3px; }
+.wa-btn .wa-logo { flex-shrink: 0; width: 18px; height: 18px; color: #FFFFFF; filter: drop-shadow(0 1px 1px rgba(0,60,30,0.25)); }
+.wa-btn-lg { min-height: 52px; padding: 0 26px; font-size: 15px; }
+.wa-btn-lg .wa-logo { width: 20px; height: 20px; }
+@media (prefers-reduced-motion: no-preference) {
+  .wa-btn { transition: background-color 150ms ease, transform 150ms ease; }
+  .wa-btn:hover { transform: translateY(-1px); }
 }
-.footer-subscribe input::placeholder { color: var(--on-dark-faint); }
-.footer-subscribe input:focus-visible { border-color: var(--brass); box-shadow: 0 0 0 3px rgba(255,184,0,0.3); }
-.footer-subscribe .btn { padding: 10px 26px; font-size: 13px; }
-.footer-subscribe-status { margin: 10px 0 0; font-size: 13px; line-height: 1.5; color: var(--on-dark-muted); }
-.footer-subscribe-status:empty { display: none; }
+/* the code on its own white card (a code needs a light ground to scan), the
+   logo over its middle (the code's error correction leaves room for it) */
+.channel-qr { position: relative; display: block; flex-shrink: 0; padding: 10px; border-radius: 14px; background: #FFFFFF; }
+.channel-qr img { display: block; width: 100%; height: auto; }
+.channel-qr-logo {
+  position: absolute; top: 50%; left: 50%; width: 22%; aspect-ratio: 1; transform: translate(-50%, -50%);
+  display: grid; place-items: center; border-radius: 26%;
+  background: #25D366; box-shadow: 0 0 0 3px #FFFFFF;
+}
+.channel-qr-logo .wa-logo { width: 64%; height: 64%; color: #FFFFFF; }
+
+/* the footer: the code beside the button */
+.footer-channel { display: flex; align-items: center; gap: 14px; }
+.footer-channel-qr { width: 96px; padding: 7px; border-radius: 12px; }
+.footer-channel .wa-btn { padding: 0 18px; }
+.site-footer .wa-btn, .site-footer .wa-btn:hover { color: var(--ink); }
+.site-footer .wa-btn:focus-visible { outline-color: #FFFFFF; }
+
+/* the home page band, between the testimonials and the FAQ */
+.channel-band { padding: 0 0 clamp(40px, calc(5vw / var(--z, 1)), 64px); }
+.channel-panel {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px clamp(32px, calc(5vw / var(--z, 1)), 72px); align-items: center;
+  padding: clamp(28px, calc(4vw / var(--z, 1)), 52px) clamp(24px, calc(4.5vw / var(--z, 1)), 64px);
+  border: 1px solid var(--border-soft); border-radius: var(--radius); background: var(--hero-cream);
+}
+.channel-copy h2 { margin: 0 0 14px; }
+.channel-copy p { max-width: 36rem; font-size: 17px; line-height: 1.65; color: var(--muted); }
+.channel-copy p strong { font-weight: 700; color: var(--text-strong); overflow-wrap: anywhere; }
+.channel-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 24px; }
+.channel-note { font-size: 13.5px; color: var(--muted); }
+.channel-figure { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 0; }
+.channel-figure .channel-qr { width: 208px; padding: 14px; border-radius: 18px; box-shadow: 0 14px 34px var(--shadow-12); }
+.channel-figure figcaption { max-width: 208px; font-size: 13px; line-height: 1.45; text-align: center; color: var(--muted); }
+@media (max-width: 760px) {
+  .channel-panel { grid-template-columns: minmax(0, 1fr); }
+  .channel-figure { align-items: flex-start; }
+  .channel-figure figcaption { text-align: left; }
+}
+/* touch screens: only the button (a phone can't scan its own screen) */
+@media (hover: none) and (pointer: coarse) {
+  .channel-qr, .channel-figure { display: none; }
+  .channel-panel { grid-template-columns: minmax(0, 1fr); }
+}
 .footer-bottom {
   position: relative;
   z-index: 1;
