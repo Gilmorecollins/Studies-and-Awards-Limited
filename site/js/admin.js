@@ -1,30 +1,26 @@
 // The testimonials admin page (admin/index.html): sign in, then add, edit,
 // reorder, show or hide, and delete the testimonials on the home page.
 //
-// The testimonials live in the Supabase database (js/supabase-config.js). The
-// database's own rules decide who may change them: only confirmed accounts on
-// its admin list (public.admins). This page only offers the tools; it cannot
-// let anyone else make changes, whatever happens in the browser.
+// The testimonials live in the Cloudflare database behind the site's back end
+// (src/worker.js, reached through js/api-client.js). The back end decides who
+// may change them: only signed-in accounts on its admin list. This page only
+// offers the tools; it cannot let anyone else make changes, whatever happens
+// in the browser.
 //
 // Photos are cropped square (480 x 480, from near the top, where the face
-// usually is) and saved as JPEGs in the testimonial-photos storage bucket
-// under a random name; a replaced or removed photo is deleted once the change
+// usually is) and saved as JPEGs in the database under a random name; a replaced or removed photo is deleted once the change
 // is saved.
 (function () {
   'use strict';
 
-  var cfg = window.SUPABASE_CONFIG;
   var $ = function (id) { return document.getElementById(id); };
 
-  if (!cfg || !window.supabase || !window.supabase.createClient || !window.TestimonialCard) {
-    $('view-loading').textContent = 'The admin page could not start: a script is missing. Check that js/vendor/supabase.js, js/supabase-config.js and js/testimonial-card.js are on the site.';
+  if (!window.siteApi || !window.TestimonialCard) {
+    $('view-loading').textContent = 'The admin page could not start: a script is missing. Check that js/api-client.js and js/testimonial-card.js are on the site.';
     return;
   }
 
-  var db = window.supabase.createClient(cfg.url, cfg.key, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
-  });
-  var BUCKET = cfg.photoBucket;
+  var db = window.siteApi;
   var PHOTO_SIZE = 480;
 
   var views = ['view-loading', 'view-signin', 'view-denied', 'view-list'];
@@ -64,14 +60,14 @@
   }
 
   function photoUrl(path) {
-    return path ? cfg.url + '/storage/v1/object/public/' + BUCKET + '/' + encodeURIComponent(path) : '';
+    return db.photoUrl(path);
   }
 
   function possessive(name) {
     return name + '’s';
   }
 
-  // an error from Supabase or the network, in plain words
+  // an error from the server or the network, in plain words
   function friendly(error) {
     var msg = String((error && (error.message || error.error_description || error.msg)) || error || '');
     if (/invalid login credentials/i.test(msg)) return 'That email and password don’t match an account.';
@@ -79,7 +75,7 @@
     if (/failed to fetch|networkerror|network request failed|load failed/i.test(msg)) return 'Couldn’t reach the server. Check your internet connection and try again.';
     if (/published_only_with_consent/i.test(msg)) return 'Tick that they have agreed before showing it on the website.';
     if (/rate limit|too many requests/i.test(msg)) return 'Too many tries in a short time. Wait a minute, then try again.';
-    if (/jwt|session|refresh token/i.test(msg)) return 'You’ve been signed out. Sign in again, then try once more.';
+    if (/jwt|session|refresh token|unauthorized/i.test(msg)) return 'You’ve been signed out. Sign in again, then try once more.';
     if (/row-level security|permission denied|not authorized|unauthorized/i.test(msg)) return 'This account isn’t allowed to make that change.';
     if (/PGRST116|no\) rows|0 rows/i.test(msg)) return 'That testimonial couldn’t be changed: it may have just been deleted. Reload the page and try again.';
     if (/password should be|weak password|at least/i.test(msg)) return 'That password is too weak. Use at least 10 characters, mixing letters and numbers.';
@@ -133,7 +129,7 @@
     var email = $('signin-email').value.trim();
     var password = $('signin-password').value;
     if (!email || !password) {
-      setError($('signin-error'), 'Enter your email and password.');
+      setError($('signin-error'), 'Enter your username and password.');
       return;
     }
     setError($('signin-error'), '');
@@ -392,7 +388,7 @@
 
   function uploadPhoto(blob) {
     var path = uuid() + '.jpg';
-    return db.storage.from(BUCKET)
+    return db.storage.from()
       .upload(path, blob, { contentType: 'image/jpeg', cacheControl: '31536000', upsert: false })
       .then(function (res) {
         if (res.error) throw res.error;
@@ -402,7 +398,7 @@
 
   // best effort: a leftover photo is harmless, so a failure here is not shown
   function removePhoto(path) {
-    db.storage.from(BUCKET).remove([path]).then(function () {}, function () {});
+    db.storage.from().remove([path]).then(function () {}, function () {});
   }
 
   function clearNewPhoto() {

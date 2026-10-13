@@ -39,8 +39,8 @@
     <p class="admin-lead">For staff who manage the testimonials on the home page.</p>
     <form id="signin-form" novalidate>
       <div class="admin-field">
-        <label for="signin-email">Email</label>
-        <input type="email" id="signin-email" autocomplete="username" required>
+        <label for="signin-email">Username or email</label>
+        <input type="text" autocapitalize="none" spellcheck="false" id="signin-email" autocomplete="username" required>
       </div>
       <div class="admin-field">
         <label for="signin-password">Password</label>
@@ -193,8 +193,7 @@
   </form>
 </dialog>
 
-<script src="../js/vendor/supabase.js"></script>
-<script src="../js/supabase-config.js"></script>
+<script src="../js/api-client.js"></script>
 <script src="../js/testimonial-card.js"></script>
 <script src="../js/admin.js"></script>
 </body>

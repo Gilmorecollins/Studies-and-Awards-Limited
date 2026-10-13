@@ -25,13 +25,11 @@ site/              The actual website. Open site/index.html in a browser,
   js/testimonial-card.js
                     Builds one testimonial card, for the home page and for
                     the admin page's preview.
-  js/supabase-config.js
-                    The Supabase project's address and publishable key,
-                    for the home page testimonials and the admin page.
+  js/api-client.js  How the admin page talks to the back end (/api/*).
   admin/index.html  The testimonials admin page (sign in, then add, edit,
                     reorder, show or hide, delete). Linked from the
                     "Portal login" menu. With js/admin.js, css/admin.css and
-                    js/vendor/supabase.js (a pinned copy of supabase-js).
+                    js/api-client.js.
   js/destinations-data.js
                     GENERATED. Destination registry (name, airport code,
                     tagline) in journey order. Each destination page
@@ -304,7 +302,7 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
     If the file is ever empty, tapping KAL shows a "coming soon" note instead.
   - Changing English text on a page means its translation line stops matching: edit the
     English in the language files too (or re-run the template and compare).
-- **Page not found**: `site/404.html` is what Vercel shows for any address that
+- **Page not found**: `site/404.html` is what Cloudflare shows for any address that
   doesn't exist. It is served at the missing address itself (e.g. `/old/page`),
   so every link and file in it starts with `/`. It is marked `noindex`.
 - **Opening hours badge**: the footer and the Find Us page show "Open now" or
@@ -433,32 +431,39 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   that the person has agreed to it (under that name, and with that photo), and
   the database itself refuses otherwise. Photos are cropped square
   (480 x 480) in the browser before uploading.
-  - **Where it lives**: the Supabase project "Studies and Awards Project"
-    (`js/supabase-config.js` has its address and publishable key; the
-    publishable key is meant to be public). The table is
-    `public.testimonials`; photos are in the `testimonial-photos` storage
-    bucket. The home page reads the switched-on ones directly; if the
-    database can't be reached the section just stays hidden.
-  - **Who can make changes**: only accounts whose email is in the
-    `public.admins` table (and confirmed). This is enforced by the database's
-    row level security, not by the page, so nobody else can change anything
-    whatever they do in their browser. Visitors can only read the switched-on
-    testimonials.
-  - **Adding an admin**: in the Supabase dashboard, Authentication, Users,
-    "Add user", "Create new user", enter their email and a temporary password
-    and tick "Auto Confirm User". Then add their email to the admin list with
-    SQL (SQL Editor): `insert into public.admins (email) values
-    ('name@example.com');` (lowercase). They can change the password from the
-    admin page ("Change password"). To remove someone:
-    `delete from public.admins where email = 'name@example.com';` and delete
-    the user in Authentication. Admins are added by hand, so in
-    Authentication, Sign In / Providers, switch off "Allow new users to sign
-    up".
-  - **Samples**: `js/testimonials-data.js` holds sample testimonials for
-    reviewing the layout. They show only when nothing is switched on, and only
-    on your own copy of the site (opened as a file, or on localhost) or with
-    `?testimonialsPreview` in the address, each tagged "Sample: preview
-    only". Visitors on the live site never see them.
-- **Publishing**: Vercel (project `test-studies-and-awards-limited`) serves
-  `site/` and publishes the live site automatically from `main`. A Claude
+  - **Where it lives**: the back end is `src/worker.js`, a Cloudflare Worker
+    that runs on the same address as the site and answers `/api/*`. The data
+    is in the Cloudflare D1 database `studiesandawards` (tables in
+    `migrations/0001_init.sql`): `testimonials`, `photos` (the cropped
+    photos), `admins`. The home page reads the switched-on testimonials from
+    `/api/testimonials`; if that can't be reached the section just stays
+    hidden.
+  - **Who can make changes**: only accounts in the `admins` table, signed in
+    on the admin page. Passwords are stored scrambled (salted PBKDF2), a
+    sign-in lasts 7 days, and 10 wrong tries in 15 minutes lock that email
+    out for a while. The back end enforces this, not the page, so nobody else
+    can change anything whatever they do in their browser. A testimonial
+    can't be switched on without the "agreed" tick, and visitors can only
+    read the switched-on ones.
+  - **Adding an admin**: sign in to the admin page, then (until a button is
+    added) send a request from the browser console while signed in:
+    `fetch('/api/admin/admins', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email:'name@example.com', password:'a-long-temporary-password'})})`.
+    They can change the password from the admin page ("Change password"). To
+    remove someone: Cloudflare dashboard, Storage & databases, D1,
+    `studiesandawards`, Console: `delete from admins where email =
+    'name@example.com';` (they are signed out straight away).
+  - **Security measures**: the back end checks every change came from this
+    site, signs everyone out of other devices when a password is changed,
+    limits wrong password tries (10 per account per address, 30 per address,
+    100 per account, all within 15 minutes), refuses oversized sign-in
+    requests, never lets "add an admin" overwrite an existing account, and
+    sends the usual protective headers (`site/_headers` for the pages,
+    `src/worker.js` for `/api`). Use a long, unique password for every admin:
+    short or guessable ones (like "admin" / "admin@123") are the one hole no
+    code can close.
+  - **Rebuilding**: `migrations/0001_init.sql` recreates the empty tables.
+    Test the back end on your computer with `npx wrangler dev`.
+- **Publishing**: Cloudflare (Worker `studiesandawards`, set up by
+  `wrangler.jsonc` at the top of the repo) serves `site/` and publishes the
+  live site automatically from `main`. Unknown addresses show `site/404.html`. A Claude
   Artifact preview of the site is kept for review.
