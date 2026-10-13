@@ -7,9 +7,13 @@
     "generate": "node generate-countries.mjs",
     "check": "node generate-countries.mjs --check",
     "photos": "node process-photos.mjs",
-    "thumbs": "node make-team-thumbs.mjs"
+    "thumbs": "node make-team-thumbs.mjs",
+    "qr": "node make-whatsapp-qr.mjs"
   },
   "dependencies": {
     "jimp": "^1.6.1"
+  },
+  "devDependencies": {
+    "qrcode": "^1.5.4"
   }
 }
