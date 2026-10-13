@@ -125,6 +125,7 @@
     rpc: function () { // "is this account an admin?": a valid sign-in is one
       return call('GET', '/api/me').then(function (res) { return { data: !res.error, error: null }; });
     },
+    call: call,
     audit: function () { return call('GET', '/api/admin/audit'); },
     subscribers: function () { return call('GET', '/api/admin/subscribers'); },
     removeSubscriber: function (email) { return call('DELETE', '/api/admin/subscribers', { email: email }); },

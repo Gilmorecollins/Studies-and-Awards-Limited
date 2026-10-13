@@ -17,11 +17,18 @@
 // (HttpOnly, Secure, SameSite=Strict) that lasts 7 days; the signing key is
 // created once and kept in the database, so there is nothing to configure.
 
+import {
+  PAGES, TEAM_FILE, STYLE_FILE, SAFE_LINK,
+  scanHtml, scanImages, scanTeam, buildRules, applyHtml, applyTeam, applyImages
+} from './content.js';
+
 const enc = new TextEncoder();
 const SESSION_DAYS = 7;
 const PBKDF2_ROUNDS = 100000; // the most Workers allows
 const MAX_PHOTO = 400 * 1024;
 const MAX_PASSWORD = 200;
+const MAX_MEDIA = 1900 * 1024; // a database row holds up to 2 MB
+const MEDIA_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const PHOTO_NAME = /^[a-z0-9-]+\.jpg$/;
 const ACCOUNT = /^[a-z0-9._@+-]{3,254}$/;
 
@@ -30,7 +37,7 @@ export default {
     const url = new URL(request.url);
     let response;
     try {
-      response = await route(request, env, url);
+      response = url.pathname.startsWith('/api/') ? await route(request, env, url) : await servePublic(request, env, url);
     } catch (err) {
       console.error(err);
       response = json({ error: 'Something went wrong on the server.' }, 500);
@@ -86,6 +93,9 @@ async function route(request, env, url) {
     });
   }
 
+  if (method === 'GET' && path.startsWith('/api/media/')) return serveMedia(env, path.slice('/api/media/'.length));
+  if (method === 'GET' && (path === '/api/site/team-data.js' || path === '/api/site/styles.css')) return serveSiteFile(request, env, url, path);
+
   if (method === 'GET' && path === '/api/config') {
     return json({ turnstile: await setting(env, 'turnstile_sitekey') || null }, 200, { 'Cache-Control': 'public, max-age=300' });
   }
@@ -103,8 +113,30 @@ async function route(request, env, url) {
   if (!path.startsWith('/api/admin/')) return json({ error: 'Not found' }, 404);
   if (!email) return json({ error: 'session expired' }, 401);
   if (method !== 'GET' && !isJson(request, path)) return json({ error: 'Bad request' }, 400);
-  if (path !== '/api/admin/photo' && Number(request.headers.get('Content-Length') || 0) > 16 * 1024) {
+  if (path !== '/api/admin/photo' && path !== '/api/admin/media' && Number(request.headers.get('Content-Length') || 0) > 16 * 1024) {
     return json({ error: 'That is too large.' }, 413);
+  }
+
+  if (path === '/api/admin/content/pages' && method === 'GET') {
+    return json([...PAGES, { path: 'team', label: 'Team members' }]);
+  }
+  if (path === '/api/admin/content') {
+    if (method === 'GET') return listContent(env, url.searchParams.get('path') || '/');
+    if (method === 'PUT') return saveContent(env, await readJson(request), email, ip);
+    if (method === 'DELETE') return resetContent(env, await readJson(request), email, ip);
+  }
+  if (path === '/api/admin/images' && method === 'GET') return listImages(env, url);
+  if (path === '/api/admin/media' && method === 'POST') {
+    const type = request.headers.get('Content-Type');
+    const bytes = new Uint8Array(await request.arrayBuffer());
+    if (!bytes.length || bytes.length > MAX_MEDIA) return json({ error: 'That picture is too large.' }, 413);
+    const okMagic = type === 'image/jpeg' ? bytes[0] === 0xff && bytes[1] === 0xd8
+      : type === 'image/png' ? bytes[0] === 0x89 && bytes[1] === 0x50
+      : bytes[0] === 0x52 && bytes[1] === 0x49; // webp: RIFF
+    if (!okMagic) return json({ error: 'That is not a picture the site can use.' }, 415);
+    const id = crypto.randomUUID();
+    await env.DB.prepare('INSERT INTO media (id, mime, data, created_at) VALUES (?,?,?,?)').bind(id, type, bytes, new Date().toISOString()).run();
+    return json({ url: '/api/media/' + id });
   }
 
   if (method === 'GET' && path === '/api/admin/audit') {
@@ -257,6 +289,182 @@ async function saveTestimonial(env, id, body, actor, ip) {
   }
   await audit(env, actor, what, row.name, ip);
   return json(out(row));
+}
+
+// ---------- the pages themselves, with the edits put in ----------
+
+let rulesCache = { at: 0, rules: null };
+
+async function getRules(env) {
+  if (rulesCache.rules && Date.now() - rulesCache.at < 15000) return rulesCache.rules;
+  const { results } = await env.DB.prepare('SELECT scope, kind, original, value, updated_at FROM content').all();
+  rulesCache = { at: Date.now(), rules: buildRules(results) };
+  return rulesCache.rules;
+}
+
+function pageKey(pathname) {
+  const p = pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '').replace(/(.)\/+$/, '$1');
+  return p || '/';
+}
+
+// Pages are sent as they are in the files, unless something was edited.
+// If anything goes wrong while editing, the visitor gets the original page.
+async function servePublic(request, env, url) {
+  const res = await env.ASSETS.fetch(request);
+  if (request.method !== 'GET' || url.pathname.startsWith('/admin')) return res;
+  const type = res.headers.get('Content-Type') || '';
+  if (!type.startsWith('text/html')) return res;
+  let rules;
+  try { rules = await getRules(env); } catch (e) { return res; }
+  if (!rules.any) return res;
+  const original = await res.text();
+  let html = original;
+  try { html = applyHtml(original, pageKey(url.pathname), rules); } catch (e) { console.error(e); }
+  const headers = new Headers(res.headers);
+  headers.delete('Content-Length');
+  headers.delete('ETag');
+  headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+  return new Response(html, { status: res.status, headers });
+}
+
+// the team file and the main style file, when they carry edits
+async function serveSiteFile(request, env, url, path) {
+  const isTeam = path.endsWith('team-data.js');
+  const res = await env.ASSETS.fetch(new Request(new URL(isTeam ? TEAM_FILE : STYLE_FILE, url)));
+  const source = await res.text();
+  let out = source;
+  try {
+    const rules = await getRules(env);
+    out = isTeam ? applyTeam(source, rules) : applyImages(source, rules);
+  } catch (e) { console.error(e); }
+  return new Response(out, {
+    headers: {
+      'Content-Type': isTeam ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf-8',
+      'Cache-Control': 'public, max-age=0, must-revalidate'
+    }
+  });
+}
+
+async function serveMedia(env, id) {
+  if (!/^[0-9a-f-]{36}$/.test(id)) return json({ error: 'Not found' }, 404);
+  const row = await env.DB.prepare('SELECT mime, data FROM media WHERE id = ?').bind(id).first();
+  if (!row) return json({ error: 'Not found' }, 404);
+  return new Response(row.data, {
+    headers: {
+      'Content-Type': row.mime,
+      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Content-Security-Policy': "default-src 'none'; sandbox"
+    }
+  });
+}
+
+// ---------- editing website content (admin) ----------
+
+async function assetText(env, url, path) {
+  const res = await env.ASSETS.fetch(new Request(new URL(path, url)));
+  return res.text();
+}
+
+async function listContent(env, path) {
+  const url = new URL('https://assets.local/');
+  let items;
+  let scopes;
+  if (path === 'team') {
+    items = scanTeam(await assetText(env, url, TEAM_FILE));
+  } else {
+    if (!PAGES.some(p => p.path === path)) return json({ error: 'Not found' }, 404);
+    items = scanHtml(await assetText(env, url, path));
+  }
+  const { results } = await env.DB.prepare('SELECT scope, kind, original, value FROM content WHERE kind != ?').bind('image').all();
+  const rows = new Map(results.map(r => [r.scope + '\0' + r.kind + '\0' + r.original, r]));
+  for (const item of items) {
+    const own = path === 'team' ? item.scope : path;
+    const hit = rows.get(own + '\0' + item.kind + '\0' + item.original) || rows.get('*\0' + item.kind + '\0' + item.original);
+    item.scope = path === 'team' ? item.scope : (hit ? hit.scope : '*');
+    item.value = hit ? hit.value : null;
+  }
+  return json({ items });
+}
+
+const SCOPE = /^(\*|\/[a-z0-9-]*|team:[a-z0-9-]+)$/;
+const KINDS = new Set(['text', 'meta', 'alt', 'link', 'image']);
+const IMAGE_ORIGINAL = /^assets\/[^"'()\s<>\\]+\.(jpe?g|png|webp|gif|svg)$/i;
+
+function checkContentKey(b) {
+  if (!b || typeof b !== 'object') return 'Bad request';
+  if (typeof b.scope !== 'string' || !SCOPE.test(b.scope)) return 'Bad request';
+  if (!KINDS.has(b.kind)) return 'Bad request';
+  if (typeof b.original !== 'string' || !b.original || b.original.length > 2000) return 'Bad request';
+  if (b.kind === 'image' && (b.scope !== '*' || !IMAGE_ORIGINAL.test(b.original))) return 'Bad request';
+  if (b.scope.startsWith('team:') && b.kind !== 'text') return 'Bad request';
+  return null;
+}
+
+async function saveContent(env, b, actor, ip) {
+  const bad = checkContentKey(b);
+  if (bad) return json({ error: bad }, 400);
+  if (typeof b.value !== 'string') return json({ error: 'Bad request' }, 400);
+  const value = b.value.trim();
+  if (!value || value === b.original) return resetContent(env, b, actor, ip);
+  if (value.length > 4000) return json({ error: 'That is too long.' }, 400);
+  if (b.kind === 'link' && (!SAFE_LINK.test(value) || /[\s"'<>]/.test(value) || value.length > 500)) {
+    return json({ error: 'Use a full web address (https://…), mailto: or tel: link.' }, 400);
+  }
+  if (b.kind === 'image') {
+    const m = /^\/api\/media\/([0-9a-f-]{36})$/.exec(value);
+    if (!m || !(await env.DB.prepare('SELECT 1 AS x FROM media WHERE id = ?').bind(m[1]).first())) return json({ error: 'Bad request' }, 400);
+  }
+  const old = await env.DB.prepare('SELECT value FROM content WHERE scope=? AND kind=? AND original=?').bind(b.scope, b.kind, b.original).first();
+  await env.DB.prepare(
+    'INSERT INTO content (scope, kind, original, value, updated_at, updated_by) VALUES (?,?,?,?,?,?) ' +
+    'ON CONFLICT(scope, kind, original) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at, updated_by = excluded.updated_by'
+  ).bind(b.scope, b.kind, b.original, value, new Date().toISOString(), actor).run();
+  if (b.kind === 'image' && old) await dropUnusedMedia(env, old.value);
+  rulesCache.at = 0;
+  await audit(env, actor, 'edited website ' + labelOf(b.kind), b.original.slice(0, 70), ip);
+  return json({ ok: true, value });
+}
+
+async function resetContent(env, b, actor, ip) {
+  const bad = checkContentKey(b);
+  if (bad) return json({ error: bad }, 400);
+  const row = await env.DB.prepare('DELETE FROM content WHERE scope=? AND kind=? AND original=? RETURNING value').bind(b.scope, b.kind, b.original).first();
+  if (row && b.kind === 'image') await dropUnusedMedia(env, row.value);
+  rulesCache.at = 0;
+  if (row) await audit(env, actor, 'reset website ' + labelOf(b.kind) + ' to the original', b.original.slice(0, 70), ip);
+  return json({ ok: true, value: null });
+}
+
+function labelOf(kind) {
+  return { text: 'text', meta: 'description', alt: 'picture description', link: 'link', image: 'picture' }[kind];
+}
+
+async function dropUnusedMedia(env, url) {
+  const m = /^\/api\/media\/([0-9a-f-]{36})$/.exec(url || '');
+  if (!m) return;
+  const used = await env.DB.prepare('SELECT 1 AS x FROM content WHERE value = ? LIMIT 1').bind(url).first();
+  if (!used) await env.DB.prepare('DELETE FROM media WHERE id = ?').bind(m[1]).run();
+}
+
+// every picture the site uses, and where
+async function listImages(env, url) {
+  const origin = new URL('https://assets.local/');
+  const sources = [...PAGES.map(p => ({ label: p.label, path: p.path })), { label: 'Team members', path: TEAM_FILE }, { label: 'Page styles', path: STYLE_FILE }];
+  const texts = await Promise.all(sources.map(s => assetText(env, origin, s.path).catch(() => '')));
+  const used = new Map();
+  sources.forEach((s, i) => {
+    for (const p of scanImages(texts[i])) {
+      if (!used.has(p)) used.set(p, []);
+      used.get(p).push(s.label);
+    }
+  });
+  const { results } = await env.DB.prepare("SELECT original, value FROM content WHERE kind = 'image'").all();
+  const edited = new Map(results.map(r => [r.original, r.value]));
+  const list = [...used.entries()]
+    .filter(([p]) => !/\/(fonts|flags)\//.test(p))
+    .map(([path, usedOn]) => ({ path, usedOn, value: edited.get(path) || null }))
+    .sort((a, b) => a.path.localeCompare(b.path));
+  return json(list);
 }
 
 // ---------- newsletter sign-ups ----------
@@ -443,7 +651,9 @@ function json(data, status = 200, headers = {}) {
 // changes must come as JSON (or the photo bytes), which a cross-site form cannot send
 function isJson(request, path) {
   const type = request.headers.get('Content-Type') || '';
-  return path === '/api/admin/photo' ? type === 'image/jpeg' : type.startsWith('application/json') || request.method === 'DELETE';
+  if (path === '/api/admin/photo') return type === 'image/jpeg';
+  if (path === '/api/admin/media') return MEDIA_TYPES.has(type);
+  return type.startsWith('application/json') || request.method === 'DELETE';
 }
 
 async function readJson(request) {

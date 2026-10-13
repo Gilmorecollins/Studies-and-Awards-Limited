@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Testimonials admin | Studies and Awards</title>
+<title>Website admin | Studies and Awards</title>
 <link rel="icon" type="image/png" href="../assets/favicon.png">
 <script>(function(){var t,m=/(?:^|;)sa-theme=(light|dark)(?:;|$)/.exec(window.name||'');try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'&&m)t=m[1];if(t!=='light'&&t!=='dark')t='light';document.documentElement.setAttribute('data-theme',t)})()</script>
 <link rel="stylesheet" href="../css/styles.css">
@@ -20,7 +20,7 @@
       <span class="brand-mark" aria-hidden="true"><img src="../assets/logo-mark.png" alt="" width="120" height="80"></span>
       <span class="brand-name">Studies &amp; Awards Limited</span>
     </a>
-    <span class="admin-bar-title">Testimonials admin</span>
+    <span class="admin-bar-title">Website admin</span>
     <div class="admin-bar-user" id="admin-user" hidden>
       <span class="admin-bar-email" id="admin-email"></span>
       <button type="button" class="admin-link-btn" id="admin-activity-btn">Activity</button>
@@ -61,6 +61,13 @@
     <button type="button" class="btn btn-outline" data-signout>Sign out</button>
   </section>
 
+  <!-- what to edit -->
+  <nav class="admin-tabs" id="admin-tabs" aria-label="What to edit" hidden>
+    <button type="button" data-tab="view-list" aria-selected="true">Testimonials</button>
+    <button type="button" data-tab="view-text" aria-selected="false">Website text</button>
+    <button type="button" data-tab="view-images" aria-selected="false">Pictures</button>
+  </nav>
+
   <!-- the testimonials -->
   <section class="admin-list-view" id="view-list" aria-labelledby="list-heading" hidden>
     <div class="admin-list-head">
@@ -76,6 +83,43 @@
       <p>No testimonials yet. Add the first one; it stays hidden until you switch it on.</p>
     </div>
     <p class="admin-foot-note">Only the testimonials that are <strong>on the website</strong> show on the home page, in this order. <a href="../index.html#testimonials" target="_blank" rel="noopener">Open the home page</a></p>
+  </section>
+
+  <!-- words, links and descriptions on any page -->
+  <section class="admin-list-view" id="view-text" aria-labelledby="text-heading" hidden>
+    <div class="admin-list-head">
+      <div>
+        <h1 id="text-heading">Website text</h1>
+        <p class="admin-lead">Pick a page, then change any words, links or descriptions. Changes show on the website within a minute, and you can reset any of them to the original.</p>
+      </div>
+      <a class="btn btn-outline" id="text-open" href="../" target="_blank" rel="noopener">Open this page</a>
+    </div>
+    <div class="cms-tools">
+      <div class="admin-field"><label for="text-page">Page</label><select id="text-page"></select></div>
+      <div class="admin-field"><label for="text-search">Find</label><input type="search" id="text-search" placeholder="Type a word to find it" autocomplete="off"></div>
+      <label class="cms-check"><input type="checkbox" id="text-edited"> Only what I have changed</label>
+    </div>
+    <p class="admin-notice" id="text-notice" role="status" aria-live="polite" hidden></p>
+    <p class="admin-error" id="text-error" role="alert" hidden></p>
+    <div id="text-groups"></div>
+    <p class="admin-foot-note">Edited words show in English everywhere. The Swahili version still shows its own wording for anything you haven&rsquo;t changed.</p>
+  </section>
+
+  <!-- pictures -->
+  <section class="admin-list-view" id="view-images" aria-labelledby="images-heading" hidden>
+    <div class="admin-list-head">
+      <div>
+        <h1 id="images-heading">Pictures</h1>
+        <p class="admin-lead">Every picture on the website. Choose &ldquo;Replace&rdquo; to swap one for your own; it shows everywhere that picture is used. Use a picture with the same shape as the one it replaces, or it may be cropped.</p>
+      </div>
+    </div>
+    <div class="cms-tools">
+      <div class="admin-field"><label for="images-search">Find</label><input type="search" id="images-search" placeholder="For example: team, sydney, logo" autocomplete="off"></div>
+      <label class="cms-check"><input type="checkbox" id="images-edited"> Only what I have changed</label>
+    </div>
+    <p class="admin-notice" id="images-notice" role="status" aria-live="polite" hidden></p>
+    <p class="admin-error" id="images-error" role="alert" hidden></p>
+    <div id="images-groups"></div>
   </section>
 
 </main>
@@ -225,5 +269,6 @@
 <script src="../js/api-client.js"></script>
 <script src="../js/testimonial-card.js"></script>
 <script src="../js/admin.js"></script>
+<script src="../js/admin-content.js"></script>
 </body>
 </html>

@@ -111,6 +111,7 @@
         return null;
       }
       showView('view-list');
+      document.dispatchEvent(new CustomEvent('admin:signedin'));
       return load();
     });
   }
@@ -127,6 +128,7 @@
     busy = false;
     Array.prototype.forEach.call(document.querySelectorAll('dialog[open]'), function (d) { d.close(); });
     showView('view-signin');
+    document.dispatchEvent(new CustomEvent('admin:signedout'));
   }
 
   $('signin-form').addEventListener('submit', function (event) {

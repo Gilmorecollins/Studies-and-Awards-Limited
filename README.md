@@ -462,6 +462,25 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
     `src/worker.js` for `/api`). Use a long, unique password for every admin:
     short or guessable ones (like "admin" / "admin@123") are the one hole no
     code can close.
+  - **Website text and Pictures (editing the site from the admin page)**: the
+    "Website text" tab lists, page by page, every piece of text, link,
+    description (search engines and link previews) and picture description,
+    plus the team members' names, roles and bios ("Team members" in the page
+    list). Change any of them and press Save; "Only on this page" limits a
+    change, otherwise it applies everywhere the same words appear (handy for
+    the footer and contact details). "Reset to original" undoes it. The
+    "Pictures" tab lists every image on the site; "Replace" swaps one for your
+    own (it is shrunk in the browser to fit) everywhere it is used.
+    How it works: nothing in the files changes. An edit is saved in the
+    database against the ORIGINAL wording (table `content`; pictures in
+    `media`), and `src/content.js` swaps it in when a page is sent, so it
+    shows within about a minute with no flicker and no script on the page.
+    All text is escaped, and links must be https, mailto or tel. Because an
+    edit is matched to the original wording, if you change that wording in the
+    files an old edit stops applying and the new original shows; reset it from
+    the admin page to tidy up. Not editable here yet: words that scripts build
+    (partner institutions, destination cards, course lists), and anything in
+    the Swahili version (edited words show in English).
   - **Activity log**: the admin page's "Activity" button lists the latest
     200 sign-ins (right and wrong), password changes, and every change to a
     testimonial or photo, with who did it and from which address. Wrong
@@ -479,7 +498,7 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   - **Newsletter box**: the footer box on every page saves the address
     (admin page, "Subscribers": copy all, or remove one). If the back end
     can't be reached it falls back to opening the visitor's email app.
-  - **Rebuilding**: `migrations/0001_init.sql` and `migrations/0002_security.sql` recreate the empty tables.
+  - **Rebuilding**: `migrations/0001_init.sql` `migrations/0002_security.sql` and `migrations/0003_content.sql` recreate the empty tables.
     Test the back end on your computer with `npx wrangler dev`.
 - **Publishing**: Cloudflare (Worker `studiesandawards`, set up by
   `wrangler.jsonc` at the top of the repo) serves `site/` and publishes the
