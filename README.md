@@ -282,6 +282,28 @@ source-assets/      Raw, uncompressed originals (destination photos, logo).
   refresh the cached preview. `--check` covers these blocks too.
 - **Blog**: `site/blog.html` is a "coming soon" page for now, linked as "Blog" in the
   footer of every page (not in the header). When posts exist, replace its hero with the list.
+- **Languages** (English, Kiswahili, Kalenjin): `site/js/i18n.js` swaps the page's
+  text for a translation when a visitor picks a language in the header (EN | SW), and
+  remembers the choice. Each language is one file, `site/js/i18n-<code>.js`, a list of
+  `"English text": "translation"` lines; text with no line stays in English, so a page
+  that has not been translated still works. Kiswahili covers every page: Home,
+  Destinations, the six country pages, Services, Find Us, About, Team (with the bios),
+  Blog and the 404 page. Kalenjin covers the same pages (as a draft).
+  - Kiswahili (`i18n-sw.js`) is written and shown in the switcher. Have a Swahili
+    speaker read it before launch.
+  - Kalenjin is **hidden from the language switch** for now (`reviewed: false` in `site/js/i18n.js`);
+    the files stay, and `?lang=kal` on any address still previews it. Set `reviewed: true` to show the KAL button again.
+  - Kalenjin (`i18n-kal.js`) is a DRAFT, not checked by a speaker, but every line of every
+    page (852) is in. It was drafted with help from open Kalenjin sources and machine
+    back-translation, then rewritten in a second pass. Visa, fee and deadline wording must be
+    exact, so a fluent speaker needs to go through it (`tools/i18n/kalenjin-notes.md` explains
+    how it was made and why it is not enough on its own). The sheet
+    `tools/i18n/kal-to-translate.csv` has every line: the English, the Kiswahili and the
+    Kalenjin now on the site. Edit it and run
+    `node tools/i18n.mjs import kal tools/i18n/kal-to-translate.csv` to update the site.
+    If the file is ever empty, tapping KAL shows a "coming soon" note instead.
+  - Changing English text on a page means its translation line stops matching: edit the
+    English in the language files too (or re-run the template and compare).
 - **Page not found**: `site/404.html` is what Vercel shows for any address that
   doesn't exist. It is served at the missing address itself (e.g. `/old/page`),
   so every link and file in it starts with `/`. It is marked `noindex`.

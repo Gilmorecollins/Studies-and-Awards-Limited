@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="/css/styles.css">
 <!-- dark mode, before the page is drawn (the same script generate-countries.mjs writes into the other pages) -->
 <script>(function(){var t,m=/(?:^|;)sa-theme=(light|dark)(?:;|$)/.exec(window.name||'');try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'&&m)t=m[1];if(t!=='light'&&t!=='dark')t='light';document.documentElement.setAttribute('data-theme',t)})()</script>
+<script>(function(){var l,m=/(?:^|;)sa-lang=(sw|kal)(?=;|$)/.exec(window.name||''),u=/[?&]lang=(sw|kal|en)(?=&|$)/.exec(location.search);try{l=localStorage.getItem('lang')}catch(e){}l=u?u[1]:(l==='sw'||l==='kal'?l:(m?m[1]:''));if(l==='sw'||l==='kal'){var d=document.documentElement;d.className+=' i18n-wait';setTimeout(function(){d.className=d.className.replace(' i18n-wait','')},2500)}})()</script>
 </head>
 <body>
 
@@ -120,7 +121,7 @@
         </span>
           <span class="brand-name">Studies &amp; Awards Limited</span>
         </div>
-        <p class="footer-blurb">Personalised guidance from your first meeting with us until you arrive and start your studies abroad.</p>
+        <p class="footer-blurb">Personal guidance from your first meeting until you start your studies abroad.</p>
       </div>
       <nav aria-label="Quick links">
         <div class="footer-heading">QUICK LINKS</div>
@@ -201,5 +202,6 @@
 <script src="/js/team-data.js"></script>
 <script src="/js/theme.js"></script>
 <script src="/js/main.js"></script>
+<script src="/js/i18n.js"></script>
 </body>
 </html>
