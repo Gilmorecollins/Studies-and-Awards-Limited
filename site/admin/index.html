@@ -23,6 +23,8 @@
     <span class="admin-bar-title">Testimonials admin</span>
     <div class="admin-bar-user" id="admin-user" hidden>
       <span class="admin-bar-email" id="admin-email"></span>
+      <button type="button" class="admin-link-btn" id="admin-activity-btn">Activity</button>
+      <button type="button" class="admin-link-btn" id="admin-subscribers-btn">Subscribers</button>
       <button type="button" class="admin-link-btn" id="admin-password-btn">Change password</button>
       <button type="button" class="btn btn-outline admin-signout" data-signout>Sign out</button>
     </div>
@@ -46,6 +48,7 @@
         <label for="signin-password">Password</label>
         <input type="password" id="signin-password" autocomplete="current-password" required>
       </div>
+      <div id="signin-check" class="admin-check"></div>
       <p class="admin-error" id="signin-error" role="alert" hidden></p>
       <button type="submit" class="btn btn-primary btn-block">Sign in</button>
     </form>
@@ -172,6 +175,31 @@
   </form>
 </dialog>
 
+<!-- the activity log -->
+<dialog class="admin-dialog admin-wide" id="activity" aria-labelledby="activity-heading">
+  <div class="admin-dialog-body">
+    <h2 id="activity-heading">Activity</h2>
+    <p class="admin-lead">The latest 200 sign-ins and changes, newest first. Times are in your time zone.</p>
+    <p class="admin-error" id="activity-error" role="alert" hidden></p>
+    <div class="admin-table-wrap"><table class="admin-table" id="activity-table"><thead><tr><th>When</th><th>Who</th><th>What</th><th>Address</th></tr></thead><tbody></tbody></table></div>
+    <div class="admin-dialog-foot"><button type="button" class="btn btn-outline" data-close>Close</button></div>
+  </div>
+</dialog>
+
+<!-- newsletter subscribers -->
+<dialog class="admin-dialog admin-wide" id="subscribers" aria-labelledby="subscribers-heading">
+  <div class="admin-dialog-body">
+    <h2 id="subscribers-heading">Newsletter subscribers</h2>
+    <p class="admin-lead" id="subscribers-summary"></p>
+    <p class="admin-error" id="subscribers-error" role="alert" hidden></p>
+    <div class="admin-table-wrap"><table class="admin-table" id="subscribers-table"><thead><tr><th>Email</th><th>Joined</th><th><span class="sr-only">Remove</span></th></tr></thead><tbody></tbody></table></div>
+    <div class="admin-dialog-foot">
+      <button type="button" class="btn btn-outline" id="subscribers-copy">Copy all emails</button>
+      <button type="button" class="btn btn-outline" data-close>Close</button>
+    </div>
+  </div>
+</dialog>
+
 <!-- changing the password -->
 <dialog class="admin-dialog admin-confirm" id="password" aria-labelledby="password-heading">
   <form id="password-form" method="dialog" novalidate>
@@ -193,6 +221,7 @@
   </form>
 </dialog>
 
+<script src="../js/turnstile.js"></script>
 <script src="../js/api-client.js"></script>
 <script src="../js/testimonial-card.js"></script>
 <script src="../js/admin.js"></script>

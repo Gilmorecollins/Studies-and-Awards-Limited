@@ -147,9 +147,11 @@
   });
 })();
 
-// Footer newsletter box, no backend on this site, so "subscribing" opens
-// the visitor's own mail client with the address pre-filled, same as every
-// other call-to-action on the site.
+// Footer newsletter box. The address is sent to the site's own back end
+// (/api/subscribe) and kept for the team (admin page, "Subscribers"). A
+// Cloudflare Turnstile check runs quietly in the background, and a hidden
+// field catches bots. If the back end can't be reached, the visitor's own
+// mail app opens with the request instead, so nobody is turned away.
 (function () {
   'use strict';
 
@@ -157,21 +159,82 @@
   if (!form) return;
 
   var input = document.getElementById('footer-subscribe-email');
+  var button = form.querySelector('[type="submit"]');
   var status = document.createElement('p');
   status.className = 'footer-subscribe-status';
   status.setAttribute('role', 'status');
   form.parentNode.insertBefore(status, form.nextSibling);
 
+  // a field real visitors never see
+  var trap = document.createElement('input');
+  trap.type = 'text';
+  trap.name = 'website';
+  trap.tabIndex = -1;
+  trap.autocomplete = 'off';
+  trap.setAttribute('aria-hidden', 'true');
+  trap.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;opacity:0';
+  form.appendChild(trap);
+
+  var holder = document.createElement('div');
+  holder.className = 'footer-subscribe-check';
+  form.parentNode.insertBefore(holder, status);
+
+  // the check is loaded the first time the visitor touches the box
+  var check = null;
+  function startCheck() {
+    if (check) return check;
+    check = new Promise(function (resolve) {
+      var script = document.createElement('script');
+      script.src = 'js/turnstile.js';
+      script.onload = function () { window.SiteTurnstile.mount(holder).then(resolve, function () { resolve(null); }); };
+      script.onerror = function () { resolve(null); };
+      document.head.appendChild(script);
+    });
+    return check;
+  }
+  input.addEventListener('focus', startCheck);
+
+  function mailFallback(email) {
+    var subject = encodeURIComponent('Newsletter Signup');
+    var body = encodeURIComponent('Please add this email address to the newsletter list: ' + email);
+    window.location.href = 'mailto:admissions@studiesandawardsltd.com?subject=' + subject + '&body=' + body;
+    status.textContent = 'Your email app should open with the request ready. Just press send.';
+  }
+
   form.addEventListener('submit', function (event) {
     event.preventDefault();
     var email = input.value.trim();
     if (!email) return;
+    button.disabled = true;
+    status.textContent = 'Subscribing…';
 
-    var subject = encodeURIComponent('Newsletter Signup');
-    var body = encodeURIComponent('Please add this email address to the newsletter list: ' + email);
-    window.location.href = 'mailto:admissions@studiesandawardsltd.com?subject=' + subject + '&body=' + body;
-
-    status.textContent = 'Your email app should open with the request ready. Just press send.';
+    startCheck().then(function (c) { return c ? c.token().then(function (t) { return { c: c, t: t }; }) : { c: null, t: '' }; })
+      .then(function (r) {
+        return window.fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, website: trap.value, turnstile: r.t })
+        }).then(function (res) {
+          if (r.c) r.c.reset();
+          return res.json().catch(function () { return {}; }).then(function (data) { return { res: res, data: data }; });
+        });
+      })
+      .then(function (out) {
+        if (out.res.ok) {
+          input.value = '';
+          status.textContent = 'Thank you. You are subscribed.';
+        } else if (out.res.status === 400) {
+          status.textContent = 'Please enter a valid email address.';
+        } else if (out.res.status === 429) {
+          status.textContent = 'Too many tries. Please wait a minute, then try again.';
+        } else if (out.res.status === 403) {
+          status.textContent = 'We could not confirm you are a person. Please try again.';
+        } else {
+          mailFallback(email);
+        }
+      })
+      .catch(function () { mailFallback(email); })
+      .then(function () { button.disabled = false; });
   });
 })();
 

@@ -153,3 +153,18 @@
   .admin-editor-body { padding: 18px 16px; }
   .admin-editor .admin-dialog-foot, .admin-dialog-head { padding-left: 16px; padding-right: 16px; }
 }
+
+/* activity log and subscribers */
+.admin-wide { width: min(760px, calc(100vw - 32px)); }
+.admin-wide .admin-dialog-body { padding: 24px; display: flex; flex-direction: column; gap: 14px; max-height: calc(100vh - 64px); }
+.admin-table-wrap { overflow: auto; border: 1px solid var(--border-soft); border-radius: 10px; min-height: 80px; }
+.admin-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.admin-table th { position: sticky; top: 0; background: var(--surface); text-align: left; font-weight: 700; color: var(--text-strong); padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.admin-table td { padding: 9px 12px; border-bottom: 1px solid var(--border-soft); vertical-align: top; overflow-wrap: anywhere; }
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table .admin-when { white-space: nowrap; color: var(--muted); }
+.admin-table .is-bad { color: #b3261e; font-weight: 600; }
+.admin-table .admin-link-btn { color: #b3261e; }
+.admin-check:empty { display: none; }
+.admin-check { display: flex; justify-content: center; }
+@media (max-width: 760px) { .admin-wide .admin-dialog-body { padding: 18px 16px; } }
